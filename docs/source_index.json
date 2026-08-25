@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-25T02:30:00Z",
-  "purpose": "Machine-readable evidence of source fetches for Phase 0.5 audit",
+  "generated_at": "2026-08-25T05:00:00Z",
+  "purpose": "Machine-readable evidence of source fetches (Phase 0.5 audit + Chapter 2 research)",
   "sources": [
     {
       "id": "R11-01",
@@ -202,6 +202,156 @@
       ],
       "research_note_path": "docs/research_notes/S03.md",
       "key_finding": "CS520 defines KG as directed labeled graph with semantically defined labels. Minimal formal definition: subset of N x L x N."
+    },
+    {
+      "id": "R11-05",
+      "canonical_url": "https://www.w3.org/TR/turtle/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T05:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/turtle/",
+      "title": "RDF 1.1 Turtle",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2014-02-25",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/R11-05.md",
+      "key_finding": "Turtle is a concrete textual syntax for RDF, not the data model. Grammar is a subset of SPARQL 1.1 grammar."
+    },
+    {
+      "id": "TOOL-01",
+      "canonical_url": "https://rdflib.readthedocs.io/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T05:00:00Z",
+      "http_status": 200,
+      "final_url": "https://rdflib.readthedocs.io/",
+      "title": "RDFLib documentation",
+      "document_status": "Official documentation",
+      "used_in_chapters": [
+        "2",
+        "3"
+      ],
+      "research_note_path": "docs/research_notes/TOOL-01.md",
+      "key_finding": "Pure-Python RDF library: Graph/URIRef/Literal/BNode/Namespace; SPARQL 1.1 engine; many serializations. Installed version 7.6.0."
+    },
+    {
+      "id": "N4J-05",
+      "canonical_url": "https://neo4j.com/docs/getting-started/data-modeling/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T05:00:00Z",
+      "http_status": 200,
+      "final_url": "https://neo4j.com/docs/getting-started/data-modeling/",
+      "title": "Neo4j Data Modeling",
+      "document_status": "Official documentation",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/N4J-05.md"
+    },
+    {
+      "id": "N4J-06",
+      "canonical_url": "https://neo4j.com/docs/cypher-manual/current/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T05:00:00Z",
+      "http_status": 200,
+      "final_url": "https://neo4j.com/docs/cypher-manual/current/",
+      "title": "Neo4j Cypher Manual",
+      "document_status": "Official documentation",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/N4J-06.md"
+    },
+    {
+      "id": "N4J-07",
+      "canonical_url": "https://neo4j.com/docs/python-manual/current/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T05:00:00Z",
+      "http_status": 200,
+      "final_url": "https://neo4j.com/docs/python-manual/current/",
+      "title": "Neo4j Python Driver Manual",
+      "document_status": "Official documentation",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/N4J-07.md",
+      "key_finding": "Driver 6.x supports Neo4j 4.4/5.x; Bolt protocol; execute_query API. Installed version 6.2.0."
+    },
+    {
+      "id": "N4J-08",
+      "canonical_url": "https://neo4j.com/docs/operations-manual/current/docker/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T05:00:00Z",
+      "http_status": 200,
+      "final_url": "https://neo4j.com/docs/operations-manual/current/docker/",
+      "title": "Neo4j Docker documentation",
+      "document_status": "Official documentation",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/N4J-08.md",
+      "key_finding": "Neo4j moved to calendar versioning (2026.07 current); 5.26 is LTS. Docker tag pinned to 5.26.30-community (verified on Docker Hub)."
+    },
+    {
+      "id": "GQL-01",
+      "canonical_url": "https://www.iso.org/standard/76120.html",
+      "fetch_status": "FETCHED_METADATA_ONLY",
+      "fetched_at": "2026-08-25T05:00:00Z",
+      "http_status": 403,
+      "final_url": "https://www.iso.org/standard/76120.html",
+      "title": "ISO/IEC 39075:2024 — GQL",
+      "document_status": "International Standard",
+      "publication_date": "2024-04-17",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/GQL-01.md",
+      "key_finding": "ISO site blocks direct fetch (403); metadata cross-verified via gqlstandards.org and Neo4j GQL conformance docs."
+    },
+    {
+      "id": "GQL-02",
+      "canonical_url": "https://neo4j.com/docs/cypher-manual/current/appendix/gql-conformance/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T05:00:00Z",
+      "http_status": 200,
+      "final_url": "https://neo4j.com/docs/cypher-manual/current/appendix/gql-conformance/",
+      "title": "Neo4j Cypher — GQL conformance",
+      "document_status": "Official documentation",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/GQL-02.md",
+      "key_finding": "Cypher accommodates most mandatory GQL features but is not identical to GQL; some mandatory features unsupported."
+    },
+    {
+      "id": "GQL-03",
+      "canonical_url": "https://www.gqlstandards.org/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T05:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.gqlstandards.org/",
+      "title": "GQL Standards",
+      "document_status": "Community standards site",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/GQL-03.md"
+    },
+    {
+      "id": "S04",
+      "canonical_url": "https://web.stanford.edu/class/cs520/2020/notes/What_Are_Graph_Data_Models.html",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T05:00:00Z",
+      "http_status": 200,
+      "final_url": "https://web.stanford.edu/class/cs520/2020/notes/What_Are_Graph_Data_Models.html",
+      "title": "What Are Graph Data Models?",
+      "organization": "Stanford University",
+      "document_status": "Academic Course Notes",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/S04.md"
     }
   ]
 }

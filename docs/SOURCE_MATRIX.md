@@ -10,7 +10,7 @@ Last verified: 2026-08-25
 | What is a Knowledge Graph | Stanford CS520 Lecture 1 | Hogan et al., *Knowledge Graphs* Ch.1 | ACADEMIC | Stable | University course + peer-reviewed textbook define the field's conceptual boundaries | 1, introduction |
 | Graph data models (RDF vs Property Graph) | W3C RDF 1.1 Concepts | Neo4j Graph Data Modeling Fundamentals | STANDARD / OFFICIAL_DOCUMENTATION | Stable | W3C defines RDF; Neo4j defines property graph model | 1, 2 |
 | RDF triples, IRIs, literals, blank nodes | W3C RDF 1.1 Primer | W3C RDF 1.2 Concepts (CR) | STANDARD | Stable baseline + Emerging CR | RDF 1.1 is stable REC; 1.2 CR introduces triple terms | 2, 3, 6 |
-| RDF 1.2 triple terms & reification | W3C RDF 1.2 Concepts (CR 2026-04-07) | W3C RDF 1.2 Primer (WD) | STANDARD | Candidate Recommendation | Defines new reification mechanism replacing RDF 1.1 reification vocabulary | 3, 6 |
+| RDF 1.2 triple terms & reification | W3C RDF 1.2 Concepts (CR 2026-04-07) | W3C RDF 1.2 Primer (WD) | STANDARD | Candidate Recommendation | Introduces triple-term-based reification (rdf:reifies) as preferred modern mechanism; RDF 1.1 reification vocabulary remains as legacy for compatibility | 3, 6 |
 | SPARQL 1.1 query language | W3C SPARQL 1.1 Overview / Query (REC 2013) | Stanford CS520 SPARQL lectures | STANDARD / ACADEMIC | Stable Recommendation | Official query language for RDF graphs | 2, 5, 9 |
 | SPARQL 1.2 query language | W3C SPARQL 1.2 Query (WD 2026-08-20) | — | STANDARD | Working Draft | Emerging update; not yet stable — label clearly in text | 2 (callout) |
 | Turtle serialization | W3C Turtle REC 2014 | RDFLib documentation | STANDARD / OFFICIAL_DOCUMENTATION | Stable | Canonical human-readable RDF syntax | 2 |

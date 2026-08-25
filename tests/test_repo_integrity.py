@@ -44,12 +44,13 @@ class TestSourceIndexIntegrity:
 class TestWrapperArtifacts:
     """Verify no leaked tool/protocol markers remain in tracked files."""
 
+    # Constructed via concatenation so this file does not self-match.
     FORBIDDEN_PATTERNS = [
-        "</content>",
-        "</parameter>",
-        "<content>",
-        "<parameter",
-        "assistant to=",
+        "</" + "content>",
+        "</" + "parameter>",
+        "<" + "content>",
+        "<" + "parameter",
+        "assistant" + " to=",
     ]
 
     def test_no_wrapper_markers_in_tracked_files(self) -> None:
@@ -116,6 +117,9 @@ class TestShaqlContradictions:
         docs_dir = ROOT / "docs"
         violations = []
         for md_file in docs_dir.rglob("*.md"):
+            # Historical phase reports document past findings; skip them.
+            if md_file.name.startswith("PHASE"):
+                continue
             text = md_file.read_text(encoding="utf-8", errors="ignore")
             lower = text.lower()
             for pattern in self.STALE_PATTERNS:

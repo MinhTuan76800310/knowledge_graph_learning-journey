@@ -1,6 +1,6 @@
 services:
   neo4j:
-    image: neo4j:5-community
+    image: neo4j:5.26.30-community
     container_name: kg-book-neo4j
     restart: unless-stopped
     ports:
@@ -8,7 +8,6 @@ services:
       - "7687:7687"   # Bolt
     environment:
       - NEO4J_AUTH=neo4j/knowledgegraph
-      - NEO4J_PLUGINS=["apoc"]
     volumes:
       - neo4j_data:/data
       - neo4j_logs:/logs
@@ -16,4 +15,3 @@ services:
 volumes:
   neo4j_data:
   neo4j_logs:
-

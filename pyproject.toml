@@ -35,11 +35,12 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["N806"]  # Allow uppercase for RDFLib Namespace variables (EX, NS)
 
 [tool.mypy]
 python_version = "3.12"
 strict = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests", "chapter01"]
+testpaths = ["tests", "chapter01", "chapter02"]
 addopts = "-v --tb=short"
