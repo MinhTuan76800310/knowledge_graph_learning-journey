@@ -95,9 +95,110 @@ Each entry records:
 
 ## Backlog outside Chapter 2
 
-Chapters 3–10 experiments are not yet designed. They will be added here as each
+Chapters 4–10 experiments are not yet designed. They will be added here as each
 chapter is written, applying the same rule: defer any experiment that is not required
 to validate a factual claim in the manuscript.
+
+---
+
+## Chapter 3 — Deferred Labs
+
+The conceptual content of these labs is delivered in Book Preview v0.2 as
+`book/chapter03.md` (diagrams, static examples, and citations). Only the runnable
+implementations are deferred. No Docker work is performed in the book-first phase.
+
+### EXP-3-1 — Schema modeling
+
+- **Pedagogical purpose:** Let the reader design a small schema for the
+  Hanoi/Vietnam domain on both sides: RDFS classes/properties/domain/range, and
+  property-graph labels/types/constraints; then observe what each schema does and
+  does not imply.
+- **Semantic contracts:** `book/chapter03.md` §3.1 (schema ≠ ontology; domain/range
+  are inference rules). Sources H01, S05, R11-03, N4J-05.
+- **Dependencies:** RDFLib (RDF side); pinned Neo4j server (property-graph side).
+- **Acceptance criteria:**
+  - RDFS schema for the domain loads and yields the expected `rdf:type` entailments.
+  - Property-graph schema uses labels, relationship types, and at least one
+    uniqueness constraint.
+  - A test asserts that `rdfs:domain` *infers* a type rather than rejecting data.
+- **Priority:** P1
+- **Status:** `DEFERRED_UNTIL_BOOK_V0.1`
+
+### EXP-3-2 — Entity identity / owl:sameAs
+
+- **Pedagogical purpose:** Make the propagation consequence of `owl:sameAs`
+  executable: two graphs with `ex:Hanoi` and `wd:Q1858`, assert sameAs, and observe
+  information merging; then assert `owl:differentFrom` and observe the no-UNA
+  behavior (two names, no automatic distinctness).
+- **Semantic contracts:** `book/chapter03.md` §3.2 (sameAs = identity; no UNA).
+  Sources OWL-02, H01.
+- **Dependencies:** RDFLib or an OWL-capable reasoner (e.g., owlrl) for entailment
+  checks.
+- **Acceptance criteria:**
+  - Before sameAs: queries on `wd:Q1858` do not see `ex:Hanoi`'s properties.
+  - After sameAs: properties of both names are visible under either name.
+  - A wrong sameAs demonstrably merges unrelated entities (the hazard case).
+- **Priority:** P1
+- **Status:** `DEFERRED_UNTIL_BOOK_V0.1`
+
+### EXP-3-3 — Named graphs
+
+- **Pedagogical purpose:** Store the two sources as named graphs in an RDF dataset
+  (TriG), query per-graph and across graphs, and demonstrate that the graph name
+  carries no automatic provenance meaning.
+- **Semantic contracts:** `book/chapter03.md` §3.3.2 (named graph = grouping;
+  provenance is an application convention). Sources R11-02.
+- **Dependencies:** RDFLib (ConjunctiveGraph/Dataset + TriG).
+- **Acceptance criteria:**
+  - Same triple stored in two named graphs; per-graph queries isolate it.
+  - A test asserts the dataset structure (default graph + named graphs) and that
+    nothing in the model states *who asserted* the triples.
+- **Priority:** P2
+- **Status:** `DEFERRED_UNTIL_BOOK_V0.1`
+
+### EXP-3-4 — N-ary relation
+
+- **Pedagogical purpose:** Implement the CapitalStatus pattern: binary
+  `capitalOf` vs qualified relation entity with `validFrom`; compare query shapes.
+- **Semantic contracts:** `book/chapter03.md` §3.3.3 (Pattern 1 of the N-ary note;
+  reified edge does not assert the edge). Sources NARY-01, H01.
+- **Dependencies:** RDFLib.
+- **Acceptance criteria:**
+  - Both representations encode "Hanoi capital of Vietnam since 1976".
+  - Queries retrieve the temporal context in both; the n-ary form supports adding a
+    second context dimension without schema surgery.
+- **Priority:** P2
+- **Status:** `DEFERRED_UNTIL_BOOK_V0.1`
+
+### EXP-3-5 — Context modeling
+
+- **Pedagogical purpose:** Attach source/time/scope context to the capital statement
+  using at least two mechanisms (named graph + relationship property or n-ary), and
+  show that context changes *evaluation*, not *truth*.
+- **Semantic contracts:** `book/chapter03.md` §3.3 ("Context enables evaluation;
+  context does not create truth."). Sources H01, WD-01, WD-02.
+- **Dependencies:** EXP-3-3, EXP-3-4.
+- **Acceptance criteria:**
+  - The same statement is retrievable with different context annotations.
+  - A conflicting population value from a second source coexists without deletion,
+    each with its own context (Wikidata rank/qualifier analogue).
+- **Priority:** P2
+- **Status:** `DEFERRED_UNTIL_BOOK_V0.1`
+
+### EXP-3-6 — Identity-resolution exercise
+
+- **Pedagogical purpose:** A guided, non-ML exercise: given two small source files
+  with overlapping entities, the reader applies the candidate → evidence → accepted
+  flow and produces sameAs/canonical-merge output; contrast with what automated
+  blocking/matching would add (Chapter 7 preview).
+- **Semantic contracts:** `book/chapter03.md` §3.2.5 and §3.4. Sources S06, H01.
+- **Dependencies:** None beyond Python standard library + RDFLib.
+- **Acceptance criteria:**
+  - Exercise data contains true matches, near-misses, and homonyms.
+  - Solution records evidence per candidate and only promotes candidates that pass
+    the stated policy.
+- **Priority:** P2
+- **Status:** `DEFERRED_UNTIL_BOOK_V0.1`
 
 ---
 
@@ -109,5 +210,16 @@ Synced 2026-08-25 (GitHub CLI authenticated):
 - EXP-2-5 → issue #2
 - EXP-2-6 → issue #3
 
-All labelled `lab`, `deferred`, `chapter-02`. This file remains the design-level
+All labelled `lab`, `deferred`, `chapter-02`.
+
+Synced 2026-08-25 (Chapter 3 labs):
+
+- EXP-3-1 → issue #4
+- EXP-3-2 → issue #5
+- EXP-3-3 → issue #6
+- EXP-3-4 → issue #7
+- EXP-3-5 → issue #8
+- EXP-3-6 → issue #9
+
+All labelled `lab`, `deferred`, `chapter-03`. This file remains the design-level
 source of truth; the issues track execution after Book v0.1.

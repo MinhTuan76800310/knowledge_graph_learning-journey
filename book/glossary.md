@@ -3,6 +3,9 @@
 Các thuật ngữ được sắp theo bảng chữ cái của tên tiếng Anh. Mỗi mục gồm tên tiếng Anh,
 tên/giải thích tiếng Việt, và định nghĩa ngắn dùng trong cuốn sách.
 
+**Alias (Bí danh).** Một tên khác cùng biểu thị một thực thể. Khác với định danh chính
+tắc, alias không được hệ thống chọn làm tên quy chiếu duy nhất.
+
 **Assertion (Tuyên bố).** Một mệnh đề được khẳng định là đúng trong ngữ cảnh của một đồ thị.
 Trong RDF, một triple có mặt trong đồ thị là một assertion. Assertion chưa chắc là tri thức
 được chấp nhận (accepted knowledge).
@@ -10,6 +13,9 @@ Trong RDF, một triple có mặt trong đồ thị là một assertion. Asserti
 **Blank node (Nút trống).** Một nút trong đồ thị RDF biểu diễn một tài nguyên tồn tại nhưng
 không được đặt tên bằng IRI. Nhãn của blank node chỉ có phạm vi cục bộ trong một tài liệu;
 ngữ nghĩa trực giác là "tồn tại một tài nguyên nào đó…".
+
+**Canonical identifier (Định danh chính tắc).** Định danh duy nhất được một hệ thống chọn
+làm tên quy chiếu của một thực thể; các tên khác được giữ như alias.
 
 **Context (Ngữ cảnh).** Lớp thông tin về nguồn gốc, thời gian, phạm vi và độ tin cậy của một
 tuyên bố. Trong mô hình kỹ thuật của sách: KG = Data Graph + Semantics + Context.
@@ -19,6 +25,9 @@ ASCII-art (`MATCH ... RETURN`). Cypher tương thích phần lớn với GQL nh�
 
 **Data Graph (Đồ thị dữ liệu).** Tập hợp thực thể, quan hệ và thuộc tính mà chưa có định
 nghĩa hình thức về ý nghĩa. Trả lời được "có gì" nhưng chưa trả lời được "nghĩa là gì".
+
+**Denotation (Sự biểu thị).** Quan hệ giữa một định danh và thực thể mà nó chỉ đến. Định
+danh không phải là thực thể; sự biểu thị do quy ước và con người gán, không tự động có sẵn.
 
 **Entailment (Suy diễn logic).** Một mệnh đề được suy ra từ các mệnh đề khác theo quy tắc ngữ
 nghĩa (ví dụ RDFS/OWL). Khác với validation: entailment thêm tri thức, không từ chối dữ liệu.
@@ -30,6 +39,14 @@ một nút trong đồ thị.
 
 **Graph pattern matching (Khớp mẫu đồ thị).** Cơ chế truy vấn của SPARQL và Cypher: mô tả một
 mẫu đồ thị cần tìm và trả về các phần của đồ thị khớp với mẫu đó.
+
+**Identifier (Định danh).** Chuỗi ký tự dùng để gọi tên một thực thể trong hệ thống (IRI,
+Q-id, khóa ứng dụng). Định danh khác thực thể mà nó biểu thị; cùng định danh không chứng
+minh thống nhất ngữ nghĩa, khác định danh không chứng minh khác thực thể.
+
+**Identity resolution (Giải quyết định danh).** Quá trình xác định hai định danh trong hai
+nguồn có biểu thị cùng một thực thể hay không, đi từ ứng viên đồng nhất qua bằng chứng và
+xem xét đến khẳng định được chấp nhận. Đồng nghĩa thực hành với record linkage.
 
 **IRI (Internationalized Resource Identifier).** Cơ chế định danh có phạm vi toàn cục trong
 RDF. Cùng một IRI không tự động chứng minh hai bên cùng ngữ nghĩa; hai IRI khác nhau chưa
@@ -45,18 +62,40 @@ thuộc tính) và quan hệ (có hướng, có kiểu, và có thể có thuộ
 **Literal.** Giá trị dữ liệu trong RDF (chuỗi, số, …), chỉ xuất hiện ở vị trí đối tượng của
 bộ ba.
 
+**Named graph (Đồ thị có tên).** Một cặp (tên đồ thị, đồ thị RDF) trong RDF dataset. Tên đồ
+thị chỉ được ghép cặp cú pháp với đồ thị; ý nghĩa provenance/nguồn là quy ước ứng dụng,
+không phải ngữ nghĩa hình thức có sẵn.
+
+**N-ary relation (Quan hệ n-ary).** Quan hệ có nhiều hơn hai người tham gia, hoặc quan hệ
+cần mang thêm thuộc tính (thời gian, độ tin cậy). Trong RDF được biểu diễn gián tiếp, phổ
+biến nhất bằng một thực thể trung gian đại diện cho sự kiện quan hệ.
+
 **Ontology (Bản thể học).** Định nghĩa hình thức các khái niệm, quan hệ, ràng buộc và tiên đề
 trong một miền tri thức.
 
+**owl:sameAs.** Vị từ OWL khẳng định hai định danh biểu thị **cùng một cá thể**. Không phải
+"tương tự" hay "gần giống": mọi thông tin của tên này suy ra được cho tên kia.
+
 **Property Graph.** Xem Labeled Property Graph.
+
+**Qualifier (Định ngữ).** Trong Wikidata: cặp thuộc tính–giá trị gắn vào một statement để mở
+rộng ngữ cảnh (thời điểm, phạm vi, phương pháp) mà không thay thế nội dung cốt lõi.
 
 **RDF (Resource Description Framework).** Mô hình dữ liệu chuẩn của W3C biểu diễn tri thức
 dưới dạng các bộ ba (subject, predicate, object).
+
+**Record linkage (Liên kết bản ghi).** Bài toán suy luận xem hai bản ghi từ các nguồn khác
+nhau có phải cùng một thực thể thế giới thực hay không. Là suy luận không chắc chắn, cần
+bằng chứng và xác nhận; các thuật toán công nghiệp (blocking, matching) thuộc Chương 7.
 
 **Relation (Quan hệ).** Mối liên hệ giữa hai thực thể, biểu diễn bằng cạnh có nhãn.
 
 **Reification (Tái hiện).** Kỹ thuật biến một bộ ba/quan hệ thành một tài nguyên để có thể gắn
 thêm thông tin cho nó.
+
+**Schema (Lược đồ).** Phần mô tả cấu trúc và từ vựng được kỳ vọng của đồ thị dữ liệu: lớp,
+quan hệ, kiểu thuộc tính, ràng buộc. Lược đồ không phải ontology: nó cho bộ khung từ vựng
+chứ chưa cho ngữ nghĩa suy luận đầy đủ.
 
 **Semantics (Ngữ nghĩa).** Lớp ý nghĩa của đồ thị: schema, ontology, identity, constraints.
 
@@ -76,6 +115,10 @@ object).
 
 **Turtle.** Một cú pháp văn bản phổ biến để viết RDF. Turtle là cú pháp, không phải bản thân
 mô hình RDF.
+
+**Unique name assumption (Giả định tên duy nhất).** Giả định rằng các tên khác nhau luôn chỉ
+các thực thể khác nhau. OWL không có giả định này: khác tên không ngụ ý khác thực thể; muốn
+khẳng định khác nhau phải dùng owl:differentFrom.
 
 **Validation (Xác nhận).** Kiểm tra dữ liệu có tuân thủ các ràng buộc đã định hay không (ví dụ
 SHACL). Khác với entailment: validation có thể từ chối dữ liệu.

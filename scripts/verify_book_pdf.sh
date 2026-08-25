@@ -57,6 +57,7 @@ EXPECTED_TITLES=(
   "Giới thiệu"
   "Chương 1 — Từ Đồ thị đến Tri thức"
   "Chương 2 — Mô hình Dữ liệu và Ngôn ngữ Truy vấn"
+  "Chương 3 — Lược đồ, Định danh và Ngữ cảnh"
   "Thuật ngữ"
 )
 for title in "${EXPECTED_TITLES[@]}"; do
