@@ -3,7 +3,7 @@
 Progressively transforms a plain graph into a knowledge graph by adding:
 1. Labeled edges (data graph)
 2. Taxonomy (subclass hierarchy)
-3. Ontology (domain/range constraints + symmetric property)
+3. Ontology (domain/range inference + symmetric property)
 4. Context (source, temporal validity)
 
 Uses original Vietnamese city data instead of copying Stanford's Winterthur example.

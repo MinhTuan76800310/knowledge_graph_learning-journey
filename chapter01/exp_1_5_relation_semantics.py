@@ -1,8 +1,11 @@
 """Experiment 1-5: Define the Semantics of a Relation.
 
 Demonstrates that defining relation semantics (domain, range, symmetry,
-transitivity, inverse) enables automatic inference and constraint checking.
-This is the bridge between a data graph and a knowledge graph.
+transitivity, inverse) enables automatic inference via RDFS-style entailment.
+
+IMPORTANT: Domain/range in this experiment produce TYPE INFERENCES (RDFS
+semantics per W3C RDF Schema 1.1 S3.1-3.2), NOT validation violations.
+For constraint checking / violation reporting, see SHACL in Chapter 5.
 
 Difficulty: ★★★ Research/Design Challenge
 Status: ✅ Independently runnable
@@ -44,7 +47,9 @@ class RelationSemantics:
         self._check_constraints(s, p, o)
 
     def _check_constraints(self, s: str, p: str, o: str) -> None:
-        """Validate triple against relation definition."""
+        """Check triple against relation definition (informational only).
+        NOTE: RDFS domain/range are INFERENCE rules, not validation.
+        This method is a placeholder for custom policy, not standard RDFS."""
         if p not in self.relation_defs:
             return
         defn = self.relation_defs[p]
@@ -164,8 +169,9 @@ def main() -> None:
     print("   yields 'RedRiverDelta partOf Vietnam'. The chain emerges from the rule.")
     print("3. INVERSE: 'Hanoi capitalOf Vietnam' yields 'Vietnam hasCapital Hanoi'.")
     print("   Two relations are linked by definition, not by duplicate data entry.")
-    print("4. DOMAIN/RANGE: These constrain what types can participate in a relation.")
-    print("   A full system would reject ('42', 'capitalOf', 'Blue') as a violation.")
+    print("4. DOMAIN/RANGE (RDFS semantics): These INFERENCE rules add type information.")
+    print("   If (X, capitalOf, Y) and domain=City, then X rdf:type City is INFERRED.")
+    print("   RDFS does NOT reject or validate data — that requires SHACL (Chapter 5).")
     print("5. SEMANTICS ARE EXPLICIT: The meaning is in the DEFINITION, not the label string.")
     print("   'sisterCity' could be called 'x7q' — if defined as symmetric, it behaves the same.")
 

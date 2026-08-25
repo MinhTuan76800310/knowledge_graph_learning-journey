@@ -59,7 +59,7 @@ Một đồ thị chỉ có Data Graph là một cấu trúc dữ liệu. Thêm 
 Xét hai trường hợp:
 
 - **Trường hợp A**: Một đồ thị chứa `(Alice) --[:KNOWS]--> (Bob)` nhưng không định nghĩa `:KNOWS` nghĩa là gì, không có schema, không có nguồn gốc. Đây là data graph.
-- **Trường hợp B**: Cùng đồ thị trên, nhưng `:KNOWS` được định nghĩa là quan hệ xã hội hai chiều giữa hai Person, có domain/range ràng buộc, có timestamp, có nguồn trích dẫn từ LinkedIn API. Đây là knowledge graph.
+- **Trường hợp B**: Cùng đồ thị trên, nhưng `:KNOWS` được định nghĩa là quan hệ xã hội hai chiều giữa hai Person, có ngữ nghĩa RDFS (domain/range dùng để suy diễn kiểu), có timestamp, có nguồn trích dẫn từ LinkedIn API. Đây là knowledge graph.
 
 Sự khác biệt nằm ở semantics và context, không nằm ở cấu trúc đồ thị.
 
@@ -95,39 +95,67 @@ Hệ thống phân cấp các khái niệm dựa trên quan hệ cha-con (subcla
 
 ### Knowledge Graph (Đồ thị Tri thức)
 
-Data graph + semantics (schema, ontology, identity, constraints) + context (provenance, time, scope, confidence). KG cho phép máy không chỉ lưu trữ mà còn suy luận, kiểm chứng, và tiến hóa tri thức.
+#### Định nghĩa học thuật (Academic/Minimal Model)
+
+Theo Stanford CS520 (S03), một knowledge graph là **đồ thị có hướng có nhãn** (directed labeled graph) trong đó các nhãn mang ngữ nghĩa được định nghĩa rõ ràng. Một cách hình thức tối thiểu: cho tập đỉnh N và tập nhãn L, knowledge graph là một tập con của N × L × N — tức là một tập các bộ ba (triple) có hướng. Các định nghĩa khác nhau tồn tại trong tài liệu nghiên cứu; không có một định nghĩa duy nhất được chấp nhận rộng rãi.
+
+#### Mô hình Kỹ thuật của Cuốn sách (Book Engineering Model)
+
+Để phục vụ việc thiết kế hệ thống tri thức trong thực tế, cuốn sách này sử dụng mô hình phân tách sau:
+
+**Knowledge Graph = Data Graph + Semantics + Context**
+
+Trong đó:
+- **Data Graph**: entities, relations, properties
+- **Semantics**: schema, ontology, identity, constraints
+- **Context**: provenance, time, scope, confidence
+
+Đây là **mô hình học tập dành cho kỹ sư**, KHÔNG phải định nghĩa phổ quát. Nó trả lời câu hỏi: "Những khả năng bổ sung nào chúng ta muốn hệ thống tri thức dựa trên đồ thị mang lại?" Một artifact không cần có đầy đủ tất cả các thành phần context để được gọi là knowledge graph theo nghĩa học thuật.
 
 ## Mechanism
 
-Cơ chế cốt lõi của chương này là **sự bổ sung tuần tự các lớp ý nghĩa lên đồ thị dữ liệu**:
+Cơ chế cốt lõi của chương này là **sự bổ sung tuần tự các lớp năng lực lên cấu trúc đồ thị**. Đây không phải là thang bậc trưởng thành cứng nhắc (một data graph vẫn có thể là knowledge graph theo nghĩa học thuật), mà là mô hình tích lũy các khả năng kỹ thuật:
 
 ```
-Plain Graph → Data Graph → Taxonomy → Ontology → Knowledge Graph
-     ↑              ↑           ↑          ↑            ↑
-  Structure      Labels     Hierarchy   Semantics    Context
+Graph Structure (đỉnh + cạnh)
+  + Semantic Commitments (nhãn có ý nghĩa)
+    + Schema/Ontology (formal definitions, domain/range, subclass)
+      + Identity (persistent IRIs, entity resolution, sameAs)
+        + Context/Provenance (source, time, scope, confidence)
+          + Constraints/Validation (SHACL shapes, cardinality)
+            + Inference Capabilities (entailment, rules, reasoning)
 ```
 
-Mỗi bước chuyển tiếp giải quyết một giới hạn cụ thể của bước trước:
-- Data Graph thêm labels vào plain graph → phân biệt được loại quan hệ
-- Taxonomy thêm hierarchy vào data graph → tổ chức được khái niệm
-- Ontology thêm formal semantics vào taxonomy → máy hiểu được ý nghĩa và ràng buộc
-- Context thêm provenance/time/confidence vào ontology-backed graph → quản lý được tri thức trong thực tế
+Mỗi lớp bổ sung giải quyết một giới hạn cụ thể của lớp trước:
+- Semantic commitments phân biệt được loại quan hệ (thay vì nhãn tùy ý)
+- Schema/ontology cho phép máy hiểu ý nghĩa và suy diễn kiểu
+- Identity giải quyết vấn đề cùng một entity có nhiều tên/biểu diễn
+- Context/provenance cho phép quản lý tri thức trong thực tế (nguồn gốc, thời gian, độ tin cậy)
+- Constraints/validation phát hiện dữ liệu không phù hợp với chính sách đã định
+- Inference capabilities tạo ra tri thức mới từ tri thức hiện có
+
+Lưu ý: các lớp này **không loại trừ lẫn nhau**. Một hệ thống có thể có inference mà chưa có validation đầy đủ, hoặc có context mà chưa có ontology hình thức.
 
 ## Formal Model
 
-Gọi G = (V, E, L_V, L_E) là đồ thị có nhãn, trong đó:
-- V là tập đỉnh (entities)
-- E ⊆ V × L_E × V là tập cạnh có nhãn (relations)
-- L_V: V → Σ_V là hàm gán nhãn cho đỉnh
-- L_E: E → Σ_E là hàm gán nhãn cho cạnh
+### Ký hiệu Hình thức (Formal Notation)
 
-**Data Graph** = G với L_V, L_E tùy ý, không có ràng buộc.
+> ⚠️ Ký hiệu dưới đây do cuốn sách này định nghĩa cho mục đích học tập. Nó không phải là ký hiệu chuẩn từ W3C hay tài liệu học thuật.
 
-**Taxonomy** = Data Graph + quan hệ ≤_sub trên L_V sao cho ≤_sub là partial order (phản xạ, phản đối xứng, bắc cầu).
+Cho một **labeled directed graph** G = (V, E, λ):
+- V là tập đỉnh (entities/nodes)
+- E ⊆ V × V là tập cạnh có hướng
+- λ: E → L là hàm gán nhãn cho cạnh, với L là tập nhãn quan hệ
 
-**Ontology** = Taxonomy + tập tiên đề A (axioms) bao gồm domain/range constraints, equivalence, disjointness, cardinality.
+Một **triple** (s, p, o) ∈ V × L × V tương ứng với cạnh e = (s, o) ∈ E với λ(e) = p.
 
-**Knowledge Graph** = (G, O, C) trong đó O là ontology và C là hàm context: C: (V ∪ E) → P(Provenance × Time × Scope × Confidence).
+**Data Graph**: G với λ tùy ý, không có ràng buộc ngữ nghĩa bổ sung.
+
+**Taxonomy**: Data Graph + quan hệ ⊑ (subclassOf) trên một tập con của L, sao cho ⊑ là partial order.
+
+**Ontology** (theo nghĩa RDFS/OWL): Tập tiên đề T bao gồm các khai báo domain, range, subclass, equivalence, disjointness. Ngữ nghĩa được xác định bởi entailment rules (RDFS/OWL), không phải bởi constraint checking.
+
+**Book Engineering Model** (ký hiệu riêng của sách): KSE = (G, T, C) trong đó T là tập tiên đề ontology và C là thông tin context (provenance, time, scope, confidence). Ký hiệu này do sách định nghĩa, không phải chuẩn công nghiệp.
 
 ## Worked Example
 
@@ -164,7 +192,9 @@ Máy biết Capital là một loại City, City là một loại Place. Nhưng v
     rdfs:domain :City ;
     rdfs:range :Country .
 ```
-Máy biết `:capitalOf` chỉ áp dụng từ City đến Country. Nếu ai đó viết `(Vietnam) --[:capitalOf]--> (Hanoi)`, máy phát hiện vi phạm.
+Máy biết `:capitalOf` có domain là City và range là Country. Theo ngữ nghĩa RDFS (suy diễn, không phải kiểm tra ràng buộc), nếu xuất hiện triple `(Vietnam) --[:capitalOf]--> (Hanoi)`, máy sẽ **suy ra** rằng `Vietnam rdf:type City` và `Hanoi rdf:type Country` — ngay cả khi điều này mâu thuẫn với thực tế. RDFS domain/range thêm thông tin kiểu, chúng không từ chối hay báo lỗi dữ liệu "sai".
+
+> ⚠️ **Phân biệt quan trọng:** Suy diễn RDFS (`statement → entailment`) khác với xác nhận ràng buộc SHACL (`data → constraint check → conforms/violation`). Việc phát hiện và từ chối dữ liệu không phù hợp thuộc về validation (Chương 5), không phải ngữ nghĩa RDFS tiêu chuẩn.
 
 **Bước 5 — Knowledge Graph (thêm Context):**
 ```
@@ -198,17 +228,23 @@ Tri thức nằm ở semantics và context, không nằm ở kích thước đ�
 KG là hệ thống sống. Ontology có thể tiến hóa cùng dữ liệu. Bắt đầu với taxonomy đơn giản, mở rộng dần khi nhu cầu suy diễn phát sinh.
 
 **Sai lầm 4: "Triple = Fact"**
-Triple là một tuyên bố (statement/assertion). Nó chỉ trở thành fact khi được kiểm chứng, có nguồn gốc, và nằm trong ngữ cảnh phù hợp. Chương 6 sẽ phân tích sâu vấn đề này.
+Trong RDF, một triple trong đồ thị là một **assertion** (tuyên bố) — nó khẳng định rằng mệnh đề đó đúng trong ngữ cảnh của đồ thị. Tuy nhiên, assertion ≠ accepted knowledge trong hệ thống tri thức thực tế.
+
+Phân biệt hai cấp độ:
+- **Representation semantics** (RDF): Triple trong graph = asserted proposition. RDF không phân biệt "tin" hay "không tin" — nếu triple có mặt, nó được assert.
+- **Epistemic governance policy** (hệ thống tri thức của chúng ta): Khi nào hệ thống CHỌN promote một assertion thành accepted knowledge? Điều này phụ thuộc vào provenance, validation, confidence, và chính sách của hệ thống.
+
+Chương 6 sẽ phân tích sâu sự phân biệt: Observation ≠ Assertion ≠ Claim ≠ Evidence ≠ Accepted Knowledge.
 
 ## Experiments
 
 | Experiment | Difficulty | Status | Description |
 |---|---|---|---|
-| [1-1](chapter01/exp_1_1/) | ★ | 🚧 | Plain graph without semantics |
-| [1-2](chapter01/exp_1_2/) | ★ | 🚧 | Data graph vs taxonomy |
-| [1-3](chapter01/exp_1_3/) | ★★ | 🚧 | Reproduce Winterthur/sister-city lesson with original code |
-| [1-4](chapter01/exp_1_4/) | ★★ | 🚧 | Turn a data graph into a simple KG |
-| [1-5](chapter01/exp_1_5/) | ★★★ | 🚧 | Define the semantics of a relation |
+| [1-1](chapter01/exp_1_1/) | ★ | ✅ | Plain graph without semantics |
+| [1-2](chapter01/exp_1_2/) | ★ | ✅ | Data graph vs taxonomy |
+| [1-3](chapter01/exp_1_3/) | ★★ | ✅ | Progressive transformation to KG (sister-city domain) |
+| [1-4](chapter01/exp_1_4/) | ★★ | ✅ | Data graph → simple KG with forward-chaining inference |
+| [1-5](chapter01/exp_1_5/) | ★★★ | ✅ | Define the semantics of a relation (symmetry, transitivity, inverse) |
 
 ## Thought Questions
 

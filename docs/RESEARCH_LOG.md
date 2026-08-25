@@ -37,10 +37,10 @@ Verified current status of all W3C specifications by fetching live pages from `w
 
 ### SHACL 1.2 Status
 
-- URL `https://www.w3.org/TR/shacl-12-core/` returns **404 Page Not Found**.
-- URL `https://www.w3.org/TR/shacl-12/` also returns 404.
-- The Data Shapes Working Group exists (`w3c.github.io/shacl/`) but no SHACL 1.2 draft is currently published at a stable TR URL.
-- **Decision**: Use SHACL 1.0 (Recommendation) as the sole SHACL baseline. If SHACL 1.2 emerges during writing, add it as an explicitly labeled "Current development" note. Do not reference SHACL 1.2 until a W3C TR URL exists.
+- **Phase 1 error corrected**: Previous research used incorrect URL `shacl-12-core` (with hyphen) and concluded SHACL 1.2 did not exist. The correct URL is `https://www.w3.org/TR/shacl12-core/` (no hyphen).
+- Fetched 2026-08-25: HTTP 200, title "SHACL 1.2 Core", status **W3C Working Draft**, dated 2026-08-03.
+- Publication history confirmed at `https://www.w3.org/standards/history/shacl12-core/`.
+- **Decision**: SHACL 1.0 (Recommendation, 2017-07-20) remains the stable teaching baseline. SHACL 1.2 Core (Working Draft, 2026-08-03) is documented as emerging material in Chapter 5 with explicit callout. Never teach WD content as stable baseline.
 
 ### Key Teaching Implications
 
@@ -81,7 +81,7 @@ Confirmed scope boundaries for academic sources:
 
 ## Open Questions
 
-1. SHACL 1.2 may emerge during the writing period. Set up a periodic check mechanism.
+1. ~~SHACL 1.2 may emerge~~ RESOLVED: SHACL 1.2 Core exists as Working Draft (2026-08-03). Documented as emerging material.
 2. PyKEEN compatibility with Python 3.12+ should be verified empirically before Chapter 8.
 3. RDF 1.2 is advancing rapidly (CR as of April 2026). Monitor for promotion to Proposed Recommendation or full Recommendation.
 4. Need to verify Neo4j Community Edition Docker image compatibility with current Docker version (29.5.2) during skeleton phase.

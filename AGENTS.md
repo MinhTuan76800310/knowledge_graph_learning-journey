@@ -82,3 +82,21 @@ State explicitly that Model 1 is an engineering learning model, not a universal 
 - [ ] EXPERIMENT_STATUS.md updated with evidence
 
 </content>
+
+## Standards Correctness Policy
+
+Passing tests proves implementation conformance to the test oracle. It does NOT prove that the oracle matches RDF/RDFS/OWL/SHACL standards.
+
+For standards-related experiments, tests must reference a semantic contract derived from an authoritative standard:
+
+```
+source (e.g., R11-03) → semantic contract → experiment behavior → test oracle
+```
+
+When adding or modifying tests for standards-sensitive behavior:
+1. Identify the authoritative source ID from `docs/source_index.json`
+2. Verify the semantic contract against the fetched source
+3. Record the source ID in test comments
+4. Never modify expected outputs to match incorrect code; fix the code to match the standard
+
+See `docs/research_notes/R11-03.md` for the canonical RDFS domain/range semantics contract.

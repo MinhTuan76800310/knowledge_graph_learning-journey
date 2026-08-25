@@ -1,0 +1,1014 @@
+{
+  "verified_by_assistant_date": "2026-08-25",
+  "purpose": "Direct-source manifest for knowledge-graph-book Phase 0 research when web search is unavailable.",
+  "rules": [
+    "Fetch the exact URL directly; search engine is optional.",
+    "Do not substitute model memory for a failed authoritative fetch.",
+    "Record HTTP status, final URL, retrieval timestamp, title/version/status and SHA256 where feasible.",
+    "Stable W3C Recommendations are curriculum baseline; drafts are explicitly emerging/current developments.",
+    "Do not commit full copyrighted book/article content unless the license explicitly allows redistribution.",
+    "Paraphrase and cite academic/copyrighted sources."
+  ],
+  "sources": [
+    {
+      "id": "P01",
+      "chapters": "META",
+      "type": "REFERENCE_REPO",
+      "priority": "P0",
+      "title": "ai-agent-book — pedagogical reference",
+      "url": "https://github.com/bojieli/ai-agent-book",
+      "status": "Repository",
+      "notes": "Study pedagogy/structure only; do not copy text/code."
+    },
+    {
+      "id": "P02",
+      "chapters": "META",
+      "type": "PORTAL",
+      "priority": "P2",
+      "title": "knowledgegraphs.org",
+      "url": "https://knowledgegraphs.org/",
+      "status": "Portal",
+      "notes": "Optional portal only; direct fetch may be unreliable. Not a curriculum backbone."
+    },
+    {
+      "id": "S01",
+      "chapters": "1-10",
+      "type": "ACADEMIC_COURSE",
+      "priority": "P0",
+      "title": "Stanford CS520 — Knowledge Graphs",
+      "url": "https://web.stanford.edu/class/cs520/",
+      "status": "Course site",
+      "notes": "Academic backbone."
+    },
+    {
+      "id": "S02",
+      "chapters": "1-10",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P0",
+      "title": "Stanford CS520 — Table of Contents",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/Table_Of_Contents.html",
+      "status": "Course notes",
+      "notes": "Use as curriculum map."
+    },
+    {
+      "id": "S03",
+      "chapters": "1",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P0",
+      "title": "What is a Knowledge Graph?",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/What_is_a_Knowledge_Graph.html",
+      "status": "Course notes",
+      "notes": "Core Chapter 1 source."
+    },
+    {
+      "id": "S04",
+      "chapters": "2-3",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P0",
+      "title": "What Are Graph Data Models?",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/What_Are_Graph_Data_Models.html",
+      "status": "Course notes",
+      "notes": "RDF vs property graph."
+    },
+    {
+      "id": "S05",
+      "chapters": "3-4",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P0",
+      "title": "How To Create A Knowledge Graph",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/How_To_Create_A_Knowledge_Graph.html",
+      "status": "Course notes",
+      "notes": "Schema/modeling/identity/reification."
+    },
+    {
+      "id": "S06",
+      "chapters": "7",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P0",
+      "title": "How To Create A Knowledge Graph From Structured Data",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/How_To_Create_A_Knowledge_Graph_From_Data.html",
+      "status": "Course notes",
+      "notes": "Structured acquisition/integration."
+    },
+    {
+      "id": "S07",
+      "chapters": "7",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P0",
+      "title": "How To Create A Knowledge Graph From Text",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/How_To_Create_A_Knowledge_Graph_From_Text.html",
+      "status": "Course notes",
+      "notes": "Entity/relation extraction."
+    },
+    {
+      "id": "S08",
+      "chapters": "5,8",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P0",
+      "title": "What Are Some Knowledge Graph Inference Algorithms?",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/What_Are_Some_Inference_Algorithms.html",
+      "status": "Course notes",
+      "notes": "Deductive and graph inference."
+    },
+    {
+      "id": "S09",
+      "chapters": "9",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P1",
+      "title": "How Do Users Interact With A Knowledge Graph?",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/How_Do_Users_Interact_With_a_Knowledge_Graph.html",
+      "status": "Course notes",
+      "notes": "Interaction/search/QA."
+    },
+    {
+      "id": "S10",
+      "chapters": "6,10",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P0",
+      "title": "How To Evolve A Knowledge Graph",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/How_To_Evolve_A_Knowledge_Graph.html",
+      "status": "Course notes",
+      "notes": "Evolution/truth maintenance."
+    },
+    {
+      "id": "S11",
+      "chapters": "10",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P1",
+      "title": "What Are Some High Value Use Cases Of Knowledge Graphs?",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/What_Are_Some_High_Value_Use_Cases_Of_Knowledge_Graphs.html",
+      "status": "Course notes",
+      "notes": "Application framing."
+    },
+    {
+      "id": "S12",
+      "chapters": "8-10",
+      "type": "ACADEMIC_NOTES",
+      "priority": "P1",
+      "title": "How Do Knowledge Graphs Relate To AI?",
+      "url": "https://web.stanford.edu/class/cs520/2020/notes/How_do_Knowledge_Graphs_Relate_To_AI.html",
+      "status": "Course notes",
+      "notes": "KG + AI."
+    },
+    {
+      "id": "S13",
+      "chapters": "1-10",
+      "type": "VIDEO_COURSE",
+      "priority": "P2",
+      "title": "Stanford CS520 YouTube playlist",
+      "url": "https://www.youtube.com/playlist?list=PLDhh0lALedc7LC_5wpi5gDnPRnu1GSyRG",
+      "status": "Supplemental video",
+      "notes": "Supplement only; do not bulk-download copyrighted video/transcripts."
+    },
+    {
+      "id": "H01",
+      "chapters": "1-10",
+      "type": "ACADEMIC_BOOK",
+      "priority": "P0",
+      "title": "Knowledge Graphs — Aidan Hogan et al.",
+      "url": "https://kgbook.org/",
+      "status": "Springer book site",
+      "notes": "Research/paraphrase/cite. Do not copy substantial text/figures."
+    },
+    {
+      "id": "O01",
+      "chapters": "3-4",
+      "type": "ACADEMIC_GUIDE",
+      "priority": "P0",
+      "title": "Ontology Development 101 — Stanford/Protégé",
+      "url": "https://protege.stanford.edu/publications/ontology_development/ontology101.pdf",
+      "status": "PDF guide",
+      "notes": "Ontology engineering methodology."
+    },
+    {
+      "id": "O02",
+      "chapters": "4",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P1",
+      "title": "Protégé documentation",
+      "url": "https://protegeproject.github.io/protege/",
+      "status": "Official docs",
+      "notes": "Optional hands-on ontology editor."
+    },
+    {
+      "id": "R11-01",
+      "chapters": "2",
+      "type": "STANDARD",
+      "priority": "P0",
+      "title": "RDF 1.1 Primer",
+      "url": "https://www.w3.org/TR/rdf11-primer/",
+      "status": "W3C Recommendation",
+      "notes": "Stable teaching baseline."
+    },
+    {
+      "id": "R11-02",
+      "chapters": "2-3",
+      "type": "STANDARD",
+      "priority": "P0",
+      "title": "RDF 1.1 Concepts and Abstract Syntax",
+      "url": "https://www.w3.org/TR/rdf11-concepts/",
+      "status": "W3C Recommendation",
+      "notes": "Formal data model."
+    },
+    {
+      "id": "R11-03",
+      "chapters": "4-5",
+      "type": "STANDARD",
+      "priority": "P0",
+      "title": "RDF Schema 1.1",
+      "url": "https://www.w3.org/TR/rdf-schema/",
+      "status": "W3C Recommendation",
+      "notes": "RDFS vocabulary/semantics."
+    },
+    {
+      "id": "R11-04",
+      "chapters": "5",
+      "type": "STANDARD",
+      "priority": "P1",
+      "title": "RDF 1.1 Semantics",
+      "url": "https://www.w3.org/TR/rdf11-mt/",
+      "status": "W3C Recommendation",
+      "notes": "Formal entailment semantics."
+    },
+    {
+      "id": "R11-05",
+      "chapters": "2",
+      "type": "STANDARD",
+      "priority": "P0",
+      "title": "RDF 1.1 Turtle",
+      "url": "https://www.w3.org/TR/turtle/",
+      "status": "W3C Recommendation",
+      "notes": "Primary human-readable serialization for labs."
+    },
+    {
+      "id": "R11-06",
+      "chapters": "2-3",
+      "type": "STANDARD",
+      "priority": "P1",
+      "title": "RDF 1.1 TriG",
+      "url": "https://www.w3.org/TR/trig/",
+      "status": "W3C Recommendation",
+      "notes": "RDF datasets / named graphs."
+    },
+    {
+      "id": "R11-07",
+      "chapters": "2",
+      "type": "STANDARD",
+      "priority": "P2",
+      "title": "JSON-LD 1.1",
+      "url": "https://www.w3.org/TR/json-ld11/",
+      "status": "W3C Recommendation",
+      "notes": "Optional web serialization/context lesson."
+    },
+    {
+      "id": "SP11-01",
+      "chapters": "2,9",
+      "type": "STANDARD",
+      "priority": "P0",
+      "title": "SPARQL 1.1 Overview",
+      "url": "https://www.w3.org/TR/sparql11-overview/",
+      "status": "W3C Recommendation",
+      "notes": "Stable baseline."
+    },
+    {
+      "id": "SP11-02",
+      "chapters": "2,9",
+      "type": "STANDARD",
+      "priority": "P0",
+      "title": "SPARQL 1.1 Query Language",
+      "url": "https://www.w3.org/TR/sparql11-query/",
+      "status": "W3C Recommendation",
+      "notes": "Primary SPARQL query reference."
+    },
+    {
+      "id": "SP11-03",
+      "chapters": "5",
+      "type": "STANDARD",
+      "priority": "P1",
+      "title": "SPARQL 1.1 Entailment Regimes",
+      "url": "https://www.w3.org/TR/sparql11-entailment/",
+      "status": "W3C Recommendation",
+      "notes": "SPARQL + entailment."
+    },
+    {
+      "id": "R12-01",
+      "chapters": "2,3,6",
+      "type": "STANDARD_DRAFT",
+      "priority": "P1",
+      "title": "RDF 1.2 Concepts and Abstract Data Model",
+      "url": "https://www.w3.org/TR/rdf12-concepts/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging material, including triple terms/reification. Do not teach as stable baseline."
+    },
+    {
+      "id": "R12-02",
+      "chapters": "META",
+      "type": "STANDARD_HISTORY",
+      "priority": "P0",
+      "title": "RDF 1.2 Concepts publication history",
+      "url": "https://www.w3.org/standards/history/rdf12-concepts/",
+      "status": "W3C publication history",
+      "notes": "Use to verify exact status/date."
+    },
+    {
+      "id": "R12-03",
+      "chapters": "2,3,6",
+      "type": "STANDARD_DRAFT",
+      "priority": "P1",
+      "title": "RDF 1.2 Primer",
+      "url": "https://www.w3.org/TR/rdf12-primer/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging primer."
+    },
+    {
+      "id": "R12-04",
+      "chapters": "2",
+      "type": "STANDARD_DRAFT",
+      "priority": "P2",
+      "title": "RDF 1.2 Turtle",
+      "url": "https://www.w3.org/TR/rdf12-turtle/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging syntax."
+    },
+    {
+      "id": "R12-05",
+      "chapters": "3,6",
+      "type": "STANDARD_DRAFT",
+      "priority": "P2",
+      "title": "RDF 1.2 TriG",
+      "url": "https://www.w3.org/TR/rdf12-trig/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging datasets syntax."
+    },
+    {
+      "id": "R12-06",
+      "chapters": "5,6",
+      "type": "STANDARD_DRAFT",
+      "priority": "P2",
+      "title": "RDF 1.2 Semantics",
+      "url": "https://www.w3.org/TR/rdf12-semantics/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging formal semantics."
+    },
+    {
+      "id": "R12-07",
+      "chapters": "4-5",
+      "type": "STANDARD_DRAFT",
+      "priority": "P2",
+      "title": "RDF Schema 1.2",
+      "url": "https://www.w3.org/TR/rdf12-schema/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging RDFS."
+    },
+    {
+      "id": "SP12-01",
+      "chapters": "2,9",
+      "type": "STANDARD_DRAFT",
+      "priority": "P1",
+      "title": "SPARQL 1.2 Query Language",
+      "url": "https://www.w3.org/TR/sparql12-query/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging; stable curriculum remains SPARQL 1.1."
+    },
+    {
+      "id": "SP12-02",
+      "chapters": "META",
+      "type": "STANDARD_HISTORY",
+      "priority": "P0",
+      "title": "SPARQL 1.2 Query publication history",
+      "url": "https://www.w3.org/standards/history/sparql12-query/",
+      "status": "W3C publication history",
+      "notes": "Verify exact status/date."
+    },
+    {
+      "id": "SP12-03",
+      "chapters": "2,9",
+      "type": "STANDARD_DRAFT",
+      "priority": "P2",
+      "title": "SPARQL 1.2 Protocol",
+      "url": "https://www.w3.org/TR/sparql12-protocol/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging."
+    },
+    {
+      "id": "SP12-04",
+      "chapters": "2,10",
+      "type": "STANDARD_DRAFT",
+      "priority": "P2",
+      "title": "SPARQL 1.2 Update",
+      "url": "https://www.w3.org/TR/sparql12-update/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging."
+    },
+    {
+      "id": "SP12-05",
+      "chapters": "5",
+      "type": "STANDARD_DRAFT",
+      "priority": "P2",
+      "title": "SPARQL 1.2 Entailment Regimes",
+      "url": "https://www.w3.org/TR/sparql12-entailment/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging."
+    },
+    {
+      "id": "OWL-01",
+      "chapters": "4-5",
+      "type": "STANDARD",
+      "priority": "P0",
+      "title": "OWL 2 Web Ontology Language — Document Overview",
+      "url": "https://www.w3.org/TR/owl2-overview/",
+      "status": "W3C Recommendation",
+      "notes": "OWL family map."
+    },
+    {
+      "id": "OWL-02",
+      "chapters": "4-5",
+      "type": "STANDARD",
+      "priority": "P0",
+      "title": "OWL 2 Primer",
+      "url": "https://www.w3.org/TR/owl2-primer/",
+      "status": "W3C Recommendation",
+      "notes": "Primary pedagogical OWL source."
+    },
+    {
+      "id": "OWL-03",
+      "chapters": "4-5",
+      "type": "STANDARD",
+      "priority": "P1",
+      "title": "OWL 2 Structural Specification and Functional-Style Syntax",
+      "url": "https://www.w3.org/TR/owl2-syntax/",
+      "status": "W3C Recommendation",
+      "notes": "Formal model."
+    },
+    {
+      "id": "OWL-04",
+      "chapters": "4-5",
+      "type": "STANDARD",
+      "priority": "P1",
+      "title": "OWL 2 Profiles",
+      "url": "https://www.w3.org/TR/owl2-profiles/",
+      "status": "W3C Recommendation",
+      "notes": "EL/QL/RL trade-offs."
+    },
+    {
+      "id": "OWL-05",
+      "chapters": "4-5",
+      "type": "STANDARD",
+      "priority": "P2",
+      "title": "OWL 2 Mapping to RDF Graphs",
+      "url": "https://www.w3.org/TR/owl2-mapping-to-rdf/",
+      "status": "W3C Recommendation",
+      "notes": "OWL/RDF mapping."
+    },
+    {
+      "id": "OWL-06",
+      "chapters": "4-5",
+      "type": "STANDARD",
+      "priority": "P2",
+      "title": "OWL 2 RDF-Based Semantics",
+      "url": "https://www.w3.org/TR/owl2-rdf-based-semantics/",
+      "status": "W3C Recommendation",
+      "notes": "Advanced semantics."
+    },
+    {
+      "id": "PAT-01",
+      "chapters": "3,6",
+      "type": "W3C_NOTE",
+      "priority": "P1",
+      "title": "Defining N-ary Relations on the Semantic Web",
+      "url": "https://www.w3.org/TR/swbp-n-aryRelations/",
+      "status": "W3C Working Group Note",
+      "notes": "Model contextual/qualified relationships."
+    },
+    {
+      "id": "SKOS-01",
+      "chapters": "1,3,4",
+      "type": "STANDARD",
+      "priority": "P2",
+      "title": "SKOS Simple Knowledge Organization System Reference",
+      "url": "https://www.w3.org/TR/skos-reference/",
+      "status": "W3C Recommendation",
+      "notes": "Taxonomies/thesauri/controlled vocabularies."
+    },
+    {
+      "id": "TIME-01",
+      "chapters": "6,10",
+      "type": "STANDARD",
+      "priority": "P1",
+      "title": "Time Ontology in OWL",
+      "url": "https://www.w3.org/TR/owl-time/",
+      "status": "Verify current W3C status/version",
+      "notes": "Temporal modeling; record exact version/status."
+    },
+    {
+      "id": "SH-01",
+      "chapters": "5,7,10",
+      "type": "STANDARD",
+      "priority": "P0",
+      "title": "Shapes Constraint Language (SHACL)",
+      "url": "https://www.w3.org/TR/shacl/",
+      "status": "W3C Recommendation",
+      "notes": "Stable validation baseline."
+    },
+    {
+      "id": "SH-02",
+      "chapters": "5,7,10",
+      "type": "STANDARD_DRAFT",
+      "priority": "P1",
+      "title": "SHACL 1.2 Core",
+      "url": "https://www.w3.org/TR/shacl12-core/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Emerging; clearly label."
+    },
+    {
+      "id": "SH-03",
+      "chapters": "META",
+      "type": "STANDARD_HISTORY",
+      "priority": "P1",
+      "title": "SHACL 1.2 Core publication history",
+      "url": "https://www.w3.org/standards/history/shacl12-core/",
+      "status": "W3C publication history",
+      "notes": "Verify exact status/date."
+    },
+    {
+      "id": "SH-04",
+      "chapters": "5",
+      "type": "STANDARD_DRAFT",
+      "priority": "P2",
+      "title": "SHACL 1.2 SPARQL Extensions",
+      "url": "https://www.w3.org/TR/shacl12-sparql/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Optional advanced validation."
+    },
+    {
+      "id": "SH-05",
+      "chapters": "5",
+      "type": "STANDARD_DRAFT",
+      "priority": "P2",
+      "title": "SHACL 1.2 Node Expressions",
+      "url": "https://www.w3.org/TR/shacl12-node-expr/",
+      "status": "Verify current W3C status at fetch time",
+      "notes": "Optional advanced material."
+    },
+    {
+      "id": "PROV-01",
+      "chapters": "6,10",
+      "type": "STANDARD",
+      "priority": "P0",
+      "title": "PROV-O: The PROV Ontology",
+      "url": "https://www.w3.org/TR/prov-o/",
+      "status": "W3C Recommendation",
+      "notes": "Canonical RDF/OWL provenance model."
+    },
+    {
+      "id": "PROV-02",
+      "chapters": "6,10",
+      "type": "W3C_NOTE",
+      "priority": "P0",
+      "title": "PROV Model Primer",
+      "url": "https://www.w3.org/TR/prov-primer/",
+      "status": "W3C Working Group Note",
+      "notes": "Start here before PROV-O/DM."
+    },
+    {
+      "id": "PROV-03",
+      "chapters": "6,10",
+      "type": "STANDARD",
+      "priority": "P1",
+      "title": "PROV-DM: The PROV Data Model",
+      "url": "https://www.w3.org/TR/prov-dm/",
+      "status": "W3C Recommendation",
+      "notes": "Conceptual provenance model."
+    },
+    {
+      "id": "PROV-04",
+      "chapters": "META",
+      "type": "W3C_NOTE",
+      "priority": "P1",
+      "title": "PROV Overview",
+      "url": "https://www.w3.org/TR/prov-overview/",
+      "status": "W3C Working Group Note",
+      "notes": "Map of PROV family."
+    },
+    {
+      "id": "WD-01",
+      "chapters": "3,6,9",
+      "type": "REAL_WORLD_KG",
+      "priority": "P0",
+      "title": "Wikidata Data Model",
+      "url": "https://www.wikidata.org/wiki/Wikidata:Data_model/en",
+      "status": "Living documentation",
+      "notes": "Real-world statement/claim model."
+    },
+    {
+      "id": "WD-02",
+      "chapters": "6",
+      "type": "REAL_WORLD_KG",
+      "priority": "P0",
+      "title": "Wikidata Help: Statements",
+      "url": "https://www.wikidata.org/wiki/Help:Statements/en",
+      "status": "Living documentation",
+      "notes": "Statement anatomy."
+    },
+    {
+      "id": "WD-03",
+      "chapters": "6",
+      "type": "REAL_WORLD_KG",
+      "priority": "P0",
+      "title": "Wikidata Help: Qualifiers",
+      "url": "https://www.wikidata.org/wiki/Help:Qualifiers/en",
+      "status": "Living documentation",
+      "notes": "Scope/time/context."
+    },
+    {
+      "id": "WD-04",
+      "chapters": "6",
+      "type": "REAL_WORLD_KG",
+      "priority": "P0",
+      "title": "Wikidata Help: Ranking",
+      "url": "https://www.wikidata.org/wiki/Help:Ranking",
+      "status": "Living documentation",
+      "notes": "Preferred/normal/deprecated rank."
+    },
+    {
+      "id": "WD-05",
+      "chapters": "2,6,9",
+      "type": "REAL_WORLD_KG",
+      "priority": "P0",
+      "title": "Wikidata SPARQL Tutorial",
+      "url": "https://www.wikidata.org/wiki/Wikidata:SPARQL_tutorial/en",
+      "status": "Living documentation",
+      "notes": "Hands-on public KG querying."
+    },
+    {
+      "id": "WD-06",
+      "chapters": "3,6",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P1",
+      "title": "Wikibase DataModel",
+      "url": "https://www.mediawiki.org/wiki/Wikibase/DataModel",
+      "status": "Official documentation",
+      "notes": "Underlying Wikibase data model."
+    },
+    {
+      "id": "WD-07",
+      "chapters": "2,6",
+      "type": "MACHINE_READABLE_DATA",
+      "priority": "P1",
+      "title": "Wikidata Q42 JSON example",
+      "url": "https://www.wikidata.org/wiki/Special:EntityData/Q42.json",
+      "status": "Live machine-readable entity",
+      "notes": "Good reproducible parsing example."
+    },
+    {
+      "id": "WD-08",
+      "chapters": "2,6",
+      "type": "MACHINE_READABLE_DATA",
+      "priority": "P1",
+      "title": "Wikidata Q42 Turtle example",
+      "url": "https://www.wikidata.org/wiki/Special:EntityData/Q42.ttl",
+      "status": "Live machine-readable entity",
+      "notes": "Compare with JSON representation."
+    },
+    {
+      "id": "WD-09",
+      "chapters": "2,9",
+      "type": "QUERY_ENDPOINT",
+      "priority": "P1",
+      "title": "Wikidata Query Service",
+      "url": "https://query.wikidata.org/",
+      "status": "Public service",
+      "notes": "Interactive SPARQL endpoint; rate limits apply."
+    },
+    {
+      "id": "WD-10",
+      "chapters": "2,9",
+      "type": "QUERY_ENDPOINT",
+      "priority": "P2",
+      "title": "Wikidata SPARQL endpoint",
+      "url": "https://query.wikidata.org/sparql",
+      "status": "Public service",
+      "notes": "Use politely, cache tiny examples, respect rate limits."
+    },
+    {
+      "id": "N4J-01",
+      "chapters": "2",
+      "type": "OFFICIAL_COURSE",
+      "priority": "P0",
+      "title": "Neo4j Fundamentals",
+      "url": "https://graphacademy.neo4j.com/courses/neo4j-fundamentals/",
+      "status": "Official course",
+      "notes": "Property-graph lab."
+    },
+    {
+      "id": "N4J-02",
+      "chapters": "2,9",
+      "type": "OFFICIAL_COURSE",
+      "priority": "P0",
+      "title": "Cypher Fundamentals",
+      "url": "https://graphacademy.neo4j.com/courses/cypher-fundamentals/",
+      "status": "Official course",
+      "notes": "Query lab."
+    },
+    {
+      "id": "N4J-03",
+      "chapters": "2-3",
+      "type": "OFFICIAL_COURSE",
+      "priority": "P0",
+      "title": "Graph Data Modeling Fundamentals",
+      "url": "https://graphacademy.neo4j.com/courses/modeling-fundamentals/",
+      "status": "Official course",
+      "notes": "Modeling trade-offs."
+    },
+    {
+      "id": "N4J-04",
+      "chapters": "7,9",
+      "type": "OFFICIAL_COURSE",
+      "priority": "P1",
+      "title": "Building Knowledge Graphs with LLMs",
+      "url": "https://graphacademy.neo4j.com/courses/llm-knowledge-graph-construction/",
+      "status": "Official course",
+      "notes": "Use only after foundations."
+    },
+    {
+      "id": "N4J-05",
+      "chapters": "2-3",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P0",
+      "title": "Neo4j Data Modeling",
+      "url": "https://neo4j.com/docs/getting-started/data-modeling/",
+      "status": "Official docs",
+      "notes": "Property graph design."
+    },
+    {
+      "id": "N4J-06",
+      "chapters": "2,9",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P0",
+      "title": "Neo4j Cypher Manual",
+      "url": "https://neo4j.com/docs/cypher-manual/current/",
+      "status": "Official docs",
+      "notes": "Primary Cypher reference."
+    },
+    {
+      "id": "N4J-07",
+      "chapters": "2,7,9",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P1",
+      "title": "Neo4j Python Driver Manual",
+      "url": "https://neo4j.com/docs/python-manual/current/",
+      "status": "Official docs",
+      "notes": "Python labs."
+    },
+    {
+      "id": "N4J-08",
+      "chapters": "2",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P1",
+      "title": "Neo4j Docker documentation",
+      "url": "https://neo4j.com/docs/operations-manual/current/docker/",
+      "status": "Official docs",
+      "notes": "Local reproducible server."
+    },
+    {
+      "id": "GQL-01",
+      "chapters": "2",
+      "type": "STANDARD",
+      "priority": "P1",
+      "title": "ISO/IEC 39075:2024 — GQL",
+      "url": "https://www.iso.org/standard/76120.html",
+      "status": "International Standard",
+      "notes": "Graph Query Language standard metadata."
+    },
+    {
+      "id": "GQL-02",
+      "chapters": "2",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P1",
+      "title": "Neo4j Cypher — GQL conformance",
+      "url": "https://neo4j.com/docs/cypher-manual/current/appendix/gql-conformance/",
+      "status": "Official docs",
+      "notes": "Cypher/GQL relationship."
+    },
+    {
+      "id": "GQL-03",
+      "chapters": "2",
+      "type": "COMMUNITY_STANDARD_INFO",
+      "priority": "P2",
+      "title": "GQL Standards",
+      "url": "https://www.gqlstandards.org/",
+      "status": "Community standards site",
+      "notes": "Supplemental context."
+    },
+    {
+      "id": "TOOL-01",
+      "chapters": "2-7",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P0",
+      "title": "RDFLib documentation",
+      "url": "https://rdflib.readthedocs.io/",
+      "status": "Official docs",
+      "notes": "Primary Python RDF lab library."
+    },
+    {
+      "id": "TOOL-02",
+      "chapters": "2-7",
+      "type": "SOURCE_REPO",
+      "priority": "P1",
+      "title": "RDFLib GitHub",
+      "url": "https://github.com/RDFLib/rdflib",
+      "status": "Repository",
+      "notes": "Verify release/maintenance/license."
+    },
+    {
+      "id": "TOOL-03",
+      "chapters": "5,7,10",
+      "type": "SOURCE_REPO",
+      "priority": "P0",
+      "title": "pySHACL",
+      "url": "https://github.com/RDFLib/pySHACL",
+      "status": "Repository",
+      "notes": "SHACL labs; verify current release."
+    },
+    {
+      "id": "TOOL-04",
+      "chapters": "5",
+      "type": "SOURCE_REPO",
+      "priority": "P1",
+      "title": "OWL-RL",
+      "url": "https://github.com/RDFLib/OWL-RL",
+      "status": "Repository",
+      "notes": "RDFS/OWL RL reasoning experiments."
+    },
+    {
+      "id": "TOOL-05",
+      "chapters": "4-5",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P2",
+      "title": "Owlready2 documentation",
+      "url": "https://owlready2.readthedocs.io/",
+      "status": "Official docs",
+      "notes": "Optional OWL reasoning path."
+    },
+    {
+      "id": "TOOL-06",
+      "chapters": "8",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P0",
+      "title": "PyKEEN documentation",
+      "url": "https://pykeen.readthedocs.io/",
+      "status": "Official docs",
+      "notes": "KG embeddings."
+    },
+    {
+      "id": "TOOL-07",
+      "chapters": "1,8",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P0",
+      "title": "NetworkX documentation",
+      "url": "https://networkx.org/documentation/stable/",
+      "status": "Official docs",
+      "notes": "Graph basics/analytics."
+    },
+    {
+      "id": "ML-01",
+      "chapters": "8",
+      "type": "ACADEMIC_COURSE",
+      "priority": "P0",
+      "title": "Stanford CS224W — Machine Learning with Graphs",
+      "url": "https://snap.stanford.edu/class/cs224w-2022/",
+      "status": "Course site",
+      "notes": "Focus on KG embeddings/reasoning lectures."
+    },
+    {
+      "id": "LLMKG-01",
+      "chapters": "9-10",
+      "type": "RESEARCH_PAPER",
+      "priority": "P0",
+      "title": "Unifying Large Language Models and Knowledge Graphs: A Roadmap",
+      "url": "https://arxiv.org/abs/2306.08302",
+      "status": "Research paper",
+      "notes": "Taxonomy: KG-enhanced LLM, LLM-augmented KG, synergized LLM+KG."
+    },
+    {
+      "id": "LLMKG-02",
+      "chapters": "9-10",
+      "type": "RESEARCH_PAPER_PDF",
+      "priority": "P1",
+      "title": "Unifying LLMs and KGs — PDF",
+      "url": "https://arxiv.org/pdf/2306.08302",
+      "status": "Research paper PDF",
+      "notes": "Read/paraphrase; do not reproduce substantial text."
+    },
+    {
+      "id": "GR-01",
+      "chapters": "9",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P0",
+      "title": "Microsoft GraphRAG documentation",
+      "url": "https://microsoft.github.io/graphrag/",
+      "status": "Official docs",
+      "notes": "Case study/reference implementation, not curriculum foundation."
+    },
+    {
+      "id": "GR-02",
+      "chapters": "9",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P0",
+      "title": "GraphRAG indexing architecture",
+      "url": "https://microsoft.github.io/graphrag/index/architecture/",
+      "status": "Official docs",
+      "notes": "Indexing architecture."
+    },
+    {
+      "id": "GR-03",
+      "chapters": "9",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P1",
+      "title": "GraphRAG default dataflow",
+      "url": "https://microsoft.github.io/graphrag/index/default_dataflow/",
+      "status": "Official docs",
+      "notes": "Entities/relationships/claims/community reports pipeline."
+    },
+    {
+      "id": "GR-04",
+      "chapters": "9",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P1",
+      "title": "GraphRAG indexing methods",
+      "url": "https://microsoft.github.io/graphrag/index/methods/",
+      "status": "Official docs",
+      "notes": "Method details."
+    },
+    {
+      "id": "GR-05",
+      "chapters": "9",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P0",
+      "title": "GraphRAG query overview",
+      "url": "https://microsoft.github.io/graphrag/query/overview/",
+      "status": "Official docs",
+      "notes": "Local/global/DRIFT/baseline."
+    },
+    {
+      "id": "GR-06",
+      "chapters": "9",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P1",
+      "title": "GraphRAG local search",
+      "url": "https://microsoft.github.io/graphrag/query/local_search/",
+      "status": "Official docs",
+      "notes": "Entity-centric local retrieval."
+    },
+    {
+      "id": "GR-07",
+      "chapters": "9",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P1",
+      "title": "GraphRAG global search",
+      "url": "https://microsoft.github.io/graphrag/query/global_search/",
+      "status": "Official docs",
+      "notes": "Community-report/global retrieval."
+    },
+    {
+      "id": "GR-08",
+      "chapters": "9",
+      "type": "OFFICIAL_DOCS",
+      "priority": "P1",
+      "title": "GraphRAG DRIFT search",
+      "url": "https://microsoft.github.io/graphrag/query/drift_search/",
+      "status": "Official docs",
+      "notes": "DRIFT retrieval."
+    },
+    {
+      "id": "GR-09",
+      "chapters": "9",
+      "type": "SOURCE_REPO",
+      "priority": "P1",
+      "title": "Microsoft GraphRAG GitHub",
+      "url": "https://github.com/microsoft/graphrag",
+      "status": "Repository",
+      "notes": "Check current maintenance/status notice before depending on implementation."
+    },
+    {
+      "id": "GR-10",
+      "chapters": "9",
+      "type": "RESEARCH_PAPER",
+      "priority": "P0",
+      "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization",
+      "url": "https://arxiv.org/abs/2404.16130",
+      "status": "Research paper",
+      "notes": "GraphRAG paper."
+    },
+    {
+      "id": "GR-11",
+      "chapters": "9",
+      "type": "RESEARCH_PAPER_PDF",
+      "priority": "P1",
+      "title": "From Local to Global — PDF",
+      "url": "https://arxiv.org/pdf/2404.16130",
+      "status": "Research paper PDF",
+      "notes": "Read/paraphrase; do not reproduce substantial text."
+    }
+  ]
+}

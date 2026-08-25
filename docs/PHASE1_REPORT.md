@@ -49,7 +49,7 @@
 | SPARQL 1.1 Query | ✅ Recommendation | 2013-03-21 |
 | SPARQL 1.2 Query | 🔄 Working Draft | 2026-08-20 |
 | SHACL 1.1 | ✅ Recommendation | 2017-07-20 |
-| SHACL 1.2 | ❌ Not yet published | — |
+| SHACL 1.2 Core | 🔄 Working Draft | 2026-08-03 | https://www.w3.org/TR/shacl12-core/ |
 | OWL 2 Overview | ✅ Recommendation | 2012-12-11 |
 | PROV-O | ✅ Recommendation | 2013-04-30 |
 
