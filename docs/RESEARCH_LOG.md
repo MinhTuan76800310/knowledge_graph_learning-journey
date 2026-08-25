@@ -86,4 +86,3 @@ Confirmed scope boundaries for academic sources:
 3. RDF 1.2 is advancing rapidly (CR as of April 2026). Monitor for promotion to Proposed Recommendation or full Recommendation.
 4. Need to verify Neo4j Community Edition Docker image compatibility with current Docker version (29.5.2) during skeleton phase.
 
-</parameter>

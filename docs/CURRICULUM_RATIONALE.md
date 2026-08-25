@@ -119,7 +119,7 @@ W3C standards evolve. The book explicitly distinguishes:
 As of 2026-08-25:
 - RDF 1.2 Concepts is a Candidate Recommendation Snapshot (2026-04-07)
 - SPARQL 1.2 Query is a Working Draft (2026-08-20)
-- SHACL 1.2 does not yet exist as a published document; SHACL 1.0 remains stable
+- SHACL 1.2 Core exists as Working Draft (2026-08-03); SHACL 1.0 (Recommendation, 2017) remains the stable teaching baseline
 - All other referenced specs are stable Recommendations
 
 Callout boxes mark emerging material. The main curriculum never teaches a draft as if it were stable.
@@ -130,4 +130,3 @@ This repository contains ORIGINAL writing. No substantial passages are copied fr
 
 The Hogan et al. textbook (kgbook.org) is used strictly as a research reference. Its conceptual taxonomy informs the book's structure, but no paragraphs, figures, examples, or substantial wording are reproduced.
 
-</parameter>

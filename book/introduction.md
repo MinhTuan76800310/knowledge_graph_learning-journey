@@ -76,4 +76,3 @@ Sách viết bằng **tiếng Việt**. Thuật ngữ kỹ thuật giữ nguyên
 
 Hãy bắt đầu từ [Chương 1: Từ Đồ thị đến Tri thức](chapter01.md).
 
-</content>

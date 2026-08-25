@@ -18,7 +18,7 @@ Last verified: 2026-08-25
 | SPARQL 1.2 Query Language | 1.2 | Working Draft | 2026-08-20 | https://www.w3.org/TR/sparql12-query/ | Emerging; not yet stable |
 | OWL 2 Web Ontology Language Document Overview (Second Edition) | 2 | Recommendation | 2012-12-11 | https://www.w3.org/TR/owl2-overview/ | Stable baseline |
 | OWL 2 Primer (Second Edition) | 2 | Recommendation | 2012-12-11 | https://www.w3.org/TR/owl2-primer/ | Stable baseline |
-| Shapes Constraint Language (SHACL) | 1.0 | Recommendation | 2017-07-20 | https://www.w3.org/TR/shacl/ | Stable baseline; no SHACL 1.2 spec published as of 2026-08-25 |
+| Shapes Constraint Language (SHACL) | 1.0 | Recommendation | 2017-07-20 | https://www.w3.org/TR/shacl/ | Stable baseline; SHACL 1.2 Core exists as Working Draft (2026-08-03) |
 | PROV-O: The PROV Ontology | 1.0 | Recommendation | 2013-04-30 | https://www.w3.org/TR/prov-o/ | Stable baseline for provenance |
 | Turtle 1.1 | 1.1 | Recommendation | 2014-02-25 | https://www.w3.org/TR/turtle/ | Stable baseline |
 
@@ -36,7 +36,7 @@ Last verified: 2026-08-25
 | Knowledge Graphs (Springer, 2021) | Aidan Hogan et al. | ACADEMIC | https://kgbook.org | Copyrighted Springer book. Research reference only; no copied prose or figures | All chapters |
 | Stanford CS224W — Machine Learning with Graphs | Stanford University / Jure Leskovec | ACADEMIC | https://snap.stanford.edu/class/cs224w/ | Course materials; KG embeddings and reasoning sections only | 8 |
 | Ontology Development 101 | Natalya F. Noy & Deborah L. McGuinness, Stanford / Protégé team | TUTORIAL | https://protege.stanford.edu/publications/ontology_development/ontology101.pdf | Foundational ontology engineering methodology | 4 |
-| Unifying Large Language Models and Knowledge Graphs: A Roadmap | Zhu et al., 2023 | RESEARCH_PAPER | https://arxiv.org/abs/2305.10091 | Survey paper; used in Chapter 9 only | 9 |
+| Unifying Large Language Models and Knowledge Graphs: A Roadmap | Zhu et al., 2023 | RESEARCH_PAPER | https://arxiv.org/abs/2306.08302 | Survey paper; DOI 10.1109/TKDE.2024.3352100; used in Chapter 9 only | 9 |
 
 ## Official Documentation & Case Studies
 
@@ -64,4 +64,3 @@ Last verified: 2026-08-25
 | PyKEEN | 1.11.1 | 2025-04-24 | KG embeddings (TransE, DistMult, ComplEx, RotatE) | ✅ Selected (verify before Ch8) |
 | Neo4j Community Edition | Docker | Ongoing | Property graph database | ✅ Selected (Docker) |
 
-</parameter>

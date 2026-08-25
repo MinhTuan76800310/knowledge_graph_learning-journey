@@ -63,4 +63,3 @@ docker compose up -d neo4j
 - Third-party code requires license verification and attribution.
 - Hogan et al. (kgbook.org) is research reference only — no reproduced content.
 
-</parameter>

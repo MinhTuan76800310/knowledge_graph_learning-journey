@@ -81,7 +81,6 @@ State explicitly that Model 1 is an engineering learning model, not a universal 
 - [ ] Glossary updated with new terms
 - [ ] EXPERIMENT_STATUS.md updated with evidence
 
-</content>
 
 ## Standards Correctness Policy
 

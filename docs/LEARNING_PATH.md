@@ -41,4 +41,3 @@ Chapters are designed to be sequential. However:
 
 The Mechanism Knowledge Graph evolves across all chapters. Each chapter adds capabilities to the same evolving system under `capstone/mechanism_knowledge_system/`. By Chapter 10, this becomes a complete living knowledge system.
 
-</content>

@@ -79,4 +79,3 @@ A plain graph is a mathematical structure `(V, E)` where `E ⊆ V × L × V`. Th
 - Stanford CS520 Lecture 1: What is a Knowledge Graph? — https://web.stanford.edu/class/cs520/
 - Hogan et al., *Knowledge Graphs*, Chapter 2: Data Graphs — https://kgbook.org/
 
-</content>

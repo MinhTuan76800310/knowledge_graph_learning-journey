@@ -15,13 +15,12 @@ from __future__ import annotations
 
 
 class RelationSemantics:
-    """A system for defining and enforcing relation semantics."""
+    """A system for defining and applying relation semantics via RDFS-style entailment."""
 
     def __init__(self) -> None:
         self.triples: list[tuple[str, str, str]] = []
         self.relation_defs: dict[str, dict[str, object]] = {}
         self.inferred: list[tuple[str, str, str]] = []
-        self.violations: list[str] = []
 
     def define_relation(
         self,
@@ -42,23 +41,30 @@ class RelationSemantics:
         }
 
     def add_triple(self, s: str, p: str, o: str) -> None:
-        """Add a triple and check against defined semantics."""
+        """Add a triple and apply RDFS-style entailment for domain/range."""
         self.triples.append((s, p, o))
-        self._check_constraints(s, p, o)
+        self._apply_rdfs_domain_range(s, p, o)
 
-    def _check_constraints(self, s: str, p: str, o: str) -> None:
-        """Check triple against relation definition (informational only).
-        NOTE: RDFS domain/range are INFERENCE rules, not validation.
-        This method is a placeholder for custom policy, not standard RDFS."""
+    def _apply_rdfs_domain_range(self, s: str, p: str, o: str) -> None:
+        """Apply RDFS domain/range entailment (W3C RDF Schema 1.1 S3.1-3.2).
+
+        If P rdfs:domain C and (s, P, o), infer (s, rdf:type, C).
+        If P rdfs:range C and (s, P, o), infer (o, rdf:type, C).
+
+        This is INFERENCE, not validation. No data is rejected.
+        Source contract: R11-03 (docs/research_notes/R11-03.md).
+        """
         if p not in self.relation_defs:
             return
         defn = self.relation_defs[p]
-        # Domain/range checks are informational, not blocking
         if defn["domain"]:
-            # In a full system, we'd check type assertions
-            pass
+            type_triple = (s, "rdf:type", defn["domain"])
+            if type_triple not in self.inferred:
+                self.inferred.append(type_triple)
         if defn["range"]:
-            pass
+            type_triple = (o, "rdf:type", defn["range"])
+            if type_triple not in self.inferred:
+                self.inferred.append(type_triple)
 
     def infer(self) -> list[tuple[str, str, str]]:
         """Run forward-chaining inference based on relation definitions."""
@@ -102,8 +108,9 @@ class RelationSemantics:
                         new_triples.append(inv_triple)
                         changed = True
 
-        self.inferred = new_triples
-        return new_triples
+        # Append symmetry/transitivity/inverse inferences (domain/range already added)
+        self.inferred.extend(new_triples)
+        return self.inferred
 
     def summary(self) -> str:
         lines = ["Asserted triples:"]
@@ -122,7 +129,7 @@ class RelationSemantics:
                 props.append("transitive")
             if defn["inverse_of"]:
                 props.append(f"inverseOf={defn['inverse_of']}")
-            lines.append(f"  {name}: {', '.join(props) if props else '(no constraints)'}")
+            lines.append(f"  {name}: {', '.join(props) if props else '(no semantic properties)'}")
         if self.inferred:
             lines.append(f"\nInferred triples ({len(self.inferred)}):")
             for s, p, o in self.inferred:

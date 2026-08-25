@@ -887,6 +887,7 @@
       "priority": "P0",
       "title": "Unifying Large Language Models and Knowledge Graphs: A Roadmap",
       "url": "https://arxiv.org/abs/2306.08302",
+      "doi": "10.1109/TKDE.2024.3352100",
       "status": "Research paper",
       "notes": "Taxonomy: KG-enhanced LLM, LLM-augmented KG, synergized LLM+KG."
     },

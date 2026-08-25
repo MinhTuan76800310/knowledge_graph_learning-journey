@@ -151,4 +151,3 @@ TBD — will be selected before public release. All third-party code included on
 
 **Phase 1 in progress.** Currently building Chapter 1 and its experiments. See `docs/PHASE1_REPORT.md` (when available) for current milestone status.
 
-</parameter>

@@ -218,4 +218,3 @@ All P1 issues resolved:
 
 **Chapter 2 may proceed.**
 
-</content>

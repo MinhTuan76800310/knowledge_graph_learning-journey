@@ -238,21 +238,99 @@ class TestExp15:
         assert result.returncode == 0
         assert "Semantics of a Relation" in result.stdout
 
-    def test_inverse_inference(self) -> None:
-        result = subprocess.run(
-            [sys.executable, str(CHAPTER01_DIR / "exp_1_5_relation_semantics.py")],
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
-        assert "hasCapital" in result.stdout
+    def test_inverse_inference_exact_triple(self) -> None:
+        """Verify exact inverse triple (Vietnam, hasCapital, Hanoi) is inferred."""
+        sys.path.insert(0, str(CHAPTER01_DIR))
+        from exp_1_5_relation_semantics import RelationSemantics
 
-    def test_transitive_inference(self) -> None:
-        result = subprocess.run(
-            [sys.executable, str(CHAPTER01_DIR / "exp_1_5_relation_semantics.py")],
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
-        # RedRiverDelta partOf Vietnam should be inferred transitively
-        assert "Vietnam" in result.stdout
+        kg = RelationSemantics()
+        kg.define_relation("capitalOf", inverse_of="hasCapital", domain="City", range_="Country")
+        kg.add_triple("Hanoi", "capitalOf", "Vietnam")
+        kg.infer()
+
+        assert ("Vietnam", "hasCapital", "Hanoi") in kg.inferred
+
+    def test_transitive_inference_exact_triple(self) -> None:
+        """Verify exact transitive triple (RedRiverDelta, partOf, Vietnam) is inferred."""
+        sys.path.insert(0, str(CHAPTER01_DIR))
+        from exp_1_5_relation_semantics import RelationSemantics
+
+        kg = RelationSemantics()
+        kg.define_relation("partOf", transitive=True, domain="Region", range_="Region")
+        kg.add_triple("RedRiverDelta", "partOf", "NorthernVietnam")
+        kg.add_triple("NorthernVietnam", "partOf", "Vietnam")
+        kg.infer()
+
+        assert ("RedRiverDelta", "partOf", "Vietnam") in kg.inferred
+
+    def test_symmetric_inference_exact_triple(self) -> None:
+        """Verify exact symmetric triple (DaNang, sisterCity, Hue) is inferred."""
+        sys.path.insert(0, str(CHAPTER01_DIR))
+        from exp_1_5_relation_semantics import RelationSemantics
+
+        kg = RelationSemantics()
+        kg.define_relation("sisterCity", symmetric=True, domain="City", range_="City")
+        kg.add_triple("Hue", "sisterCity", "DaNang")
+        kg.infer()
+
+        assert ("DaNang", "sisterCity", "Hue") in kg.inferred
+
+    def test_domain_range_produce_type_inferences(self) -> None:
+        """RDFS domain/range produce rdf:type inferences (R11-03 contract)."""
+        sys.path.insert(0, str(CHAPTER01_DIR))
+        from exp_1_5_relation_semantics import RelationSemantics
+
+        kg = RelationSemantics()
+        kg.define_relation("capitalOf", inverse_of="hasCapital", domain="City", range_="Country")
+        kg.add_triple("Hanoi", "capitalOf", "Vietnam")
+
+        assert ("Hanoi", "rdf:type", "City") in kg.inferred
+        assert ("Vietnam", "rdf:type", "Country") in kg.inferred
+
+    def test_rdfs_does_not_reject_mismatched_domain(self) -> None:
+        """RDFS domain/range never reject data; they only add type inferences.
+        Source contract: R11-03 (docs/research_notes/R11-03.md)."""
+        sys.path.insert(0, str(CHAPTER01_DIR))
+        from exp_1_5_relation_semantics import RelationSemantics
+
+        kg = RelationSemantics()
+        kg.define_relation("locatedIn", domain="City", range_="Region")
+        kg.add_triple("UnknownEntity", "locatedIn", "SomePlace")
+
+        # Triple must be accepted regardless of domain mismatch
+        assert ("UnknownEntity", "locatedIn", "SomePlace") in kg.triples
+        # Domain inference still fires
+        assert ("UnknownEntity", "rdf:type", "City") in kg.inferred
+        assert ("SomePlace", "rdf:type", "Region") in kg.inferred
+
+    def test_rdfs_domain_range_produces_type_inferences(self) -> None:
+        """RDFS domain/range produce type inferences, not validation violations.
+        Source contract: R11-03 (docs/research_notes/R11-03.md)."""
+        sys.path.insert(0, str(CHAPTER01_DIR))
+        from exp_1_5_relation_semantics import RelationSemantics
+
+        kg = RelationSemantics()
+        kg.define_relation("locatedIn", domain="City", range_="Region")
+        kg.add_triple("Hanoi", "locatedIn", "RedRiverDelta")
+
+        # Domain/range should produce rdf:type inferences
+        type_inferences = [t for t in kg.inferred if t[1] == "rdf:type"]
+        assert ("Hanoi", "rdf:type", "City") in type_inferences
+        assert ("RedRiverDelta", "rdf:type", "Region") in type_inferences
+
+    def test_rdfs_domain_range_does_not_reject_data(self) -> None:
+        """RDFS domain/range never reject data; they only add inferences.
+        Source contract: R11-03 (docs/research_notes/R11-03.md)."""
+        sys.path.insert(0, str(CHAPTER01_DIR))
+        from exp_1_5_relation_semantics import RelationSemantics
+
+        kg = RelationSemantics()
+        kg.define_relation("locatedIn", domain="City", range_="Region")
+        # Add a triple where subject is NOT declared as City
+        kg.add_triple("SomeEntity", "locatedIn", "SomeRegion")
+
+        # Triple must still be accepted (not rejected)
+        assert ("SomeEntity", "locatedIn", "SomeRegion") in kg.triples
+        # And type inference still applies
+        assert ("SomeEntity", "rdf:type", "City") in kg.inferred
+        assert ("SomeRegion", "rdf:type", "Region") in kg.inferred

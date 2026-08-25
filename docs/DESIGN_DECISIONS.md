@@ -112,4 +112,3 @@ This document records significant architectural, pedagogical, and technical deci
 
 **Consequences:** `docs/EXPERIMENT_STATUS.md` must contain execution timestamps and output summaries. CI should eventually enforce this automatically.
 
-</content>

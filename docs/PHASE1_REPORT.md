@@ -48,7 +48,7 @@
 | RDF 1.2 Concepts | 🔄 Candidate Recommendation | 2026-04-07 |
 | SPARQL 1.1 Query | ✅ Recommendation | 2013-03-21 |
 | SPARQL 1.2 Query | 🔄 Working Draft | 2026-08-20 |
-| SHACL 1.1 | ✅ Recommendation | 2017-07-20 |
+| SHACL 1.0 | ✅ Recommendation | 2017-07-20 |
 | SHACL 1.2 Core | 🔄 Working Draft | 2026-08-03 | https://www.w3.org/TR/shacl12-core/ |
 | OWL 2 Overview | ✅ Recommendation | 2012-12-11 |
 | PROV-O | ✅ Recommendation | 2013-04-30 |
@@ -127,7 +127,7 @@ All 5 Chapter 1 experiments ran successfully with captured output:
 
 3. **Neo4j not tested:** Docker Compose file created but Neo4j experiments deferred to Chapter 2. No container startup verified in Phase 1.
 
-4. **External links not validated:** Source URLs recorded but not HTTP-checked for availability. Manual verification recommended before publication.
+4. **External links validated in Phase 0.5:** Source URLs were HTTP-checked during the Phase 0.5 Semantic & Evidence Audit (2026-08-25). See `docs/source_index.json` for fetch evidence and `docs/PHASE0_5_AUDIT_REPORT.md` for results. The original Phase 1 statement that links were not checked is superseded.
 
 5. **Chapter 1 README files:** Individual experiment READMEs created under `chapter01/exp_1_X/` directories but main `chapter01/README.md` index not yet written.
 
@@ -179,4 +179,3 @@ Chapter 2 ("Data Models and Query Languages") should:
 
 **Phase 1 is COMPLETE.** Ready to proceed to Chapter 2 upon user approval.
 
-</content>

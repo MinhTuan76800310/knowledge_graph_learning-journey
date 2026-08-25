@@ -95,7 +95,7 @@ class SimpleKnowledgeGraph(TaxonomyGraph):
 
     def mark_symmetric(self, prop: str) -> None:
         self.symmetric_props.add(prop)
-        self.add(prop, "owl:symmetricProperty", "true")
+        self.add(prop, "rdf:type", "owl:SymmetricProperty")
 
     def infer(self) -> list[str]:
         """Run simple RDFS-style inference. Returns list of inferred triples as strings."""

@@ -48,4 +48,3 @@ Last verified: 2026-08-25
 - **Emerging / Current development**: W3C Candidate Recommendation or Working Draft. Clearly labeled in callout boxes. Never taught as if stable.
 - **Experimental**: Pre-standard proposals or active research without consensus. Only mentioned in "Current developments" sections with explicit caveats.
 
-</parameter>

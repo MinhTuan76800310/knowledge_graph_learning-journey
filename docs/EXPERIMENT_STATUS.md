@@ -29,4 +29,3 @@ Note: Tests require `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1` due to ROS jazzy launch_t
 
 Not yet implemented. Experiments will be added as each chapter is drafted.
 
-</content>

@@ -52,7 +52,7 @@ Ba lớp này giải quyết ba vấn đề khác nhau:
 2. **Semantics** trả lời: "Các nút và cạnh đó *nghĩa là gì*? Chúng tuân theo quy tắc nào?"
 3. **Context** trả lời: "Thông tin này đến từ đâu? Khi nào đúng? Trong phạm vi nào? Đáng tin đến mức nào?"
 
-Một đồ thị chỉ có Data Graph là một cấu trúc dữ liệu. Thêm Semantics, nó trở nên có ý nghĩa với máy. Thêm Context, nó trở nên đáng tin cậy và có thể quản lý được trong thực tế.
+Trong mô hình kỹ thuật của sách (Book Engineering Model), Data Graph cung cấp cấu trúc, Semantics cung cấp ý nghĩa cho máy, và Context hỗ trợ đánh giá độ tin cậy cũng như khả năng kiểm toán. Đây là các lớp năng lực bổ sung, không phải điều kiện tiên quyết để một đồ thị được gọi là Knowledge Graph theo định nghĩa tối thiểu (S03).
 
 ### Tại sao không phải mọi đồ thị đều là Knowledge Graph?
 
@@ -87,7 +87,7 @@ Tập hợp các entity, relation, và property mà KHÔNG có định nghĩa h�
 
 ### Taxonomy (Phân loại)
 
-Hệ thống phân cấp các khái niệm dựa trên quan hệ cha-con (subclass/superclass). Taxonomy thêm cấu trúc vào data graph nhưng chưa đủ để tạo ra KG vì thiếu ràng buộc và ngữ nghĩa đầy đủ.
+Hệ thống phân cấp các khái niệm dựa trên quan hệ cha-con (subclass/superclass). Taxonomy thêm cấu trúc phân cấp vào data graph. Trong mô hình kỹ thuật của sách (Book Engineering Model), taxonomy là một trong nhiều lớp năng lực có thể kết hợp; bản thân taxonomy vẫn là một dạng đồ thị tri thức theo định nghĩa tối thiểu (S03).
 
 ### Ontology (Bản thể học)
 
@@ -151,7 +151,7 @@ Một **triple** (s, p, o) ∈ V × L × V tương ứng với cạnh e = (s, o)
 
 **Data Graph**: G với λ tùy ý, không có ràng buộc ngữ nghĩa bổ sung.
 
-**Taxonomy**: Data Graph + quan hệ ⊑ (subclassOf) trên một tập con của L, sao cho ⊑ là partial order.
+**Taxonomy**: Data Graph + tập khái niệm C ⊆ V và quan hệ phân cấp ⊑ ⊆ C × C (subclassOf), sao cho ⊑ là partial order trên C. Quan hệ subclass áp dụng lên các nút khái niệm, không phải lên tập nhãn L.
 
 **Ontology** (theo nghĩa RDFS/OWL): Tập tiên đề T bao gồm các khai báo domain, range, subclass, equivalence, disjointness. Ngữ nghĩa được xác định bởi entailment rules (RDFS/OWL), không phải bởi constraint checking.
 
@@ -288,4 +288,3 @@ Chương 6 sẽ phân tích sâu sự phân biệt: Observation ≠ Assertion �
 - RDF 1.1 Concepts: W3C Recommendation 2014-02-25 (Stable)
 - RDF 1.2 Concepts: W3C Candidate Recommendation 2026-04-07 (Emerging)
 
-</content>
