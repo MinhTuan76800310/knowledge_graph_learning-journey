@@ -1,0 +1,45 @@
+[project]
+name = "knowledge-graph-book"
+version = "0.1.0"
+description = "An open-source executable textbook: Knowledge Graphs from first principles to production knowledge systems."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Knowledge Graph Book Contributors" }]
+
+dependencies = [
+    "rdflib>=7.6.0",
+    "pyshacl>=0.40.1",
+    "owlrl>=7.6.2",
+    "networkx>=3.6",
+    "neo4j>=5.0",
+    "pandas>=2.0",
+    "matplotlib>=3.8",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+ml = [
+    "pykeen>=1.11.1",
+    "torch>=2.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "chapter01"]
+addopts = "-v --tb=short"
