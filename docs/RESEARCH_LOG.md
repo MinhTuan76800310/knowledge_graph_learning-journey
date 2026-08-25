@@ -49,7 +49,7 @@ Verified current status of all W3C specifications by fetching live pages from `w
 3. **SPARQL baseline = SPARQL 1.1**. SPARQL 1.2 is too recent (Working Draft dated 5 days ago) to serve as curriculum foundation. Mention in Chapter 2 "Current developments" section only.
 4. **OWL baseline = OWL 2 Second Edition** (2012). This remains the current stable OWL standard.
 5. **PROV-O baseline = PROV-O** (2013 Recommendation). Stable and sufficient for provenance modeling in Chapter 6.
-6. **SHACL baseline = SHACL 1.0** (Recommendation). No 1.2 draft exists yet.
+6. **SHACL baseline = SHACL 1.0** (Recommendation, 2017-07-20). SHACL 1.2 Core exists as Working Draft (2026-08-03) at https://www.w3.org/TR/shacl12-core/. Teach 1.0 as stable baseline; mention 1.2 as emerging.
 
 ## 2026-08-25: Python Library Maintenance Audit
 

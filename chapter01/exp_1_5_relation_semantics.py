@@ -1,10 +1,14 @@
 """Experiment 1-5: Define the Semantics of a Relation.
 
 Demonstrates that defining relation semantics (domain, range, symmetry,
-transitivity, inverse) enables automatic inference via RDFS-style entailment.
+transitivity, inverse) enables automatic inference via a small toy forward-chaining
+reasoner implementing selected RDFS and OWL-inspired rules.
 
-IMPORTANT: Domain/range in this experiment produce TYPE INFERENCES (RDFS
-semantics per W3C RDF Schema 1.1 S3.1-3.2), NOT validation violations.
+IMPORTANT: This experiment implements a SMALL TOY FORWARD-CHAINING REASONER
+with selected rules inspired by RDFS and OWL semantics:
+- Domain/range type inference: RDFS (W3C RDF Schema 1.1 S3.1-3.2, source R11-03)
+- Symmetry, transitivity, inverse: OWL-inspired (W3C OWL 2, source OWL-01)
+This is NOT a full RDFS or OWL entailment engine.
 For constraint checking / violation reporting, see SHACL in Chapter 5.
 
 Difficulty: ★★★ Research/Design Challenge
@@ -15,7 +19,7 @@ from __future__ import annotations
 
 
 class RelationSemantics:
-    """A system for defining and applying relation semantics via RDFS-style entailment."""
+    """A small toy forward-chaining reasoner implementing selected RDFS + OWL-inspired rules."""
 
     def __init__(self) -> None:
         self.triples: list[tuple[str, str, str]] = []
@@ -81,7 +85,7 @@ class RelationSemantics:
                     continue
                 defn = self.relation_defs[p]
 
-                # Symmetry: if (s, p, o) then (o, p, s)
+                # Symmetry (OWL-inspired: owl:SymmetricProperty): if (s, p, o) then (o, p, s)
                 if defn["symmetric"]:
                     rev = (o, p, s)
                     if rev not in all_triples:
@@ -89,7 +93,8 @@ class RelationSemantics:
                         new_triples.append(rev)
                         changed = True
 
-                # Transitivity: if (s, p, o) and (o, p, x) then (s, p, x)
+                # Transitivity (OWL-inspired: owl:TransitiveProperty):
+                # if (s, p, o) and (o, p, x) then (s, p, x)
                 if defn["transitive"]:
                     for s2, p2, o2 in list(current):
                         if p2 == p and s2 == o:
@@ -99,7 +104,8 @@ class RelationSemantics:
                                 new_triples.append(trans)
                                 changed = True
 
-                # Inverse: if (s, p, o) and p has inverse q, then (o, q, s)
+                # Inverse (OWL-inspired: owl:inverseOf):
+                # if (s, p, o) and p has inverse q, then (o, q, s)
                 if defn["inverse_of"]:
                     inv_p = defn["inverse_of"]
                     inv_triple = (o, inv_p, s)

@@ -14,7 +14,7 @@
 - Source ID `S03` used consistently everywhere (no CS520-KG / S-CS520 aliases).
 
 ### 2. Research-Document Consistency (P06-2)
-- Fixed stale "SHACL 1.2 does not exist" statement in `docs/SOURCES.md` (line 21).
+- Fixed stale SHACL 1.2 availability claim (now confirmed as WD 2026-08-03) in `docs/SOURCES.md` (line 21).
 - Fixed stale statement in `docs/CURRICULUM_RATIONALE.md` (line 122).
 - Fixed invented "SHACL 1.1" version in `docs/PHASE1_REPORT.md` → corrected to "SHACL 1.0".
 - SHACL stable baseline = W3C Recommendation 2017-07-20 (SH-01).
@@ -109,4 +109,3 @@
 **✅ GO.** All 11 Phase 0.6 issues resolved. 25/25 tests passing. Ruff clean. Research notes exist for all indexed sources. No wrapper artifacts remain. Research cache properly gitignored. PHASE1_REPORT contradictions resolved.
 
 Chapter 2 may proceed safely.
-</content>

@@ -3,7 +3,7 @@
 Progressively transforms a plain graph into a knowledge graph by adding:
 1. Labeled edges (data graph)
 2. Taxonomy (subclass hierarchy)
-3. Ontology (domain/range inference + symmetric property)
+3. Ontology (RDFS domain/range inference + OWL-inspired symmetric property)
 4. Context (source, temporal validity)
 
 Uses original Vietnamese city data instead of copying Stanford's Winterthur example.
@@ -98,7 +98,14 @@ class SimpleKnowledgeGraph(TaxonomyGraph):
         self.add(prop, "rdf:type", "owl:SymmetricProperty")
 
     def infer(self) -> list[str]:
-        """Run simple RDFS-style inference. Returns list of inferred triples as strings."""
+        """Run toy forward-chaining reasoner with selected RDFS + OWL-inspired rules.
+
+        Implements: RDFS domain/range type inference, subclass transitivity,
+        and OWL-inspired symmetric property inference.
+        This is NOT full RDFS or OWL entailment. See OWL-01 for standard semantics.
+
+        Returns list of inferred triples as strings.
+        """
         inferred: list[str] = []
         existing = set(self.triples)
 
@@ -124,7 +131,7 @@ class SimpleKnowledgeGraph(TaxonomyGraph):
                 if reverse_triple not in existing:
                     self.add(o, p, s)
                     existing.add(reverse_triple)
-                    inferred.append(f"INFERRED (symmetric): ({o}, {p}, {s})")
+                    inferred.append(f"INFERRED (owl:SymmetricProperty-inspired): ({o}, {p}, {s})")
 
         # Subclass transitivity on types
         changed = True

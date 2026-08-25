@@ -105,7 +105,7 @@ All 5 Chapter 1 experiments ran successfully with captured output:
 | 1-4 Data Graph → KG | ✅ | 8 triples inferred from domain/range/transitivity rules |
 | 1-5 Relation Semantics | ✅ | Symmetry, transitivity, inverse properties all demonstrated |
 
-**Test results:** 20/20 passed (`uv run pytest`)  
+**Test results (Phase 1):** 20/20 passed (`uv run pytest`). *Superseded by Phase 0.6: test suite expanded to 25 tests with direct semantic assertions. See docs/PHASE0_6_CLOSURE_REPORT.md and docs/PHASE0_7_FINAL_INTEGRITY_REPORT.md for current status.*  
 **Lint results:** All checks passed (`uv run ruff check . && uv run ruff format --check .`)
 
 ---

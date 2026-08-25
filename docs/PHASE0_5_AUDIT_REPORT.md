@@ -126,7 +126,7 @@ All fetches recorded in `docs/source_index.json` with canonical URLs, HTTP statu
 | `chapter01/exp_1_5_relation_semantics.py` | Fixed docstring ("constraint checking" → "inference"), clarified RDFS vs custom policy in output |
 | `chapter01/exp_1_3_sister_city_kg.py` | Fixed docstring ("constraints" → "inference") |
 | `docs/RESEARCH_LOG.md` | Corrected SHACL 1.2 URL and status |
-| `docs/PHASE1_REPORT.md` | Corrected SHACL 1.2 row from "❌ Not yet published" to "🔄 Working Draft \| 2026-08-03" |
+| `docs/PHASE1_REPORT.md` | Corrected SHACL 1.2 row from previous incorrect status to "🔄 Working Draft \| 2026-08-03" |
 | `docs/source_index.json` | Created with fetch evidence for 12 P0 sources |
 | `pyproject.toml` | Fixed license from MIT to GPL-3.0-or-later |
 | `AGENTS.md` | Added Standards Correctness Policy section (P1-4) |
@@ -214,7 +214,7 @@ All P1 issues resolved:
 - [x] P1-3: Dependency hygiene audited (no changes needed)
 - [x] P1-4: Standards-correctness policy added to contributor docs
 
-**Evidence:** 20/20 tests passing. All semantic corrections backed by fetched primary sources. No cosmetic changes made before substantive fixes. Repository metadata internally consistent.
+**Evidence (Phase 0.5):** 20/20 tests passing at time of audit. *Superseded by Phase 0.6: test suite expanded to 25 tests. See docs/PHASE0_7_FINAL_INTEGRITY_REPORT.md for current status.* All semantic corrections backed by fetched primary sources. No cosmetic changes made before substantive fixes. Repository metadata internally consistent.
 
 **Chapter 2 may proceed.**
 

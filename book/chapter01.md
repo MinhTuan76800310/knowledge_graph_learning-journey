@@ -151,7 +151,7 @@ Một **triple** (s, p, o) ∈ V × L × V tương ứng với cạnh e = (s, o)
 
 **Data Graph**: G với λ tùy ý, không có ràng buộc ngữ nghĩa bổ sung.
 
-**Taxonomy**: Data Graph + tập khái niệm C ⊆ V và quan hệ phân cấp ⊑ ⊆ C × C (subclassOf), sao cho ⊑ là partial order trên C. Quan hệ subclass áp dụng lên các nút khái niệm, không phải lên tập nhãn L.
+**Taxonomy**: Data Graph + tập khái niệm C ⊆ V và quan hệ phân cấp ⊑ ⊆ C × C (subclassOf). Trong mô hình đơn giản hóa của sách, ⊑ được xem như một partial order trên C (phản xạ, bắc cầu, phản đối xứng). Lưu ý: ngữ nghĩa RDFS chuẩn của rdfs:subClassOf chỉ yêu cầu tính phản xạ và bắc cầu, không đảm bảo phản đối xứng; do đó mô hình partial-order ở đây là một ràng buộc bổ sung của sách, không phải ngữ nghĩa RDFS đầy đủ.
 
 **Ontology** (theo nghĩa RDFS/OWL): Tập tiên đề T bao gồm các khai báo domain, range, subclass, equivalence, disjointness. Ngữ nghĩa được xác định bởi entailment rules (RDFS/OWL), không phải bởi constraint checking.
 

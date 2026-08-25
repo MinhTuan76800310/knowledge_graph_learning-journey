@@ -26,8 +26,12 @@ class DataGraphToKG:
         self.triples.append((s, p, o))
 
     def define_relation(
-        self, name: str, domain: str | None = None, range_: str | None = None,
-        symmetric: bool = False, transitive: bool = False,
+        self,
+        name: str,
+        domain: str | None = None,
+        range_: str | None = None,
+        symmetric: bool = False,
+        transitive: bool = False,
     ) -> None:
         self.relation_defs[name] = {
             "domain": domain or "",

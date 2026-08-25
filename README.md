@@ -145,9 +145,9 @@ See `docs/SOURCES.md` for the complete source registry and `docs/SOURCE_MATRIX.m
 
 ## License
 
-TBD — will be selected before public release. All third-party code included only after license verification.
+This project is licensed under the **GNU General Public License v3.0 or later** (GPL-3.0-or-later). See the [LICENSE](LICENSE) file for the full license text.
 
 ## Status
 
-**Phase 1 in progress.** Currently building Chapter 1 and its experiments. See `docs/PHASE1_REPORT.md` (when available) for current milestone status.
+**Phase 0.7 complete.** Chapter 1 semantic audit and integrity gate passed. Proceeding to Chapter 2 planning. See `docs/PHASE0_7_FINAL_INTEGRITY_REPORT.md` for details. Historical: `docs/PHASE1_REPORT.md` (superseded by Phase 0.5â0.7).
 
