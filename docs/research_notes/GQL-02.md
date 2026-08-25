@@ -23,5 +23,3 @@
 ## Used In
 
 - Chapter 2 (Cypher/GQL relationship callout)
-
-</parameter>

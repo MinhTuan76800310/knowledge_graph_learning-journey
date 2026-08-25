@@ -30,5 +30,3 @@
 
 - Chapter 2 (Experiments 2-1, 2-2, 2-3)
 - Chapter 3+ (RDF operations throughout)
-
-</parameter>

@@ -15,5 +15,3 @@
 ## Used In
 
 - Chapter 2 (supplemental GQL context)
-
-</parameter>

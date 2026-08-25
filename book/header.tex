@@ -1,0 +1,51 @@
+% header.tex — LaTeX preamble customizations for the Knowledge Graph book.
+% Engine: lualatex (Unicode + fontspec). Vietnamese rendered via system fonts.
+
+% --- Fonts (system fonts with full Vietnamese coverage; no bundled binaries) ---
+\usepackage{fontspec}
+% Symbols like ★ / ⚠ / ⚑ are absent from DejaVu Serif; fall back to
+% DejaVu Sans for missing glyphs instead of printing tofu boxes.
+\directlua{
+  luaotfload.add_fallback("symfallback", {
+    "DejaVu Sans:mode=node;",
+  })
+}
+\setmainfont{DejaVu Serif}[RawFeature={fallback=symfallback}]
+\setsansfont{DejaVu Sans}
+% DejaVu Sans Mono lacks precomposed Vietnamese glyphs (ồ, ề, ỉ, ...);
+% fall back to DejaVu Sans for the missing ones so code comments render.
+\setmonofont{DejaVu Sans Mono}[Scale=0.85, RawFeature={fallback=symfallback}]
+
+% --- Vietnamese language support ---
+% Pandoc already loads babel with \babelprovide[main,import]{vietnamese}
+% because metadata.yaml sets lang: vi; loading babel again here would cause
+% an option clash.
+
+% --- Code blocks: allow line breaking so they never overflow the margin ---
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
+
+% --- Figures: cap width and height so images never clip or overflow ---
+\makeatletter
+\def\maxwidth{%
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\def\maxheight{%
+  \ifdim\Gin@nat@height>0.82\textheight
+    0.82\textheight
+  \else
+    \Gin@nat@height
+  \fi
+}
+\makeatother
+\let\oldincludegraphics\includegraphics
+\renewcommand{\includegraphics}[2][]{%
+  \oldincludegraphics[#1,width=\maxwidth,height=\maxheight,keepaspectratio]{#2}}
+
+% --- Reduce overfull-box noise ---
+\hbadness=10000
+\hfuzz=2pt

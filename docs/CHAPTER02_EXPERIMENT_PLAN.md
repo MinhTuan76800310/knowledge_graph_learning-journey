@@ -35,7 +35,7 @@ All experiments use the SAME domain to enable direct representation comparison.
 - IRI vs blank node distinction
 
 ### Source Contract
-R11-02 (RDF 1.1 Concepts §3), RL-01 (RDFLib docs)
+R11-02 (RDF 1.1 Concepts §3), TOOL-01 (RDFLib docs)
 
 ---
 
@@ -64,7 +64,7 @@ R11-02 (RDF 1.1 Concepts §3), RL-01 (RDFLib docs)
 - NOT comparing raw Turtle strings (semantic comparison only)
 
 ### Source Contract
-R11-04 (Turtle 1.1), R11-02 (RDF 1.1 Concepts §7)
+R11-05 (Turtle 1.1), R11-02 (RDF 1.1 Concepts §7)
 
 ---
 
@@ -115,7 +115,7 @@ SP11-02 (SPARQL 1.1 Query §3), SP11-01 (SPARQL 1.1 Overview)
 Next work slice. Must be compatible with 2-6 comparison design.
 
 ### Source Contract
-NG-01 (Neo4j data modeling), NG-02 (Cypher Manual)
+N4J-05 (Neo4j data modeling), N4J-06 (Cypher Manual)
 
 ---
 
@@ -133,7 +133,7 @@ NG-01 (Neo4j data modeling), NG-02 (Cypher Manual)
 After 2-4 implementation.
 
 ### Source Contract
-NG-02 (Cypher Manual), GQL-02 (GQL conformance)
+N4J-06 (Cypher Manual), GQL-02 (GQL conformance)
 
 ---
 

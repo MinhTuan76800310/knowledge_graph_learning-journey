@@ -1,6 +1,7 @@
-# Book Introduction
+# Giới thiệu
 
-Chào mừng bạn đến với *Knowledge Graph Book* — một giáo trình thực hành mã nguồn mở về Knowledge Graph, từ những nguyên lý nền tảng đến hệ thống tri thức trong thực tế.
+Chào mừng bạn đến với cuốn sách về **Knowledge Graph** — một giáo trình mã nguồn mở về
+Đồ thị Tri thức, từ những nguyên lý nền tảng đến hệ thống tri thức trong thực tế.
 
 ## Cuốn sách này dành cho ai?
 
@@ -18,7 +19,7 @@ Nếu bạn đã từng thắc mắc:
 
 ## Mô hình sư phạm
 
-Lấy cảm hứng từ cấu trúc và triết lý học tập của `bojieli/ai-agent-book`, cuốn sách này tuân thủ các nguyên tắc:
+Lấy cảm hứng từ cấu trúc và triết lý học tập của các giáo trình kỹ thuật thực hành hiện đại, cuốn sách này tuân thủ các nguyên tắc:
 
 - **Một trừu tượng thống nhất** xuyên suốt toàn bộ sách: Mental Model 1 (`Knowledge Graph = Data Graph + Semantics + Context`) và Mental Model 2 (`Knowledge System = KG + Acquisition + Inference + Validation + Evolution`).
 - **Chương trình tăng dần độ khó**: mỗi chương xây dựng trên nền tảng của chương trước.
@@ -26,7 +27,7 @@ Lấy cảm hứng từ cấu trúc và triết lý học tập của `bojieli/a
 - **Đánh giá độ khó rõ ràng**: ★ (cơ bản), ★★ (trung cấp), ★★★ (thử thách nghiên cứu/thiết kế).
 - **Câu hỏi tư duy**: yêu cầu suy luận, không chỉ ghi nhớ.
 - **Môi trường tái tạo được**: mọi experiment đều chạy cục bộ trên Ubuntu laptop.
-- **Trạng thái experiment minh bạch**: ✅ chạy độc lập, 📖 cần dependency bên ngoài, 🚧 bài tập thiết kế/nghiên cứu.
+- **Trạng thái experiment minh bạch**: mỗi experiment ghi rõ là "chạy độc lập", "cần dependency bên ngoài", hay "bài tập thiết kế/nghiên cứu".
 
 ## Hai mô hình tinh thần
 
@@ -64,7 +65,7 @@ Mô hình này xuất hiện dần qua các chương và trở thành kiến tr�
 
 ## Miền Capstone: Mechanism Knowledge Graph
 
-Thay vì dùng ví dụ rời rạc ở mỗi chương, chúng ta duy trì **một đồ thị tiến hóa liên tục** dưới `capstone/mechanism_knowledge_system/`. Các khái niệm cốt lõi bao gồm: Concept, Definition, Mechanism, MechanismInput, MechanismOperation, Condition, Claim, Evidence, Observation, Experiment, Experience, Event, TimeInterval, Hypothesis.
+Thay vì dùng ví dụ rời rạc ở mỗi chương, chúng ta duy trì **một đồ thị tiến hóa liên tục** xuyên suốt cuốn sách. Các khái niệm cốt lõi bao gồm: Concept, Definition, Mechanism, MechanismInput, MechanismOperation, Condition, Claim, Evidence, Observation, Experiment, Experience, Event, TimeInterval, Hypothesis.
 
 Ontology này **không được xác định trước**. Mỗi quyết định mô hình hóa đều phải được nghiên cứu và biện minh. Đặc biệt, chúng ta sẽ khám phá câu hỏi: *làm sao hệ thống suy ra rằng các khái niệm trong các miền khác nhau cùng instantiate một mechanism?*
 
@@ -74,5 +75,4 @@ Sách viết bằng **tiếng Việt**. Thuật ngữ kỹ thuật giữ nguyên
 
 ## Bắt đầu
 
-Hãy bắt đầu từ [Chương 1: Từ Đồ thị đến Tri thức](chapter01.md).
-
+Hãy bắt đầu từ Chương 1 — *Từ Đồ thị đến Tri thức*.

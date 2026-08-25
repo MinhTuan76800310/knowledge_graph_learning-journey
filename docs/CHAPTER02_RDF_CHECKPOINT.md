@@ -111,5 +111,3 @@ All three experiments have complete designs in `docs/CHAPTER02_EXPERIMENT_PLAN.m
 - Property Graph experiments are designed but not implemented.
 - The cross-representation comparison (2-6) cannot be executed until both sides exist.
 - No browser verification was performed (this chapter has no web UI).
-
-</content>

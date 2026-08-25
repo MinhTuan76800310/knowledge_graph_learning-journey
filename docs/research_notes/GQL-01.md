@@ -26,5 +26,3 @@
 ## Used In
 
 - Chapter 2 (GQL callout in Cypher section)
-
-</parameter>

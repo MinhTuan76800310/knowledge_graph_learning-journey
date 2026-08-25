@@ -4,7 +4,7 @@ Demonstrates that Turtle is a concrete syntax for RDF, not the data model
 itself. An RDF graph can be serialized to Turtle text and parsed back into
 a graph-equivalent structure.
 
-Semantic contracts: R11-04 (Turtle 1.1), RL-01 (RDFLib).
+Semantic contracts: R11-05 (Turtle 1.1), TOOL-01 (RDFLib).
 Difficulty: ★★
 Status: ✅ Independently runnable
 """

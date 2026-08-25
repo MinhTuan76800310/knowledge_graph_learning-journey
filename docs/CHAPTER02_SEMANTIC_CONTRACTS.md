@@ -29,9 +29,16 @@ A **literal** has:
 - A datatype IRI
 - An optional language tag (only with `rdf:langString` datatype)
 
-A **blank node** is an existential variable with local scope. It has no global identity.
+A **blank node** represents a resource that exists but is not named by an IRI. Blank-node
+labels are local to a serialization and are not global identifiers; the intuitive semantics
+are existential ("there exists some resource such that..."). Deeper formal semantics are
+deferred beyond Chapter 2.
 
-An **IRI** is the universal identifier mechanism in RDF.
+An **IRI** is a **globally scoped identifier mechanism**: any two systems can write the same
+IRI string to refer to a resource. However, sharing an IRI does not by itself prove that two
+parties attach the same real-world identity semantics to it, and two different IRIs do not
+necessarily denote two different real-world entities. Identity alignment is a separate problem
+(bridge to Chapter 3).
 
 ### Boundaries
 
@@ -43,7 +50,7 @@ An **IRI** is the universal identifier mechanism in RDF.
 
 ## 2. Turtle Serialization
 
-**Source:** R11-04 (W3C Turtle REC 2014)
+**Source:** R11-05 (W3C Turtle REC 2014)
 
 ### Contract
 
@@ -78,9 +85,14 @@ Core concepts:
 - **Solution mapping**: a binding from variables to RDF terms that makes the pattern match
 - **SELECT query**: returns a table of solution mappings
 
-Matching semantics:
-- A BGP matches against an RDF graph when there exists a substitution of variables such that all resulting triples are present in the graph.
-- SPARQL matching is based on subgraph isomorphism for BGPs.
+Matching semantics (faithful to W3C SPARQL 1.1 Query, §"Basic Graph Pattern Matching"):
+- A BGP is evaluated via **pattern instance mappings** (solution mappings): a mapping μ
+  substitutes each variable with an RDF term such that the instantiated Basic Graph Pattern
+  is a **subgraph of the active RDF graph**.
+- The result of a BGP is the set of all such solution mappings.
+- This is *subgraph* matching under variable instantiation. It is **not** injective graph
+  isomorphism: distinct variables may bind to the same term unless constrained otherwise,
+  and the match requires only that the instantiated pattern be contained in the graph.
 
 ### Boundaries
 
@@ -92,7 +104,7 @@ Matching semantics:
 
 ## 4. Labeled Property Graph Model
 
-**Source:** NG-03 (Neo4j Graph Data Modeling Fundamentals), Neo4j documentation
+**Source:** N4J-03 (Graph Data Modeling Fundamentals), N4J-05 (Neo4j Data Modeling)
 
 ### Contract
 
@@ -119,7 +131,7 @@ Key distinctions from RDF:
 
 ## 5. Cypher Query Language
 
-**Source:** NG-02 (Neo4j Cypher Manual), GQL-02 (Cypher/GQL conformance)
+**Source:** N4J-06 (Neo4j Cypher Manual), GQL-02 (Cypher/GQL conformance)
 
 ### Contract
 

@@ -1,0 +1,28 @@
+# book-manifest.yaml — ordered list of manuscript sources for the PDF build.
+# scripts/build_book.sh reads this to assemble the book in the correct order.
+#
+# For Book v0.1 preview we build: front matter + Chapters 1-2 + Glossary.
+# As Chapters 3-10 are completed, append them here in order.
+
+book:
+  output_name: knowledge-graph-book
+
+# Files are relative to the book/ directory, in reading order.
+sources:
+  - preface.md
+  - how-to-use.md
+  - introduction.md
+  - chapter01.md
+  - chapter02.md
+  - glossary.md
+
+# Chapters not yet in the preview (added as they reach DRAFTED):
+# - chapter03.md
+# - chapter04.md
+# - chapter05.md
+# - chapter06.md
+# - chapter07.md
+# - chapter08.md
+# - chapter09.md
+# - chapter10.md
+# - afterword.md

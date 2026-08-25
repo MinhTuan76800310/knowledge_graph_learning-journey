@@ -58,5 +58,3 @@ See `docs/CHAPTER02_SEMANTIC_CONTRACTS.md` for formal definitions of what each e
 - **RDF model ≠ Turtle syntax.** Turtle is one concrete syntax for serializing RDF graphs.
 - **SPARQL ≠ SQL for graphs.** SPARQL matches graph patterns; SQL queries relational tables.
 - **Same knowledge ≠ same graph structure.** Representation choice alters identity, metadata, relationships, interoperability, and query ergonomics.
-
-</content>

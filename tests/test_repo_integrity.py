@@ -42,37 +42,46 @@ class TestSourceIndexIntegrity:
 
 
 class TestWrapperArtifacts:
-    """Verify no leaked tool/protocol markers remain in tracked files."""
+    """Verify no leaked tool/protocol markers remain in repository files.
 
-    # Constructed via concatenation so this file does not self-match.
+    Scans the full working tree (not only git-tracked files) so that newly
+    generated files are caught before commit. A regression on 2026-08-25
+    leaked a closing tag into a freshly created checkpoint document that a
+    tracked-files-only scan could not see at test time.
+    """
+
     FORBIDDEN_PATTERNS = [
-        "</" + "content>",
-        "</" + "parameter>",
-        "<" + "content>",
-        "<" + "parameter",
-        "assistant" + " to=",
+        "</content>",
+        "</parameter>",
+        "<content>",
+        "<parameter",
+        "assistant to=",
     ]
 
-    def test_no_wrapper_markers_in_tracked_files(self) -> None:
-        result = subprocess.run(
-            ["git", "ls-files"],
-            capture_output=True,
-            text=True,
-            cwd=str(ROOT),
-        )
-        assert result.returncode == 0
-        tracked = result.stdout.strip().split("\n")
+    SCAN_SUFFIXES = {".md", ".py", ".json", ".toml", ".yml", ".yaml", ".txt", ".bib", ".sh", ""}
+    SKIP_DIRS = {
+        ".git",
+        ".venv",
+        "venv",
+        "node_modules",
+        "__pycache__",
+        "dist",
+        ".pytest_cache",
+        ".research",
+    }
 
+    def test_no_wrapper_markers_in_repository_files(self) -> None:
         violations = []
-        for fpath in tracked:
-            full = ROOT / fpath
+        for full in ROOT.rglob("*"):
             if not full.is_file():
                 continue
-            # Only check text-like files
-            suffix = full.suffix.lower()
-            if suffix not in {".md", ".py", ".json", ".toml", ".yml", ".yaml", ".txt", ""}:
+            rel = full.relative_to(ROOT)
+            if any(part in self.SKIP_DIRS for part in rel.parts):
                 continue
-            if fpath.startswith(".venv/") or "__pycache__" in fpath:
+            # This test file legitimately contains the patterns as literals.
+            if rel == Path("tests/test_repo_integrity.py"):
+                continue
+            if full.suffix.lower() not in self.SCAN_SUFFIXES:
                 continue
             try:
                 text = full.read_text(encoding="utf-8", errors="ignore")
@@ -80,12 +89,11 @@ class TestWrapperArtifacts:
                 continue
             for pattern in self.FORBIDDEN_PATTERNS:
                 if pattern in text:
-                    # Allow legitimate references in prose (e.g., backtick-wrapped)
-                    # but flag bare occurrences
                     lines = text.split("\n")
                     for i, line in enumerate(lines, 1):
+                        # Allow backtick-wrapped references in prose describing the cleanup
                         if pattern in line and f"`{pattern}`" not in line:
-                            violations.append(f"{fpath}:{i}: {pattern}")
+                            violations.append(f"{full.relative_to(ROOT)}:{i}: {pattern}")
 
         assert not violations, "Wrapper artifacts found:\n" + "\n".join(violations[:20])
 
