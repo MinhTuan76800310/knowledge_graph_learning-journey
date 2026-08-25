@@ -360,18 +360,27 @@ thông tin vào một quan hệ, bạn phải dùng kỹ thuật tái hiện ho�
 
 ### 2.2.2 Định danh: nội bộ cơ sở dữ liệu và định danh miền
 
-Một khác biệt tinh tế nhưng quan trọng: trong đồ thị thuộc tính, mỗi nút có một
-**định danh nội bộ** do hệ quản trị cơ sở dữ liệu cấp (ví dụ một số nguyên nội bộ trong
-Neo4j). Định danh này:
+Một khác biệt tinh tế nhưng quan trọng: trong đồ thị thuộc tính, mỗi phần tử (nút, quan
+hệ) có một **định danh nội bộ** do hệ quản trị cơ sở dữ liệu cấp. Ví dụ trong Neo4j hiện
+hành, hàm `elementId()` trả về định danh này dưới dạng *chuỗi*; hàm `id()` trả về số
+nguyên trước đây đã bị loại bỏ dần (deprecated) [@neo4j-cypher-manual]. Định danh dạng
+này là **định danh triển khai** (implementation identifier):
 
-- Dùng để hệ thống định vị nút một cách hiệu quả.
+- Dùng để hệ thống định vị phần tử một cách hiệu quả *bên trong* cơ sở dữ liệu.
 - **Không ổn định xuyên hệ thống**: cùng một thực thể được nạp vào hai cơ sở dữ liệu
   khác nhau sẽ có hai định danh nội bộ khác nhau.
+- **Không được bảo đảm bền vững**: tài liệu Neo4j hiện hành chỉ bảo đảm tính duy nhất
+  của element ID trong phạm vi một giao dịch, và cảnh báo rằng ID nội bộ có thể được tái
+  sử dụng sau khi phần tử bị xóa — ứng dụng dựa vào chúng sẽ giòn và có thể sai lệch.
+  Vì vậy Neo4j khuyến nghị dùng **định danh do ứng dụng tự tạo** (application-generated
+  ID) [@neo4j-cypher-manual].
 - **Không phải là định danh miền** (domain identity). Nếu bạn cần một định danh có ý
   nghĩa nghiệp vụ và ổn định (ví dụ mã quốc gia ISO, hay một IRI), bạn lưu nó như một
   *thuộc tính* của nút.
 
-Đây là sự đánh đổi: đồ thị thuộc tính cho bạn hiệu năng và sự tiện lợi, nhưng định danh
+Bài học không nằm ở chỗ gọi hàm nào, mà ở một phân biệt khái niệm sẽ còn quay lại ở
+Chương 3: **định danh phần tử của cơ sở dữ liệu không phải là định danh của thực thể
+trong miền**. Đồ thị thuộc tính cho bạn sự tiện lợi khi thao tác, nhưng định danh
 "toàn cục" không phải là thứ mô hình cấp sẵn — nó là trách nhiệm của người thiết kế.
 
 ### 2.2.3 Khái niệm chung khác với hành vi của Neo4j
@@ -473,12 +482,14 @@ RETURN a.name, b.name
 
 ### 2.3.4 Cypher khác với ISO GQL
 
-> ⚑ **Cypher không phải là GQL.** GQL là chuẩn ngôn ngữ truy vấn đồ thị do ISO ban hành
-> (ISO/IEC 39075:2024) [@iso-gql]. Cypher có mức độ tương thích đáng kể với GQL và là
-> nguồn cảm hứng chính cho chuẩn này, nhưng **hai ngôn ngữ không trùng khớp**: một số
-> tính năng bắt buộc của GQL chưa có trong Cypher và ngược lại [@neo4j-cypher-gql-conformance].
-> Khi viết mã chạy trên Neo4j, bạn đang dùng Cypher; khi nói về chuẩn liên hệ thống, bạn
-> đang nói về GQL.
+> ⚑ **Cypher không phải là GQL.** GQL là chuẩn do ISO ban hành (ISO/IEC 39075:2024) —
+> chính xác thì nó là *ngôn ngữ chuẩn để truy vấn và thao tác đồ thị thuộc tính*
+> [@iso-gql]. Cypher có mức độ tương thích đáng kể với GQL và là nguồn cảm hứng chính
+> cho chuẩn này, nhưng **hai ngôn ngữ không trùng khớp**: một số tính năng bắt buộc của
+> GQL chưa có trong Cypher và ngược lại [@neo4j-cypher-gql-conformance]. Cần chú ý phạm
+> vi của chuẩn: GQL chuẩn hóa **ngôn ngữ truy vấn**, chứ không phải một định dạng tuần
+> tự hóa hay trao đổi dữ liệu đồ thị giữa các hệ thống. Khi viết mã chạy trên Neo4j, bạn
+> đang dùng Cypher; khi nói về chuẩn *ngôn ngữ truy vấn* đồ thị, bạn đang nói về GQL.
 
 ## 2.4 Cùng tri thức, khác biểu diễn
 
@@ -495,11 +506,11 @@ kém?*
 | **Phân loại thực thể** | Bộ ba `rdf:type` trỏ đến nút lớp | Nhãn gắn trực tiếp trên nút |
 | **Thuộc tính literal** | Bộ ba với literal ở vị trí đối tượng | Thuộc tính (tên–giá trị) trên nút |
 | **Biểu diễn quan hệ** | Bộ ba (chủ thể, vị từ, đối tượng); quan hệ là một bộ ba | Cạnh có hướng, có kiểu, là công dân hạng nhất |
-| **Siêu dữ liệu của quan hệ** | Không gắn trực tiếp được; cần tái hiện hoặc mô hình n-ary | Gắn thuộc tính trực tiếp lên quan hệ |
+| **Siêu dữ liệu của quan hệ** | Trong RDF 1.1: không gắn trực tiếp; dùng tái hiện, nút trung gian, hoặc mẫu n-ary (RDF 1.2 đang phát triển triple term/reifier) | Gắn thuộc tính trực tiếp lên quan hệ |
 | **Quan hệ n-ary / ngữ cảnh** | Phải mô hình hóa bằng nút trung gian hoặc tái hiện | Có thể thêm thuộc tính cho quan hệ, hoặc dùng nút trung gian |
 | **Lược đồ / ngữ nghĩa** | RDFS, OWL — chuẩn hóa, có ngữ nghĩa hình thức | Lược đồ thường là quy ước ứng dụng; không có chuẩn ngữ nghĩa hình thức chung |
-| **Suy luận** | Có hệ suy luận chuẩn (RDFS/OWL entailment) | Phụ thuộc triển khai; không có chuẩn suy luận chung |
-| **Khả năng liên tác** | Cao — chuẩn W3C, nhiều định dạng trao đổi | Phụ thuộc hệ thống; đang hội tụ qua GQL |
+| **Suy luận** | RDFS và OWL định nghĩa ngữ nghĩa entailment hình thức | Phụ thuộc triển khai; không có chuẩn suy luận chung |
+| **Khả năng liên tác** | Cao — chuẩn W3C cho cả mô hình dữ liệu lẫn định dạng trao đổi | Hội tụ về *ngôn ngữ truy vấn* qua GQL; trao đổi dữ liệu vẫn phụ thuộc hệ thống, chưa có chuẩn tuần tự hóa liên hệ thống tương đương Turtle/N-Triples |
 | **Mô hình truy vấn** | Khớp mẫu đồ thị (SPARQL), ánh xạ nghiệm | Khớp mẫu đồ thị (Cypher/GQL), duyệt theo đường dẫn |
 | **Tuần tự hóa** | Nhiều chuẩn: Turtle, N-Triples, RDF/XML, JSON-LD | Thường là định dạng riêng của từng hệ thống |
 | **Gắn với triển khai** | Mô hình chuẩn độc lập triển khai | Mô hình gắn chặt với hệ quản trị cụ thể |
@@ -513,19 +524,32 @@ kém?*
 (:City {name:"Hà Nội"})-[:CAPITAL_OF {since: 1976}]->(:Country {name:"Việt Nam"})
 ```
 
-Trong RDF, bộ ba `(Hanoi, capitalOf, Vietnam)` không có chỗ để gắn `since`. Bạn phải
-dùng mô hình hóa n-ary: tạo một nút trung gian đại diện cho "sự kiện thủ đô", rồi nối nó
-với Hà Nội, Việt Nam, và năm 1976. Đây là một mẫu hình chuẩn nhưng tốn thêm cấu trúc.
+Trong RDF, bộ ba `(Hanoi, capitalOf, Vietnam)` không có chỗ để gắn `since`. Với baseline
+RDF 1.1 ổn định, bạn phải dùng tái hiện (reification), một nút trung gian đại diện cho
+"sự kiện thủ đô", hoặc mẫu quan hệ n-ary, rồi nối nó với Hà Nội, Việt Nam, và năm 1976.
+Đây là những mẫu hình chuẩn nhưng tốn thêm cấu trúc.
+
+> ⚑ **Phát triển hiện tại — RDF 1.2.** Các bản dự thảo RDF 1.2 đang phát triển cơ chế
+> *triple term* và *reifier*, cho phép tham chiếu đến một mệnh đề (proposition) để gắn
+> thêm thông tin mà không phải tự dựng nút trung gian [@w3c-rdf12-concepts]. Đây là cơ
+> chế mới hơn, chưa phải baseline ổn định để giảng dạy; và nó bổ sung thêm một cách biểu
+> diễn ngữ cảnh chứ không tự động giải quyết mọi bài toán quan hệ n-ary — chọn cấu trúc
+> nào cho miền cụ thể vẫn là quyết định mô hình hóa.
 
 **Hai — định danh.** RDF cho bạn IRI như một cơ chế định danh toàn cục ngay trong mô
-hình, hỗ trợ liên kết dữ liệu giữa các hệ thống. Đồ thị thuộc tính cho bạn hiệu năng và
-sự đơn giản, nhưng định danh xuyên hệ thống là việc bạn phải tự thiết kế.
+hình, hỗ trợ liên kết dữ liệu giữa các hệ thống. Đồ thị thuộc tính cho bạn sự đơn giản
+và tiện lợi khi thao tác, nhưng định danh xuyên hệ thống là việc bạn phải tự thiết kế.
 
-**Ba — ngữ nghĩa hình thức.** RDF đi kèm một hệ ngữ nghĩa chuẩn (RDFS, OWL) cho phép suy
-luận có bảo đảm: từ `A capitalOf B` và định nghĩa `capitalOf` có miền là `City`, một bộ
-suy luận có thể tự suy ra `A là City`. Đồ thị thuộc tính không có tầng ngữ nghĩa chuẩn
-như vậy; ý nghĩa của nhãn và kiểu quan hệ là quy ước của ứng dụng. Đổi lại, đồ thị thuộc
-tính thường dễ tiếp cận và nhanh hơn cho các tác vụ duyệt đồ thị thuần túy.
+**Ba — ngữ nghĩa hình thức.** RDF đi kèm một hệ ngữ nghĩa chuẩn: **RDFS và OWL định
+nghĩa ngữ nghĩa entailment hình thức**. Từ `A capitalOf B` và định nghĩa `capitalOf`
+có miền là `City`, một bộ suy luận có thể suy ra `A là City`. Bảo đảm ở đây là bảo đảm
+*về mặt suy luận*: những gì được suy ra là hệ quả logic của các tiên đề đã nêu, dưới hệ
+ngữ nghĩa đã chọn — nó **không** xác lập rằng các phát biểu đầu vào là đúng về mặt sự
+thật. Đồ thị thuộc tính không có tầng ngữ nghĩa chuẩn như vậy; ý nghĩa của nhãn và kiểu
+quan hệ là quy ước của ứng dụng. Đổi lại, đồ thị thuộc tính thường dễ tiếp cận hơn về
+mặt khái niệm. Lưu ý rằng hiệu năng không do mô hình dữ liệu quyết định: nó phụ thuộc
+triển khai cụ thể, chỉ mục, engine lưu trữ, khối lượng công việc, câu hỏi, tập dữ liệu,
+và bộ tối ưu. Chọn mô hình là chọn cách biểu diễn, không phải một tuyên bố về tốc độ.
 
 ### 2.4.3 Vậy chọn cái nào?
 
@@ -533,8 +557,8 @@ Không có câu trả lời duy nhất — và đó chính xác là điều chư
 Những heuristic thực tế:
 
 - Nếu bạn cần **trao đổi dữ liệu giữa nhiều hệ thống**, **tích hợp nhiều nguồn**, hoặc
-  **suy luận có bảo đảm**, RDF với ngữ nghĩa chuẩn là lựa chọn tự nhiên.
-- Nếu bạn cần **duyệt đồ thị nhanh**, **mô hình quan hệ giàu thuộc tính**, và làm việc
+  **ngữ nghĩa suy luận hình thức**, RDF với chuẩn W3C là lựa chọn tự nhiên.
+- Nếu bạn cần **mô hình quan hệ giàu thuộc tính**, cú pháp duyệt đồ thị gọn, và làm việc
   trong **một hệ thống khép kín**, đồ thị thuộc tính thường tiện lợi hơn.
 - Nhiều hệ thống thực tế dùng **cả hai**: đồ thị thuộc tính cho ứng dụng, RDF cho tầng
   tích hợp và trao đổi.
