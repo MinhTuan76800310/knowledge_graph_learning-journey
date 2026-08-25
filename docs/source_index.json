@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-25T05:00:00Z",
-  "purpose": "Machine-readable evidence of source fetches (Phase 0.5 audit + Chapter 2 research)",
+  "generated_at": "2026-08-25T08:00:00Z",
+  "purpose": "Machine-readable evidence of source fetches (Phase 0.5 audit + Chapter 2 research + Chapter 3 research)",
   "sources": [
     {
       "id": "R11-01",
@@ -31,7 +31,8 @@
         "2",
         "3"
       ],
-      "research_note_path": "docs/research_notes/R11-02.md"
+      "research_note_path": "docs/research_notes/R11-02.md",
+      "key_finding": "Named graph is merely syntactically paired with its graph; RDF places no formal restrictions on what the graph name denotes (provenance is an application convention, not built-in meaning). Entailment is conditional on the truth of the entailing graph."
     },
     {
       "id": "R11-03",
@@ -245,9 +246,11 @@
       "title": "Neo4j Data Modeling",
       "document_status": "Official documentation",
       "used_in_chapters": [
-        "2"
+        "2",
+        "3"
       ],
-      "research_note_path": "docs/research_notes/N4J-05.md"
+      "research_note_path": "docs/research_notes/N4J-05.md",
+      "key_finding": "Data modeling = define query logic and storage structure; glossary: label marks a node as member of a named/indexed subset (0+ labels per node); schema = prescribed property existence and datatypes; constraints = rules ensuring data consistency. Modeling is iterative: understand domain, draft model, test use cases, refactor."
     },
     {
       "id": "N4J-06",
@@ -259,9 +262,11 @@
       "title": "Neo4j Cypher Manual",
       "document_status": "Official documentation",
       "used_in_chapters": [
-        "2"
+        "2",
+        "3"
       ],
-      "research_note_path": "docs/research_notes/N4J-06.md"
+      "research_note_path": "docs/research_notes/N4J-06.md",
+      "key_finding": "elementId() returns STRING; unique among nodes and relationships across all databases in the same DBMS only within the scope of a single transaction; outside a transaction no mapping guarantees; internal IDs are reused after deletion, so applications relying on them are brittle — Neo4j recommends application-generated IDs. Old integer id() is deprecated/removed from the current manual."
     },
     {
       "id": "N4J-07",
@@ -352,6 +357,120 @@
         "2"
       ],
       "research_note_path": "docs/research_notes/S04.md"
+    },
+    {
+      "id": "H01",
+      "canonical_url": "https://kgbook.org/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T08:00:00Z",
+      "http_status": 200,
+      "final_url": "https://kgbook.org/",
+      "title": "Knowledge Graphs (Hogan et al.), Chapter 3: Schema, Identity, Context",
+      "document_status": "Academic book (Springer 2021), open full text",
+      "publication_date": "2021",
+      "used_in_chapters": [
+        "1",
+        "3"
+      ],
+      "research_note_path": "docs/research_notes/H01.md",
+      "key_finding": "Schema/identity/context are three distinct extensions of the data graph; identity links (owl:sameAs) ground cross-namespace identity; context = scope of truth; reified edge does not assert the edge it reifies."
+    },
+    {
+      "id": "S05",
+      "canonical_url": "https://web.stanford.edu/class/cs520/2020/notes/How_To_Create_A_Knowledge_Graph.html",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T08:00:00Z",
+      "http_status": 200,
+      "final_url": "https://web.stanford.edu/class/cs520/2020/notes/How_To_Create_A_Knowledge_Graph.html",
+      "title": "How to Create a Knowledge Graph?",
+      "organization": "Stanford University",
+      "document_status": "Academic Course Notes",
+      "used_in_chapters": [
+        "3"
+      ],
+      "research_note_path": "docs/research_notes/S05.md",
+      "key_finding": "KG can start schema-less but upfront design improves usefulness; Linked Data IRI design rules; identity links use owl:sameAs; PG design = property vs label vs node, relationship properties for time-varying facts, reification for n-ary."
+    },
+    {
+      "id": "S06",
+      "canonical_url": "https://web.stanford.edu/class/cs520/2020/notes/How_To_Create_A_Knowledge_Graph_From_Data.html",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T08:00:00Z",
+      "http_status": 200,
+      "final_url": "https://web.stanford.edu/class/cs520/2020/notes/How_To_Create_A_Knowledge_Graph_From_Data.html",
+      "title": "How to Create a Knowledge Graph from Data?",
+      "organization": "Stanford University",
+      "document_status": "Academic Course Notes",
+      "used_in_chapters": [
+        "3"
+      ],
+      "research_note_path": "docs/research_notes/S06.md",
+      "key_finding": "Structured-source integration = schema mapping + record linkage; both are inexact and need human validation; mapping rules can record source provenance; reusing source identifiers is often wrong."
+    },
+    {
+      "id": "OWL-02",
+      "canonical_url": "https://www.w3.org/TR/owl2-primer/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T08:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/owl2-primer/",
+      "title": "OWL 2 Web Ontology Language Primer (Second Edition)",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2012-12-11",
+      "used_in_chapters": [
+        "3",
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/OWL-02.md",
+      "key_finding": "Section 4.7: OWL makes no unique-name assumption (different names may denote the same individual); owl:sameAs asserts identity and lets reasoners propagate all information between the names; owl:differentFrom required to assert distinctness."
+    },
+    {
+      "id": "NARY-01",
+      "canonical_url": "https://www.w3.org/TR/swbp-n-aryRelations/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T08:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/swbp-n-aryRelations/",
+      "title": "Defining N-ary Relations on the Semantic Web",
+      "document_status": "W3C Working Group Note (informative)",
+      "publication_date": "2006-04-12",
+      "used_in_chapters": [
+        "3"
+      ],
+      "research_note_path": "docs/research_notes/NARY-01.md",
+      "key_finding": "RDF/OWL properties are binary; n-ary needs split into properties-of-a-relation (certainty, time) vs multi-participant relations; Pattern 1 introduces a class whose instances are relation instances ('reified relations')."
+    },
+    {
+      "id": "WD-01",
+      "canonical_url": "https://www.wikidata.org/wiki/Help:Statements",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T08:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.wikidata.org/wiki/Help:Statements",
+      "title": "Wikidata Help:Statements",
+      "organization": "Wikimedia Foundation",
+      "document_status": "Official help page (living document)",
+      "used_in_chapters": [
+        "3"
+      ],
+      "research_note_path": "docs/research_notes/WD-01.md",
+      "key_finding": "Statement = property-value pair about an item (Q-id); statements are contextualized with qualifiers, references, and ranks; core without references/ranks = claim; ranks (preferred/normal/deprecated) manage competing values."
+    },
+    {
+      "id": "WD-02",
+      "canonical_url": "https://www.wikidata.org/wiki/Help:Qualifiers",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-25T08:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.wikidata.org/wiki/Help:Qualifiers",
+      "title": "Wikidata Help:Qualifiers",
+      "organization": "Wikimedia Foundation",
+      "document_status": "Official help page (living document)",
+      "used_in_chapters": [
+        "3"
+      ],
+      "research_note_path": "docs/research_notes/WD-02.md",
+      "key_finding": "Qualifiers contextualize a statement beyond the bare property-value pair: scope ('France excluding Adélie Land'), method ('population: estimation'), validity ('population as of 2011'); a statement should remain useful without its qualifiers."
     }
   ]
 }

@@ -8,6 +8,8 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 |-------------|------------------|-------|
 | S03 | `stanford-cs520-what-is-kg` | What is a Knowledge Graph? |
 | S04 | `stanford-cs520-graph-data-models` | What Are Graph Data Models? |
+| S05 | `stanford-cs520-create-kg` | How to Create a Knowledge Graph? |
+| S06 | `stanford-cs520-kg-from-data` | How to Create a Knowledge Graph from Data? |
 | H01 | `hogan-knowledge-graphs` | Knowledge Graphs (Hogan et al.) |
 | R11-01 | `w3c-rdf11-primer` | RDF 1.1 Primer |
 | R11-02 | `w3c-rdf11-concepts` | RDF 1.1 Concepts and Abstract Syntax |
@@ -15,6 +17,10 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | R11-05 | `w3c-rdf11-turtle` | RDF 1.1 Turtle |
 | SP11-01 | `w3c-sparql11-overview` | SPARQL 1.1 Overview |
 | SP11-02 | `w3c-sparql11-query` | SPARQL 1.1 Query Language |
+| OWL-02 | `w3c-owl2-primer` | OWL 2 Web Ontology Language Primer |
+| NARY-01 | `w3c-nary-relations` | Defining N-ary Relations on the Semantic Web |
+| WD-01 | `wikidata-statements` | Wikidata Help: Statements |
+| WD-02 | `wikidata-qualifiers` | Wikidata Help: Qualifiers |
 | TOOL-01 | `rdflib-docs` | RDFLib Documentation |
 | N4J-03 | `neo4j-modeling-fundamentals` | Graph Data Modeling Fundamentals |
 | N4J-05 | `neo4j-data-modeling` | Neo4j Data Modeling |

@@ -79,6 +79,34 @@ Confirmed scope boundaries for academic sources:
 - **Neo4j / GraphAcademy**: Property graph teaching laboratory. Used in Chapters 2, 3, 9. Never presented as synonymous with Knowledge Graphs.
 - **Microsoft GraphRAG + "Unifying LLMs and KGs" Roadmap**: Introduced only in Chapter 9 after foundations are established.
 
+## 2026-08-25: Chapter 3 Research — Schema, Identity, Context
+
+Primary sources fetched and verified for Chapter 3 (HTTP 200 unless noted);
+registry entries added to `docs/source_index.json`, notes in
+`docs/research_notes/`:
+
+| ID | Source | Role in Chapter 3 |
+|---|---|---|
+| H01 | Hogan et al., *Knowledge Graphs* (kgbook.org), Ch. 3 | Academic backbone: schema (semantic/validating/emergent), identity (PIDs, identity links, lexicalisation), context (scope of truth, reification, higher-arity) |
+| S05 | CS520 "How to Create a Knowledge Graph?" | Schema design can be upfront/incremental/evolved; IRI design; identity links; property-vs-label-vs-node |
+| S06 | CS520 "How to Create a Knowledge Graph from Data?" | Schema mapping + record linkage as the two integration problems; inexact, human-validated |
+| R11-02 | RDF 1.1 Concepts §4 RDF Datasets | Named graph is "merely syntactically paired" with its graph — no built-in provenance meaning; entailment conditional on truth of premises |
+| OWL-02 | OWL 2 Primer §4.7 | owl:sameAs = identity with information propagation; owl:differentFrom; NO unique-name assumption |
+| NARY-01 | W3C N-ary Relations Note | Binary-property limitation; Pattern 1 = relation-instance class (qualified relation) |
+| WD-01/WD-02 | Wikidata Help: Statements / Qualifiers | Production case study: statement = property–value pair + qualifiers/references/ranks |
+| N4J-05/N4J-06 | Neo4j data-modeling docs + Cypher Manual | PG side: labels, constraints, relationship properties; elementId() is a non-durable implementation identifier |
+
+Key semantic decisions recorded in the notes:
+- `owl:sameAs` taught strictly as identity (never similarity); wrong sameAs
+  propagation is the motivating hazard.
+- Named graphs taught as grouping mechanism; provenance meaning is an
+  application convention (RDF 1.1 Concepts §4 note quoted).
+- Context mechanisms REPRESENT context; they do not make statements true
+  ("Context enables evaluation; context does not create truth.").
+- ML entity-resolution algorithms (blocking/matching/random forests from S06)
+  deferred to Chapter 7; Chapter 3 teaches only the problem and the
+  candidate→evidence→accepted-assertion flow.
+
 ## Open Questions
 
 1. ~~SHACL 1.2 may emerge~~ RESOLVED: SHACL 1.2 Core exists as Working Draft (2026-08-03). Documented as emerging material.
