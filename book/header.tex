@@ -1,25 +1,35 @@
 % header.tex — LaTeX preamble customizations for the Knowledge Graph book.
 % Engine: lualatex (Unicode + fontspec). Vietnamese rendered via system fonts.
 
-% --- Fonts (system fonts with full Vietnamese coverage; no bundled binaries) ---
+% --- Fonts (cross-platform fonts with full Vietnamese coverage) ---
 \usepackage{fontspec}
-% Symbols like ★ / ⚠ / ⚑ are absent from DejaVu Serif; fall back to
-% DejaVu Sans for missing glyphs instead of printing tofu boxes.
+% Symbols like ★ / ⚠ may be absent from Times New Roman; fall back
+% to Segoe UI for missing glyphs instead of printing tofu boxes.
 \directlua{
   luaotfload.add_fallback("symfallback", {
-    "DejaVu Sans:mode=node;",
+    "Segoe UI:mode=node;",
   })
 }
-\setmainfont{DejaVu Serif}[RawFeature={fallback=symfallback}]
-\setsansfont{DejaVu Sans}
-% DejaVu Sans Mono lacks precomposed Vietnamese glyphs (ồ, ề, ỉ, ...);
-% fall back to DejaVu Sans for the missing ones so code comments render.
-\setmonofont{DejaVu Sans Mono}[Scale=0.85, RawFeature={fallback=symfallback}]
+\setmainfont{Times New Roman}[RawFeature={fallback=symfallback}]
+\setsansfont{Segoe UI}
+% Consolas lacks precomposed Vietnamese glyphs (ồ, ề, ỉ, ...);
+% fall back to Segoe UI for the missing ones so code comments render.
+\setmonofont{Consolas}[Scale=0.85, RawFeature={fallback=symfallback}]
+
+% Symbols like ★ / ⚠ may be absent from Times New Roman; the Lua filter
+% (longtable-filter.lua) replaces them with \ding{} / \ensuremath{} equivalents
+% before they reach the LaTeX engine, avoiding font subsetting issues entirely.
+\usepackage{amssymb}
+\usepackage{pifont}
 
 % --- Vietnamese language support ---
 % Pandoc already loads babel with \babelprovide[main,import]{vietnamese}
 % because metadata.yaml sets lang: vi; loading babel again here would cause
 % an option clash.
+
+% --- Tables: use longtable so wide/tall tables auto-break across pages ---
+\usepackage{longtable}
+\usepackage{booktabs}
 
 % --- Code blocks: allow line breaking so they never overflow the margin ---
 \usepackage{fvextra}

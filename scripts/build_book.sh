@@ -50,6 +50,7 @@ COMMON_ARGS=(
   -V geometry:outer=22mm
   -V geometry:top=25mm
   -V geometry:bottom=28mm
+  --lua-filter="$ROOT/scripts/longtable-filter.lua"
 )
 
 echo "build_book: rendering print PDF (lualatex)"

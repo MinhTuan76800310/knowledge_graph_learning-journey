@@ -44,9 +44,23 @@ bất kỳ dòng mã nào.
 > Context" được giới thiệu trong chương này là một **mô hình học tập dành cho kỹ sư**,
 > KHÔNG phải là định nghĩa hình thức được chấp nhận rộng rãi trong giới học thuật. Nó giúp
 > phân tách các lớp trách nhiệm khi thiết kế hệ thống tri thức, nhưng không thay thế các
-> định nghĩa chuẩn từ W3C hay tài liệu nghiên cứu chuyên ngành.
+> định nghĩa chuẩn từ **W3C** (World Wide Web Consortium — tổ chức phát triển chuẩn web) hay tài liệu nghiên cứu chuyên ngành.
 
 ## 1.2 Mô hình tinh thần
+
+> 📦 **Preview — Các thuật ngữ W3C sẽ học chi tiết ở các chương sau**
+>
+> Chương này cần nhắc đến một số thuật ngữ từ thế giới RDF / Semantic Web. Đây là bản giới thiệu ngắn để bạn không bị lạc khi gặp chúng trong chương này:
+>
+> - **W3C** (World Wide Web Consortium): tổ chức phát triển chuẩn web.
+> - **RDF** (Resource Description Framework): mô hình dữ liệu đồ thị bộ ba chuẩn của W3C.
+> - **IRI** (Internationalized Resource Identifier): định danh toàn cục dạng chuỗi, dùng trong RDF.
+> - **RDFS** (RDF Schema): tầng lược đồ/lớp của RDF.
+> - **OWL** (Web Ontology Language): ngôn ngữ bản thể học.
+> - **SHACL** (Shapes Constraint Language): ngôn ngữ ràng buộc dữ liệu RDF.
+> - **SPARQL** (Simple Protocol and RDF Query Language): ngôn ngữ truy vấn RDF.
+>
+> Bạn không cần nhớ chi tiết ngay; mỗi thuật ngữ sẽ được giải thích đầy đủ khi đến chương tương ứng.
 
 ### Knowledge Graph = Data Graph + Semantics + Context
 
@@ -102,7 +116,7 @@ Xét hai trường hợp:
 - **Trường hợp A**: Một đồ thị chứa `(Alice) --[:KNOWS]--> (Bob)` nhưng không định nghĩa
   `:KNOWS` nghĩa là gì, không có schema, không có nguồn gốc. Đây là data graph.
 - **Trường hợp B**: Cùng đồ thị trên, nhưng `:KNOWS` được định nghĩa là quan hệ xã hội hai
-  chiều giữa hai Person, có ngữ nghĩa RDFS (domain/range dùng để suy diễn kiểu), có
+  chiều giữa hai Person, có ngữ nghĩa **RDFS** (RDF Schema — tầng lược đồ/lớp của RDF, sẽ học ở Chương 4) (**domain** (miền: loại thực thể làm chủ thể) và **range** (phạm vi: loại thực thể làm đối tượng) dùng để suy diễn kiểu), có
   timestamp, có nguồn trích dẫn. Đây là knowledge graph.
 
 Sự khác biệt nằm ở semantics và context, không nằm ở cấu trúc đồ thị.
@@ -163,8 +177,8 @@ Graph Structure (đỉnh + cạnh)
     + Schema/Ontology (định nghĩa hình thức, domain/range, subclass)
       + Identity (IRI bền vững, entity resolution, sameAs)
         + Context/Provenance (nguồn, thời gian, phạm vi, độ tin cậy)
-          + Constraints/Validation (SHACL shapes, cardinality)
-            + Inference Capabilities (entailment, rules, reasoning)
+          + Constraints/Validation (**SHACL** (Shapes Constraint Language — ngôn ngữ ràng buộc dữ liệu RDF, sẽ học ở Chương 5) shapes, **cardinality** (số lượng giá trị được phép của một quan hệ/thuộc tính))
+            + Inference Capabilities (**entailment** (suy diễn logic: kết luận mới được suy ra từ các tiên đề), rules, reasoning)
 ```
 
 Mỗi lớp bổ sung giải quyết một giới hạn cụ thể của lớp trước:
@@ -327,7 +341,7 @@ chính của chương đứng vững độc lập với chúng. Trong phiên b�
 | 1-1 | ★ | Plain graph không ngữ nghĩa |
 | 1-2 | ★ | Data graph vs taxonomy |
 | 1-3 | ★★ | Chuyển đổi tiệm tiến thành KG (miền sister-city) |
-| 1-4 | ★★ | Data graph → KG đơn giản với suy luận forward-chaining |
+| 1-4 | ★★ | Data graph → KG đơn giản với suy luận **forward-chaining** (suy diễn theo chiều thuận: từ luật và dữ liệu suy ra kết luận mới) |
 | 1-5 | ★★★ | Định nghĩa ngữ nghĩa của một quan hệ (đối xứng, bắc cầu, nghịch đảo) |
 
 ## 1.10 Câu hỏi suy ngẫm
@@ -353,13 +367,43 @@ chính của chương đứng vững độc lập với chúng. Trong phiên b�
 
 ## 1.12 Chúng ta chưa làm được gì
 
-- Biểu diễn và truy vấn đồ thị bằng ngôn ngữ chuẩn (cần RDF/SPARQL hoặc Cypher).
+- Biểu diễn và truy vấn đồ thị bằng ngôn ngữ chuẩn (cần RDF/**SPARQL** (Simple Protocol and RDF Query Language — ngôn ngữ truy vấn RDF, sẽ học ở Chương 2) hoặc **Cypher** (ngôn ngữ truy vấn đồ thị thuộc tính, sẽ học ở Chương 2)).
 - Phân biệt rõ ràng giữa RDF và Property Graph trong thực hành.
 - Xử lý identity resolution khi cùng một entity có nhiều tên/IRI.
-- Biểu diễn n-ary relations (quan hệ nhiều ngôi) vượt quá binary triples.
-- Quản lý named graphs và contextual statements.
+- Biểu diễn **n-ary relations** (quan hệ có nhiều hơn hai thành phần, hoặc quan hệ cần mang thêm thuộc tính) vượt quá binary triples.
+- Quản lý **named graphs** (đồ thị có tên, cho phép gom nhóm phát biểu theo ngữ cảnh) và contextual statements.
 
 Những giới hạn này dẫn trực tiếp đến **Chương 2: Mô hình Dữ liệu và Ngôn ngữ Truy vấn**.
+
+
+## Thuật ngữ đã gặp trong chương này
+
+| Thuật ngữ | Nghĩa ngắn | Học chi tiết |
+|-----------|-----------|--------------|
+| Entity (thực thể) | Đối tượng trong thế giới thực hoặc miền vấn đề | §1.3 |
+| Relation (quan hệ) | Mối liên hệ giữa hai entity | §1.3 |
+| Triple (bộ ba) | Đơn vị cơ bản: (subject, predicate, object) | §1.3 |
+| Data Graph (đồ thị dữ liệu) | Tập hợp entity/relation/property chưa có nghĩa hình thức | §1.3 |
+| Taxonomy (phân loại) | Hệ thống phân cấp subclass/superclass | §1.3 |
+| Ontology (bản thể học) | Định nghĩa hình thức khái niệm, quan hệ, ràng buộc | §1.3 |
+| Knowledge Graph (đồ thị tri thức) | Đồ thị có hướng có nhãn mang ngữ nghĩa | §1.3 |
+| W3C (World Wide Web Consortium) | Tổ chức phát triển chuẩn web | Preview box §1.2 |
+| RDF (Resource Description Framework) | Mô hình dữ liệu đồ thị bộ ba chuẩn | Chương 2 |
+| IRI (Internationalized Resource Identifier) | Định danh toàn cục dạng chuỗi | Chương 2 |
+| RDFS (RDF Schema) | Tầng lược đồ/lớp của RDF | Chương 4 |
+| OWL (Web Ontology Language) | Ngôn ngữ bản thể học | Chương 4 |
+| SHACL (Shapes Constraint Language) | Ngôn ngữ ràng buộc dữ liệu RDF | Chương 5 |
+| SPARQL (Simple Protocol and RDF Query Language) | Ngôn ngữ truy vấn RDF | Chương 2 |
+| Cypher | Ngôn ngữ truy vấn đồ thị thuộc tính | Chương 2 |
+| Schema (lược đồ) | Mô tả cấu trúc và từ vựng được kỳ vọng | §1.2, Chương 3 |
+| Provenance (nguồn gốc) | Ai/đâu/bằng cách nào tạo ra phát biểu | §1.4, Chương 6 |
+| Entailment (suy diễn logic) | Kết luận mới suy ra từ tiên đề | §1.4, Chương 4 |
+| Domain / Range | Miền chủ thể / Phạm vi đối tượng của quan hệ | §1.3, Chương 3 |
+| Cardinality (số lượng) | Số giá trị được phép của quan hệ/thuộc tính | §1.4 |
+| Forward-chaining | Suy diễn theo chiều thuận | Thí nghiệm 1-4 |
+| N-ary relation | Quan hệ nhiều ngôi hoặc cần thuộc tính bổ sung | §1.12, Chương 3 |
+| Named graph | Đồ thị có tên để gom nhóm theo ngữ cảnh | §1.12, Chương 3 |
+| Partial order | Quan hệ thứ tự bộ phận (phản xạ, bắc cầu, phản đối xứng) | §1.5 |
 
 ## Đọc thêm
 

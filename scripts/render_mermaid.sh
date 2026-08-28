@@ -42,7 +42,7 @@ if [ "${#SOURCES[@]}" -eq 0 ]; then
 fi
 
 for src in "${SOURCES[@]}"; do
-  python3 - "$ROOT/book/$src" "$FIGDIR" "$SRCDIR" <<'PYEOF'
+  python - "$ROOT/book/$src" "$FIGDIR" "$SRCDIR" <<'PYEOF'
 import re
 import subprocess
 import sys
@@ -94,6 +94,7 @@ while i < len(lines):
                 "-p", str(figdir.parent / "puppeteer.json"),
             ],
             check=True,
+            shell=True,
         )
         # Pandoc implicit figure: image alone in a paragraph => figure env.
         out.append(f"![{caption}](figures/{png.name})")

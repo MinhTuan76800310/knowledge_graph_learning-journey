@@ -92,7 +92,7 @@ hiểu nhầm.
 **IRI là một cơ chế định danh có phạm vi toàn cục** (globally scoped identifier
 mechanism): về mặt cú pháp, hai hệ thống bất kỳ trên thế giới đều có thể viết ra cùng
 một chuỗi IRI để cùng trỏ đến một tài nguyên. Đây là thiết kế cốt lõi giúp RDF hỗ trợ
-dữ liệu liên kết (Linked Data).
+dữ liệu liên kết (**Linked Data** — dữ liệu được định danh bằng IRI để dễ tích hợp giữa các hệ thống).
 
 Nhưng có hai điều IRI *không* tự động đảm bảo:
 
@@ -137,9 +137,9 @@ Hà Nội, Paris, Việt Nam, Pháp — chính là miền đã dùng ở Chươn
 tục.
 
 ```python
-from rdflib import Graph, Literal, Namespace, RDF, RDFS
+from rdflib import Graph, Literal, Namespace, RDF, RDFS  # RDF và RDFS là các namespace chuẩn của W3C
 
-EX = Namespace("http://example.org/")
+EX = Namespace("http://example.org/")  # Namespace (không gian tên): ánh xạ tiền tố ngắn thành IRI đầy đủ
 g = Graph()
 
 g.add((EX.Hanoi,   RDF.type,     EX.City))
@@ -211,9 +211,9 @@ Ba tiện ích cú pháp của Turtle xuất hiện ở đây:
 Kiểm chứng rằng đoạn Turtle trên đúng là đồ thị ban đầu, ta parse nó trở lại và so sánh:
 
 ```python
-turtle_text = g.serialize(format="turtle")
+turtle_text = g.serialize(format="turtle")  # serialize: chuyển đồ thị RDF thành văn bản
 g2 = Graph()
-g2.parse(data=turtle_text, format="turtle")
+g2.parse(data=turtle_text, format="turtle")  # parse: đọc văn bản thành đồ thị RDF
 assert set(g) == set(g2)   # đồ thị tương đương
 ```
 
@@ -238,7 +238,7 @@ hình đồ thị mới là nội dung bất biến.**
 
 ### 2.1.6 SPARQL: khớp mẫu đồ thị
 
-SPARQL là ngôn ngữ truy vấn chuẩn cho RDF [@w3c-sparql11-overview]. Khác với SQL truy
+**SPARQL** (Simple Protocol and RDF Query Language) là ngôn ngữ truy vấn chuẩn cho RDF [@w3c-sparql11-overview]. Khác với SQL truy
 vấn các hàng trong bảng, SPARQL **khớp mẫu đồ thị** (graph pattern matching)
 [@w3c-sparql11-query].
 
@@ -482,7 +482,7 @@ RETURN a.name, b.name
 
 ### 2.3.4 Cypher khác với ISO GQL
 
-> ⚑ **Cypher không phải là GQL.** GQL là chuẩn do ISO ban hành (ISO/IEC 39075:2024) —
+> ⚑ **Cypher không phải là GQL.** GQL là chuẩn do **ISO** (International Organization for Standardization — Tổ chức Tiêu chuẩn hóa Quốc tế) ban hành (ISO/IEC 39075:2024) —
 > chính xác thì nó là *ngôn ngữ chuẩn để truy vấn và thao tác đồ thị thuộc tính*
 > [@iso-gql]. Cypher có mức độ tương thích đáng kể với GQL và là nguồn cảm hứng chính
 > cho chuẩn này, nhưng **hai ngôn ngữ không trùng khớp**: một số tính năng bắt buộc của
@@ -509,7 +509,7 @@ kém?*
 | **Siêu dữ liệu của quan hệ** | Trong RDF 1.1: không gắn trực tiếp; dùng tái hiện, nút trung gian, hoặc mẫu n-ary (RDF 1.2 đang phát triển triple term/reifier) | Gắn thuộc tính trực tiếp lên quan hệ |
 | **Quan hệ n-ary / ngữ cảnh** | Phải mô hình hóa bằng nút trung gian hoặc tái hiện | Có thể thêm thuộc tính cho quan hệ, hoặc dùng nút trung gian |
 | **Lược đồ / ngữ nghĩa** | RDFS, OWL — chuẩn hóa, có ngữ nghĩa hình thức | Lược đồ thường là quy ước ứng dụng; không có chuẩn ngữ nghĩa hình thức chung |
-| **Suy luận** | RDFS và OWL định nghĩa ngữ nghĩa entailment hình thức | Phụ thuộc triển khai; không có chuẩn suy luận chung |
+| **Suy luận** | RDFS và OWL định nghĩa ngữ nghĩa **entailment** (suy diễn logic: kết luận mới suy ra từ tiên đề) hình thức | Phụ thuộc triển khai; không có chuẩn suy luận chung |
 | **Khả năng liên tác** | Cao — chuẩn W3C cho cả mô hình dữ liệu lẫn định dạng trao đổi | Hội tụ về *ngôn ngữ truy vấn* qua GQL; trao đổi dữ liệu vẫn phụ thuộc hệ thống, chưa có chuẩn tuần tự hóa liên hệ thống tương đương Turtle/N-Triples |
 | **Mô hình truy vấn** | Khớp mẫu đồ thị (SPARQL), ánh xạ nghiệm | Khớp mẫu đồ thị (Cypher/GQL), duyệt theo đường dẫn |
 | **Tuần tự hóa** | Nhiều chuẩn: Turtle, N-Triples, RDF/XML, JSON-LD | Thường là định dạng riêng của từng hệ thống |
@@ -525,12 +525,12 @@ kém?*
 ```
 
 Trong RDF, bộ ba `(Hanoi, capitalOf, Vietnam)` không có chỗ để gắn `since`. Với baseline
-RDF 1.1 ổn định, bạn phải dùng tái hiện (reification), một nút trung gian đại diện cho
+RDF 1.1 ổn định, bạn phải dùng **tái hiện** (**reification** — kỹ thuật biến một bộ ba/quan hệ thành một tài nguyên để gắn thêm thông tin cho nó; chi tiết ở Chương 3), một nút trung gian đại diện cho
 "sự kiện thủ đô", hoặc mẫu quan hệ n-ary, rồi nối nó với Hà Nội, Việt Nam, và năm 1976.
 Đây là những mẫu hình chuẩn nhưng tốn thêm cấu trúc.
 
 > ⚑ **Phát triển hiện tại — RDF 1.2.** Các bản dự thảo RDF 1.2 đang phát triển cơ chế
-> *triple term* và *reifier*, cho phép tham chiếu đến một mệnh đề (proposition) để gắn
+> **triple term** (bộ ba đặc biệt) và **reifier** (thực thể đại diện cho mệnh đề), cho phép tham chiếu đến một mệnh đề (proposition) để gắn
 > thêm thông tin mà không phải tự dựng nút trung gian [@w3c-rdf12-concepts]. Đây là cơ
 > chế mới hơn, chưa phải baseline ổn định để giảng dạy; và nó bổ sung thêm một cách biểu
 > diễn ngữ cảnh chứ không tự động giải quyết mọi bài toán quan hệ n-ary — chọn cấu trúc
@@ -622,6 +622,35 @@ và rằng định danh (IRI) là một cơ chế mạnh nhưng không tự đ�
 hỏi tự nhiên tiếp theo là: **làm sao để tổ chức định danh, lược đồ và ngữ cảnh sao cho
 tri thức vừa nhất quán vừa có thể tích hợp?** Chương 3 — *Lược đồ, Định danh và Ngữ cảnh*
 — sẽ trả lời điều đó, bắt đầu từ chính những khoảng trống mà chương này để lại.
+
+
+## Thuật ngữ đã gặp trong chương này
+
+| Thuật ngữ | Nghĩa ngắn | Học chi tiết |
+|-----------|-----------|--------------|
+| RDF (Resource Description Framework) | Mô hình dữ liệu đồ thị bộ ba chuẩn W3C | §2.1 |
+| IRI (Internationalized Resource Identifier) | Định danh toàn cục dạng chuỗi | §2.1.2 |
+| Literal | Giá trị dữ liệu (chuỗi, số) ở vị trí đối tượng | §2.1.1 |
+| Blank node (nút trống) | Tài nguyên tồn tại nhưng không có IRI | §2.1.3 |
+| Turtle | Cú pháp văn bản phổ biến để viết RDF | §2.1.5 |
+| N-Triples | Định dạng dòng đơn giản, mỗi dòng một bộ ba | §2.1.5 |
+| RDF/XML | Định dạng tuần tự hóa RDF theo cú pháp XML | §2.1.5 |
+| JSON-LD (JSON for Linked Data) | Định dạng JSON cho dữ liệu liên kết | §2.1.5 |
+| SPARQL (Simple Protocol and RDF Query Language) | Ngôn ngữ truy vấn chuẩn cho RDF | §2.1.6 |
+| Basic Graph Pattern (BGP) | Tập hợp các mẫu bộ ba trong truy vấn SPARQL | §2.1.6 |
+| Solution mapping (ánh xạ nghiệm) | Phép gán biến với hạng mục đồ thị khớp mẫu | §2.1.6 |
+| Labeled Property Graph (Đồ thị Thuộc tính có nhãn) | Mô hình đồ thị gồm nút, nhãn, thuộc tính, quan hệ | §2.2 |
+| Cypher | Ngôn ngữ truy vấn khai báo cho đồ thị thuộc tính | §2.3 |
+| GQL (Graph Query Language) | Ngôn ngữ truy vấn đồ thị chuẩn ISO | §2.3.4 |
+| ISO (International Organization for Standardization) | Tổ chức Tiêu chuẩn hóa Quốc tế | §2.3.4 |
+| Namespace (không gian tên) | Ánh xạ tiền tố ngắn thành IRI đầy đủ | §2.1.4 |
+| Linked Data (dữ liệu liên kết) | Dữ liệu được định danh bằng IRI để tích hợp | §2.1.2 |
+| Reification (tái hiện) | Kỹ thuật biến bộ ba thành tài nguyên để gắn thêm thông tin | §2.4.2, Chương 3 |
+| Triple term / Reifier | Cơ chế RDF 1.2 tham chiếu mệnh đề | §2.1.7 |
+| Entailment (suy diễn logic) | Kết luận mới suy ra từ tiên đề | §2.4.1 |
+| Serialize / Parse | Chuyển đồ thị thành văn bản / Đọc văn bản thành đồ thị | §2.1.5 |
+| Graph isomorphism (đẳng cấu đồ thị) | Hai đồ thị tương đương nếu có song ánh bảo toàn bộ ba | §2.1.5 |
+| W3C (World Wide Web Consortium) | Tổ chức phát triển chuẩn web | §2.0 |
 
 ## Đọc thêm
 
