@@ -244,8 +244,8 @@ assert set(g) == set(g2)   # đồ thị tương đương
   G₂ = { (ex:Hanoi, ex:hasAddress, _:x7), (_:x7, ex:city, ex:Hanoi) }
   ```
 
-  So sánh tập bộ ba thô: `_:b0 ≠ _:x7` → khác nhau. Nhưng về mặt ngữ nghĩa, cả hai đều
-  nói "Hà Nội có một địa chỉ, và địa chỉ đó nằm ở Hà Nội". Song ánh `{_:b0 ↦ _:x7}` biến
+  So sánh tập bộ ba thô: `_:b0` ≠ `_:x7` → khác nhau. Nhưng về mặt ngữ nghĩa, cả hai đều
+  nói "Hà Nội có một địa chỉ, và địa chỉ đó nằm ở Hà Nội". Song ánh _:b0 → _:x7 biến
   mọi bộ ba của G₁ thành bộ ba tương ứng trong G₂ → hai đồ thị **đẳng cấu**. Blank node
   là biến tồn tại, không phải tên — nên tên cục bộ của chúng không mang ý nghĩa.
 

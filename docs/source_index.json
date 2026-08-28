@@ -475,19 +475,26 @@
     {
       "id": "OWL-03",
       "canonical_url": "https://www.w3.org/TR/owl2-syntax/",
-      "fetch_status": "REGISTERED_NOT_FETCHED",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-28T23:40:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/owl2-syntax/",
       "title": "OWL 2 Web Ontology Language Structural Specification and Functional-Style Syntax (Second Edition)",
       "document_status": "W3C Recommendation",
       "publication_date": "2012-12-11",
       "used_in_chapters": [
         "4"
       ],
-      "research_note_path": "docs/research_notes/OWL-03.md"
+      "research_note_path": "docs/research_notes/OWL-03.md",
+      "key_finding": "Declarations are nonlogical (§5.8). Annotations have no logical effect (§10). Object vs data properties structurally distinct (§5.3-5.4)."
     },
     {
       "id": "OWL-04",
       "canonical_url": "https://www.w3.org/TR/owl2-direct-semantics/",
-      "fetch_status": "REGISTERED_NOT_FETCHED",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-28T23:40:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/owl2-direct-semantics/",
       "title": "OWL 2 Web Ontology Language Direct Semantics (Second Edition)",
       "document_status": "W3C Recommendation",
       "publication_date": "2012-12-11",
@@ -495,12 +502,15 @@
         "4"
       ],
       "research_note_path": "docs/research_notes/OWL-04.md",
-      "key_finding": "Defines model-theoretic semantics for OWL 2 DL; interpretation I = (Δ^I, ·^I) maps classes to subsets of domain, object properties to binary relations, individuals to domain elements."
+      "key_finding": "Interpretation is 10-tuple with separate data domain Δ_D disjoint from object domain Δ^I. Declarations and annotations have no logical consequences. Serialization syntax ≠ semantic regime."
     },
     {
       "id": "OWL-05",
       "canonical_url": "https://www.w3.org/TR/owl2-profiles/",
-      "fetch_status": "REGISTERED_NOT_FETCHED",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-28T23:40:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/owl2-profiles/",
       "title": "OWL 2 Web Ontology Language Profiles (Second Edition)",
       "document_status": "W3C Recommendation",
       "publication_date": "2012-12-11",
@@ -508,20 +518,39 @@
         "4"
       ],
       "research_note_path": "docs/research_notes/OWL-05.md",
-      "key_finding": "Defines EL (polynomial-time reasoning, large class hierarchies), QL (query rewriting over large instance data), RL (rule-based reasoning over RDF data)."
+      "key_finding": "EL PTIME only for core tasks (not conjunctive queries). QL supports query rewriting to SQL. RL on arbitrary RDF may miss answers (completeness not guaranteed). No profile is subset of another."
     },
     {
       "id": "HOGAN-CH6",
       "canonical_url": "https://kgbook.org/",
-      "fetch_status": "REGISTERED_NOT_FETCHED",
-      "title": "Knowledge Graphs (Hogan et al.), Chapter 6: Deductive Knowledge",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-28T23:40:00Z",
+      "http_status": 200,
+      "final_url": "https://kgbook.org/",
+      "title": "Knowledge Graphs (Hogan et al.), Chapter 4: Deductive Knowledge",
       "document_status": "Academic textbook",
       "publication_date": "2021",
       "used_in_chapters": [
         "4"
       ],
       "research_note_path": "docs/research_notes/HOGAN-CH6.md",
-      "key_finding": "Covers ontology-based deductive reasoning, Description Logics, interpretations, models, entailment, TBox/ABox distinction."
+      "key_finding": "OWL 2 DL 'roughly corresponds to' SROIQ. TBox/ABox/RBox as formal tuple components. Decidability vs tractability explicitly distinguished. OWA/CWA contrasted."
+    },
+    {
+      "id": "OWL-06",
+      "canonical_url": "https://www.w3.org/TR/owl2-rdf-based-semantics/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-28T23:40:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/owl2-rdf-based-semantics/",
+      "title": "OWL 2 Web Ontology Language RDF-Based Semantics (Second Edition)",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2012-12-11",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/OWL-06.md",
+      "key_finding": "Gives semantics directly to RDF graphs. Annotations are NOT semantically inert under RDF-Based (unlike Direct Semantics). Serialization syntax ≠ semantic regime. Direct Semantics conclusions are subset of RDF-Based conclusions."
     }
   ]
 }

@@ -67,7 +67,7 @@ thống ý nghĩa mà máy có thể suy luận trên đó.
 
 Chương 3 đã giới thiệu **schema** (lược đồ) như phần mô tả cấu trúc và từ vựng được kỳ
 vọng của đồ thị dữ liệu: lớp nào tồn tại, quan hệ nào nối từ đâu đến đâu, thuộc tính nào
-được phép [@hogan-knowledge-graphs]. Schema trả lời câu hỏi "được phép có gì?"
+được phép [@hogan-knowledge-graphs]. Schema mô tả tổ chức, từ vựng và cấu trúc kỳ vọng.
 
 Một **ontology** đi xa hơn: nó đưa ra các **cam kết ngữ nghĩa hình thức** (formal semantic
 commitments) về các khái niệm và quan hệ trong miền tri thức. Nói cách khác:
@@ -97,13 +97,17 @@ Một ontology OWL gồm ba loại thành phần:
 > ⚠ **Phân biệt quan trọng:**
 >
 > - **Tên/nhãn** (name/label): chuỗi ký tự dùng để tham chiếu — `City`, `capitalOf`.
-> - **Khai báo** (declaration): nói rằng một tên tồn tại — "có một lớp tên City". Khai báo
->   không gán ngữ nghĩa vượt quá sự tồn tại.
+> - **Khai báo** (declaration): liên kết một IRI với một loại thực thể OWL (Class,
+>   ObjectProperty, DataProperty, NamedIndividual, AnnotationProperty, Datatype). Khai báo hỗ
+>   trợ quản lý từ vựng, phân loại và phân giải nhập nhằng, nhưng **không tạo ra hệ quả logic**
+>   dưới Direct Semantics [@w3c-owl2-syntax].
 > - **Tiên đề** (axiom): phát biểu ràng buộc ngữ nghĩa — "mọi City đều là Place". Tiên đề
 >   mới là thứ tạo ra suy diễn.
 > - **Chú thích** (annotation): thông tin dành cho con người — nhãn hiển thị, mô tả, bình
->   luận. Chú thích **không** ảnh hưởng đến suy diễn logic trừ khi được liên kết với tiên đề
->   tường minh.
+>   luận. Dưới OWL 2 Direct Semantics, chú thích **không có nghĩa ngữ nghĩa** và bị bỏ qua khi
+>   tính suy diễn [@w3c-owl2-direct-semantics]. Tiên đề có thể mang chú thích, nhưng chú thích
+>   đó vẫn không thay đổi nghĩa logic của tiên đề. Ứng dụng có thể diễn giải chú thích bên ngoài
+>   ngữ nghĩa logic OWL.
 
 Một chú thích `rdfs:label "Thành phố"` giúp con người đọc hiểu, nhưng bộ suy luận không dùng
 nó để rút ra kết luận logic. Chỉ có tiên đề mới làm được điều đó.
@@ -177,7 +181,7 @@ Country^I = {v, f}
 Place^I   = {h, v, p, f}
 ```
 
-Đọc `City^I ⊆ Δ^I` như sau: "Trong diễn giải I, lớp City được gán với tập con {h, p} của
+Đọc $City^I \subseteq \Delta^I$ như sau: "Trong diễn giải I, lớp City được gán với tập con {h, p} của
 miền." Nói cách khác, trong diễn giải này, h và p là các "thành phố".
 
 Thuộc tính đối tượng được diễn giải thành **quan hệ hai ngôi** trên miền:
@@ -186,12 +190,28 @@ Thuộc tính đối tượng được diễn giải thành **quan hệ hai ngô
 capitalOf^I = {(h, v), (p, f)}
 ```
 
-Đọc `capitalOf^I ⊆ Δ^I × Δ^I` như sau: "Trong diễn giải I, quan hệ capitalOf được gán với
+Đọc $capitalOf^I \subseteq \Delta^I \times \Delta^I$ như sau: "Trong diễn giải I, quan hệ capitalOf được gán với
 tập các cặp {(h,v), (p,f)}." Nghĩa là: trong diễn giải này, h có quan hệ capitalOf với v,
 và p có quan hệ capitalOf với f.
 
+### Thuộc tính dữ liệu và miền dữ liệu
+
+OWL phân biệt hai loại thuộc tính. **Thuộc tính đối tượng** (object property) nối cá thể với
+cá thể: $R^I \subseteq \Delta^I \times \Delta^I$. **Thuộc tính dữ liệu** (data property) nối cá thể với giá trị dữ
+liệu: $P^I \subseteq \Delta^I \times \Delta_D$, trong đó $\Delta_D$ là **miền dữ liệu** (data domain) — tập các giá trị
+như chuỗi, số, ngày tháng. Miền dữ liệu $\Delta_D$ khác rỗng và **rời nhau** với miền đối tượng $\Delta^I$
+[@w3c-owl2-direct-semantics].
+
+Ví dụ: `hasName(Hanoi, "Hà Nội")` hoặc `population(Hanoi, 8000000)`. Ở đây `"Hà Nội"` và
+`8000000` là phần tử của $\Delta_D$, không phải của $\Delta^I$.
+
+> ⚠ **Lưu ý sư phạm:** Phần đầu chương dùng ký hiệu đơn giản hóa $I = (\Delta^I, \cdot^I)$ để tập trung
+> vào cơ chế cốt lõi. Khi làm việc với thuộc tính dữ liệu, hãy nhớ rằng ngữ nghĩa đầy đủ bao
+> gồm cả miền dữ liệu $\Delta_D$ rời nhau. Ký hiệu đơn giản hóa không sai — nó chỉ chưa đủ cho thuộc
+> tính dữ liệu.
+
 > ⚠ **Quan trọng:** Một diễn giải chỉ là *một cách* gán nghĩa. Có vô số diễn giải khác nhau
-> cho cùng một bộ ký hiệu. Ví dụ, một diễn giải J có thể gán `City^J = {v}` — nghĩa là
+> cho cùng một bộ ký hiệu. Ví dụ, một diễn giải J có thể gán $City^J = \{v\}$ — nghĩa là
 > trong J, chỉ có v là "thành phố". Diễn giải J hoàn toàn hợp lệ về mặt toán học, dù nó
 > không khớp với trực giác của chúng ta về thành phố. Vai trò của ontology là *loại bỏ* các
 > diễn giải không phù hợp với ý định mô hình hóa.
@@ -213,11 +233,11 @@ City^I ⊆ Place^I
 Nghĩa là: trong bất kỳ diễn giải nào thỏa mãn tiên đề này, tập mà City được gán phải là tập
 con của tập mà Place được gán.
 
-Quay lại ví dụ: trong diễn giải I ở trên, `City^I = {h, p}` và `Place^I = {h, v, p, f}`.
-Vì {h, p} ⊆ {h, v, p, f}, diễn giải I **thỏa mãn** tiên đề `City ⊑ Place`.
+Quay lại ví dụ: trong diễn giải I ở trên, $City^I = \{h, p\}$ và $Place^I = \{h, v, p, f\}$.
+Vì $\{h, p\} \subseteq \{h, v, p, f\}$, diễn giải I **thỏa mãn** tiên đề `City ⊑ Place`.
 
-Ngược lại, xét diễn giải J với `City^J = {h, p}` và `Place^J = {h}`. Vì {h, p} ⊄ {h}
-(phần tử p thuộc City^J nhưng không thuộc Place^J), diễn giải J **không thỏa mãn** tiên đề
+Ngược lại, xét diễn giải J với $City^J = \{h, p\}$ và $Place^J = \{h\}$. Vì $\{h, p\} \not\subseteq \{h\}$
+(phần tử p thuộc $City^J$ nhưng không thuộc $Place^J$), diễn giải J **không thỏa mãn** tiên đề
 này.
 
 Một diễn giải **thỏa mãn** một tiên đề khi điều kiện ngữ nghĩa của tiên đề đó đúng trong
@@ -240,10 +260,10 @@ Xét ontology O gồm hai tiên đề:
 (2) Country ⊑ Place
 ```
 
-Diễn giải I ở trên (với `Place^I = {h, v, p, f}`, `City^I = {h, p}`, `Country^I = {v, f}`)
+Diễn giải I ở trên (với $Place^I = \{h, v, p, f\}$, $City^I = \{h, p\}$, $Country^I = \{v, f\}$)
 thỏa mãn cả hai → I là một mô hình của O.
 
-Diễn giải J (với `Place^J = {h}`) không thỏa mãn (1) → J không phải mô hình của O.
+Diễn giải J (với $Place^J = \{h\}$) không thỏa mãn (1) → J không phải mô hình của O.
 
 > 🖊 **Tự kiểm tra:** Tại sao "mô hình" không giống với "ontology"? Ontology là tập tiên đề
 > (mô tả các ràng buộc). Mô hình là một diễn giải cụ thể thỏa mãn các ràng buộc đó. Một
@@ -276,8 +296,8 @@ tìm được dù chỉ một mô hình của O mà trong đó α sai, thì O �
 
 Câu hỏi: O có suy diễn ra `Hanoi : City` không?
 
-Hãy xét bất kỳ mô hình M nào của O. Vì M thỏa mãn (1), ta có `CapitalCity^M ⊆ City^M`.
-Vì M thỏa mãn (2), ta có `Hanoi^M ∈ CapitalCity^M`. Kết hợp hai điều: `Hanoi^M ∈ City^M`.
+Hãy xét bất kỳ mô hình M nào của O. Vì M thỏa mãn (1), ta có $CapitalCity^M \subseteq City^M$.
+Vì M thỏa mãn (2), ta có $Hanoi^M \in CapitalCity^M$. Kết hợp hai điều: $Hanoi^M \in City^M$.
 Vậy `Hanoi : City` đúng trong M.
 
 Vì lập luận trên đúng cho *mọi* mô hình M của O, ta kết luận:
@@ -326,7 +346,7 @@ Bây giờ ta áp dụng cơ chế diễn giải/mô hình/suy diễn vào các 
 City ⊑ Place
 ```
 
-Điều kiện ngữ nghĩa: `City^I ⊆ Place^I` trong mọi mô hình.
+Điều kiện ngữ nghĩa: $City^I \subseteq Place^I$ trong mọi mô hình.
 
 Đây là quan hệ **một chiều**. Từ `City ⊑ Place`, ta biết mọi City đều là Place. Nhưng ta
 **không** biết mọi Place đều là City. Place có thể chứa các phần tử không thuộc City.
@@ -337,16 +357,16 @@ City ⊑ Place
 A ≡ B
 ```
 
-Điều kiện ngữ nghĩa: `A^I = B^I` trong mọi mô hình.
+Điều kiện ngữ nghĩa: $A^I = B^I$ trong mọi mô hình.
 
 Hai lớp tương đương khi và chỉ khi chúng có **cùng tập thành viên** trong mọi mô hình. Đây
-là quan hệ hai chiều: `A ≡ B` tương đương với cả `A ⊑ B` lẫn `B ⊑ A`.
+là quan hệ hai chiều: $A \equiv B$ tương đương với cả $A \sqsubseteq B$ lẫn $B \sqsubseteq A$.
 
 > ⚠ **Ngộ nhận phổ biến:** Nhầm lẫn `owl:equivalentClass` với `owl:sameAs`.
 >
 > - `owl:sameAs` (Chương 3): hai **cá thể** là một. `ex:Hanoi owl:sameAs wd:Q1858` nghĩa là
 >   hai tên này chỉ cùng một cá thể.
-> - `owl:equivalentClass`: hai **lớp** có cùng tập thành viên. `City ≡ UrbanArea` nghĩa là
+> - `owl:equivalentClass`: hai **lớp** có cùng tập thành viên. $City \equiv UrbanArea$ nghĩa là
 >   trong mọi mô hình, tập các City bằng tập các UrbanArea.
 >
 > Một bên nói về identity của cá thể. Một bên nói về equality của tập hợp. Đừng nhầm.
@@ -357,18 +377,18 @@ là quan hệ hai chiều: `A ≡ B` tương đương với cả `A ⊑ B` lẫn
 City ⊓ Country ≡ ⊥
 ```
 
-Điều kiện ngữ nghĩa: `City^I ∩ Country^I = ∅` trong mọi mô hình.
+Điều kiện ngữ nghĩa: $City^I \cap Country^I = \emptyset$ trong mọi mô hình.
 
 Nghĩa là: không có phần tử nào vừa là City vừa là Country.
 
 > ⚠ **Quan trọng:** Các tên lớp khác nhau **không tự động** rời nhau. Việc `City` và
-> `Country` là hai tên khác nhau không ngụ ý `City^I ∩ Country^I = ∅`. Tính rời nhau phải
+> `Country` là hai tên khác nhau không ngụ ý $City^I \cap Country^I = \emptyset$. Tính rời nhau phải
 > được **khai báo tường minh** bằng một tiên đề. Đây là hệ quả trực tiếp của việc OWL không
 > có giả định tên duy nhất (Chương 3): tên khác nhau không ngụ ý thực thể khác nhau, và
 > tương tự, tên lớp khác nhau không ngụ ý tập thành viên rời nhau.
 
 **Phản ví dụ:** Giả sử ontology chỉ có `City` và `Country` mà không có tiên đề disjointness.
-Khi đó tồn tại một mô hình trong đó `City^I = {h, v}` và `Country^I = {v, f}` — phần tử v
+Khi đó tồn tại một mô hình trong đó $City^I = \{h, v\}$ và $Country^I = \{v, f\}$ — phần tử v
 thuộc cả hai lớp. Mô hình này hoàn toàn hợp lệ vì không có tiên đề nào cấm nó.
 
 ## 4.5 Điều kiện cần và điều kiện đủ
@@ -388,9 +408,10 @@ CapitalCity ⊑ City
 - Nếu x là CapitalCity ⇒ x là City. (Điều kiện **đủ**: là CapitalCity đủ để kết luận là City.)
 - Nếu x là City ⇒ x là CapitalCity? **KHÔNG.** Là City không đủ để kết luận là CapitalCity.
 
-Nói cách khác, `CapitalCity ⊑ City` cho ta điều kiện đủ cho City (là CapitalCity thì chắc
-chắn là City), nhưng chỉ cho điều kiện **cần** cho CapitalCity (muốn là CapitalCity thì
-trước hết phải là City).
+Nói cách khác, `CapitalCity ⊑ City` cho ta: CapitalCity là điều kiện **đủ** cho City (là
+CapitalCity thì chắc chắn là City), và City là điều kiện **cần** cho CapitalCity (muốn là
+CapitalCity thì trước hết phải là City). Hướng rất quan trọng: $A \sqsubseteq B$ nghĩa là A đủ cho B, B
+cần cho A.
 
 ### Điều kiện cần: SubClassOf với biểu thức lớp
 
@@ -402,7 +423,7 @@ CapitalCity ⊑ City ⊓ ∃capitalOf.Country
 
 Đọc: "Mọi CapitalCity đều là City VÀ có quan hệ capitalOf đến ít nhất một Country."
 
-Vế phải (`City ⊓ ∃capitalOf.Country`) mô tả các **điều kiện cần** cho CapitalCity: nếu một
+Vế phải ($City \sqcap \exists capitalOf.Country$) mô tả các **điều kiện cần** cho CapitalCity: nếu một
 cá thể là CapitalCity, thì nó *phải* thỏa mãn cả hai điều kiện này. Nhưng ngược lại chưa
 đúng: một cá thể thỏa mãn vế phải chưa chắc là CapitalCity (vì tiên đề chỉ nói một chiều).
 
@@ -432,15 +453,15 @@ Câu hỏi: O ⊨ `Hanoi : CapitalCity`?
 
 Hãy xét bất kỳ mô hình M nào của O:
 
-- Từ (2): `Hanoi^M ∈ City^M`
-- Từ (3): `Vietnam^M ∈ Country^M`
-- Từ (4): `(Hanoi^M, Vietnam^M) ∈ capitalOf^M`
+- Từ (2): $Hanoi^M \in City^M$
+- Từ (3): $Vietnam^M \in Country^M$
+- Từ (4): $(Hanoi^M, Vietnam^M) \in capitalOf^M$
 
-Kết hợp: `Hanoi^M ∈ City^M` và tồn tại `Vietnam^M ∈ Country^M` sao cho
-`(Hanoi^M, Vietnam^M) ∈ capitalOf^M`. Vậy `Hanoi^M` thuộc tập `{x | x ∈ City^M và ∃y:
-(x,y) ∈ capitalOf^M và y ∈ Country^M}`.
+Kết hợp: $Hanoi^M \in City^M$ và tồn tại $Vietnam^M \in Country^M$ sao cho
+$(Hanoi^M, Vietnam^M) \in capitalOf^M$. Vậy $Hanoi^M$ thuộc tập $\{x \mid x \in City^M \text{ và } \exists y:
+(x,y) \in capitalOf^M \text{ và } y \in Country^M\}$.
 
-Từ (1), tập này chính là `CapitalCity^M`. Vậy `Hanoi^M ∈ CapitalCity^M`.
+Từ (1), tập này chính là $CapitalCity^M$. Vậy $Hanoi^M \in CapitalCity^M$.
 
 Vì lập luận đúng cho mọi mô hình M:
 
@@ -448,10 +469,10 @@ Vì lập luận đúng cho mọi mô hình M:
 O ⊨ Hanoi : CapitalCity
 ```
 
-> 🖊 **Tự kiểm tra:** Giả sử thay (1) bằng `CapitalCity ⊑ City ⊓ ∃capitalOf.Country` (chỉ
+> 🖊 **Tự kiểm tra:** Giả sử thay (1) bằng $CapitalCity \sqsubseteq City \sqcap \exists capitalOf.Country$ (chỉ
 > SubClassOf, không phải Equivalence). Với cùng dữ liệu (2)-(4), O có suy diễn ra
 > `Hanoi : CapitalCity` không? Tại sao? Gợi ý: xét xem có tồn tại mô hình nào trong đó
-> Hanoi thỏa mãn vế phải nhưng không thuộc CapitalCity^M không.
+> Hanoi thỏa mãn vế phải nhưng không thuộc $CapitalCity^M$ không.
 
 ## 4.6 Biểu thức lớp (Class Expressions)
 
@@ -464,9 +485,9 @@ thức có ngữ nghĩa tập hợp chính xác.
 C ⊓ D
 ```
 
-Ngữ nghĩa: `(C ⊓ D)^I = C^I ∩ D^I`
+Ngữ nghĩa: $(C \sqcap D)^I = C^I \cap D^I$
 
-Tập các phần tử thuộc **cả** C lẫn D. Ví dụ: `City ⊓ HasAirport` là lớp các thành phố có
+Tập các phần tử thuộc **cả** C lẫn D. Ví dụ: $City \sqcap HasAirport$ là lớp các thành phố có
 sân bay.
 
 ### Hợp (Union)
@@ -475,7 +496,7 @@ sân bay.
 C ⊔ D
 ```
 
-Ngữ nghĩa: `(C ⊔ D)^I = C^I ∪ D^I`
+Ngữ nghĩa: $(C \sqcup D)^I = C^I \cup D^I$
 
 Tập các phần tử thuộc C **hoặc** D (hoặc cả hai).
 
@@ -485,10 +506,10 @@ Tập các phần tử thuộc C **hoặc** D (hoặc cả hai).
 ¬C
 ```
 
-Ngữ nghĩa: `(¬C)^I = Δ^I \ C^I`
+Ngữ nghĩa: $(\neg C)^I = \Delta^I \setminus C^I$
 
 Tập các phần tử trong miền **không** thuộc C. Lưu ý: phủ định tính tương đối so với miền
-diễn giải Δ^I, không phải "mọi thứ trong vũ trụ".
+diễn giải $\Delta^I$, không phải "mọi thứ trong vũ trụ".
 
 ### Hạn chế tồn tại (Existential Restriction)
 
@@ -504,16 +525,25 @@ Ngữ nghĩa:
 (∃ R.C)^I = { x ∈ Δ^I | ∃y: (x,y) ∈ R^I và y ∈ C^I }
 ```
 
-**Ví dụ:** `∃capitalOf.Country` là lớp các cá thể có quan hệ capitalOf đến ít nhất một
-Country. Trong diễn giải I ở trên, `Hanoi^I = h` và `(h,v) ∈ capitalOf^I` với
-`v ∈ Country^I`, nên `h ∈ (∃capitalOf.Country)^I`.
+**Ví dụ:** $\exists capitalOf.Country$ là lớp các cá thể có quan hệ capitalOf đến ít nhất một
+Country. Trong diễn giải I ở trên, $Hanoi^I = h$ và $(h,v) \in capitalOf^I$ với
+$v \in Country^I$, nên $h \in (\exists capitalOf.Country)^I$.
 
 > ⚠ **Hệ quả quan trọng của thế giới mở:** Hạn chế tồn tại yêu cầu sự **tồn tại** của một
 > phần tử y trong miền diễn giải, nhưng y **không nhất thiết phải có tên** trong đồ thị RDF.
-> Nghĩa là: ontology có thể suy diễn rằng "tồn tại một Country mà Hanoi là thủ đô" ngay cả
-> khi không có cá thể Country nào được đặt tên tường minh trong dữ liệu. Bộ suy luận có thể
-> tạo ra một phần tử ẩn (anonymous element) trong miền để thỏa mãn hạn chế. Đừng nhầm lẫn
-> giữa "có trong dữ liệu" và "tồn tại trong mô hình".
+> Nghĩa là: ontology có thể đòi hỏi rằng "trong mọi mô hình, tồn tại một Country mà Hanoi có
+> quan hệ capitalOf đến" ngay cả khi không có cá thể Country nào được đặt tên tường minh trong
+> dữ liệu.
+>
+> **Phân biệt bắt buộc:**
+> - **Tồn tại ngữ nghĩa (semantic existence):** ontology đòi hỏi phần tử phù hợp trong mọi mô
+>   hình. Đây là phát biểu về cấu trúc toán học của các mô hình.
+> - **Vật chất hóa (materialization):** một bộ suy luận cụ thể *có thể* dùng witness, nút ẩn,
+>   hoặc biểu diễn Skolem để tính toán — nhưng đây là hành vi triển khai, không phải bản thân
+>   quan hệ suy diễn.
+> - **Suy diễn OWL KHÔNG tự động thêm blank node hay triple RDF vào đồ thị nguồn.**
+>
+> Tồn tại ngữ nghĩa ≠ nút được vật chất hóa/serialized.
 
 ### Hạn chế phổ quát (Universal Restriction)
 
@@ -529,15 +559,27 @@ Ngữ nghĩa:
 (∀ R.C)^I = { x ∈ Δ^I | ∀y: (x,y) ∈ R^I ⇒ y ∈ C^I }
 ```
 
-> ⚠ **Ranh giới tinh tế:** Hạn chế phổ quát **không** khẳng định rằng R-liên kết tồn tại.
-> Nếu x không có bất kỳ R-liên kết nào, thì `∀ R.C` vẫn đúng cho x — một cách trống rỗng
-> (vacuously true). Đây là hệ quả của logic cổ điển: "với mọi y, nếu (x,y) ∈ R^I thì y ∈ C^I"
-> đúng tự động khi không có y nào thỏa (x,y) ∈ R^I.
+> ⚠ **Ranh giới tinh tế — hai mức độ khác nhau:**
 >
-> **Ví dụ:** Giả sử `∀hasChild.Doctor` ("mọi con đều là bác sĩ"). Nếu Alice không có con nào
-> được biết đến trong mô hình, thì Alice thuộc `(∀hasChild.Doctor)^I` — không phải vì con
-> cô ấy là bác sĩ, mà vì điều kiện "mọi con" được thỏa mãn một cách trống rỗng. Đây là lý do
-> hạn chế phổ quát không thể dùng như một ràng buộc "phải có ít nhất một giá trị".
+> **Mức A — Trong một diễn giải I cụ thể:** Nếu x không có bất kỳ R-liên kết nào *trong I*,
+> thì x ∈ (∀R.C)^I — một cách trống rỗng (vacuously true). Đây là hệ quả của logic cổ điển:
+> "với mọi y, nếu (x,y) ∈ R^I thì y ∈ C^I" đúng tự động khi không có y nào thỏa (x,y) ∈ R^I.
+>
+> **Mức B — Suy diễn từ ontology/dữ liệu:** Nếu đồ thị RDF chỉ đơn thuần *không chứa* triple
+> R nào cho x, điều đó **KHÔNG** suy diễn ra $x : \forall R.C$. Vì dưới giả định thế giới mở, có thể
+> tồn tại một mô hình khác chứa R-liên kết chưa được khẳng định trong dữ liệu, và liên kết đó
+> dẫn đến phần tử không thuộc C.
+>
+> **Phân biệt bắt buộc:** Vắng mặt trong dữ liệu/serialization ≠ vắng mặt trong diễn giải.
+>
+> **Ví dụ:** Giả sử $\forall hasChild.Doctor$ ("mọi con đều là bác sĩ").
+> - Trong một diễn giải I cụ thể mà Alice không có con: $Alice \in (\forall hasChild.Doctor)^I$ (trống
+>   rỗng).
+> - Nhưng từ dữ liệu RDF chỉ thiếu triple hasChild cho Alice, ta **không** suy diễn được
+>   $Alice : \forall hasChild.Doctor$ — vì có thể tồn tại mô hình trong đó Alice có con không phải bác
+>   sĩ.
+>
+> Đây là lý do hạn chế phổ quát không thể dùng như một ràng buộc "phải có ít nhất một giá trị".
 
 ### Lực lượng (Cardinality)
 
@@ -553,9 +595,9 @@ OWL cung cấp các hạn chế về số lượng:
 > hay "unique constraint" kiểm tra dữ liệu hiện có. Trong OWL, dưới giả định thế giới mở và
 > không có giả định tên duy nhất:
 >
-> - `≥ 1 hasChild.Person` không yêu cầu dữ liệu RDF phải chứa một triple hasChild tường minh.
+> - $\geq 1\ hasChild.Person$ không yêu cầu dữ liệu RDF phải chứa một triple hasChild tường minh.
 >   Bộ suy luận có thể suy diễn sự tồn tại của một Person ẩn.
-> - `≤ 1 hasNationalCapital.City` với hai tên `Hanoi` và `HaNoiCity` không tự động gây lỗi.
+> - $\leq 1\ hasNationalCapital.City$ với hai tên `Hanoi` và `HaNoiCity` không tự động gây lỗi.
 >   Thay vào đó, bộ suy luận có thể suy diễn `Hanoi owl:sameAs HaNoiCity` (Chương 3).
 >
 > Validation theo nghĩa "kiểm tra dữ liệu tuân thủ quy tắc" là công việc của SHACL (Chương 5),
@@ -572,9 +614,9 @@ quan trọng nhất, mỗi đặc trưng được giải thích qua cơ chế th
 capitalOf ⊑ locatedIn
 ```
 
-Ngữ nghĩa: `capitalOf^I ⊆ locatedIn^I` trong mọi mô hình.
+Ngữ nghĩa: $capitalOf^I \subseteq locatedIn^I$ trong mọi mô hình.
 
-Nếu (x,y) ∈ capitalOf^I thì (x,y) ∈ locatedIn^I. Mọi cặp thủ đô-quốc gia cũng là cặp
+Nếu $(x,y) \in capitalOf^I$ thì $(x,y) \in locatedIn^I$. Mọi cặp thủ đô-quốc gia cũng là cặp
 "nằm trong".
 
 ### Inverse (Nghịch đảo)
@@ -583,7 +625,7 @@ Nếu (x,y) ∈ capitalOf^I thì (x,y) ∈ locatedIn^I. Mọi cặp thủ đô-q
 capitalOf⁻ ≡ hasCapital
 ```
 
-Ngữ nghĩa: `(x,y) ∈ capitalOf^I ⇔ (y,x) ∈ hasCapital^I`.
+Ngữ nghĩa: $(x,y) \in capitalOf^I \Leftrightarrow (y,x) \in hasCapital^I$.
 
 Nếu Hanoi capitalOf Vietnam thì Vietnam hasCapital Hanoi, và ngược lại.
 
@@ -593,7 +635,7 @@ Nếu Hanoi capitalOf Vietnam thì Vietnam hasCapital Hanoi, và ngược lại.
 Sym(sisterCity)
 ```
 
-Ngữ nghĩa: `(x,y) ∈ sisterCity^I ⇒ (y,x) ∈ sisterCity^I`.
+Ngữ nghĩa: $(x,y) \in sisterCity^I \Rightarrow (y,x) \in sisterCity^I$.
 
 Nếu Hanoi sisterCity Paris thì Paris sisterCity Hanoi.
 
@@ -603,7 +645,7 @@ Nếu Hanoi sisterCity Paris thì Paris sisterCity Hanoi.
 Trans(locatedIn)
 ```
 
-Ngữ nghĩa: `(x,y) ∈ locatedIn^I và (y,z) ∈ locatedIn^I ⇒ (x,z) ∈ locatedIn^I`.
+Ngữ nghĩa: $(x,y) \in locatedIn^I$ và $(y,z) \in locatedIn^I \Rightarrow (x,z) \in locatedIn^I$.
 
 Nếu Hanoi locatedIn Vietnam và Vietnam locatedIn SoutheastAsia thì Hanoi locatedIn
 SoutheastAsia.
@@ -614,7 +656,7 @@ SoutheastAsia.
 Func(hasNationalCapital)
 ```
 
-Ngữ nghĩa: `(x,y) ∈ hasNationalCapital^I và (x,z) ∈ hasNationalCapital^I ⇒ y = z`.
+Ngữ nghĩa: $(x,y) \in hasNationalCapital^I$ và $(x,z) \in hasNationalCapital^I \Rightarrow y = z$.
 
 Mỗi cá thể có **nhiều nhất một** hasNationalCapital trong mô hình.
 
@@ -627,16 +669,17 @@ Mỗi cá thể có **nhiều nhất một** hasNationalCapital trong mô hình.
 > ```
 >
 > Trong cơ sở dữ liệu quan hệ, đây là vi phạm ràng buộc unique. Nhưng trong OWL, vì không có
-> giả định tên duy nhất (Chương 3), bộ suy luận **không báo lỗi**. Thay vào đó, nó suy diễn:
+> giả định tên duy nhất (Chương 3), ontology **không mâu thuẫn**. Thay vào đó, ontology suy
+> diễn rằng hai tên biểu thị cùng một cá thể:
 >
 > ```
-> Hanoi owl:sameAs HaNoiCity
+> O ⊨ Hanoi và HaNoiCity là cùng một cá thể
 > ```
 >
-> Hai tên được coi là cùng một cá thể. Đây là hệ quả trực tiếp của việc OWL dùng ngữ nghĩa
-> mô hình: thay vì từ chối dữ liệu, hệ thống tìm mô hình thỏa mãn tất cả tiên đề — và mô
-> hình đó gán hai tên cho cùng một phần tử miền. Nếu bạn muốn từ chối dữ liệu trùng lặp, hãy
-> dùng SHACL (Chương 5).
+> Một bộ suy luận có thể biểu diễn hệ quả này bằng `owl:sameAs`, nhưng bản thân quan hệ suy
+> diễn là phát biểu ngữ nghĩa, không phải hành động thêm triple. Nếu ontology đồng thời khẳng
+> định `Hanoi owl:differentFrom HaNoiCity`, thì tính functional sẽ khiến ontology **không nhất
+> quán**. Nếu bạn muốn từ chối dữ liệu trùng lặp, hãy dùng SHACL (Chương 5).
 
 ### Inverse-Functional (Nghịch đảo hàm)
 
@@ -644,7 +687,7 @@ Mỗi cá thể có **nhiều nhất một** hasNationalCapital trong mô hình.
 InvFunc(hasNationalCapital)
 ```
 
-Ngữ nghĩa: `(x,z) ∈ hasNationalCapital^I và (y,z) ∈ hasNationalCapital^I ⇒ x = y`.
+Ngữ nghĩa: $(x,z) \in hasNationalCapital^I$ và $(y,z) \in hasNationalCapital^I \Rightarrow x = y$.
 
 Nếu hai quốc gia đều có cùng thủ đô (theo hasNationalCapital), thì hai quốc gia đó là một.
 
@@ -653,15 +696,25 @@ Nếu hai quốc gia đều có cùng thủ đô (theo hasNationalCapital), thì
 Đây là một trong những khái niệm gây bất ngờ nhất cho kỹ sư quen với cơ sở dữ liệu. Hãy
 dành thời gian cho nó.
 
-### Trực giác cơ sở dữ liệu: thiếu = sai
+### Trực giác cơ sở dữ liệu: ba khái niệm khác nhau
 
-Trong hầu hết hệ thống cơ sở dữ liệu, nếu một trường không có giá trị, hệ thống xử lý như
-thể giá trị đó không tồn tại hoặc bị từ chối. Đây là **giả định thế giới đóng** (Closed
-World Assumption): những gì không được biết là sai.
+Khi so sánh OWL với cơ sở dữ liệu, cần phân biệt ba khái niệm mà kỹ sư phần mềm thường
+nhầm lẫn:
+
+**A. Giả định thế giới đóng (Closed World Assumption) trên sự kiện cơ sở dữ liệu:** Trong
+nhiều hệ thống, vắng mặt của một bộ dữ liệu/sự kiện được xử lý như thể nó sai *đối với trạng
+thái được biểu diễn*. Đây là quy ước ứng dụng, không phải luật phổ quát.
+
+**B. SQL NULL:** Một khái niệm riêng biệt dùng logic ba giá trị (true/false/unknown). NULL
+không đơn giản là false; các phép so sánh với NULL trả về UNKNOWN, và `WHERE` loại bỏ cả
+false lẫn unknown. Đây là cơ chế xử lý giá trị thiếu, không phải giả định thế giới đóng.
+
+**C. OWL Open World Assumption:** Vắng mặt của một khẳng định không suy ra phủ định của nó.
 
 ```
-Cơ sở dữ liệu:
-  không có dữ liệu → coi như false / absent
+Cơ sở dữ liệu (CWA):   vắng mặt sự kiện → thường coi như false cho trạng thái hiện tại
+SQL NULL:              giá trị thiếu → UNKNOWN (≠ FALSE)
+OWL (OWA):             vắng mặt khẳng định → chưa biết (unknown)
 ```
 
 ### Trực giác OWL: thiếu = chưa biết
@@ -691,7 +744,8 @@ không. Ontology chưa nói.
 
 ### Ba trạng thái suy diễn
 
-Trong OWL, một phát biểu α đối với ontology O rơi vào đúng một trong ba trạng thái:
+**Giả sử O nhất quán** (có ít nhất một mô hình). Khi đó, một phát biểu α mà phủ định của nó
+có thể biểu diễn được rơi vào đúng một trong ba trạng thái:
 
 | Trạng thái | Ký hiệu | Nghĩa |
 |------------|---------|-------|
@@ -702,6 +756,11 @@ Trong OWL, một phát biểu α đối với ontology O rơi vào đúng một 
 Trạng thái thứ ba — **chưa xác định** — là trạng thái mà cơ sở dữ liệu truyền thống không
 có. Trong OWL, nó là trạng thái mặc định cho hầu hết các phát biểu mà ontology chưa ràng
 buộc đủ chặt.
+
+> ⚠ **Nếu ontology KHÔNG nhất quán:** Phân loại ba trạng thái trên bị phá vỡ dưới ngữ nghĩa
+> cổ điển. Khi Models(O) = ∅, mọi phát biểu đều được suy diễn một cách trống rỗng (ex falso
+> quodlibet). Đây là lý do kiểm tra tính nhất quán là bước đầu tiên quan trọng trước khi suy
+> diễn — và là một động lực cho Chương 5.
 
 > ⚠ **OWL không phải là "mọi thứ đều có thể đúng."** Các tiên đề vẫn loại bỏ các diễn giải
 > không phù hợp. Thế giới mở có nghĩa là sự vắng mặt của thông tin không phải là bằng chứng
@@ -718,13 +777,13 @@ required field / NOT NULL / schema validation
 ```
 
 Trong cơ sở dữ liệu, "required field" nghĩa là dữ liệu phải chứa giá trị. Trong OWL,
-`∃R.C` nghĩa là trong mô hình phải tồn tại một R-filler — nhưng filler đó có thể là phần
+$\exists R.C$ nghĩa là trong mô hình phải tồn tại một R-filler — nhưng filler đó có thể là phần
 tử ẩn, không có tên trong dữ liệu. OWL không kiểm tra dữ liệu; OWL mô tả cấu trúc của các
 mô hình hợp lệ.
 
 Validation theo nghĩa "từ chối dữ liệu không tuân thủ" thuộc về SHACL (Chương 5).
 
-> 🖊 **Tự kiểm tra:** Giả sử ontology có `Person ⊑ ∃hasName.String` ("mọi Person đều có ít
+> 🖊 **Tự kiểm tra:** Giả sử ontology có $Person \sqsubseteq \exists hasName.String$ ("mọi Person đều có ít
 > nhất một tên"). Đồ thị RDF chứa `ex:Alice rdf:type ex:Person` nhưng không có triple
 > `ex:Alice ex:hasName ...` nào. Theo OWL, ontology có nhất quán không? Alice có phải là
 > Person hợp lệ không? Giải thích tại sao câu trả lời khác với trực giác cơ sở dữ liệu.
@@ -741,8 +800,8 @@ Ba khái niệm này thường bị nhầm lẫn. Hãy phân biệt rõ.
 O nhất quán ⇔ Models(O) ≠ ∅
 ```
 
-Nếu ontology mâu thuẫn nội tại (ví dụ: vừa khẳng định `A ⊑ B` vừa `A ⊓ B ≡ ⊥` với
-`∃x: x ∈ A`), thì không có mô hình nào → ontology không nhất quán.
+Nếu ontology mâu thuẫn nội tại (ví dụ: vừa khẳng định $A \sqsubseteq B$ vừa $A \sqcap B \equiv \bot$ với
+$\exists x: x \in A$), thì không có mô hình nào → ontology không nhất quán.
 
 ### Tính thỏa được của lớp (Class Satisfiability)
 
@@ -760,11 +819,11 @@ C thỏa được đối với O ⇔ ∃I ∈ Models(O): C^I ≠ ∅
 > City ⊓ Country ≡ ⊥          (City và Country rời nhau)
 > ImpossiblePlace ≡ City ⊓ Country  (ImpossiblePlace = giao của hai lớp rời)
 > ```
-> Ontology này vẫn nhất quán — tồn tại mô hình trong đó `City^I = {h}`, `Country^I = {v}`,
-> `ImpossiblePlace^I = ∅`. Lớp `ImpossiblePlace` chỉ bị buộc phải có tập rỗng. Nó không
+> Ontology này vẫn nhất quán — tồn tại mô hình trong đó $City^I = \{h\}$, $Country^I = \{v\}$,
+> $ImpossiblePlace^I = \emptyset$. Lớp `ImpossiblePlace` chỉ bị buộc phải có tập rỗng. Nó không
 > gây mâu thuẫn; nó chỉ không thể có thành viên.
 >
-> Ngược lại, nếu thêm tiên đề `∃x: x ∈ ImpossiblePlace`, thì ontology trở nên **không nhất
+> Ngược lại, nếu thêm tiên đề $\exists x: x \in ImpossiblePlace$, thì ontology trở nên **không nhất
 > quán** — vì không có mô hình nào thỏa mãn cả "ImpossiblePlace phải có thành viên" lẫn
 > "ImpossiblePlace = ∅".
 
@@ -797,8 +856,14 @@ khả năng biểu diễn (expressiveness)
 tính khả thi của suy luận (decidability / tractability)
 ```
 
-DL là nền tảng lý thuyết của OWL. OWL 2 DL tương ứng với một DL cụ thể (SROIQ). Chúng ta
-không cần học toàn bộ DL để dùng OWL hiệu quả, nhưng hiểu trực giác DL giúp tránh ngộ nhận.
+DL là nền tảng lý thuyết của OWL. OWL 2 Direct Semantics tương thích chặt chẽ với Description
+Logic SROIQ, mở rộng với các tính năng đặc thù OWL như datatype và punning. Chúng ta không cần
+học toàn bộ DL để dùng OWL hiệu quả, nhưng hiểu trực giác DL giúp tránh ngộ nhận.
+
+> ⚠ **Phân biệt:** Description Logic được thiết kế chủ yếu để đạt được khả năng biểu diễn hữu
+> ích trong khi bảo toàn **tính quyết định được** (decidability) cho các tác vụ suy luận quan
+> trọng. Không phải mọi DL đều "nhanh" — tính khả thi tính toán (tractability) mạnh hơn là mục
+> tiêu của các OWL profiles (§4.12), không phải của DL nói chung.
 
 ### TBox, ABox, RBox: phân loại tinh thần
 
@@ -836,14 +901,25 @@ capitalOf⁻ ≡ hasCapital
 
 ## 4.11 OWL Direct Semantics và RDF-Based Semantics
 
-OWL 2 có hai ngữ nghĩa chính thức [@w3c-owl2-direct-semantics] [@w3c-owl2-rdf-semantics]:
+OWL 2 có hai ngữ nghĩa chính thức [@w3c-owl2-direct-semantics] [@w3c-owl2-rdf-semantics].
+Sự phân biệt nằm ở **chế độ ngữ nghĩa** (semantic regime), không phải định dạng tệp tin.
 
-- **Direct Semantics**: định nghĩa ngữ nghĩa trực tiếp trên cấu trúc OWL structural model.
-  Đây là ngữ nghĩa dùng trong chương này vì nó cho phép giải thích interpretation → model →
-  entailment một cách sạch sẽ và trực tiếp.
+- **Direct Semantics**: định nghĩa ngữ nghĩa mô hình-lý thuyết trực tiếp trên các kiến tạo của
+  OWL structural specification. Tương thích với Description Logic SROIQ mở rộng với các tính
+  năng đặc thù OWL (datatype, punning). Áp dụng cho ontology OWL 2 DL thỏa mãn các hạn chế
+  toàn cục. Đây là ngữ nghĩa dùng trong chương này vì nó cho phép giải thích interpretation →
+  model → entailment một cách sạch sẽ và trực tiếp.
 
-- **RDF-Based Semantics**: định nghĩa ngữ nghĩa dựa trên RDF triples, mở rộng ngữ nghĩa RDF.
-  Phù hợp khi làm việc với dữ liệu RDF thuần túy và cần tương thích với RDFS.
+- **RDF-Based Semantics**: định nghĩa ngữ nghĩa trực tiếp trên đồ thị RDF, mở rộng ngữ nghĩa
+  RDFS. Hỗ trợ OWL 2 Full (không quyết định được) và tương thích rộng hơn với dữ liệu RDF
+  tổng quát. Dưới RDF-Based Semantics, chú thích có nghĩa ngữ nghĩa yếu (khác với Direct
+  Semantics nơi chú thích bị bỏ qua hoàn toàn).
+
+> ⚠ **Phân biệt bắt buộc:** Cú pháp serialization ≠ chế độ ngữ nghĩa. Một ontology OWL 2 DL
+> được viết bằng RDF/Turtle vẫn có thể được diễn giải bằng Direct Semantics sau khi ánh xạ về
+> dạng cấu trúc OWL. Ngược lại, cùng một tài liệu RDF có thể được xử lý bằng RDF-Based
+> Semantics mà không cần chuyển đổi. Việc chọn ngữ nghĩa phụ thuộc vào tác vụ suy luận và yêu
+> cầu ứng dụng, không phụ thuộc vào định dạng lưu trữ.
 
 Chương này chủ yếu dùng góc nhìn Direct Semantics / OWL 2 DL vì mục tiêu sư phạm: giúp bạn
 hiểu cơ chế suy diễn mà không bị phân tán bởi chi tiết serialization. Khi triển khai thực tế
@@ -890,6 +966,23 @@ ReferenceVariable."
 kiện bên phải, bộ suy luận sẽ suy diễn `m : RateOfChangeMechanism` mà không cần ai gắn nhãn
 tường minh.
 
+> ⚠ **Đây là chữ ký cấu trúc đồ chơi sư phạm (pedagogical toy structural signature), KHÔNG
+> phải ontology đủ cho nhận diện cơ chế xuyên miền.** Ba hạn chế tồn tại độc lập: định nghĩa
+> trên KHÔNG nói rằng DerivativeOperation, Quantity và ReferenceVariable tham gia vào *cùng
+> một* ứng dụng đạo hàm. Một cá thể có thể thỏa mãn cả ba existential thông qua các filler
+> hoàn toàn không liên quan nhau. Mô hình mạnh hơn về mặt khái niệm sẽ dùng cấu trúc trung
+> gian:
+>
+> ```
+> Mechanism → hasApplication → DerivativeApplication
+>   → differentiand → Quantity
+>   → withRespectTo → ReferenceVariable
+> ```
+>
+> Bài học: **chất lượng định nghĩa lớp phụ thuộc vào chất lượng mô hình khái niệm.** OWL suy
+> luận chính xác theo các tiên đề ta cung cấp; nó không sửa chữa một mô hình khái niệm yếu.
+> Chúng ta sẽ quay lại vấn đề này ở capstone cuối sách.
+
 Nhưng ontology **không giải quyết được**:
 
 - Làm sao trích xuất mô tả cơ chế từ văn bản sách giáo khoa?
@@ -905,13 +998,15 @@ trình thu thập, đánh giá và tiến hóa tri thức.
 
 ## 4.14 Những ngộ nhận thường gặp
 
-**Sai lầm 1: "Ontology = taxonomy."** Taxonomy chỉ là cây phân cấp subclass. Ontology bao
-gồm taxonomy nhưng thêm equivalence, disjointness, restrictions, property characteristics,
-và các tiên đề phức tạp hơn. Taxonomy là tập con của ontology.
+**Sai lầm 1: "Ontology = taxonomy."** Ontology thường chứa cấu trúc phân cấp subclass, nhưng
+còn thêm equivalence, disjointness, restrictions, property characteristics và các tiên đề phức
+tạp hơn. Taxonomy có thể tồn tại độc lập như một sản phẩm phân loại; ontology mở rộng nó bằng
+các cam kết ngữ nghĩa hình thức.
 
-**Sai lầm 2: "Ontology = schema."** Schema nhấn mạnh cấu trúc kỳ vọng. Ontology nhấn mạnh
-cam kết ngữ nghĩa hình thức. Ranh giới mờ, nhưng sự phân biệt hữu ích: schema nói "được
-phép có gì", ontology nói "các khái niệm nghĩa là gì và điều gì suy ra từ đó".
+**Sai lầm 2: "Ontology = schema."** Schema mô tả tổ chức/từ vựng/cấu trúc kỳ vọng. Ontology
+nhấn mạnh cam kết ngữ nghĩa hình thức và hệ quả logic. Ranh giới mờ, nhưng sự phân biệt hữu
+ích. Validation xác định dữ liệu cụ thể có tuân thủ yêu cầu hay không — đó là công việc của
+SHACL (Chương 5), không phải OWL.
 
 **Sai lầm 3: "OWL tự động gán ý nghĩa con người cho từ ngữ."** OWL gán ngữ nghĩa toán học
 (tập hợp, quan hệ), không phải ý nghĩa ngôn ngữ tự nhiên. `City` trong OWL là một tập con
@@ -929,8 +1024,10 @@ Assumption: thiếu = chưa biết.
 **Sai lầm 7: "OWL restriction là database validation rule."** Đã phân tích ở §4.6 và §4.8.
 OWL mô tả cấu trúc mô hình, không kiểm tra dữ liệu. Dùng SHACL cho validation.
 
-**Sai lầm 8: "`minCardinality 1` nghĩa là dữ liệu RDF phải chứa giá trị."** Không. OWL có
-thể suy diễn sự tồn tại của phần tử ẩn trong mô hình.
+**Sai lầm 8: "`minCardinality 1` nghĩa là dữ liệu RDF phải chứa giá trị."** Không. OWL đòi
+hỏi sự tồn tại ngữ nghĩa trong mọi mô hình — nhưng điều này không có nghĩa dữ liệu RDF phải
+chứa triple tường minh, và cũng không có nghĩa bộ suy luận tự động thêm triple vào đồ thị
+nguồn. Tồn tại ngữ nghĩa ≠ vật chất hóa.
 
 **Sai lầm 9: "Suy diễn hình thức chứng minh sự thật thực tế."** Suy diễn chỉ chứng minh hệ
 quy logic: nếu tiền đề đúng thì kết luận đúng. Tiền đề có thể sai.
@@ -946,10 +1043,10 @@ suy luận cao hơn. Chọn profile phù hợp với tác vụ, không phải ng
 
 ## 4.15 Câu hỏi suy ngẫm
 
-1. (★) Cho `CapitalCity ⊑ City` và dữ liệu `Hanoi : City`. Ta có thể kết luận
+1. (★) Cho $CapitalCity \sqsubseteq City$ và dữ liệu `Hanoi : City`. Ta có thể kết luận
    `Hanoi : CapitalCity` không? Tại sao?
 
-2. (★★) Cho `CapitalCity ≡ City ⊓ ∃capitalOf.Country` và dữ liệu:
+2. (★★) Cho $CapitalCity \equiv City \sqcap \exists capitalOf.Country$ và dữ liệu:
    ```
    Hanoi : City
    Hanoi capitalOf Vietnam
@@ -980,7 +1077,8 @@ suy luận cao hơn. Chọn profile phù hợp với tác vụ, không phải ng
   phần tử miền.
 - Mô hình là diễn giải thỏa mãn mọi tiên đề.
 - Suy diễn (O ⊨ α) nghĩa là α đúng trong mọi mô hình của O.
-- SubClassOf là điều kiện đủ một chiều; Equivalence là điều kiện cần và đủ.
+- SubClassOf: A ⊑ B nghĩa là A đủ cho B, B cần cho A. Equivalence: A ≡ B nghĩa là A và B
+  cần và đủ cho nhau.
 - Hạn chế tồn tại yêu cầu sự tồn tại trong mô hình, không nhất thiết trong dữ liệu.
 - Hạn chế phổ quát không khẳng định sự tồn tại của liên kết.
 - OWL dùng giả định thế giới mở: thiếu ≠ sai.

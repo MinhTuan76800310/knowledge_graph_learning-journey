@@ -403,7 +403,7 @@ concepts:
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "SubClassOf as one-directional implication"
+    notes: "If A ⊑ B then B is necessary for A; directionality explicit"
 
   sufficient_condition:
     first_mentioned_chapter: 4
@@ -411,7 +411,7 @@ concepts:
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Equivalence as bidirectional implication"
+    notes: "If A ⊑ B then A is sufficient for B; Equivalence gives both necessary and sufficient"
 
   description_logic:
     first_mentioned_chapter: 4

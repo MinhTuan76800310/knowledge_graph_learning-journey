@@ -40,8 +40,11 @@ nghĩa hình thức về ý nghĩa. Trả lời được "có gì" nhưng chưa 
 **Denotation (Sự biểu thị).** Quan hệ giữa một định danh và thực thể mà nó chỉ đến. Định
 danh không phải là thực thể; sự biểu thị do quy ước và con người gán, không tự động có sẵn.
 
-**Entailment (Suy diễn logic).** O ⊨ α nghĩa là α đúng trong mọi mô hình của ontology O. Khác
-với validation: entailment thêm tri thức, không từ chối dữ liệu.
+**Entailment (Suy diễn logic).** O ⊨ α nghĩa là α đúng trong mọi mô hình của ontology O. Suy
+diễn là quan hệ ngữ nghĩa mô tả hệ quả logic; bản thân nó không thay đổi hay thêm triple vào
+đồ thị. Hệ thống có thể tính toán, vật chất hóa, hoặc lưu cache các hệ quả — nhưng đó là hành
+vi triển khai, không phải bản thân quan hệ suy diễn. Khác với validation: validation kiểm tra
+dữ liệu, entailment mô tả hệ quả logic.
 
 **Entity (Thực thể).** Một đối tượng trong thế giới thực hoặc miền vấn đề, được biểu diễn bằng
 một nút trong đồ thị.
@@ -133,7 +136,8 @@ thị sao cho mẫu truy vấn khớp. Kết quả truy vấn là tập các án
 Chủ thể là IRI hoặc blank node; vị từ chỉ là IRI; đối tượng là IRI, literal hoặc blank node.
 
 **Taxonomy (Phân loại).** Hệ thống phân cấp các khái niệm dựa trên quan hệ cha-con
-(subclass/superclass).
+(subclass/superclass). Ontology thường chứa cấu trúc phân cấp subclass và có thể mở rộng bằng
+các tiên đề ngữ nghĩa bổ sung. Taxonomy có thể tồn tại độc lập như sản phẩm phân loại.
 
 **Triple (Bộ ba).** Đơn vị cơ bản của biểu diễn tri thức dạng đồ thị: (subject, predicate,
 object).
