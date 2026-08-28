@@ -1,10 +1,18 @@
 """Tests for concept dependency registry integrity.
 
 Enforces the invariants from docs/BOOK_PEDAGOGY.md:
-  - No concept is used before it is explained (unless marked incidental_gloss)
-  - Every concept has both first_used_chapter and first_explained_chapter
+  - A concept's first_required_use_chapter must be >= first_explained_chapter
+    (you cannot require understanding of something not yet taught)
+  - A concept may be mentioned earlier than explained only if incidental_gloss is true
+  - Every concept has all required fields
   - explanation_level is one of: intuition, mechanism, application
   - Registry YAML is well-formed
+
+Field semantics:
+  first_mentioned_chapter: first textual appearance (may be incidental)
+  first_required_use_chapter: first chapter where the reader MUST understand the concept
+  first_explained_chapter: chapter where mechanism-level teaching occurs
+  incidental_gloss: whether pre-explanation mentions include a minimum local gloss
 """
 
 from pathlib import Path
@@ -31,7 +39,13 @@ def test_registry_not_empty(registry):
 
 
 def test_all_concepts_have_required_fields(registry):
-    required = {"first_used_chapter", "first_explained_chapter", "explanation_level", "incidental_gloss"}
+    required = {
+        "first_mentioned_chapter",
+        "first_required_use_chapter",
+        "first_explained_chapter",
+        "explanation_level",
+        "incidental_gloss",
+    }
     for name, entry in registry.items():
         missing = required - set(entry.keys())
         assert not missing, f"Concept '{name}' missing fields: {missing}"
@@ -46,43 +60,72 @@ def test_explanation_levels_are_valid(registry):
         )
 
 
-def test_no_unexplained_usage(registry):
-    """A concept cannot be used before it is explained unless marked incidental."""
+def test_required_use_after_explanation(registry):
+    """A concept must be explained by the time it is required.
+
+    Invariant: first_explained_chapter <= first_required_use_chapter
+
+    This is the core pedagogical invariant from BOOK_PEDAGOGY.md §2:
+    'Defer Depth, Never Required Understanding.'
+    """
     violations = []
     for name, entry in registry.items():
-        used = entry["first_used_chapter"]
+        required = entry["first_required_use_chapter"]
         explained = entry["first_explained_chapter"]
-        incidental = entry.get("incidental_gloss", False)
-        if used < explained and not incidental:
+        if explained > required:
             violations.append(
-                f"  '{name}': used in Ch{used} but explained in Ch{explained} "
-                f"(not marked incidental_gloss)"
+                f"  '{name}': required in Ch{required} but not explained until Ch{explained}"
             )
     assert not violations, (
-        "Concepts used before explanation without incidental gloss:\n"
+        "Concepts required before they are explained:\n"
         + "\n".join(violations)
     )
 
 
-def test_explained_before_or_when_used(registry):
-    """Explanation chapter must be >= usage chapter."""
+def test_early_mentions_are_incidental(registry):
+    """If a concept is mentioned before it is explained, it must be marked incidental.
+
+    Invariant: if first_mentioned_chapter < first_explained_chapter,
+    then incidental_gloss must be true.
+    """
     violations = []
     for name, entry in registry.items():
-        used = entry["first_used_chapter"]
+        mentioned = entry["first_mentioned_chapter"]
         explained = entry["first_explained_chapter"]
-        if explained < used:
+        incidental = entry.get("incidental_gloss", False)
+        if mentioned < explained and not incidental:
             violations.append(
-                f"  '{name}': explained in Ch{explained} but first used in Ch{used}"
+                f"  '{name}': mentioned in Ch{mentioned} but explained in Ch{explained} "
+                f"(not marked incidental_gloss)"
             )
     assert not violations, (
-        "Concepts explained after first use (impossible):\n"
+        "Concepts mentioned before explanation without incidental gloss:\n"
+        + "\n".join(violations)
+    )
+
+
+def test_mentioned_before_or_when_required(registry):
+    """A concept cannot be required before it is even mentioned.
+
+    Invariant: first_mentioned_chapter <= first_required_use_chapter
+    """
+    violations = []
+    for name, entry in registry.items():
+        mentioned = entry["first_mentioned_chapter"]
+        required = entry["first_required_use_chapter"]
+        if mentioned > required:
+            violations.append(
+                f"  '{name}': required in Ch{required} but not mentioned until Ch{mentioned}"
+            )
+    assert not violations, (
+        "Concepts required before they are mentioned:\n"
         + "\n".join(violations)
     )
 
 
 def test_chapter_numbers_are_positive_integers(registry):
     for name, entry in registry.items():
-        for field in ("first_used_chapter", "first_explained_chapter"):
+        for field in ("first_mentioned_chapter", "first_required_use_chapter", "first_explained_chapter"):
             val = entry[field]
             assert isinstance(val, int) and val >= 1, (
                 f"Concept '{name}' has invalid {field}: {val}"

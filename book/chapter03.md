@@ -645,7 +645,7 @@ Bảng tổng kết mỗi bước thêm gì:
 |------|--------|--------------------|
 | Gióng hàng lược đồ | ánh xạ từ vựng, lớp, quan hệ | "hai từ vựng này cùng nói một chuyện" |
 | Giải quyết định danh | `owl:sameAs` / định danh chính tắc + bí danh | "hai tên này là một thực thể" |
-| Gắn ngữ cảnh | named graph / thực thể n-ary / thuộc tính quan hệ | "phát biểu này đúng theo nguồn nào, khi nào, trong phạm vi nào" |
+| Gắn ngữ cảnh | named graph / thực thể n-ary / thuộc tính quan hệ | "phát biểu này do nguồn nào khẳng định, áp dụng trong khoảng thời gian nào, trong phạm vi/jurisdiction nào" |
 
 Ba bước này là khung xương của mọi quy trình tích hợp knowledge graph — các thuật toán
 công nghiệp ở Chương 7 chỉ làm cho chúng chạy được ở quy mô lớn, không thay đổi cấu

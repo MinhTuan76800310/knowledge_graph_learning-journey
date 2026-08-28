@@ -112,7 +112,7 @@ Xét hai trường hợp:
 - **Trường hợp A**: Một đồ thị chứa `(Alice) --[:KNOWS]--> (Bob)` nhưng không định nghĩa
   `:KNOWS` nghĩa là gì, không có schema, không có nguồn gốc. Đây là data graph.
 - **Trường hợp B**: Cùng đồ thị trên, nhưng `:KNOWS` được định nghĩa là quan hệ xã hội hai
-  chiều giữa hai Person, có ngữ nghĩa **RDFS** (RDF Schema — tầng lược đồ/lớp của RDF, sẽ học ở Chương 4) (**domain** (miền: loại thực thể làm chủ thể) và **range** (phạm vi: loại thực thể làm đối tượng) dùng để suy diễn kiểu), có
+  chiều giữa hai Person, có ngữ nghĩa **RDFS** (RDF Schema — từ vựng và ngữ nghĩa bổ sung cho RDF, cung cấp các khái niệm lớp, quan hệ cha-con, domain/range để suy diễn kiểu; sẽ học chi tiết ở Chương 2) (**domain** (miền: loại thực thể làm chủ thể) và **range** (phạm vi: loại thực thể làm đối tượng) dùng để suy diễn kiểu), có
   timestamp, có nguồn trích dẫn. Đây là knowledge graph.
 
 Sự khác biệt nằm ở semantics và context, không nằm ở cấu trúc đồ thị.
@@ -277,12 +277,13 @@ Trong mô hình đơn giản hóa của sách, ⊑ được xem như một parti
 cầu, phản đối xứng). Lưu ý: ngữ nghĩa RDFS chuẩn của `rdfs:subClassOf` chỉ yêu cầu tính phản
 xạ và bắc cầu, không đảm bảo phản đối xứng; do đó mô hình partial-order ở đây là một ràng
 buộc bổ sung của sách, không phải ngữ nghĩa RDFS đầy đủ. Khi hai lớp A và B thỏa mãn cả
-A ⊑ B lẫn B ⊑ A, theo OWL chúng được coi là **equivalent classes** (lớp tương đương, sẽ học
+A ⊑ B lẫn B ⊑ A, theo **OWL** (Web Ontology Language — ngôn ngữ bản thể học chuẩn W3C cho biểu diễn các tiên đề logic về lớp, thuộc tính và cá thể; sẽ học chi tiết ở Chương 4) chúng được coi là **equivalent classes** (lớp tương đương, sẽ học
 ở Chương 4) — tức là chúng có cùng tập thành viên trong mọi mô hình hợp lệ.
 
-**Ontology** (theo nghĩa RDFS/OWL): Tập tiên đề T bao gồm các khai báo domain, range,
-subclass, equivalence, disjointness. Ngữ nghĩa được xác định bởi entailment rules
-(RDFS/OWL), không phải bởi constraint checking.
+**Ontology** (theo nghĩa RDFS và OWL): Tập tiên đề T bao gồm các khai báo domain, range,
+subclass (do RDFS cung cấp), cùng equivalence, disjointness, property characteristics và class
+restrictions (do OWL bổ sung). Ngữ nghĩa được xác định bởi formal semantics và entailment
+relations của từng chuẩn, không phải bởi constraint checking.
 
 **Book Engineering Model** (ký hiệu riêng của sách): KSE = (K, T, C) trong đó K ⊆ V × L × V
 là tập triple, T là tập tiên đề ontology và C là thông tin context (provenance, time, scope,
@@ -342,7 +343,7 @@ máy sẽ **suy ra** rằng Vietnam thuộc lớp City và Hanoi thuộc lớp C
 này mâu thuẫn với thực tế. RDFS domain/range thêm thông tin kiểu, chúng không từ chối hay
 báo lỗi dữ liệu "sai".
 
-> ⚠ **Phân biệt quan trọng:** Suy diễn RDFS (`statement → entailment`) khác với xác nhận
+> ⚠ **Phân biệt quan trọng:** Suy diễn theo formal semantics (`statement → entailment`) khác với xác nhận
 > ràng buộc SHACL (`data → constraint check → conforms/violation`). Việc phát hiện và từ chối
 > dữ liệu không phù hợp thuộc về validation (Chương 5), không phải ngữ nghĩa RDFS tiêu chuẩn.
 
@@ -360,7 +361,7 @@ khác, hệ thống có thể so sánh và đánh giá.
 **Property Graph thay vì RDF.** Property graph (như Neo4j) gộp property trực tiếp vào
 node/edge thay vì dùng triple riêng. Ưu điểm: trực quan, mô hình dữ liệu gần với cách lập
 trình viên thường nghĩ về đồ thị. Nhược điểm: semantics phụ thuộc vào ứng dụng, không có
-standard entailment như RDF/RDFS/OWL. Chương 2 sẽ so sánh chi tiết.
+formal semantics và entailment relations chuẩn như RDF/RDFS/OWL. Chương 2 sẽ so sánh chi tiết.
 
 **Schema-less Knowledge Graph.** Một số hệ thống (Wikidata) cho phép thêm statement mà không
 cần ontology đầy đủ trước. Ưu điểm: linh hoạt, cộng đồng đóng góp dễ dàng. Nhược điểm: chất
@@ -459,8 +460,8 @@ Những giới hạn này dẫn trực tiếp đến **Chương 2: Mô hình D�
 | W3C (World Wide Web Consortium) | Tổ chức phát triển chuẩn web | Preview box §1.2 |
 | RDF (Resource Description Framework) | Mô hình dữ liệu đồ thị bộ ba chuẩn | Chương 2 |
 | IRI (Internationalized Resource Identifier) | Định danh toàn cục dạng chuỗi | Chương 2 |
-| RDFS (RDF Schema) | Tầng lược đồ/lớp của RDF | Chương 4 |
-| OWL (Web Ontology Language) | Ngôn ngữ bản thể học | Chương 4 |
+| RDFS (RDF Schema) | Từ vựng và ngữ nghĩa bổ sung cho RDF (lớp, subclass, domain/range) | Chương 2 |
+| OWL (Web Ontology Language) | Ngôn ngữ bản thể học chuẩn W3C | Chương 4 |
 | SHACL (Shapes Constraint Language) | Ngôn ngữ ràng buộc dữ liệu RDF | Chương 5 |
 | SPARQL (Simple Protocol and RDF Query Language) | Ngôn ngữ truy vấn RDF | Chương 2 |
 | Cypher | Ngôn ngữ truy vấn đồ thị thuộc tính | Chương 2 |

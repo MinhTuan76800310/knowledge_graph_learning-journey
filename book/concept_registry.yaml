@@ -1,179 +1,210 @@
 # Concept Dependency Registry — Knowledge Graph Book
-# Tracks when each concept is first USED (mentioned in a way that requires understanding)
-# vs first EXPLAINED (taught at mechanism level per BOOK_PEDAGOGY.md §4).
+# Tracks when each concept is first MENTIONED, first REQUIRED, and first EXPLAINED.
+#
+# Field semantics:
+#   first_mentioned_chapter:    first textual appearance (may be incidental)
+#   first_required_use_chapter: first chapter where reader MUST understand the concept
+#   first_explained_chapter:    chapter where mechanism-level teaching occurs
+#   incidental_gloss:           whether pre-explanation mentions include a minimum local gloss
+#   explanation_level:          intuition | mechanism | application
 #
 # Invariants enforced by tests/test_book_concept_dependencies.py:
-#   - first_used_chapter <= first_explained_chapter (no unexplained usage)
-#   - If first_used_chapter < first_explained_chapter, incidental_gloss must be true
-#   - Every concept has both fields populated
-#
-# Levels: intuition | mechanism | application (per BOOK_PEDAGOGY.md §4)
+#   1. first_explained_chapter <= first_required_use_chapter
+#      (cannot require understanding before teaching)
+#   2. if first_mentioned_chapter < first_explained_chapter then incidental_gloss == true
+#      (early mentions must carry a local gloss)
+#   3. first_mentioned_chapter <= first_required_use_chapter
+#      (cannot require something before it's even mentioned)
 
 concepts:
   # === Chapter 1 core concepts ===
   graph:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Formal model G=(V,E) introduced with set-theoretic definition"
+    notes: "Formal model introduced with set-theoretic definition"
 
   node:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Defined as element of vertex set V"
 
   edge:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Defined as element of edge set E, directed pair (u,v)"
 
   entity:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Real-world entity ≠ graph node ≠ identifier ≠ label — four-way distinction"
 
   relation:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Binary relation between entities, distinct from property"
 
   property:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
     notes: "Attribute of entity; distinguished from relation"
 
   knowledge_graph:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Data Graph + Semantics + Context mental model"
 
   data_graph:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Pure structure layer of KG mental model"
 
   semantics:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
     notes: "Meaning layer; full formal treatment deferred to Ch4"
 
   context:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
     notes: "Provenance/time/scope layer; full treatment in Ch6"
 
   taxonomy:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Data Graph + concept hierarchy C⊆V and subClassOf partial order"
 
   ontology:
-    first_used_chapter: 1
-    first_explained_chapter: 1
-    explanation_level: intuition
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 4
+    first_explained_chapter: 4
+    explanation_level: mechanism
     incidental_gloss: true
-    notes: "Introduced as 'formal specification of concepts and relations'; full treatment Ch4"
+    notes: "Introduced intuitively in Ch1; formal treatment Ch4"
 
   schema:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
     notes: "Expected structure; distinguished from ontology in Ch3-4"
 
   rdf:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
     notes: "Named in Ch1 preview box; triple model taught in Ch2"
 
   sparql:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 preview box; query language taught in Ch2"
+    notes: "Named in Ch1; query language taught in Ch2"
 
   rdfs:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 preview box; schema language taught in Ch2"
+    notes: "Named in Ch1; schema language taught in Ch2"
 
   owl:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 preview box; formal semantics taught in Ch4"
+    notes: "Named in Ch1; formal semantics taught in Ch4"
 
   shacl:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 preview box; validation language taught in Ch5"
+    notes: "Named in Ch1; validation language taught in Ch5"
 
   property_graph:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
     notes: "Contrasted with RDF in Ch1; model details in Ch2"
 
   iri:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
     notes: "Named in Ch1; identity mechanism taught in Ch2"
 
   embedding:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: true
     notes: "Mentioned as representation technique; full treatment Ch8"
 
   inference:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
     notes: "Deriving new knowledge from existing knowledge; formal treatment Ch4-5"
 
   validation:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
     notes: "Checking structural/semantic correctness; SHACL treatment Ch5"
 
   provenance:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: true
@@ -181,56 +212,64 @@ concepts:
 
   # === Chapter 2 core concepts ===
   triple:
-    first_used_chapter: 2
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
-    incidental_gloss: false
-    notes: "(subject, predicate, object) with formal definition"
+    incidental_gloss: true
+    notes: "Named in Ch1 §1.3; formal (subject, predicate, object) definition in Ch2"
 
   blank_node:
-    first_used_chapter: 2
+    first_mentioned_chapter: 2
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Existential variable, not a name; scope-limited identity"
 
   literal:
-    first_used_chapter: 2
+    first_mentioned_chapter: 2
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Typed value with optional language tag"
 
   turtle:
-    first_used_chapter: 2
+    first_mentioned_chapter: 2
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Serialization syntax for RDF; prefixes, semicolons, collections"
 
   bgp:
-    first_used_chapter: 2
+    first_mentioned_chapter: 2
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Basic Graph Pattern; pattern matching via solution mappings"
 
   solution_mapping:
-    first_used_chapter: 2
+    first_mentioned_chapter: 2
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Variable-to-term binding μ; worked substitution example required"
+    notes: "Variable-to-term binding μ; worked substitution example"
 
   graph_isomorphism:
-    first_used_chapter: 2
+    first_mentioned_chapter: 2
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Structural equivalence modulo blank node renaming"
 
   cypher:
-    first_used_chapter: 2
+    first_mentioned_chapter: 2
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
@@ -238,155 +277,185 @@ concepts:
 
   # === Chapter 3 core concepts ===
   identity:
-    first_used_chapter: 3
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 3
     first_explained_chapter: 3
     explanation_level: mechanism
-    incidental_gloss: false
-    notes: "Same-as vs equal-value; owl:sameAs semantics"
+    incidental_gloss: true
+    notes: "Named in Ch1 Entity definition; full treatment Ch3"
 
   entity_resolution:
-    first_used_chapter: 3
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 3
     first_explained_chapter: 3
     explanation_level: mechanism
-    incidental_gloss: false
-    notes: "Determining when two references denote the same real-world entity"
+    incidental_gloss: true
+    notes: "Named in Ch1 Entity counterexample; full treatment Ch3"
 
   reification:
-    first_used_chapter: 3
+    first_mentioned_chapter: 3
+    first_required_use_chapter: 3
     first_explained_chapter: 3
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Making statements about statements; n-ary relations"
 
   named_graph:
-    first_used_chapter: 3
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 3
     first_explained_chapter: 3
     explanation_level: mechanism
-    incidental_gloss: false
-    notes: "Graph-level context/provenance container"
+    incidental_gloss: true
+    notes: "Named in Ch1 §1.12; full treatment Ch3"
 
   una:
-    first_used_chapter: 3
+    first_mentioned_chapter: 3
+    first_required_use_chapter: 3
     first_explained_chapter: 3
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Unique Name Assumption; OWL lacks it by default"
 
   subclass:
-    first_used_chapter: 1
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
     notes: "rdfs:subClassOf as partial order; OWL ⊑ semantics in Ch4"
 
   domain_range:
-    first_used_chapter: 2
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
-    incidental_gloss: false
-    notes: "RDFS domain/range as entailment rules, not validation constraints"
+    incidental_gloss: true
+    notes: "Named in Ch1 §1.6 step 4; RDFS entailment semantics in Ch2"
 
-  # === Chapter 4 concepts (to be populated during Ch4 authoring) ===
+  # === Chapter 4 concepts ===
+  axiom:
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 4
+    first_explained_chapter: 4
+    explanation_level: mechanism
+    incidental_gloss: true
+    notes: "Named in Ch1 ontology definition; formal treatment Ch4"
+
   interpretation:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Model-theoretic interpretation I = (Δ^I, ·^I)"
 
   model:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Interpretation satisfying all axioms"
 
   entailment:
-    first_used_chapter: 4
+    first_mentioned_chapter: 1
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
-    incidental_gloss: false
-    notes: "O ⊨ α: true in every model of O"
+    incidental_gloss: true
+    notes: "Named in Ch1 §1.4; O ⊨ α formally taught Ch4"
 
   class_expression:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Intersection, union, complement, restrictions"
 
   existential_restriction:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
     notes: "∃R.C; requires existence in model, not named individual"
 
   universal_restriction:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
     notes: "∀R.C; does not imply existence of R-successor"
 
   owa:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Open World Assumption; unknown ≠ false"
 
   necessary_condition:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
     notes: "SubClassOf as one-directional implication"
 
   sufficient_condition:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Equivalence as bidirectional implication"
 
   description_logic:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: intuition
     incidental_gloss: false
     notes: "Decidable fragment of FOL; expressivity vs computability tradeoff"
 
   tbox:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: intuition
     incidental_gloss: false
     notes: "Terminological box; general domain knowledge (mental category, not physical section)"
 
   abox:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: intuition
     incidental_gloss: false
     notes: "Assertional box; individual facts (mental category, not physical section)"
 
   rbox:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: intuition
     incidental_gloss: false
     notes: "Role box; property characteristics (mental category, not physical section)"
 
   consistency:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Existence of at least one model; ≠ data correctness"
 
   satisfiability:
-    first_used_chapter: 4
+    first_mentioned_chapter: 4
+    first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
