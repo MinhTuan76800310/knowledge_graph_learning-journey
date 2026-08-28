@@ -136,6 +136,9 @@ Bây giờ ta biểu diễn ba sự kiện mở đầu bằng RDFLib [@rdflib-do
 Hà Nội, Paris, Việt Nam, Pháp — chính là miền đã dùng ở Chương 1 để đảm bảo tính liên
 tục.
 
+> **Cài đặt:** Nếu chưa có RDFLib, cài bằng `pip install rdflib`. Thư viện này không yêu
+> cầu Docker hay dịch vụ bên ngoài.
+
 ```python
 from rdflib import Graph, Literal, Namespace, RDF, RDFS  # RDF và RDFS là các namespace chuẩn của W3C
 
@@ -151,9 +154,11 @@ g.add((EX.Paris,   EX.capitalOf, EX.France))
 g.add((EX.Hanoi,   EX.sisterCity, EX.Paris))
 g.add((EX.Vietnam, RDF.type,     EX.Country))
 g.add((EX.France,  RDF.type,     EX.Country))
+g.add((EX.Hanoi,   EX.population, Literal(8000000)))
+g.add((EX.Paris,   EX.population, Literal(2161000)))
 ```
 
-Đồ thị này có **9 bộ ba**. Mỗi dòng `g.add(...)` thêm đúng một bộ ba; mỗi bộ ba là một
+Đồ thị này có **11 bộ ba**. Mỗi dòng `g.add(...)` thêm đúng một bộ ba; mỗi bộ ba là một
 mệnh đề độc lập. Vì đồ thị RDF là một *tập hợp*, thứ tự thêm không quan trọng và bộ ba
 trùng lặp tự động bị loại bỏ.
 
@@ -166,10 +171,13 @@ graph LR
     Paris -.->|rdf:type| City
     Vietnam -.->|rdf:type| Country["ex:Country"]
     France -.->|rdf:type| Country
+    Hanoi ---|"ex:population 8000000"| PopH["8000000"]
+    Paris ---|"ex:population 2161000"| PopP["2161000"]
 ```
 
 Hình: Miền tri thức thủ đô dưới dạng đồ thị RDF. Nét liền là quan hệ miền
-(capitalOf, sisterCity); nét đứt là phân loại (rdf:type).
+(capitalOf, sisterCity); nét đứt là phân loại (rdf:type); nét ngang là thuộc tính dữ liệu
+(population).
 
 Lưu ý cách RDF biểu diễn **kiểu của thực thể**: thay vì một trường "loại" gắn trong nút,
 RDF dùng chính một bộ ba `rdf:type`. Đây là một lựa chọn thiết kế có hệ quả lớn — mọi
@@ -179,7 +187,7 @@ cùng một cơ chế.
 ### 2.1.5 Turtle: cú pháp, không phải mô hình
 
 Turtle là cú pháp văn bản phổ biến nhất để viết RDF [@w3c-rdf11-turtle]. Đoạn Turtle dưới
-đây biểu diễn **chính xác đồ thị 9 bộ ba** ở mục 2.1.4 — không thiếu, không thừa:
+đây biểu diễn **chính xác đồ thị 11 bộ ba** ở mục 2.1.4 — không thiếu, không thừa:
 
 ```turtle
 @prefix ex:   <http://example.org/> .
@@ -189,11 +197,13 @@ Turtle là cú pháp văn bản phổ biến nhất để viết RDF [@w3c-rdf11
 ex:Hanoi a ex:City ;
     rdfs:label "Hà Nội" ;
     ex:capitalOf ex:Vietnam ;
-    ex:sisterCity ex:Paris .
+    ex:sisterCity ex:Paris ;
+    ex:population 8000000 .
 
 ex:Paris a ex:City ;
     rdfs:label "Paris" ;
-    ex:capitalOf ex:France .
+    ex:capitalOf ex:France ;
+    ex:population 2161000 .
 
 ex:Vietnam a ex:Country .
 ex:France  a ex:Country .
@@ -226,6 +236,18 @@ assert set(g) == set(g2)   # đồ thị tương đương
   toàn. Khi có blank node, nhãn của chúng là cục bộ và có thể khác nhau giữa hai tài
   liệu, nên so sánh tập bộ ba thô sẽ cho kết quả sai; phải dùng đẳng cấu để "khớp" các
   blank node với nhau. RDFLib cung cấp so sánh đẳng cấu qua `rdflib.compare`.
+
+  **Ví dụ cụ thể:** Xét hai đồ thị:
+
+  ```
+  G₁ = { (ex:Hanoi, ex:hasAddress, _:b0), (_:b0, ex:city, ex:Hanoi) }
+  G₂ = { (ex:Hanoi, ex:hasAddress, _:x7), (_:x7, ex:city, ex:Hanoi) }
+  ```
+
+  So sánh tập bộ ba thô: `_:b0 ≠ _:x7` → khác nhau. Nhưng về mặt ngữ nghĩa, cả hai đều
+  nói "Hà Nội có một địa chỉ, và địa chỉ đó nằm ở Hà Nội". Song ánh `{_:b0 ↦ _:x7}` biến
+  mọi bộ ba của G₁ thành bộ ba tương ứng trong G₂ → hai đồ thị **đẳng cấu**. Blank node
+  là biến tồn tại, không phải tên — nên tên cục bộ của chúng không mang ý nghĩa.
 
 > **Sai lầm phổ biến:** so sánh *chuỗi Turtle thô* để kết luận hai đồ thị giống nhau.
 > Hai tài liệu Turtle khác nhau từng ký tự (khác tiền tố, khác thứ tự dòng, khác cách
@@ -262,6 +284,28 @@ tập các **ánh xạ nghiệm** (solution mappings): mỗi ánh xạ gán mỗ
 của đồ thị sao cho khi thay biến bằng hạng mục đó, toàn bộ BGP trở thành một đồ thị con
 của đồ thị đang truy vấn.
 
+Để thấy cơ chế này hoạt động cụ thể, xét BGP gồm một mẫu bộ ba:
+
+```
+{ (?city, rdf:type, ex:City) }
+```
+
+Một ánh xạ nghiệm μ là một hàm gán biến → hạng mục. Ví dụ:
+
+```
+μ₁ = { ?city ↦ ex:Hanoi }
+```
+
+Khi áp dụng μ₁ vào mẫu bộ ba, ta thay `?city` bằng `ex:Hanoi`:
+
+```
+(ex:Hanoi, rdf:type, ex:City)
+```
+
+Bộ ba này **có mặt** trong đồ thị → μ₁ là một ánh xạ nghiệm hợp lệ. Ngược lại, ánh xạ
+μ' = { ?city ↦ ex:Vietnam } cho ra `(ex:Vietnam, rdf:type, ex:City)` — bộ ba này **không
+có mặt** trong đồ thị → μ' không phải nghiệm.
+
 ```sparql
 PREFIX ex:  <http://example.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -270,12 +314,17 @@ SELECT ?city
 WHERE { ?city rdf:type ex:City }
 ```
 
-Trên đồ thị 9 bộ ba, truy vấn này trả về hai ánh xạ nghiệm:
+Trên đồ thị 11 bộ ba, truy vấn này trả về hai ánh xạ nghiệm:
 
 ```
 ?city = http://example.org/Hanoi
 ?city = http://example.org/Paris
 ```
+
+> 🖊 **Tự kiểm tra:** Giả sử đồ thị có thêm triple `(ex:DaNang, rdf:type, ex:City)`. Hãy viết
+> ra tập ánh xạ nghiệm mới cho truy vấn trên. Sau đó, giải thích bằng lời: tại sao SPARQL
+> trả về *ánh xạ* (mapping) thay vì chỉ trả về danh sách các node? Ánh xạ khác danh sách ở
+> điểm nào khi truy vấn có nhiều biến?
 
 #### Biến dùng chung tạo phép nối
 
@@ -312,7 +361,7 @@ một thuộc tính có thể vắng mặt:
 
 ```sparql
 SELECT ?entity ?label WHERE {
-    ?entity a ?type .
+    ?entity rdf:type ex:City .
     OPTIONAL { ?entity rdfs:label ?label }
 }
 ```

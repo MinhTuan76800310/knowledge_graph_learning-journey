@@ -14,6 +14,9 @@ local SYMBOL_MAP = {
   ["✓"] = "\\ding{51}",
   ["✗"] = "\\ding{55}",
   ["📦"] = "\\ding{118}",
+  ["🖊"] = "\\ding{46}",
+  ["📐"] = "\\ding{118}",
+  ["↦"] = "\\ensuremath{\\mapsto}",
   ["⊆"] = "\\ensuremath{\\subseteq}",
   ["⊑"] = "\\ensuremath{\\sqsubseteq}",
   ["∈"] = "\\ensuremath{\\in}",
@@ -35,6 +38,17 @@ function Str(el)
     local replaced = replace_symbols(el.text)
     if replaced ~= el.text then
       return pandoc.RawInline("latex", replaced)
+    end
+  end
+  return el
+end
+
+function Code(el)
+  if FORMAT:match("latex") then
+    local replaced = replace_symbols(el.text)
+    if replaced ~= el.text then
+      -- Wrap in \texttt{} so the LaTeX commands render in monospace context
+      return pandoc.RawInline("latex", "\\texttt{" .. replaced .. "}")
     end
   end
   return el

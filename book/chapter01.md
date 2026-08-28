@@ -48,19 +48,15 @@ bất kỳ dòng mã nào.
 
 ## 1.2 Mô hình tinh thần
 
-> 📦 **Preview — Các thuật ngữ W3C sẽ học chi tiết ở các chương sau**
+> 📦 **Preview — Ba thuật ngữ chuẩn sẽ gặp trong chương này**
 >
-> Chương này cần nhắc đến một số thuật ngữ từ thế giới RDF / Semantic Web. Đây là bản giới thiệu ngắn để bạn không bị lạc khi gặp chúng trong chương này:
+> Chương này nhắc đến một số thuật ngữ từ thế giới chuẩn web. Đây là bản giới thiệu ngắn:
 >
-> - **W3C** (World Wide Web Consortium): tổ chức phát triển chuẩn web.
-> - **RDF** (Resource Description Framework): mô hình dữ liệu đồ thị bộ ba chuẩn của W3C.
-> - **IRI** (Internationalized Resource Identifier): định danh toàn cục dạng chuỗi, dùng trong RDF.
-> - **RDFS** (RDF Schema): tầng lược đồ/lớp của RDF.
-> - **OWL** (Web Ontology Language): ngôn ngữ bản thể học.
-> - **SHACL** (Shapes Constraint Language): ngôn ngữ ràng buộc dữ liệu RDF.
-> - **SPARQL** (Simple Protocol and RDF Query Language): ngôn ngữ truy vấn RDF.
+> - **W3C** (World Wide Web Consortium): tổ chức phát triển chuẩn web, bao gồm các chuẩn RDF và OWL.
+> - **RDF** (Resource Description Framework): mô hình dữ liệu đồ thị bộ ba chuẩn của W3C. Sẽ học chi tiết ở Chương 2.
+> - **IRI** (Internationalized Resource Identifier): định danh toàn cục dạng chuỗi, dùng để đặt tên cho entity trong RDF. Sẽ học chi tiết ở Chương 2.
 >
-> Bạn không cần nhớ chi tiết ngay; mỗi thuật ngữ sẽ được giải thích đầy đủ khi đến chương tương ứng.
+> Các thuật ngữ khác như RDFS, OWL, SHACL, SPARQL sẽ được giới thiệu khi chúng xuất hiện lần đầu ở các chương tương ứng. Bạn không cần nhớ trước.
 
 ### Knowledge Graph = Data Graph + Semantics + Context
 
@@ -131,9 +127,29 @@ labeled graph): mỗi cạnh có tên/nhãn xác định loại quan hệ.
 `(subject, predicate, object)`. Ví dụ: `(Hanoi, isCapitalOf, Vietnam)`. Mỗi triple tương
 ứng với một cạnh có nhãn trong đồ thị.
 
-**Entity (Thực thể).** Một đối tượng trong thế giới thực hoặc miền vấn đề được biểu diễn
-bằng một nút trong đồ thị. Entity có identity (danh tính) — thường là IRI trong RDF hoặc
-node ID trong property graph.
+**Entity (Thực thể).** Một đối tượng trong thế giới thực hoặc miền vấn đề. Khi biểu diễn
+entity trong đồ thị tri thức, cần phân biệt rõ bốn tầng:
+
+1. **Real-world entity**: Đối tượng thực tế (thành phố Hà Nội, con người Nguyễn Văn A).
+2. **Graph node**: Nút trong đồ thị đại diện cho entity đó.
+3. **Identifier**: Tên/IRI dùng để tham chiếu node (ví dụ: `ex:Hanoi`).
+4. **Label**: Chuỗi hiển thị cho con người đọc (ví dụ: "Hà Nội").
+
+Bốn tầng này **không phải là một**. Cùng một real-world entity có thể được biểu diễn bằng
+nhiều graph node khác nhau trong các hệ thống khác nhau, mỗi node có identifier riêng và
+label riêng. Ngược lại, hai identifier khác nhau có thể cùng trỏ đến một entity — đây chính
+là vấn đề **entity resolution** (phân giải thực thể, sẽ học ở Chương 3).
+
+> ⚠ **Ngộ nhận phổ biến:** Nhầm lẫn identifier với entity. `ex:Hanoi` là một chuỗi ký tự
+> dùng làm định danh; nó không *là* thành phố Hà Nội. Khi hệ thống nói "`ex:Hanoi` là thủ
+> đô của `ex:Vietnam`", nó đang nói về các ký hiệu trong đồ thị, không trực tiếp về thực
+> tế. Sự kết nối giữa ký hiệu và thực tế nằm ở semantics và context, không nằm ở bản thân
+> identifier.
+
+> 🖊 **Tự kiểm tra:** Nếu hai hệ thống khác nhau đều có node mang label "Hà Nội" nhưng dùng
+> identifier khác nhau (`ex:Hanoi` vs `wd:Q1858`), chúng có đang nói về cùng một entity
+> không? Làm sao bạn biết? Thông tin nào ngoài label và identifier sẽ giúp trả lời câu hỏi
+> này?
 
 **Relation (Quan hệ).** Mối liên hệ giữa hai entity, được biểu diễn bằng cạnh có nhãn. Quan
 hệ mang semantics: `isCapitalOf` khác `isLocatedIn` dù cả hai đều nối hai địa danh.
@@ -194,34 +210,83 @@ Mỗi lớp bổ sung giải quyết một giới hạn cụ thể của lớp t
 Lưu ý: các lớp này **không loại trừ lẫn nhau**. Một hệ thống có thể có inference mà chưa có
 validation đầy đủ, hoặc có context mà chưa có ontology hình thức.
 
+> 🖊 **Tự kiểm tra:** Chọn một hệ thống đồ thị bạn đã từng làm việc (cơ sở dữ liệu quan hệ,
+> API REST, file JSON, v.v.). Nó thuộc lớp nào trong mô hình trên? Lớp nào còn thiếu để nó
+> trở thành Knowledge Graph theo mô hình kỹ thuật của sách? Giải thích tại sao lớp thiếu đó
+> lại quan trọng.
+
 ## 1.5 Mô hình hình thức
 
 > ⚠ Ký hiệu dưới đây do cuốn sách này định nghĩa cho mục đích học tập. Nó không phải là
 > ký hiệu chuẩn từ W3C hay tài liệu học thuật.
 
-Cho một **labeled directed graph** G = (V, E, λ):
+> 📐 **Toán học tối thiểu cho chương này**
+>
+> - **Tập hợp (set):** Một tập hợp S là một bộ sưu tập các phần tử phân biệt. Ký hiệu x ∈ S
+>   nghĩa là "x thuộc S". Ví dụ: V = {Hanoi, Vietnam} là tập gồm hai phần tử.
+> - **Tích Descartes (Cartesian product):** A × B là tập tất cả các cặp có thứ tự (a, b) với
+>   a ∈ A và b ∈ B. Ví dụ: nếu V = {Hanoi, Vietnam} thì V × V chứa (Hanoi, Hanoi),
+>   (Hanoi, Vietnam), (Vietnam, Hanoi), (Vietnam, Vietnam).
+> - **Tập con (subset):** A ⊆ B nghĩa là mọi phần tử của A đều thuộc B.
+> - **Hàm (function):** f: A → B gán mỗi phần tử của A đúng một phần tử của B.
+>
+> Bạn chỉ cần hiểu bốn khái niệm trên để theo dõi toàn bộ mô hình hình thức trong chương này.
 
-- V là tập đỉnh (entities/nodes)
-- E ⊆ V × V là tập cạnh có hướng
-- λ: E → L là hàm gán nhãn cho cạnh, với L là tập nhãn quan hệ
+### Vì sao không dùng G = (V, E, λ)?
 
-Một **triple** (s, p, o) ∈ V × L × V tương ứng với cạnh e = (s, o) ∈ E với λ(e) = p.
+Một cách tiếp cận phổ biến trong lý thuyết đồ thị là mô hình **labeled directed graph**
+G = (V, E, λ) với E ⊆ V × V và hàm gán nhãn λ: E → L. Tuy nhiên, mô hình này có một giới
+hạn quan trọng đối với Knowledge Graph: giữa cùng hai đỉnh, chỉ có **một** cạnh duy nhất
+trong E (vì E là tập hợp các cặp), nên chỉ gán được **một** nhãn. Trong thực tế, hai thực
+thể thường có nhiều mối quan hệ đồng thời:
 
-**Data Graph**: G với λ tùy ý, không có ràng buộc ngữ nghĩa bổ sung.
+```
+(Hanoi, locatedIn, Vietnam)
+(Hanoi, capitalOf, Vietnam)
+```
+
+Để biểu diễn cả hai triple trên bằng G = (V, E, λ), ta cần hai cạnh khác nhau giữa cùng
+cặp đỉnh — nhưng E ⊆ V × V không cho phép điều này.
+
+### Mô hình triple trực tiếp
+
+Thay vì đi qua cấu trúc cạnh trung gian, chúng ta định nghĩa Knowledge Graph **trực tiếp**
+dưới dạng tập các bộ ba:
+
+Cho tập đỉnh V (entities) và tập nhãn L (predicates/relations):
+
+$$K \subseteq V \times L \times V$$
+
+Mỗi phần tử (s, p, o) ∈ K là một **triple**, trong đó s là subject (chủ thể), p là predicate
+(vị từ/nhãn quan hệ), và o là object (đối tượng).
+
+**Ví dụ cụ thể:** Với V = {Hanoi, Vietnam} và L = {locatedIn, capitalOf}:
+
+$$K = \{(Hanoi,\; locatedIn,\; Vietnam),\;\; (Hanoi,\; capitalOf,\; Vietnam)\}$$
+
+Hai triple cùng chia sẻ subject và object nhưng khác predicate — điều mà G = (V, E, λ) không
+biểu diễn được một cách tự nhiên.
+
+> 🖊 **Tự kiểm tra:** Tại sao mô hình K ⊆ V × L × V phù hợp hơn G = (V, E, λ) cho Knowledge
+> Graph? Hãy giải thích bằng cách đưa ra một ví dụ cụ thể mà G = (V, E, λ) gặp khó khăn.
+
+**Data Graph**: K với các nhãn tùy ý, không có ràng buộc ngữ nghĩa bổ sung.
 
 **Taxonomy**: Data Graph + tập khái niệm C ⊆ V và quan hệ phân cấp ⊑ ⊆ C × C (subclassOf).
 Trong mô hình đơn giản hóa của sách, ⊑ được xem như một partial order trên C (phản xạ, bắc
 cầu, phản đối xứng). Lưu ý: ngữ nghĩa RDFS chuẩn của `rdfs:subClassOf` chỉ yêu cầu tính phản
 xạ và bắc cầu, không đảm bảo phản đối xứng; do đó mô hình partial-order ở đây là một ràng
-buộc bổ sung của sách, không phải ngữ nghĩa RDFS đầy đủ.
+buộc bổ sung của sách, không phải ngữ nghĩa RDFS đầy đủ. Khi hai lớp A và B thỏa mãn cả
+A ⊑ B lẫn B ⊑ A, theo OWL chúng được coi là **equivalent classes** (lớp tương đương, sẽ học
+ở Chương 4) — tức là chúng có cùng tập thành viên trong mọi mô hình hợp lệ.
 
 **Ontology** (theo nghĩa RDFS/OWL): Tập tiên đề T bao gồm các khai báo domain, range,
 subclass, equivalence, disjointness. Ngữ nghĩa được xác định bởi entailment rules
 (RDFS/OWL), không phải bởi constraint checking.
 
-**Book Engineering Model** (ký hiệu riêng của sách): KSE = (G, T, C) trong đó T là tập tiên
-đề ontology và C là thông tin context (provenance, time, scope, confidence). Ký hiệu này do
-sách định nghĩa, không phải chuẩn công nghiệp.
+**Book Engineering Model** (ký hiệu riêng của sách): KSE = (K, T, C) trong đó K ⊆ V × L × V
+là tập triple, T là tập tiên đề ontology và C là thông tin context (provenance, time, scope,
+confidence). Ký hiệu này do sách định nghĩa, không phải chuẩn công nghiệp.
 
 ## 1.6 Ví dụ xuyên suốt
 
@@ -247,29 +312,33 @@ Có nhãn, nhưng `:LOCATED_IN` nghĩa là gì? Có khác `:CAPITAL_OF` không? 
 **Bước 3 — Taxonomy:**
 
 ```
-City rdfs:subClassOf Place
-Country rdfs:subClassOf Place
-Capital rdfs:subClassOf City
+City    là subclass của Place
+Country là subclass của Place
+Capital là subclass của City
 ```
 
 Máy biết Capital là một loại City, City là một loại Place. Nhưng vẫn chưa biết
 `:LOCATED_IN` áp dụng cho loại nào.
 
+> ⚠ Ở đây chúng ta dùng ký hiệu khái niệm ("là subclass của") thay vì cú pháp cụ thể. Cú
+> pháp biểu diễn thực tế (ví dụ: `rdfs:subClassOf` trong RDF/Turtle) sẽ được học ở Chương 2.
+> Điều quan trọng ở bước này là **ý nghĩa phân cấp**, không phải cách viết.
+
 **Bước 4 — Ontology:**
 
 ```
-:locatedIn rdf:type owl:ObjectProperty ;
-    rdfs:domain :Place ;
-    rdfs:range :Place .
+Quan hệ locatedIn:
+  - domain (miền chủ thể): Place
+  - range (phạm vi đối tượng): Place
 
-:capitalOf rdf:type owl:ObjectProperty ;
-    rdfs:domain :City ;
-    rdfs:range :Country .
+Quan hệ capitalOf:
+  - domain: City
+  - range: Country
 ```
 
-Máy biết `:capitalOf` có domain là City và range là Country. Theo ngữ nghĩa RDFS (suy diễn,
+Máy biết `capitalOf` có domain là City và range là Country. Theo ngữ nghĩa RDFS (suy diễn,
 không phải kiểm tra ràng buộc), nếu xuất hiện triple `(Vietnam) --[:capitalOf]--> (Hanoi)`,
-máy sẽ **suy ra** rằng `Vietnam rdf:type City` và `Hanoi rdf:type Country` — ngay cả khi điều
+máy sẽ **suy ra** rằng Vietnam thuộc lớp City và Hanoi thuộc lớp Country — ngay cả khi điều
 này mâu thuẫn với thực tế. RDFS domain/range thêm thông tin kiểu, chúng không từ chối hay
 báo lỗi dữ liệu "sai".
 
@@ -289,17 +358,17 @@ khác, hệ thống có thể so sánh và đánh giá.
 ## 1.7 Các thiết kế thay thế
 
 **Property Graph thay vì RDF.** Property graph (như Neo4j) gộp property trực tiếp vào
-node/edge thay vì dùng triple riêng. Ưu điểm: trực quan, hiệu năng cao cho traversal. Nhược
-điểm: semantics phụ thuộc vào ứng dụng, không có standard entailment như RDF/RDFS/OWL.
-Chương 2 sẽ so sánh chi tiết.
+node/edge thay vì dùng triple riêng. Ưu điểm: trực quan, mô hình dữ liệu gần với cách lập
+trình viên thường nghĩ về đồ thị. Nhược điểm: semantics phụ thuộc vào ứng dụng, không có
+standard entailment như RDF/RDFS/OWL. Chương 2 sẽ so sánh chi tiết.
 
 **Schema-less Knowledge Graph.** Một số hệ thống (Wikidata) cho phép thêm statement mà không
 cần ontology đầy đủ trước. Ưu điểm: linh hoạt, cộng đồng đóng góp dễ dàng. Nhược điểm: chất
 lượng không đồng đều, khó suy diễn tự động. Wikidata giải quyết bằng
 qualifiers/references/ranks thay vì OWL axioms.
 
-**Embedding-based "Knowledge".** Graph embeddings (TransE, ComplEx) biểu diễn entity/relation
-dưới dạng vector. Có thể dự đoán quan hệ mới nhưng kết quả là xác suất, không phải
+**Embedding-based "Knowledge".** Graph embeddings biểu diễn entity/relation dưới dạng vector
+trong không gian liên tục. Có thể dự đoán quan hệ mới nhưng kết quả là xác suất, không phải
 entailment. Chương 8 sẽ phân biệt rõ induction vs deduction.
 
 ## 1.8 Những ngộ nhận thường gặp

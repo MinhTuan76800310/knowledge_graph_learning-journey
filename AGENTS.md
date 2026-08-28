@@ -10,10 +10,11 @@ This repository is designed for AI-assisted development. Follow these rules when
 
 ## Before writing any chapter content
 
-1. Read `docs/SOURCES.md` and `docs/SOURCE_MATRIX.md` to identify authoritative sources for the topic.
-2. Read `docs/CURRICULUM_RATIONALE.md` to understand pedagogical sequencing.
-3. Verify W3C spec status before referencing — check `docs/SOURCES.md` for current status markers.
-4. Never copy text from external sources. Research, understand, write originally, cite.
+1. Read `docs/BOOK_PEDAGOGY.md` — the canonical authoring policy for concept introduction, forward references, and reader-friction review.
+2. Read `docs/SOURCES.md` and `docs/SOURCE_MATRIX.md` to identify authoritative sources for the topic.
+3. Read `docs/CURRICULUM_RATIONALE.md` to understand pedagogical sequencing.
+4. Verify W3C spec status before referencing — check `docs/SOURCES.md` for current status markers.
+5. Never copy text from external sources. Research, understand, write originally, cite.
 
 ## Experiment standards
 

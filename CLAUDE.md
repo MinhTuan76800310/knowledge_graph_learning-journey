@@ -48,6 +48,7 @@ docker compose up -d neo4j
 - Technical terms: English on first occurrence with Vietnamese gloss, e.g., "thực thể (entity)"
 - Diagrams: Mermaid or generated SVG, never copyrighted figures
 - All external claims must cite a source from docs/SOURCES.md
+- **Pedagogy:** Before writing or revising any chapter content, read `docs/BOOK_PEDAGOGY.md`. It is the canonical authoring policy governing concept introduction, forward references, math notation, and reader-friction review.
 
 ## Standards Version Policy
 

@@ -327,6 +327,9 @@ Chính hệ quả lan truyền này làm `owl:sameAs` vừa mạnh vừa nguy hi
 - **Mạnh**: một khẳng định đúng duy nhất có thể hợp nhất dữ liệu của nhiều nguồn mà
   không cần sao chép.
 - **Nguy hiểm**: một khẳng định **sai** duy nhất hợp nhất hai thực thể vốn khác nhau,
+  và toàn bộ thông tin của chúng trộn lẫn — gây ra lỗi suy diễn dây chuyền.
+
+> 🖊 **Tự kiểm tra:** Giả sử đồ thị có `ex:Hanoi owl:sameAs wd:Q1858` và `wd:Q1858 ex:population 8000000`. Không có triple nào nói về dân số của `ex:Hanoi` một cách trực tiếp. Một bộ suy luận OWL sẽ trả lời gì khi được hỏi "dân số của ex:Hanoi là bao nhiêu"? Tại sao? Nếu dòng `owl:sameAs` bị sai (hai IRI thực ra chỉ hai thành phố khác nhau), hậu quả là gì?
   và mọi thuộc tính của thực thể này bị gán cho thực thể kia trên toàn đồ thị.
 
 Vì vậy, `owl:sameAs` không phải là nơi để ghi nhận "hai thứ trông giống nhau". Các
@@ -450,16 +453,23 @@ nguyên gì, hay quan hệ giữa tài nguyên đó với đồ thị là gì [@
 Nói thẳng ra: **named graph không tự động có nghĩa là "nguồn đã khẳng định những bộ ba
 này"**. Nó là cơ chế gom nhóm; ý nghĩa provenance là **quy ước của ứng dụng** — một quy
 ước tốt và phổ biến, nhưng chỉ trở thành ngữ nghĩa thật khi ứng dụng mô tả nó tường
-minh (ví dụ bằng một từ vựng provenance như PROV — sẽ gặp ở Chương 6).
+minh (ví dụ bằng một từ vựng provenance như **PROV** — PROV-O là chuẩn W3C cung cấp các
+lớp và thuộc tính để mô tả nguồn gốc, tác nhân, hoạt động tạo ra dữ liệu; sẽ học chi tiết
+ở Chương 6).
 
 ### 3.3.3 Thực thể quan hệ đủ tư cách: mẫu n-ary
 
 Cơ chế thứ hai giải quyết một giới hạn cấu trúc của RDF: thuộc tính RDF là quan hệ
-**hai ngôi** — nối đúng hai hạng mục. Mà "Hà Nội là thủ đô của Việt Nam *từ 1976*" có
-ba tham gia: thành phố, quốc gia, và thời điểm. W3C gọi đây là bài toán **quan hệ
-n-ary** (n-ary relation): khi điều cần biểu diễn tự nhiên có nhiều hơn hai người tham
-gia, hoặc khi bản thân quan hệ cần mang thêm thuộc tính (độ tin cậy, thời gian, phạm
-vi) [@w3c-nary-relations].
+**hai ngôi** (binary) — nối đúng hai hạng mục. Để thấy vì sao điều này là giới hạn, hãy
+phân biệt ba mức độ:
+
+- **Quan hệ hai ngôi (binary):** `(Hanoi, capitalOf, Vietnam)` — hai tham gia, một quan hệ.
+  RDF biểu diễn trực tiếp bằng một triple.
+- **Quan hệ ba ngôi (ternary):** "Hà Nội là thủ đô của Việt Nam *từ 1976*" — ba tham gia:
+  thành phố, quốc gia, thời điểm. Không có vị trí nào trong triple cho "từ 1976".
+- **Quan hệ n-ngôi (n-ary):** Tổng quát hóa — khi số tham gia vượt quá hai, hoặc khi bản
+  thân quan hệ cần mang thêm thuộc tính (độ tin cậy, thời gian, phạm vi). W3C gọi đây là
+  bài toán **quan hệ n-ary** (n-ary relation) [@w3c-nary-relations].
 
 Mẫu chuẩn (Pattern 1 trong tài liệu W3C): tạo một **thực thể trung gian** đại diện cho
 chính "sự kiện quan hệ", rồi nối nó với từng người tham gia [@w3c-nary-relations]:
@@ -498,6 +508,8 @@ Một chi tiết ngữ nghĩa đáng giá từ Hogan et al.: **cạnh được t
 được khẳng định** — bạn có thể mô tả một quan hệ *để nói rằng nó không còn đúng*, mà
 không hề khẳng định nó [@hogan-knowledge-graphs]. Biểu diễn và khẳng định là hai việc
 khác nhau.
+
+> 🖊 **Tự kiểm tra:** Giả sử bạn cần biểu diễn "Alice làm việc tại công ty X từ 2020 đến 2023, với vai trò kỹ sư phần mềm". Hãy phác thảo cấu trúc n-ary cho phát biểu này: thực thể trung gian đại diện cho điều gì? Có bao nhiêu cạnh nối từ nó? Nếu sau này Alice quay lại công ty X với vai trò khác, cấu trúc của bạn xử lý được không?
 
 ### 3.3.4 Thuộc tính của quan hệ: cách của đồ thị thuộc tính
 

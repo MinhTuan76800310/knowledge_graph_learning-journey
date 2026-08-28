@@ -1,3 +1,17 @@
+# ⛔ SUPERSEDED — DO NOT EXECUTE
+
+**This file is superseded as of 2026-08-28.**
+
+The Deep Readability Closure (Chapters 1–3) must be completed and accepted BEFORE
+Chapter 4 begins. See the active work specification in the conversation context or
+in `docs/BOOK_DEEP_READABILITY_CHECKPOINT.md` once created.
+
+Do NOT start Chapter 4 until the Go/No-Go for Chapter 4 is explicitly reported.
+
+---
+
+# Original content below (retained for historical reference only)
+
 You are continuing an existing repository from a NEW Claude Code session on a NEW machine.
 
 Do not rely on any memory from previous sessions.
