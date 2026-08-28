@@ -16,6 +16,10 @@ Last verified: 2026-08-25
 | Turtle serialization | W3C Turtle REC 2014 | RDFLib documentation | STANDARD / OFFICIAL_DOCUMENTATION | Stable | Canonical human-readable RDF syntax | 2 |
 | RDFS semantics & entailment | W3C RDF Schema 1.1 (REC 2014) | Hogan et al. Ch.4 Deductive Knowledge | STANDARD / ACADEMIC | Stable | Defines subclass, subproperty, domain, range inference rules | 4, 5 |
 | OWL 2 ontology language | W3C OWL 2 Overview (REC 2012) | Stanford Ontology Development 101 | STANDARD / TUTORIAL | Stable | Formal ontology language with description logic semantics | 4, 5 |
+| OWL 2 structural specification & functional-style syntax | W3C OWL 2 Structural Specification (REC 2012) | — | STANDARD | Stable | Defines abstract syntax and structural constraints of OWL 2 | 4 |
+| OWL 2 direct semantics | W3C OWL 2 Direct Semantics (REC 2012) | — | STANDARD | Stable | Model-theoretic semantics for OWL 2 DL; interpretations, satisfiability, entailment | 4 |
+| OWL 2 profiles (EL, QL, RL) | W3C OWL 2 Profiles (REC 2012) | — | STANDARD | Stable | Tractable fragments: EL (poly-time), QL (query rewriting), RL (rule-based) | 4 |
+| Deductive knowledge & Description Logics | Hogan et al. Ch.6 Deductive Knowledge | — | ACADEMIC | Stable | Ontology-based reasoning, DL interpretations, models, entailment, TBox/ABox | 4 |
 | SHACL validation | W3C SHACL (REC 2017) | pySHACL documentation | STANDARD / OFFICIAL_DOCUMENTATION | Stable | Constraint validation for RDF graphs; SHACL 1.2 Core WD 2026-08-03 is emerging | 5 |
 | PROV-O provenance | W3C PROV-O (REC 2013) | Hogan et al. Ch.7 Context | STANDARD / ACADEMIC | Stable | Standard ontology for provenance, agents, activities | 6 |
 | Identity & entity resolution | Hogan et al. Ch.3 Identity | Stanford CS520 Creating KGs from structured data | ACADEMIC | Stable | Comprehensive treatment of IRI identity, sameAs, disambiguation | 3 |

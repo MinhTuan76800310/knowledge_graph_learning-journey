@@ -10,12 +10,23 @@ tắc, alias không được hệ thống chọn làm tên quy chiếu duy nhấ
 Trong RDF, một triple có mặt trong đồ thị là một assertion. Assertion chưa chắc là tri thức
 được chấp nhận (accepted knowledge).
 
+**Axiom (Tiên đề).** Phát biểu ràng buộc ngữ nghĩa hình thức của các ký hiệu trong ontology.
+Khác với chú thích (annotation): tiên đề tạo ra suy diễn, chú thích chỉ dành cho con người.
+
 **Blank node (Nút trống).** Một nút trong đồ thị RDF biểu diễn một tài nguyên tồn tại nhưng
 không được đặt tên bằng IRI. Nhãn của blank node chỉ có phạm vi cục bộ trong một tài liệu;
 ngữ nghĩa trực giác là "tồn tại một tài nguyên nào đó…".
 
 **Canonical identifier (Định danh chính tắc).** Định danh duy nhất được một hệ thống chọn
 làm tên quy chiếu của một thực thể; các tên khác được giữ như alias.
+
+**Class Expression (Biểu thức lớp).** Tổ hợp của các lớp và thuộc tính tạo thành mô tả phức
+tạp: giao (⊓), hợp (⊔), phủ định (¬), hạn chế tồn tại (∃R.C), hạn chế phổ quát (∀R.C).
+Mỗi biểu thức có ngữ nghĩa tập hợp chính xác trong diễn giải.
+
+**Consistency (Tính nhất quán).** Ontology nhất quán khi tồn tại ít nhất một mô hình. Khác với
+satisfiability (một lớp có thể có thành viên) và entailment (một phát biểu đúng trong mọi mô
+hình).
 
 **Context (Ngữ cảnh).** Lớp thông tin về nguồn gốc, thời gian, phạm vi và độ tin cậy của một
 tuyên bố. Trong mô hình kỹ thuật của sách: KG = Data Graph + Semantics + Context.
@@ -29,11 +40,14 @@ nghĩa hình thức về ý nghĩa. Trả lời được "có gì" nhưng chưa 
 **Denotation (Sự biểu thị).** Quan hệ giữa một định danh và thực thể mà nó chỉ đến. Định
 danh không phải là thực thể; sự biểu thị do quy ước và con người gán, không tự động có sẵn.
 
-**Entailment (Suy diễn logic).** Một mệnh đề được suy ra từ các mệnh đề khác theo quy tắc ngữ
-nghĩa (ví dụ RDFS/OWL). Khác với validation: entailment thêm tri thức, không từ chối dữ liệu.
+**Entailment (Suy diễn logic).** O ⊨ α nghĩa là α đúng trong mọi mô hình của ontology O. Khác
+với validation: entailment thêm tri thức, không từ chối dữ liệu.
 
 **Entity (Thực thể).** Một đối tượng trong thế giới thực hoặc miền vấn đề, được biểu diễn bằng
 một nút trong đồ thị.
+
+**Existential Restriction (Hạn chế tồn tại).** ∃R.C — lớp các cá thể có ít nhất một R-liên kết
+đến phần tử thuộc C. Yêu cầu sự tồn tại trong mô hình, không nhất thiết trong dữ liệu RDF.
 
 **GQL.** Ngôn ngữ truy vấn đồ thị chuẩn do ISO ban hành (ISO/IEC 39075:2024).
 
@@ -47,6 +61,9 @@ minh thống nhất ngữ nghĩa, khác định danh không chứng minh khác t
 **Identity resolution (Giải quyết định danh).** Quá trình xác định hai định danh trong hai
 nguồn có biểu thị cùng một thực thể hay không, đi từ ứng viên đồng nhất qua bằng chứng và
 xem xét đến khẳng định được chấp nhận. Đồng nghĩa thực hành với record linkage.
+
+**Interpretation (Diễn giải).** Cách gán nghĩa toán học cho ký hiệu: I = (Δ^I, ·^I), trong đó
+Δ^I là miền diễn giải và ·^I ánh xạ lớp → tập hợp, thuộc tính → quan hệ, cá thể → phần tử.
 
 **IRI (Internationalized Resource Identifier).** Cơ chế định danh có phạm vi toàn cục trong
 RDF. Cùng một IRI không tự động chứng minh hai bên cùng ngữ nghĩa; hai IRI khác nhau chưa
@@ -62,6 +79,9 @@ thuộc tính) và quan hệ (có hướng, có kiểu, và có thể có thuộ
 **Literal.** Giá trị dữ liệu trong RDF (chuỗi, số, …), chỉ xuất hiện ở vị trí đối tượng của
 bộ ba.
 
+**Model (Mô hình).** Diễn giải thỏa mãn tất cả các tiên đề trong ontology. Tập hợp các mô hình
+xác định ngữ nghĩa của ontology: suy diễn = đúng trong mọi mô hình.
+
 **Named graph (Đồ thị có tên).** Một cặp (tên đồ thị, đồ thị RDF) trong RDF dataset. Tên đồ
 thị chỉ được ghép cặp cú pháp với đồ thị; ý nghĩa provenance/nguồn là quy ước ứng dụng,
 không phải ngữ nghĩa hình thức có sẵn.
@@ -70,8 +90,13 @@ không phải ngữ nghĩa hình thức có sẵn.
 cần mang thêm thuộc tính (thời gian, độ tin cậy). Trong RDF được biểu diễn gián tiếp, phổ
 biến nhất bằng một thực thể trung gian đại diện cho sự kiện quan hệ.
 
-**Ontology (Bản thể học).** Định nghĩa hình thức các khái niệm, quan hệ, ràng buộc và tiên đề
-trong một miền tri thức.
+**Ontology (Bản thể học).** Tập tiên đề ràng buộc ngữ nghĩa hình thức của các ký hiệu trong một
+miền tri thức. Khác với schema: ontology nhấn mạnh cam kết ngữ nghĩa và hệ quả logic, không
+chỉ cấu trúc kỳ vọng.
+
+**Open World Assumption — OWA (Giả định thế giới mở).** Trong OWL, thiếu thông tin không có
+nghĩa là sai; nó chỉ có nghĩa là chưa biết. Khác với cơ sở dữ liệu truyền thống dùng giả định
+thế giới đóng (thiếu = sai/vắng).
 
 **owl:sameAs.** Vị từ OWL khẳng định hai định danh biểu thị **cùng một cá thể**. Không phải
 "tương tự" hay "gần giống": mọi thông tin của tên này suy ra được cho tên kia.
@@ -122,3 +147,11 @@ khẳng định khác nhau phải dùng owl:differentFrom.
 
 **Validation (Xác nhận).** Kiểm tra dữ liệu có tuân thủ các ràng buộc đã định hay không (ví dụ
 SHACL). Khác với entailment: validation có thể từ chối dữ liệu.
+
+**Satisfiability (Tính thỏa được).** Lớp C thỏa được đối với ontology O khi tồn tại ít nhất một
+mô hình của O trong đó C^I ≠ ∅. Khác với consistency (toàn bộ ontology có mô hình) và
+entailment (phát biểu đúng trong mọi mô hình).
+
+**Universal Restriction (Hạn chế phổ quát).** ∀R.C — lớp các cá thể mà mọi R-liên kết đều dẫn
+đến phần tử thuộc C. Không khẳng định sự tồn tại của R-liên kết; nếu không có liên kết nào
+thì điều kiện được thỏa mãn một cách trống rỗng (vacuously true).

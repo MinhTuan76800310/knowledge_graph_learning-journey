@@ -471,6 +471,57 @@
       ],
       "research_note_path": "docs/research_notes/WD-02.md",
       "key_finding": "Qualifiers contextualize a statement beyond the bare property-value pair: scope ('France excluding Adélie Land'), method ('population: estimation'), validity ('population as of 2011'); a statement should remain useful without its qualifiers."
+    },
+    {
+      "id": "OWL-03",
+      "canonical_url": "https://www.w3.org/TR/owl2-syntax/",
+      "fetch_status": "REGISTERED_NOT_FETCHED",
+      "title": "OWL 2 Web Ontology Language Structural Specification and Functional-Style Syntax (Second Edition)",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2012-12-11",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/OWL-03.md"
+    },
+    {
+      "id": "OWL-04",
+      "canonical_url": "https://www.w3.org/TR/owl2-direct-semantics/",
+      "fetch_status": "REGISTERED_NOT_FETCHED",
+      "title": "OWL 2 Web Ontology Language Direct Semantics (Second Edition)",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2012-12-11",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/OWL-04.md",
+      "key_finding": "Defines model-theoretic semantics for OWL 2 DL; interpretation I = (Δ^I, ·^I) maps classes to subsets of domain, object properties to binary relations, individuals to domain elements."
+    },
+    {
+      "id": "OWL-05",
+      "canonical_url": "https://www.w3.org/TR/owl2-profiles/",
+      "fetch_status": "REGISTERED_NOT_FETCHED",
+      "title": "OWL 2 Web Ontology Language Profiles (Second Edition)",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2012-12-11",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/OWL-05.md",
+      "key_finding": "Defines EL (polynomial-time reasoning, large class hierarchies), QL (query rewriting over large instance data), RL (rule-based reasoning over RDF data)."
+    },
+    {
+      "id": "HOGAN-CH6",
+      "canonical_url": "https://kgbook.org/",
+      "fetch_status": "REGISTERED_NOT_FETCHED",
+      "title": "Knowledge Graphs (Hogan et al.), Chapter 6: Deductive Knowledge",
+      "document_status": "Academic textbook",
+      "publication_date": "2021",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/HOGAN-CH6.md",
+      "key_finding": "Covers ontology-based deductive reasoning, Description Logics, interpretations, models, entailment, TBox/ABox distinction."
     }
   ]
 }

@@ -4,7 +4,7 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-08-25
+Last updated: 2026-08-28
 
 ## Front matter
 
@@ -22,7 +22,7 @@ Last updated: 2026-08-25
 | 1 — From Graph to Knowledge | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 2 — Data Models and Query Languages | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 3 — Schema, Identity, and Context | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
-| 4 — Ontologies and Formal Meaning | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
+| 4 — Ontologies and Formal Meaning | ✅ | ✅ | 🔲 | 🔲 | 🔲 | DRAFTED |
 | 5 — Deduction, Rules, and Validation | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 | 6 — Claims, Evidence, Provenance, Time, Contradiction | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 | 7 — Knowledge Acquisition and Integration | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
