@@ -933,9 +933,9 @@ OWL 2 đầy đủ rất biểu đạt, nhưng suy luận trên nó có thể t�
 
 | Profile | Thiết kế cho | Đặc điểm suy luận |
 |---------|-------------|-------------------|
-| **OWL 2 EL** | Ontology lớn với nhiều lớp/thuộc tính | Suy luận chuẩn trong thời gian đa thức; phù hợp taxonomy y khoa, sinh học |
+| **OWL 2 EL** | Ontology lớn với nhiều lớp/thuộc tính | Suy luận cốt lõi (consistency, subsumption, instance checking) trong thời gian đa thức; truy vấn liên kết (conjunctive query) vẫn EXPTIME. Phù hợp taxonomy y khoa, sinh học |
 | **OWL 2 QL** | Truy vấn trên lượng lớn dữ liệu cá thể | Hỗ trợ query rewriting sang SQL; phù hợp khi ABox rất lớn |
-| **OWL 2 RL** | Suy luận dạng luật trên dữ liệu RDF | Tương thích với rule engine; phù hợp forward-chaining trên RDF stores |
+| **OWL 2 RL** | Suy luận dạng luật trên dữ liệu RDF | Tương thích với rule engine; phù hợp forward-chaining trên RDF stores. Tính đầy đủ không đảm bảo trên đồ thị RDF tùy ý |
 
 > ⚠ **Không có profile "tốt nhất".** Lựa chọn phụ thuộc vào cấu trúc ontology và tác vụ suy
 > luận cụ thể. EL không "nhanh hơn QL" trong mọi trường hợp; QL không "tốt hơn RL" cho mọi
@@ -1115,8 +1115,9 @@ Những câu hỏi này mở ra **Chương 5 — Suy diễn, Quy tắc và Xác 
 | Class Expression (biểu thức lớp) | Tổ hợp lớp: giao, hợp, phủ định, hạn chế | §4.6 |
 | Existential Restriction (hạn chế tồn tại) | ∃R.C: có ít nhất một R-liên kết đến C | §4.6 |
 | Universal Restriction (hạn chế phổ quát) | ∀R.C: mọi R-liên kết đều đến C | §4.6 |
-| Necessary Condition (điều kiện cần) | SubClassOf một chiều | §4.5 |
-| Sufficient Condition (điều kiện đủ) | Equivalence hai chiều | §4.5 |
+| Necessary Condition (điều kiện cần) | A ⊑ B: B cần cho A | §4.5 |
+| Sufficient Condition (điều kiện đủ) | A ⊑ B: A đủ cho B | §4.5 |
+| Necessary & Sufficient (cần và đủ) | A ≡ B: A và B cần và đủ cho nhau | §4.5 |
 | Open World Assumption (giả định thế giới mở) | Thiếu ≠ sai | §4.8 |
 | Consistency (tính nhất quán) | Tồn tại ít nhất một mô hình | §4.9 |
 | Satisfiability (tính thỏa được) | Lớp có thể có thành viên trong mô hình | §4.9 |

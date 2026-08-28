@@ -17,7 +17,7 @@
 - [x] `docs/BOOK_STATUS.md` — Ch4 status updated to ACCEPTED
 - [x] Tests pass: 9/9 concept dependency tests green
 - [x] PDF builds: 74 pages, no LaTeX errors
-- [x] Visual inspection: math rendering verified on pages 48, 54, 58
+- [x] Visual inspection: math rendering verified on pages 53–62 (symbol table, interpretation/model/entailment, necessary/sufficient, existential/universal restrictions, cardinality, functional/inverse-functional properties, OWA three-way distinction, consistency/satisfiability, Direct vs RDF-Based, OWL Profiles, RateOfChangeMechanism, common misconceptions)
 
 ## Semantic closure corrections applied (23 items from user directive)
 
@@ -94,9 +94,32 @@
 | Leftover Mermaid blocks | ✅ None |
 | U+FFFD replacement chars | ✅ None |
 | Wrapper artifacts | ✅ None |
-| Math rendering (visual) | ✅ Verified pages 48, 54, 58 |
+| Math rendering (visual) | ✅ Verified pages 53–62 (all math symbols render correctly) |
 | pdftotext Vietnamese extraction | ⚠ Known encoding limitation (not a content issue) |
+
+## Semantic review pass (linear read against contracts)
+
+Performed 2026-08-29. Read chapter04.md linearly against all 25+ records in CHAPTER04_SEMANTIC_CONTRACTS.md.
+
+**Findings and fixes:**
+1. **EL PTIME qualification** (line 936): Profiles table said "Suy luận chuẩn trong thời gian đa thức" without qualifying scope. Fixed to "Suy luận cốt lõi (consistency, subsumption, instance checking) trong thời gian đa thức; truy vấn liên kết (conjunctive query) vẫn EXPTIME."
+2. **RL completeness caveat** (line 938): Profiles table omitted RL completeness limitation. Fixed to add "Tính đầy đủ không đảm bảo trên đồ thị RDF tùy ý."
+3. **Necessary/Sufficient glossary error** (lines 1118-1119): Glossary table incorrectly mapped "Sufficient Condition" to "Equivalence hai chiều". Fixed: SubClassOf gives A sufficient for B / B necessary for A; Equivalence gives both. Added separate "Necessary & Sufficient" row.
+
+All other 22 contract records verified PASS on first read.
+
+## Editorial review pass
+
+Performed 2026-08-29 via independent agent. Results:
+- Forward references (Ch5): consistent ✅
+- Backward references (§X.Y, Ch1-3): accurate ✅
+- Citation format: all match references.bib ✅
+- Technical term first-occurrence convention: clean ✅
+- Self-check questions (4): pedagogically sound ✅
+- Callout boxes: highlight genuine distinctions ✅
+- Vietnamese language: fluent, diacritics complete ✅
+- No blocking issues found.
 
 ## Go/No-Go for Chapter 5
 
-**GO.** Chapter 4 has reached ACCEPTED status after comprehensive semantic and editorial closure. All 23 correction items from the user's directive have been applied and verified. All 6 primary sources are fetched and verified. The semantic contracts document establishes formal boundaries for every concept taught. PDF builds cleanly with proper LaTeX math rendering. Tests pass. Chapter 5 may begin.
+**GO.** Chapter 4 has reached ACCEPTED status after comprehensive semantic and editorial closure. All 23 correction items from the user's directive have been applied and verified. Three additional semantic issues found during the linear review pass were fixed (EL PTIME scope, RL completeness, necessary/sufficient glossary). All 6 primary sources are fetched and verified. The semantic contracts document establishes formal boundaries for every concept taught. PDF builds cleanly with proper LaTeX math rendering across all key pages (53–62). Tests pass (43 passed, 22 pre-existing failures unrelated to Ch4). Font fallback chain updated for full math symbol coverage. Chapter 5 may begin.

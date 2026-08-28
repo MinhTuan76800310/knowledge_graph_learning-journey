@@ -7,6 +7,7 @@
 % to Segoe UI for missing glyphs instead of printing tofu boxes.
 \directlua{
   luaotfload.add_fallback("symfallback", {
+    "Cambria Math:mode=node;",
     "Segoe UI:mode=node;",
   })
 }
@@ -21,6 +22,8 @@
 % before they reach the LaTeX engine, avoiding font subsetting issues entirely.
 \usepackage{amssymb}
 \usepackage{pifont}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
 
 % --- Vietnamese language support ---
 % Pandoc already loads babel with \babelprovide[main,import]{vietnamese}
