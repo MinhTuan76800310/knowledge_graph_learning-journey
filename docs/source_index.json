@@ -636,6 +636,34 @@
       "used_in_chapters": ["5"],
       "research_note_path": "docs/research_notes/OWL-RL-SPEC.md",
       "key_finding": "Six rule tables (Tables 4-9) covering equality, properties, classes, class axioms, datatypes, schema vocabulary. prp-dom/prp-rng demonstrate domain/range as inference rules. Theorem PR1 gives conditional completeness. Sound but not complete on arbitrary RDF."
+    },
+    {
+      "id": "PROV-DM-01",
+      "canonical_url": "https://www.w3.org/TR/prov-dm/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-29T16:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/prov-dm/",
+      "title": "PROV Data Model (PROV-DM)",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2013-04-30",
+      "used_in_chapters": ["6"],
+      "research_note_path": "docs/research_notes/PROV-DM-01.md",
+      "key_finding": "Conceptual provenance model underlying PROV-O. Core: Entity, Activity, Agent with relationships (wasGeneratedBy, wasDerivedFrom, etc.). Provenance forms directed graphs rooted at the entity. Generation precedes usage. Influence underlies all relations."
+    },
+    {
+      "id": "OWL-TIME-01",
+      "canonical_url": "https://www.w3.org/TR/owl-time/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-29T16:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/owl-time/",
+      "title": "Time Ontology in OWL",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2020-10-27",
+      "used_in_chapters": ["6"],
+      "research_note_path": "docs/research_notes/OWL-TIME-01.md",
+      "key_finding": "Core classes: TemporalEntity, Instant, Interval. Allen's interval algebra relations. hasTime links any resource to a TemporalEntity. Valid time vs assertion time modeled as separate temporal facts."
     }
   ]
 }
