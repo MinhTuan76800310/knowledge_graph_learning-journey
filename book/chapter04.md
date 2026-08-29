@@ -184,6 +184,11 @@ Place^I   = {h, v, p, f}
 Đọc $City^I \subseteq \Delta^I$ như sau: "Trong diễn giải I, lớp City được gán với tập con {h, p} của
 miền." Nói cách khác, trong diễn giải này, h và p là các "thành phố".
 
+Tập $\{h, p\}$ — ảnh của ký hiệu `City` dưới hàm diễn giải — được gọi là **class extension**
+(mở rộng lớp) của `City` trong diễn giải I. Hai diễn giải khác nhau có thể gán hai class
+extension khác nhau cho cùng một tên lớp; nhiệm vụ của ontology là ép mọi mô hình phải chọn
+class extension thỏa mãn các tiên đề.
+
 Thuộc tính đối tượng được diễn giải thành **quan hệ hai ngôi** trên miền:
 
 ```
@@ -352,6 +357,98 @@ O ⊨ α
 Ontology reasoning không phải là máy "suy nghĩ giống người". Nó là sự thu hẹp tập các diễn
 giải có thể bằng các ràng buộc hình thức, rồi kiểm tra xem một phát biểu có đúng trong tất
 cả các diễn giải còn lại hay không.
+
+### Diễn giải trên miền cơ chế — chuyển giao toàn bộ máy móc
+
+Ví dụ thành phố dùng để học *cơ chế hình thức*. Máy móc đó không dành riêng cho địa lý:
+hãy diễn giải cùng một hệ ký hiệu trên miền cơ chế — chính cơ chế `RATE_OF_CHANGE` của
+xuyên suốt cuốn sách.
+
+Miền diễn giải gồm bốn phần tử cơ chế:
+
+```
+Δ^I = { m₁, d₁, q₁, r₁ }
+```
+
+trong đó $m_1$ sẽ "đóng vai" cơ chế rate of change, $d_1$ đóng vai phép toán đạo hàm,
+$q_1$ đóng vai đại lượng position, và $r_1$ đóng vai biến thời gian. Hàm diễn giải gán tên
+cho các phần tử miền:
+
+```
+rateOfChange_1^I        = m₁
+derivativeOperation_1^I = d₁
+position_1^I            = q₁
+time_1^I                = r₁
+```
+
+Lớp được diễn giải thành tập con của miền:
+
+```
+Mechanism^I              = { m₁ }
+RateOfChangeMechanism^I  = { m₁ }
+DerivativeOperation^I    = { d₁ }
+Quantity^I               = { q₁ }
+ReferenceVariable^I      = { r₁ }
+```
+
+Thuộc tính đối tượng được diễn giải thành quan hệ hai ngôi:
+
+```
+hasOperation^I         = { (m₁, d₁) }
+hasInput^I             = { (m₁, q₁) }
+hasReferenceVariable^I = { (m₁, r₁) }
+```
+
+```mermaid
+%%{init: {"theme": "neutral"} }%%
+graph LR
+    M["m₁<br/>(rateOfChange_1^I)"] -->|"hasOperation^I"| D["d₁<br/>(derivativeOperation_1^I)"]
+    M -->|"hasInput^I"| Q["q₁<br/>(position_1^I)"]
+    M -->|"hasReferenceVariable^I"| R["r₁<br/>(time_1^I)"]
+```
+
+Hình: cùng một cấu trúc diễn giải như ví dụ thành phố, trên miền cơ chế. Miền
+$\Delta^I = \{m_1, d_1, q_1, r_1\}$, lớp là tập con, thuộc tính là quan hệ.
+
+Bây giờ kiểm tra sự thỏa mãn. Xét tiên đề định nghĩa `RateOfChangeMechanism` (sẽ được viết
+đầy đủ ở §4.13):
+
+```
+RateOfChangeMechanism ≡ Mechanism ⊓ ∃hasOperation.DerivativeOperation
+                        ⊓ ∃hasInput.Quantity ⊓ ∃hasReferenceVariable.ReferenceVariable
+```
+
+Trong diễn giải I:
+
+- $m_1 \in \mathit{Mechanism}^I$ vì $\mathit{Mechanism}^I = \{m_1\}$.
+- $m_1 \in (\exists hasOperation.\mathit{DerivativeOperation})^I$ vì tồn tại $\langle m_1, d_1\rangle \in hasOperation^I$ với $d_1 \in \mathit{DerivativeOperation}^I$.
+- $m_1 \in (\exists hasInput.\mathit{Quantity})^I$ vì $\langle m_1, q_1\rangle \in hasInput^I$ với $q_1 \in \mathit{Quantity}^I$.
+- $m_1 \in (\exists hasReferenceVariable.\mathit{ReferenceVariable})^I$ vì $\langle m_1, r_1\rangle \in hasReferenceVariable^I$ với $r_1 \in \mathit{ReferenceVariable}^I$.
+
+Cả bốn điều kiện đúng → $\mathit{rateOfChange\_1}^I = m_1 \in \mathit{RateOfChangeMechanism}^I$. Diễn
+giải I tuân theo định nghĩa cơ chế.
+
+**Đối chứng — một diễn giải thỏa mãn ontology thành phố nhưng vi phạm tiên đề cơ chế.**
+Xét diễn giải J diễn giải các ký hiệu địa lý như bình thường: $\mathit{City}^J = \{h, p\}$,
+$\mathit{capitalOf}^J = \{(h,v), (p,f)\}$ — J thỏa mãn `City ⊑ Place`, `capitalOf` nối
+thành phố–quốc gia, v.v. Nhưng J gán $\mathit{rateOfChange\_1}^J = m_5$ với
+$hasOperation^J = \varnothing$. Khi đó $m_5 \notin (\exists hasOperation.\mathit{DerivativeOperation})^J$
+— không có part tử nào vừa là DerivativeOperation vừa liên kết hasOperation với $m_5$ — nên
+$m_5 \notin \mathit{RateOfChangeMechanism}^J$. J là mô hình của ontology thành phố nhưng
+*không* là mô hình của ontology cơ chế. Bài học của §4.3 được tái khẳng định trên miền cơ
+chế: **thỏa mãn một bộ tiên đề không ngụ ý thỏa mãn bộ khác**; một diễn giải hợp lệ về địa lý
+vẫn có thể "vô lý" về mặt cơ chế.
+
+> 🖊 **Tự kiểm tra:** Dựng một diễn giải K trên miền cơ chế gồm năm phần tử
+> $\{m_1, d_1, d_2, q_1, r_1\}$ với $hasOperation^K = \{(m_1, d_1), (m_1, d_2)\}$ và
+> $\mathit{DerivativeOperation}^K = \{d_1\}$. Hỏi: $m_1$ có thuộc
+> $(\exists hasOperation.\mathit{DerivativeOperation})^K$ không? *Chỉ dẫn — đáp án:* kiểm
+> tra từng cặp trong $hasOperation^K$. Cặp $\langle m_1, d_1\rangle$ đưa đến $d_1$, và
+> $d_1 \in \mathit{DerivativeOperation}^K$ → có ít nhất một liên kết như vậy → câu trả lời
+> là **có**: $m_1$ thuộc hạn chế tồn tại. (Lưu ý: cặp $\langle m_1, d_2\rangle$ đưa đến $d_2
+> \notin \mathit{DerivativeOperation}^K$ nhưng điều đó không bác bỏ câu trả lời — hạn chế
+> tồn tại chỉ cần *một* liên kết đúng. Định nghĩa hình thức của $\exists R.C$ và $\forall R.C$
+> ở §4.6.)
 
 ## 4.4 Lớp như tập hợp: subclass, equivalence, disjointness
 
@@ -721,6 +818,29 @@ Ngữ nghĩa: $(x,z) \in hasNationalCapital^I$ và $(y,z) \in hasNationalCapital
 
 Nếu hai quốc gia đều có cùng thủ đô (theo hasNationalCapital), thì hai quốc gia đó là một.
 
+### Reflexivity, Asymmetry và Property Chains
+
+OWL còn hỗ trợ ba đặc trưng bổ sung:
+
+**Reflexive (phản xạ):** mọi cá thể đều có quan hệ với chính nó. `Reflexive(hasIdentity)` — mọi
+thứ đều có quan hệ hasIdentity với chính nó. $R^I$ chứa $\{(x,x) \mid x \in \Delta^I\}$.
+
+**Irreflexive (phản xạ đảo):** không cá thể nào có quan hệ với chính nó. `Irreflexive(hasProperPart)`.
+Trên miền cơ chế: `Irreflexive(requires)` — một cơ chế không thể `requires` chính nó. $R^I \cap \{(x,x) \mid x \in \Delta^I\} = \varnothing$.
+
+**Asymmetric (bất đối xứng):** nếu $x$ quan hệ với $y$ thì $y$ không thể quan hệ với $x$.
+`Asymmetric(hasInput)` — nếu mechanism M có M's input là quantity Q, thì Q không thể có input là
+M. Trên miền cơ chế: `Asymmetric(requires)` — nếu `ex:newtonCooling_1 ex:requires ex:rateOfChange_1`,
+thì `ex:rateOfChange_1` không thể `requires` `ex:newtonCooling_1`. $R^I \cap (R^I)^{-1} = \varnothing$.
+
+**Property chain (chuỗi thuộc tính):** OWL 2 cho phép định nghĩa thuộc tính này là bắc cầu
+của thuộc tính khác. `hasPart o hasPart ⊑ hasPart` nghĩa là "phần của phần của một thứ cũng
+là phần của thứ đó". Trên miền cơ chế: `requires o requires ⊑ requires` — nếu M1 requires M2
+và M2 requires M3, thì M1 requires M3. Ngữ nghĩa: $(x,z) \in R^I$ nếu tồn tại $y$ sao cho
+$(x,y) \in R_1^I$ và $(y,z) \in R_2^I$, trong đó $R_1 \circ R_2 \sqsubseteq R$.
+Property chain là công cụ mạnh để suy diễn quan hệ gián tiếp — và sẽ được dùng ở Chương 5
+trong forward-chaining rule trên graph cơ chế.
+
 ## 4.8 Giả định thế giới mở (Open World Assumption)
 
 Đây là một trong những khái niệm gây bất ngờ nhất cho kỹ sư quen với cơ sở dữ liệu. Hãy
@@ -771,6 +891,16 @@ OWL:
 
 Nó chỉ có nghĩa là: chúng ta không biết Hà Nội có sân bay hay không. Có thể có, có thể
 không. Ontology chưa nói.
+
+**Ví dụ miền cơ chế — "thiếu điều kiện" không phải là "không có điều kiện".** Trong đồ thị
+cơ chế, `ex:rateOfChange_1` và `ex:heatTransferRate_2` không có triple `ex:hasCondition` nào,
+còn `ex:newtonCooling_1` thì có (Chương 2, OPTIONAL). Một kỹ sư quen thế giới đóng dễ đọc
+"sách giáo khoa không ghi điều kiện cho rateOfChange_1" thành "rateOfChange_1 hoạt động vô
+điều kiện". OWL không cho kết luận đó: dưới OWA, việc thiếu khẳng định chỉ có nghĩa là
+*chưa biết* — tồn tại mô hình trong đó rateOfChange_1 có một Condition chưa được ghi vào dữ
+liệu. Nhớ lại Chương 3: điều kiện áp dụng là một chiều của ngữ cảnh, phải được *khẳng định
+bằng bằng chứng*, không được suy ra từ sự vắng mặt quan hệ. (Chương 6 sẽ quản lý tri thức
+"chưa biết" này một cách có chủ đích qua tầng claim – bằng chứng.)
 
 ### Ba trạng thái suy diễn
 
@@ -856,6 +986,30 @@ C thỏa được đối với O ⇔ ∃I ∈ Models(O): C^I ≠ ∅
 > Ngược lại, nếu thêm tiên đề $\exists x: x \in ImpossiblePlace$, thì ontology trở nên **không nhất
 > quán** — vì không có mô hình nào thỏa mãn cả "ImpossiblePlace phải có thành viên" lẫn
 > "ImpossiblePlace = ∅".
+
+**Ba câu hỏi trên miền cơ chế.** Phân biệt trên áp dụng nguyên vẹn cho ontology cơ chế
+(dùng định nghĩa chặt ở §4.13):
+
+- **Không nhất quán — ví dụ cơ chế:**
+  ```
+  RateOfChangeMechanism ⊑ ∃hasApplication.DerivativeApplication
+  rateOfChange_1 : RateOfChangeMechanism
+  rateOfChange_1 : ¬∃hasApplication.DerivativeApplication
+  ```
+  Dòng thứ ba khẳng định tường minh điều ngược lại dòng thứ nhất cộng dòng thứ hai → không
+  mô hình nào thỏa cả ba → ontology không nhất quán. Chú ý: dòng thứ ba phải là *khẳng định*;
+  chỉ "thiếu triple hasApplication" thì ontology vẫn nhất quán (OWA, §4.8).
+
+- **Lớp không thỏa được — ví dụ cơ chế:**
+  ```
+  ElementaryMechanism ≡ RateOfChangeMechanism ⊓ ¬∃hasApplication.DerivativeApplication
+  ```
+  Một thành viên của `ElementaryMechanism` buộc phải vừa là RateOfChangeMechanism (nên phải
+  có một DerivativeApplication) vừa không được có ứng dụng nào → tập rỗng trong mọi mô hình
+  → lớp này không thỏa được. Ontology vẫn nhất quán *miễn là* không ai khẳng định
+  `x : ElementaryMechanism`. Nếu sau này dữ liệu ghi `ex:newtonCooling_1 : ElementaryMechanism`,
+  ontology trở nên không nhất quán — và bộ suy luận sẽ báo, đây chính là cơ chế phát hiện
+  lỗi mô hình hóa trước khi tri thức được tin dùng.
 
 ### Suy diễn (Entailment)
 
@@ -971,6 +1125,37 @@ OWL 2 đầy đủ rất biểu đạt, nhưng suy luận trên nó có thể t�
 > luận cụ thể. EL không "nhanh hơn QL" trong mọi trường hợp; QL không "tốt hơn RL" cho mọi
 > ứng dụng. Hãy chọn dựa trên yêu cầu thực tế, không dựa trên bảng xếp hạng chung chung.
 
+**Phân loại ontology cơ chế.** Ontology Mechanism Knowledge Graph của chúng ta rơi vào profile
+nào? Xét các tiên đề đã viết:
+
+- `DerivativeApplication ⊑ MechanismApplication`, `DerivativeApplication ⊑ ∃differentiand.Quantity`
+  → EL (cho phép ⊑, ⊓, ∃)
+- `RateOfChangeMechanism ≡ Mechanism ⊓ ∃hasApplication.DerivativeApplication`
+  → EL (≡ là tổ hợp của ⊑ và ⊑)
+- `Reflexive(hasIdentity)` → EL (OWL 2 EL cho phép self-restriction)
+- `Irreflexive(requires)`, `Asymmetric(hasInput)`, `Asymmetric(requires)` → **không** EL
+  (các property characteristic này nằm ngoài EL)
+- `requires o requires ⊑ requires` → **không** EL (EL không hỗ trợ property chain)
+
+Vậy **lõi khái niệm** (Mechanism, RateOfChangeMechanism, DerivativeApplication) thuộc **OWL 2 EL**
+— phù hợp vì đây là ontology TBox-heavy, cần suy luận phân loại đa thức. Các ràng buộc về
+đối xứng/bắc cầu (property characteristics) đẩy ontology lên OWL 2 **RL** (nếu dùng rule engine)
+hoặc OWL 2 **Full** (nếu giữ nguyên). Nếu chỉ truy vấn dữ liệu cá thể (ABox) mà không cần suy
+luận phân loại, OWL 2 **QL** cho phép rewriting xuống SQL.
+
+> 🖊 **Tự kiểm tra:** Ontology cơ chế có thể giảm xuống OWL 2 EL bằng cách bỏ đi những tính
+> chất nào? Đánh đổi là gì?
+>
+> <details><summary>Đáp án</summary>
+>
+> Bỏ `Irreflexive(requires)`, `Asymmetric(hasInput)`, `Asymmetric(requires)` và
+> `requires o requires ⊑ requires`. Khi đó mọi tiên đề còn lại đều nằm trong EL:
+> suy luận phân loại (subsumption) chạy đa thức, nhưng mất khả năng phát hiện vòng tròn
+> phụ thuộc bất hợp lệ (nhờ `requires` bất đối xứng) và mất tính bắc cầu suy dẫn
+> (`A requires B` + `B requires C` không còn suy ra `A requires C`). Đây là đánh đổi
+> điển hình giữa biểu đạt và hiệu suất.
+> </details>
+
 ## 4.13 Cầu nối đến Mechanism Knowledge Graph
 
 Tại sao ontology quan trọng cho hệ thống tri thức cơ chế (Mechanism Knowledge System) mà
@@ -1000,18 +1185,74 @@ tường minh.
 > phải ontology đủ cho nhận diện cơ chế xuyên miền.** Ba hạn chế tồn tại độc lập: định nghĩa
 > trên KHÔNG nói rằng DerivativeOperation, Quantity và ReferenceVariable tham gia vào *cùng
 > một* ứng dụng đạo hàm. Một cá thể có thể thỏa mãn cả ba existential thông qua các filler
-> hoàn toàn không liên quan nhau. Mô hình mạnh hơn về mặt khái niệm sẽ dùng cấu trúc trung
-> gian:
->
-> ```
-> Mechanism → hasApplication → DerivativeApplication
->   → differentiand → Quantity
->   → withRespectTo → ReferenceVariable
-> ```
->
+> hoàn toàn không liên quan nhau.
+
+Hãy buộc phát biểu trên phải trả giá — bằng chứng hai mô hình. Xét cá thể $m_9$ và hai mô
+hình khả dĩ:
+
+**Mô hình $M_1$** (thỏa mãn định nghĩa đồ chơi, nhưng "vô lý" về cơ chế):
+
+```
+Δ^{M1} = { m₉, d₁, q₁, q₂, r₁ }
+Mechanism^M1              = { m₉ }
+DerivativeOperation^M1    = { d₁ }
+Quantity^M1               = { q₁, q₂ }
+ReferenceVariable^M1      = { r₁ }
+hasOperation^M1           = { (m₉, d₁) }
+hasInput^M1               = { (m₉, q₁) }
+hasReferenceVariable^M1   = { (m₉, r₁) }
+```
+
+Kiểm tra: $m_9 \in \mathit{Mechanism}^{M_1}$, có liên kết hasOperation đến một
+DerivativeOperation ($d_1$), có hasInput đến một Quantity ($q_1$), có hasReferenceVariable
+đến một ReferenceVariable ($r_1$). Đủ cả ba vế → theo định nghĩa đồ chơi,
+$m_9 \in \mathit{RateOfChangeMechanism}^{M_1}$. Nhưng $M_1$ **không có bất kỳ**
+DerivativeApplication nào — ba filler $d_1, q_1, r_1$ chỉ đơn thuần cùng hiện diện, không
+bị ràng buộc thành "một ứng dụng đạo hàm" duy nhất. Một cái máy có phép toán đạo hàm, có
+một đại lượng đầu vào, có một biến tham chiếu — mà không có *hoạt động* nào ràng buộc ba
+thứ đó với nhau — bị định nghĩa đồ chơi gọi là RateOfChangeMechanism. Đó là lỗ hổng.
+
+**Mô hình $M_2$** (thỏa mãn định nghĩa chặt):
+
+```
+Δ^{M2} = { m₉, d₁, q₁, r₁, a₁ }
+Mechanism^M2              = { m₉ }
+DerivativeApplication^M2  = { a₁ }
+hasApplication^M2         = { (m₉, a₁) }
+differentiand^M2          = { (a₁, q₁) }
+withRespectTo^M2          = { (a₁, r₁) }
+hasOperation^M2           = { (a₁, d₁), (m₉, d₁) }
+```
+
+Trong $M_2$, $m_9$ có hasApplication đến $a_1 \in \mathit{DerivativeApplication}^{M_2}$ →
+thỏa định nghĩa chặt (bên dưới). Sự khác biệt hai mô hình chính là lỗ hổng được phơi bày:
+định nghĩa ba hạn chế tồn tại độc lập *thừa nhận* $M_1$; định nghĩa có trung gian chặt
+*đòi hỏi* $M_2$ với $a_1$ ràng buộc cả ba tham gia.
+
+**Định nghĩa chặt — DerivativeApplication.** Từ Chương 3 (§3.3.3, n-ary), ứng dụng đạo hàm
+là một thực thể trung gian bốn tham gia. Bây giờ ta viết nó bằng tiên đề DL:
+
+```
+DerivativeApplication ⊑ MechanismApplication
+DerivativeApplication ⊑ ∃differentiand.Quantity
+DerivativeApplication ⊑ ∃withRespectTo.ReferenceVariable
+DerivativeApplication ⊑ ∃hasOperation.DerivativeOperation
+RateOfChangeMechanism ≡ Mechanism ⊓ ∃hasApplication.DerivativeApplication
+```
+
+Từ dòng cuối: bộ suy luận phân loại `rateOfChange_1` là RateOfChangeMechanism khi và chỉ
+khi nó có hasApplication đến một cá thể DerivativeApplication — tức khi tồn tại một
+ứng dụng đạo hàm *duy nhất* ràng buộc differentiand, withRespectTo và hasOperation. Nếu
+ba tham gia chỉ tồn tại "rách rời" như trong $M_1$, bộ suy luận không phân loại. Đây
+chính là lời hứa của §3.3.3 được hoàn tất: cái nút phụ `derivativeApplication_1` mà Chương
+3 dựng bằng tay giờ có ngữ nghĩa hình thức đầy đủ, và Chương 5 sẽ xác nhận nó bằng
+SHACL/rule trên chính đồ thị cơ chế.
+
 > Bài học: **chất lượng định nghĩa lớp phụ thuộc vào chất lượng mô hình khái niệm.** OWL suy
 > luận chính xác theo các tiên đề ta cung cấp; nó không sửa chữa một mô hình khái niệm yếu.
-> Chúng ta sẽ quay lại vấn đề này ở capstone cuối sách.
+> Sự khác biệt giữa $M_1$ và $M_2$ là bài toán mô hình hóa, không phải bài toán logic.
+> Chương 6 sẽ quay lại quản lý hình thức này trong tầng nhận thức — một MechanismApplication
+> được gắn claim, bằng chứng và trạng thái quản trị.
 
 Nhưng ontology **không giải quyết được**:
 
@@ -1097,7 +1338,22 @@ suy luận cao hơn. Chọn profile phù hợp với tác vụ, không phải ng
    đây là mâu thuẫn? Kết nối câu trả lời với Chương 3.
 
 5. (★★★) Một ontology có thể nhất quán trong khi chứa một lớp không thỏa được không? Hãy
-   xây dựng một ví dụ.
+   xây dựng một ví dụ. (Gợi ý: hãy xem ví dụ `ElementaryMechanism` ở §4.9 — ontology vẫn nhất
+   quán cho đến khi có ai khẳng định `x : ElementaryMechanism`.)
+
+6. (★★) Ontology chứa `RateOfChangeMechanism ⊑ ∃hasApplication.DerivativeApplication` và
+   cá thể `rateOfChange_1 : RateOfChangeMechanism`, nhưng dữ liệu (ABox) không chứa triple
+   `hasApplication` nào cho `rateOfChange_1`. Ontology có không nhất quán không? Bộ suy luận
+   có thể suy diễn gì về sự tồn tại của ứng dụng đạo hàm?
+
+7. (★★★) `hasInput` được khai báo Asymmetric (§4.7). Ontology có `rateOfChange_1 hasInput
+   position_1`. Bộ suy luận có thể suy diễn `position_1 hasInput rateOfChange_1` không?
+   Điều gì xảy ra nếu một bộ dữ liệu khác (từ nguồn thứ hai, §3.3.2) ghi `position_1
+   hasInput rateOfChange_1`?
+
+8. (★★★) Bạn cần suy luận phân loại trên TBox cơ chế (hàng trăm lớp) và muốn đảm bảo thời
+   gian đa thức. Dựa vào §4.12, bạn phải từ bỏ những tính chất nào của ontology hiện tại?
+   Nếu thay vào đó bạn chỉ cần truy vấn ABox lớn bằng SQL, profile nào phù hợp hơn?
 
 ## 4.16 Chúng ta đã biết gì
 
@@ -1113,8 +1369,12 @@ suy luận cao hơn. Chọn profile phù hợp với tác vụ, không phải ng
 - Hạn chế phổ quát không khẳng định sự tồn tại của liên kết.
 - OWL dùng giả định thế giới mở: thiếu ≠ sai.
 - Cardinality OWL là ngữ nghĩa logic, không phải form validation.
+- Property characteristics (đối xứng, bắc cầu, hàm, phản xạ, bất đối xứng, chuỗi thuộc tính)
+  là những ràng buộc lên quan hệ, có hiệu lực trong *mọi* mô hình.
 - Tính nhất quán, thỏa được, và suy diễn là ba câu hỏi khác nhau.
 - TBox/ABox/RBox là phân loại tinh thần, không phải yêu cầu vật lý.
+- OWL 2 EL / QL / RL là những tập con đánh đổi biểu đạt lấy hiệu suất; ontology cơ chế có
+  thể được phân loại vào từng profile (§4.12).
 
 ## 4.17 Chúng ta chưa làm được gì
 
@@ -1129,6 +1389,34 @@ nào**. Nhưng chúng ta chưa trả lời:
 - Làm sao sửa chữa dữ liệu không hợp lệ?
 
 Những câu hỏi này mở ra **Chương 5 — Suy diễn, Quy tắc và Xác nhận**.
+
+## 4.18 Mechanism Knowledge System — Năng lực đạt được
+
+**TRƯỚC CHƯƠNG NÀY** — hệ thống có schema RDFS (Chương 3) nhưng schema chỉ là danh sách
+tuyên bố cú pháp: không có ngữ nghĩa hình thức, không có cách nào biết một phát biểu có *bắt
+buộc* phải đúng hay chỉ *có thể* đúng, không có khái niệm ontology nhất quán hay không nhất
+quán.
+
+**SAU CHƯƠNG NÀY** — hệ thống có một ontology mô tả chính thức miền cơ chế: lớp
+`RateOfChangeMechanism` được định nghĩa cần-và-đủ bằng tồn tại một `DerivativeApplication`
+(§4.13), `DerivativeApplication` được ràng buộc bởi các existential lên `Quantity`,
+`ReferenceVariable`, `DerivativeOperation`; quan hệ `requires` bất đối xứng chặn vòng tròn
+phụ thuộc (§4.7). Người thiết kế hệ thống biết câu hỏi "ontology có nhất quán không", "lớp
+nào thỏa được" (§4.9), biết OWA khiến "thiếu triple ≠ sai" (§4.8), và biết ontology cơ chế
+thuộc profile nào để chọn reasoner (§4.12).
+
+**VÍ DỤ RATE_OF_CHANGE CỤ THỂ** — ontology phân loại tự động
+`rateOfChange_1 : RateOfChangeMechanism` từ việc nó có `hasApplication` trỏ tới
+`derivativeApplication_1` (vốn có `differentiand` = `position_1`, `withRespectTo` = `time_1`).
+Ngược lại, phát hiện lỗi mô hình hóa: nếu ai đó khẳng định `rateOfChange_1` vừa là
+RateOfChangeMechanism vừa không có ứng dụng đạo hàm nào, ontology trở nên **không nhất
+quán** và bộ suy luận báo lỗi (§4.9). Chứng minh hai mô hình (§4.13) cho thấy định nghĩa
+"đồ chơi" không đủ chặt: nó có thể được thỏa mãn với các filler không liên quan.
+
+**VẪN CHƯA GIẢI QUYẾT** — ontology là *tuyên bố*; còn câu hỏi *tính toán* các hệ quả bằng
+thuật toán nào, phân biệt suy diễn (inference) với xác nhận (validation), kiểm tra dữ liệu
+tuân thủ ràng buộc ra sao — vẫn chưa có lời giải. Chương 5 mở ra nấc tiếp theo: *suy diễn,
+quy tắc và xác nhận*.
 
 ## Thuật ngữ đã gặp trong chương này
 
@@ -1145,6 +1433,10 @@ Những câu hỏi này mở ra **Chương 5 — Suy diễn, Quy tắc và Xác 
 | Class Expression (biểu thức lớp) | Tổ hợp lớp: giao, hợp, phủ định, hạn chế | §4.6 |
 | Existential Restriction (hạn chế tồn tại) | ∃R.C: có ít nhất một R-liên kết đến C | §4.6 |
 | Universal Restriction (hạn chế phổ quát) | ∀R.C: mọi R-liên kết đều đến C | §4.6 |
+| Reflexive / Irreflexive | Mọi phần tử tự liên kết / không phần tử nào tự liên kết | §4.7 |
+| Asymmetric (bất đối xứng) | (x,y) ∈ R^I ⇒ (y,x) ∉ R^I | §4.7 |
+| Property Chain (chuỗi thuộc tính) | R ∘ S ⊑ T: đi qua hai bước rồi suy ra một bước | §4.7 |
+| Class Extension (phần mở rộng lớp) | C^I: tập các phần tử thuộc lớp C trong diễn giải | §4.3 |
 | Necessary Condition (điều kiện cần) | A ⊑ B: B cần cho A | §4.5 |
 | Sufficient Condition (điều kiện đủ) | A ⊑ B: A đủ cho B | §4.5 |
 | Necessary & Sufficient (cần và đủ) | A ≡ B: A và B cần và đủ cho nhau | §4.5 |
