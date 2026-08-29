@@ -4,7 +4,7 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-08-29 (TikZ pilot experiment completed)
+Last updated: 2026-08-29 (Chapter 6 drafted)
 
 ## Front matter
 
@@ -24,7 +24,7 @@ Last updated: 2026-08-29 (TikZ pilot experiment completed)
 | 3 — Schema, Identity, and Context | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 4 — Ontologies and Formal Meaning | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 5 — Deduction, Rules, and Validation | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
-| 6 — Claims, Evidence, Provenance, Time, Contradiction | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
+| 6 — Claims, Evidence, Provenance, Time, Contradiction | ✅ | ✅ | 🔲 | 🔲 | ✅ | DRAFTED |
 | 7 — Knowledge Acquisition and Integration | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 | 8 — Inductive Knowledge and Learning from Graphs | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 | 9 — Retrieval, Question Answering, and GraphRAG | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
