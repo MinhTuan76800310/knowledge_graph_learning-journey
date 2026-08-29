@@ -174,6 +174,50 @@ còn gì để thêm.](figures/generated/ch05-forward-fixpoint.pdf)
 > Nếu ở vòng $k$ không có triple mới được thêm, điều gì đảm bảo rằng vòng $k+1$ cũng sẽ
 > không thêm gì? (Gợi ý: tập quy tắc không thay đổi, và đồ thị không thay đổi.)
 
+### Ví dụ trên miền cơ chế — θ, chuỗi quy tắc và điểm bất động
+
+Áp dụng cùng cơ chế lên dữ liệu cơ chế đang chạy. Trong đồ thị gốc có:
+
+```turtle
+ex:rateOfChange_1 a ex:RateOfChangeMechanism .
+ex:RateOfChangeMechanism rdfs:subClassOf ex:ChangeMechanism .
+ex:ChangeMechanism rdfs:subClassOf ex:Mechanism .
+```
+
+Quy tắc RDFS subClassOf có dạng chung:
+
+$$r_{sub}: A \text{ rdfs:subClassOf } B, \; x \text{ rdf:type } A \to x \text{ rdf:type } B$$
+
+**Vòng 0:** $G_0$ chứa ba triple trên.
+
+**Vòng 1:**
+- Áp dụng $r_{sub}$ với phép thế
+  $$\theta_1 = \{ A \mapsto \text{ex:RateOfChangeMechanism}, B \mapsto \text{ex:ChangeMechanism}, x \mapsto \text{ex:rateOfChange}_1 \}$$
+- $\theta_1(\text{body})$ gồm `ex:RateOfChangeMechanism rdfs:subClassOf ex:ChangeMechanism` và `ex:rateOfChange_1 a ex:RateOfChangeMechanism`, cả hai đều $\in G_0$ ✓
+- Thêm $\theta_1(\text{head}) =$ `ex:rateOfChange_1 a ex:ChangeMechanism`
+
+$G_1 = G_0 \cup \{ \text{`ex:rateOfChange_1 a ex:ChangeMechanism`} \}$
+
+**Vòng 2:**
+- Áp dụng $r_{sub}$ với
+  $$\theta_2 = \{ A \mapsto \text{ex:ChangeMechanism}, B \mapsto \text{ex:Mechanism}, x \mapsto \text{ex:rateOfChange}_1 \}$$
+- $\theta_2(\text{body})$ gồm `ex:ChangeMechanism rdfs:subClassOf ex:Mechanism` và `ex:rateOfChange_1 a ex:ChangeMechanism` (vừa suy ra ở vòng 1) ✓
+- Thêm $\theta_2(\text{head}) =$ `ex:rateOfChange_1 a ex:Mechanism`
+
+$G_2 = G_1 \cup \{ \text{`ex:rateOfChange_1 a ex:Mechanism`} \}$
+
+**Vòng 3:** Không còn cặp `(A rdfs:subClassOf B, x : A)` mới nào để áp dụng. $G_3 = G_2$.
+
+**Điểm bất động.** Forward chaining đã vật chất hóa phân loại: từ `ex:rateOfChange_1 a
+ex:RateOfChangeMechanism`, quy tắc suy ra `ex:rateOfChange_1 a ex:ChangeMechanism` rồi
+`ex:rateOfChange_1 a ex:Mechanism`. Đây chính là **classification fixpoint** của cơ chế
+phân cấp lớp trong miền cơ chế.
+
+> ⚠ **Từ phép thế đến ground fact.** Các triple cuối cùng (`ex:rateOfChange_1 a
+> ex:Mechanism`) không còn chứa biến — chúng là **ground fact**. Một **ground triple**
+> (hay ground fact) là một triple trong đó mọi vị trí đều là IRI hoặc literal cụ thể,
+> không còn biến. Quá trình thay thế biến bằng giá trị cụ thể gọi là **grounding**.
+
 ### Đơn điệu (Monotonicity)
 
 Forward chaining hoạt động đúng đắn nhờ tính **đơn điệu** (monotonicity). Một chế độ suy
@@ -297,6 +341,24 @@ $$\text{suy diễn (inference)} \neq \text{xác nhận (validation)}$$
 Việc kiểm tra xem dữ liệu có "khớp" với kỳ vọng hay không là nhiệm vụ của SHACL (§5.5),
 không phải RDFS.
 
+**Ví dụ trên miền cơ chế.** Trong ontology cơ chế:
+
+```turtle
+ex:RateOfChangeMechanism rdfs:subClassOf ex:ChangeMechanism .
+ex:ChangeMechanism rdfs:subClassOf ex:Mechanism .
+```
+
+Nếu dữ liệu ghi `ex:rateOfChange_1 a ex:RateOfChangeMechanism`, bao đóng RDFS sẽ thêm:
+
+```turtle
+ex:rateOfChange_1 a ex:ChangeMechanism .
+ex:rateOfChange_1 a ex:Mechanism .
+```
+
+Không ai cần phải viết tường minh `ex:rateOfChange_1 a ex:Mechanism`; đó là hệ quả logic.
+Nhưng nếu shape yêu cầu mỗi `ex:Mechanism` phải có ít nhất một `ex:hasOperation` mà dữ liệu
+thiếu, SHACL sẽ báo vi phạm — RDFS không quan tâm điều đó.
+
 ### Quy tắc RDFS: Operationalization của ngữ nghĩa model-theoretic
 
 Cần phân biệt rõ hai cấp độ:
@@ -377,6 +439,24 @@ Vật chất hóa trở nên không khả thi khi:
 > ⚠ **Ngộ nhận thường gặp:** "Bộ suy diễn (reasoner) vật chất hóa tất cả hệ quả." Sai.
 > Nhiều reasoner dùng chiến lược lazy (tính theo yêu cầu) hoặc query rewriting. Vật chất
 > hóa chỉ là một lựa chọn triển khai.
+
+**Ví dụ trên miền cơ chế.** Giả sử hệ thống Mechanism-KG phục vụ truy vấn
+`?m a ex:Mechanism`. Dữ liệu gốc chỉ ghi `ex:rateOfChange_1 a ex:RateOfChangeMechanism` và
+`ex:RateOfChangeMechanism rdfs:subClassOf ex:Mechanism`.
+
+- **Vật chất hóa:** Tính closure một lần, lưu `ex:rateOfChange_1 a ex:Mechanism` (và
+tương tự cho `ex:heatTransferRate_2`, `ex:newtonCooling_1`). Từ đó truy vấn trở thành một
+`SELECT` đơn giản. Phù hợp khi taxonomy ổn định và truy vấn `?m a ex:Mechanism` được lặp
+lại liên tục.
+- **Suy diễn tại truy vấn:** Không lưu triple suy ra; mỗi lần truy vấn đều chạy RDFS
+subClassOf reasoning. Phù hợp khi dữ liệu thay đổi thường xuyên (ví dụ các
+`ex:CandidateMechanism` được thêm/xóa liên tục) hoặc khi closure quá lớn so với truy vấn
+thực tế.
+
+Nếu hệ thống vừa có `ex:RateOfChangeMechanism` vừa có `ex:CandidateMechanism` (cũng là
+subClassOf `ex:Mechanism`), closure sẽ chứa tất cả chúng dưới dạng `ex:Mechanism`. Khi một
+candidate bị từ chối và xóa, closure phải được tính lại — đây là chi phí của vật chất hóa
+mà hệ thống cần đánh đổi.
 
 ## 5.5 Forward vs Backward: Hai chiến lược tính toán
 
@@ -561,6 +641,54 @@ là cơ chế xác định. Shape kiểm tra dữ liệu hiện có, không suy 
 > SHACL sẽ nói gì? Nếu dữ liệu có `(Hanoi, capitalOf, "not-a-country")`, báo cáo sẽ nói
 > gì? Hai trường hợp khác nhau như thế nào?
 
+**Shape tuyển lựa trên miền cơ chế.** Trong pipeline Mechanism-KG, mỗi cơ chế mới từ một
+nguồn thứ hai (Chương 3) đi vào dưới dạng `ex:CandidateMechanism` — chưa được chấp nhận, cần
+kiểm tra cấu trúc trước khi xem xét nội dung. Shape sau đây định nghĩa một ứng viên hợp lệ:
+
+```turtle
+ex:CandidateMechanismShape
+    a sh:NodeShape ;
+    sh:targetClass ex:CandidateMechanism ;
+    sh:property [
+        sh:path ex:hasOperation ;
+        sh:minCount 1
+    ] ;
+    sh:property [
+        sh:path ex:hasInput ;
+        sh:minCount 1
+    ] ;
+    sh:property [
+        sh:path ex:hasOutput ;
+        sh:minCount 1
+    ] ;
+    sh:property [
+        sh:path rdfs:label ;
+        sh:datatype xsd:string ;
+        sh:minCount 1
+    ] .
+```
+
+Dữ liệu:
+
+```turtle
+ex:candidateRateOfChange_1 a ex:CandidateMechanism ;
+    rdfs:label "RATE_OF_CHANGE (draft)" ;
+    ex:hasOperation ex:derivativeOperation_1 ;
+    ex:hasInput ex:position_1 .
+```
+
+Lặp lại chuỗi cơ chế 6 bước cho constraint `hasOutput`:
+`sh:targetClass ex:CandidateMechanism` → focus node `ex:candidateRateOfChange_1` →
+`sh:path ex:hasOutput` → **value nodes = ∅** (không có triple `hasOutput` nào) →
+`sh:minCount 1` không thỏa → violation. Ba constraint còn lại (`hasOperation`,
+`hasInput`, `rdfs:label`-datatype) đều thỏa vì dữ liệu có đủ. Kết quả: 1 violation,
+`sh:conforms = false`.
+
+> ⚠ **Shape kiểm tra cấu trúc, không kiểm tra chân lý.** Candidate thiếu `ex:hasOutput` có
+> thể vẫn là một mô tả đúng về mặt thực tế — chỉ là nó chưa đủ cấu trúc để hệ thống tin
+> dùng. Ngược lại, một candidate đủ mọi field vẫn có thể sai về mặt nội dung. Đây chính là
+> ranh giới conformance ≠ truth ở §5.8.
+
 ## 5.7 Validation Report: Cấu trúc giải phẫu
 
 Khi chạy SHACL validation, engine sản xuất một **validation report** [@w3c-shacl, §3.6]:
@@ -596,6 +724,30 @@ Mỗi ValidationResult trả lời các câu hỏi gỡ lỗi:
 > ⚠ **sh:value không phải lúc nào cũng có.** Với `sh:minCount`, violation xảy ra vì *thiếu*
 > value node — không có "giá trị gây lỗi" cụ thể. `sh:value` chỉ xuất hiện khi constraint
 > component definition quy định. Đừng fabricate value khi không có.
+
+**Báo cáo cho candidate cơ chế.** Với vi phạm `ex:hasOutput` ở §5.6, validation report sẽ
+ghi:
+
+```turtle
+[
+    a sh:ValidationReport ;
+    sh:conforms false ;
+    sh:result [
+        a sh:ValidationResult ;
+        sh:focusNode ex:candidateRateOfChange_1 ;
+        sh:resultPath ex:hasOutput ;
+        sh:sourceShape ex:CandidateMechanismShape ;
+        sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+        sh:resultSeverity sh:Violation ;
+        sh:resultMessage "Mỗi CandidateMechanism phải có ít nhất một đầu ra (hasOutput)" ;
+    ]
+] .
+```
+
+Chú ý: `sh:value` **không** xuất hiện trong result này — violation xảy ra vì thiếu value
+node, không phải vì một value cụ thể nào sai. Đọc report phải dựa vào `sh:focusNode` +
+`sh:resultPath` + `sh:sourceConstraintComponent` để biết *nút nào, path nào, constraint nào*
+bị vi phạm.
 
 ## 5.8 Phù hợp ≠ Đúng: Ranh giới của xác nhận
 
@@ -712,6 +864,36 @@ thực tế — không có ô nào bị loại trừ.
 > KHÔNG gây ra violation khi Hanoi là City nhưng không có hasName, trong khi SHACL
 > `sh:minCount 1` trên hasName LẠI gây violation. Sự khác biệt nằm ở đâu?
 
+**Hai trục trên miền cơ chế.** Cùng phân tích cú pháp, nhưng dùng dữ liệu Mechanism-KG.
+
+*Trường hợp A — OWL-inconsistent nhưng SHACL-conformant.* Ontology khai báo
+`ex:ChangeMechanism owl:disjointWith ex:AggregationMechanism`. Dữ liệu ghi:
+
+```
+ex:someMechanism_9 a ex:ChangeMechanism .
+ex:someMechanism_9 a ex:AggregationMechanism .
+ex:someMechanism_9 ex:hasOperation ex:someOperation_1 .
+```
+
+- **OWL:** không nhất quán — một cá thể không thể thuộc hai lớp disjoint (§4.9).
+- **SHACL:** shape chỉ kiểm tra cấu trúc (có `ex:hasOperation`, có label) → **conforms**.
+  SHACL không đọc `owl:disjointWith`, nó không biết hai lớp này xung đột.
+
+*Trường hợp B — OWL-consistent nhưng SHACL-violating.* Dữ liệu chỉ có:
+
+```
+ex:candidateRateOfChange_1 a ex:CandidateMechanism .
+```
+
+- **OWL (OWA):** nhất quán — thiếu `ex:hasOutput` không gây mâu thuẫn (§4.8).
+- **SHACL:** `CandidateMechanismShape` yêu cầu `sh:minCount 1` trên `ex:hasOutput` →
+  **violation**.
+
+Bảng 2×2 vẫn giữ nguyên ý nghĩa: biết tính nhất quán OWL không cho biết kết quả xác nhận
+SHACL, và ngược lại. Hệ thống Mechanism-KG cần cả hai trục: ontology để phát hiện lỗi mô
+hình hóa (disjoint bị vi phạm), shapes để chặn candidate thiếu cấu trúc trước khi đưa vào
+kho tri thức.
+
 ## 5.10 Shapes ≠ Axioms: Phân biệt SHACL và Ontology
 
 Sự phân biệt giữa SHACL và ontology là một trong những ranh giới quan trọng nhất trong
@@ -729,6 +911,18 @@ Cùng từ vựng (`class`, `property`, `datatype`), nhưng ngược hướng:
 
 - `P rdfs:domain C` + `(x, P, y)` → suy ra `x rdf:type C` (thêm thông tin)
 - `sh:property [ sh:path P ; sh:class C ]` + `(x, P, y)` → kiểm tra `y` có phải SHACL instance của C không (kiểm tra thông tin)
+
+**Ba vai trò khác nhau: quy tắc, tiên đề, shape.** Cùng một tri thức miền cơ chế có thể
+được thể hiện theo ba cách với ba ngữ nghĩa khác nhau — đừng trộn lẫn:
+
+| Vai trò | Ví dụ cùng tuyên bố "Mechanism phải có Operation" | Điều gì xảy ra khi dữ liệu thiếu `hasOperation`? |
+|---------|----------------------------------------------------|--------------------------------------------------|
+| **Quy tắc (rule)** | `Mechanism(x) ∧ hasOperation(x, op) → Operation(op)` (Horn rule, §5.2) | Suy ra `Operation(op)` khi có đủ bằng chứng; không phàn nàn gì khi thiếu |
+| **Tiên đề OWL (axiom)** | `Mechanism ⊑ ∃hasOperation.Operation` (§4.13) | Không mâu thuẫn — OWA giả định filler không tên tồn tại |
+| **Shape SHACL (shape)** | `sh:path ex:hasOperation ; sh:minCount 1` (§5.6) | Báo **violation** — dữ liệu được cung cấp thiếu cấu trúc kỳ vọng |
+
+Quy tắc **thêm** tri thức, tiên đề **ràng buộc ngữ nghĩa model-theoretic**, shape **kiểm tra
+cấu trúc dữ liệu cụ thể**. Việc phân biệt ai làm gì quyết định thiết kế đúng của hệ thống.
 
 ### OWL Existential Restriction vs SHACL minCount
 
@@ -861,6 +1055,20 @@ Apply repair → Revalidate
 Đây là cầu nối trực tiếp đến Chương 6: khi nào dữ liệu trở thành tri thức đáng tin? Ai có
 thẩm quyền quyết định repair? Bằng chứng nào hỗ trợ?
 
+**Ví dụ trên miền cơ chế.** Candidate `ex:candidateRateOfChange_1` thiếu `ex:hasOutput`
+(§5.6). Các candidate repairs:
+
+| Repair | Hành động | Hệ quả | Cơ sở quyết định |
+|--------|-----------|--------|------------------|
+| A | Thêm `ex:hasOutput ex:velocity_1` | Bổ sung thông tin — đúng nếu candidate thực sự tính velocity | Nguồn thứ hai (textbook B) xác nhận output; bằng chứng mạnh |
+| B | Thêm `ex:hasOutput ex:unknownOutput_1` | Bổ sung placeholder — làm SHACL xanh nhưng không có giá trị tri thức | Không có bằng chứng; chỉ che vi phạm |
+| C | Xóa `ex:candidateRateOfChange_1 a ex:CandidateMechanism` | Loại candidate khỏi pipeline — mất thông tin từ nguồn thứ hai | Nguồn không đáng tin; quyết định governance |
+| D | Sửa shape: `hasOutput` sh:minCount 0 | Shape dễ tính hơn — nhưng chấp nhận candidate không có output | Yêu cầu nghiệp vụ cho phép candidate chưa hoàn chỉnh |
+
+Chỉ (A) là repair có ý nghĩa tri thức — nó dựa trên bằng chứng từ nguồn thứ hai, không chỉ
+"làm SHACL xanh" như (B). (C) từ chối dữ liệu, (D) thay đổi shape — đều hợp lệ trong các
+ngữ cảnh khác nhau. Quyết định thuộc về domain governance, không phải SHACL engine.
+
 ## 5.13 Tính đúng đắn và Tính đầy đủ
 
 Khi đánh giá một hệ thống suy diễn, hai tính chất quan trọng nhất là **soundness** (tính
@@ -969,6 +1177,27 @@ Các regime IRI chuẩn:
 - OWL Direct: `http://www.w3.org/ns/entailment/OWL-Direct`
 - OWL RDF-Based: `http://www.w3.org/ns/entailment/OWL-RDF-Based`
 
+**Ví dụ so sánh trên miền cơ chế.** Cùng một truy vấn, hai chế độ suy diễn, hai kết quả khác
+nhau:
+
+```sparql
+PREFIX ex: <http://example.org/kgbook/mks#>
+SELECT ?m WHERE { ?m a ex:Mechanism }
+```
+
+Dữ liệu gốc chứa `ex:rateOfChange_1 a ex:RateOfChangeMechanism` và
+`ex:RateOfChangeMechanism rdfs:subClassOf ex:ChangeMechanism` và
+`ex:ChangeMechanism rdfs:subClassOf ex:Mechanism`.
+
+| Regime | Kết quả | Giải thích |
+|--------|---------|------------|
+| **Simple** | ∅ (rỗng) | Chỉ khớp triple `?m a ex:Mechanism` tường minh — không có ai được gõ trực tiếp là `ex:Mechanism` |
+| **RDFS** | `rateOfChange_1`, `heatTransferRate_2`, `newtonCooling_1` | RDFS subClassOf suy diễn từ RateOfChangeMechanism → ChangeMechanism → Mechanism |
+
+Đây là minh họa thực tế cho thấy: cùng một câu hỏi SPARQL, lựa chọn entailment regime quyết
+định kết quả. Nếu không xác định regime, developer có thể nhận được ∅ và nghĩ "không có cơ
+chế nào trong đồ thị" — trong khi thực tế có 3 cơ chế, chỉ là chưa kích hoạt RDFS reasoning.
+
 > ⚠ **Không nói:** "SPARQL engines thường mặc định dùng X." Hành vi mặc định là tùy triển
 > khai, không phải chuẩn. Luôn kiểm tra Service Description của endpoint cụ thể.
 
@@ -1055,19 +1284,26 @@ các hệ thống. RIF Core Dialect định nghĩa definite Horn rules không c�
 
 ## 5.18 Cầu nối đến Mechanism KG
 
-Trong capstone project (Chương 10), chúng ta sẽ xây dựng hệ thống tri thức về mechanisms.
-Chương 5 cung cấp hai công cụ then chốt:
+Chương này đã chạy toàn bộ máy móc suy diễn và xác nhận trên dữ liệu Mechanism-KG đang
+xây dựng. Bốn ví dụ làm việc đầy đủ:
 
-1. **Suy diễn:** Từ các mechanism đã biết, suy ra các relationship mới (ví dụ: nếu mechanism
-   A requires mechanism B, và B requires C, thì A transitively requires C). Forward chaining
-   với quy tắc transitive property là ví dụ đơn giản nhất.
+1. **Suy diễn:** Forward chaining với quy tắc RDFS subClassOf trên dữ liệu cơ chế —
+   `ex:rateOfChange_1 a ex:RateOfChangeMechanism` → `a ex:ChangeMechanism` → `a
+   ex:Mechanism`, với phép thế $\theta$ và điểm bất động (§5.2). Quy tắc transitive cho
+   `ex:requires` (nếu A requires B và B requires C thì A requires C) là biến thể cùng cơ chế.
 
-2. **Xác nhận:** Kiểm tra dữ liệu mechanism có tuân thủ ontology đã định nghĩa không. Ví
-   dụ: mỗi Mechanism phải có ít nhất một MechanismOperation; mỗi Condition phải liên kết
-   với ít nhất một Mechanism. SHACL shapes là công cụ phù hợp.
+2. **Xác nhận:** Shape `CandidateMechanismShape` kiểm tra cấu trúc tối thiểu của một ứng
+   viên cơ chế (`hasOperation`, `hasInput`, `hasOutput`, `rdfs:label`) và tạo validation
+   report tương ứng (§5.6, §5.7). Mỗi Mechanism phải có ít nhất một `ex:Operation`; mỗi
+   `ex:Condition` phải liên kết với ít nhất một Mechanism — đều là các shape cùng dạng.
 
-3. **Repair governance:** Khi SHACL báo vi phạm, quyết định repair thuộc về domain governance,
-   không phải engine. Cần policy rõ ràng về ai có thẩm quyền sửa, dựa trên bằng chứng nào.
+3. **Hai trục độc lập:** Ví dụ 2×2 consistency-vs-validation trên dữ liệu cơ chế (ontology
+   disjoint bị vi phạm nhưng SHACL vẫn conformant; candidate thiếu output thì OWL-consistent
+   nhưng SHACL-violating) (§5.9).
+
+4. **Repair governance:** Khi SHACL báo candidate thiếu `ex:hasOutput`, các candidate repairs
+   (thêm từ bằng chứng nguồn, thêm placeholder, loại bỏ, thay đổi shape) có hệ quả tri thức
+   khác nhau; quyết định thuộc về domain governance, không phải engine (§5.12).
 
 > ⚠ **Lưu ý thiết kế:** Khi xây dựng mechanism ontology, đừng cố gắng biểu diễn mọi thứ
 > bằng OWL axioms. Một số ràng buộc (số lượng tối thiểu, kiểu dữ liệu, pattern) phù hợp
@@ -1149,8 +1385,11 @@ luận cũ. Thêm điều kiện vào body làm quy tắc khó khớp hơn, có 
    thế nào và tại sao?
 
 3. ★★ Thiết kế bộ SHACL shapes cho Mechanism ontology: mỗi Mechanism phải có ít nhất một
-   Definition, mỗi MechanismOperation phải liên kết với đúng một Mechanism, và mỗi
-   Condition phải có description kiểu xsd:string. Viết shapes bằng Turtle.
+   `ex:Operation`, mỗi `ex:Operation` phải liên kết với đúng một Mechanism (qua
+   `ex:hasOperation`), và mỗi `ex:Condition` phải có description kiểu xsd:string. Viết
+   shapes bằng Turtle. Kiểm tra shapes của bạn trên `ex:candidateRateOfChange_1` ở §5.6 —
+   candidate có pass shape `ex:Operation` không? (Gợi ý: xem `ex:hasOperation
+   ex:derivativeOperation_1` trong dữ liệu.)
 
 4. ★★★ So sánh forward chaining trên RDFS và forward chaining trên OWL RL về: (a) tập quy
    tắc, (b) khả năng biểu diễn, (c) tính soundness và completeness, (d) chi phí tính toán.
@@ -1195,3 +1434,68 @@ Chương này đã dạy cơ chế suy diễn và xác nhận, nhưng chưa gi�
 
 Chương tiếp theo sẽ bắt đầu giải quyết câu hỏi về tuyên bố, bằng chứng, nguồn gốc và mâu
 thuẫn — lớp Context trong Mental Model 1.
+
+## 5.23 Mechanism Knowledge System — Năng lực đạt được
+
+**TRƯỚC CHƯƠNG NÀY** — hệ thống có ontology OWL (Chương 4) với các khái niệm về diễn giải,
+mô hình, suy diễn, OWA, nhất quán. Nhưng ontology là *tuyên bố tĩnh*: không có cơ chế tính
+toán hệ quả, không có cách kiểm tra dữ liệu có tuân thủ kỳ vọng hay không, không có chiến
+lược sửa lỗi.
+
+**SAU CHƯƠNG NÀY** — hệ thống có hai pipeline hoàn chỉnh:
+- **Suy diễn:** Forward chaining với phép thế $\theta$ và điểm bất động trên dữ liệu cơ chế
+  (§5.2). RDFS rules áp dụng lên taxonomy cơ chế (§5.3). Vật chất hóa là chiến lược triển
+  khai, không phải bản thân suy diễn (§5.4).
+- **Xác nhận:** SHACL shapes kiểm tra `CandidateMechanism` (§5.6), validation report cấu
+  trúc hóa (§5.7). Phân biệt được conformance ≠ truth, consistency ≠ validation (§5.9).
+  Shapes ≠ axioms ≠ rules (§5.10).
+- **Sửa chữa:** Graph repair là bài toán quyết định, dựa trên domain governance (§5.12).
+- **Đánh giá:** Soundness và completeness chỉ có nghĩa trong phạm vi language + regime +
+  task (§5.13). Cùng một truy vấn SPARQL trên dữ liệu cơ chế cho kết quả khác nhau dưới
+  Simple và RDFS regime (§5.14).
+
+**VÍ DỤ RATE_OF_CHANGE CỤ THỂ** — forward chaining suy ra `ex:rateOfChange_1 a
+ex:Mechanism` từ `a ex:RateOfChangeMechanism` qua hai bước subClassOf (§5.2). SHACL shape
+kiểm tra `ex:candidateRateOfChange_1` thiếu `ex:hasOutput` và báo vi phạm (§5.6, §5.7).
+Hai trục 2×2 trên dữ liệu cơ chế: ontology disjoint inconsistent nhưng SHACL conformant
+(§5.9). SPARQL Simple regime trả về ∅, RDFS regime trả về 3 mechanisms (§5.14).
+
+**VẪN CHƯA GIẢI QUYẾT** — suy diễn và xác nhận giả định dữ liệu đầu vào đã sẵn sàng. Câu
+hỏi "tri thức đến từ đâu?", "khi hai nguồn mâu thuẫn thì sao?", "ai có thẩm quyền quyết
+định repair?" vẫn chưa có lời giải. Chương 6 mở ra nấc tiếp theo: *tuyên bố, bằng chứng,
+nguồn gốc và thời gian*.
+
+## Thuật ngữ đã gặp trong chương này
+
+| Thuật ngữ | Nghĩa ngắn | Học chi tiết |
+|-----------|-----------|--------------|
+| Forward Chaining (suy diễn tiến) | Áp dụng quy tắc lặp cho đến fixpoint | §5.2 |
+| Phép thế $\theta$ (Substitution) | Ánh xạ biến sang giá trị cụ thể; ground fact là kết quả | §5.2 |
+| Grounding | Làm cho quy tắc trừu tượng thành cụ thể bằng phép thế | §5.2 |
+| Fixpoint (điểm bất động) | $G_{n+1} = G_n$: không còn triple mới được sinh ra | §5.2 |
+| Bao đóng (Closure) | Đồ thị chứa mọi hệ quả đã tính | §5.2 |
+| Đơn điệu (Monotonicity) | Thêm tri thức không làm mất kết luận cũ | §5.2 |
+| RDFS Entailment Rules | Quy tắc suy diễn thêm thông tin, không kiểm tra | §5.3 |
+| Vật chất hóa (Materialization) | Chiến lược tính closure trước, lưu kết quả | §5.4 |
+| Suy diễn tại truy vấn (Query-time) | Chiến lược tính toán lazy khi có truy vấn | §5.4 |
+| Backward Chaining (suy diễn lùi) | Bắt đầu từ câu hỏi, tìm chứng minh | §5.5 |
+| SHACL Shape | Mô tả điều kiện kiểm tra dữ liệu | §5.6 |
+| Focus Node / Value Node | Nút đang đánh giá / nút đích qua path | §5.6 |
+| Validation Report | Báo cáo kết quả xác nhận (conforms/vi phạm) | §5.7 |
+| Conformance (phù hợp) | Dữ liệu khớp shapes ≠ dữ liệu đúng | §5.8 |
+| Consistency (nhất quán) | Tồn tại mô hình OWL ≠ SHACL conformant | §5.9 |
+| Soundness (tính đúng đắn) | Mọi kết quả suy diễn đều đúng ngữ nghĩa | §5.13 |
+| Completeness (tính đầy đủ) | Mọi hệ quả ngữ nghĩa đều được suy diễn | §5.13 |
+| Effective Validation Graph | Đồ thị thực sự được validator nhìn thấy | §5.11 |
+| Entailment Regime (chế độ suy diễn) | Xác định mức độ suy diễn khi truy vấn | §5.14 |
+| Graph Repair | Quyết định sửa dữ liệu hay sửa shape dựa trên governance | §5.12 |
+| Ground Triple (fact) | Triple không còn biến, sẵn sàng trong đồ thị | §5.2 |
+
+## Đọc thêm
+
+- SHACL W3C Recommendation [@w3c-shacl] — định nghĩa đầy đủ shapes và validation.
+- SPARQL 1.1 Entailment Regimes [@w3c-sparql11-entailment] — chế độ suy diễn trong SPARQL.
+- RDF 1.1 Semantics [@w3c-rdf11-mt] — ngữ nghĩa model-theoretic của RDFS.
+- Hogan et al., *Knowledge Graphs*, Chapter 7: Inductive Knowledge [@hogan-knowledge-graphs] — suy diễn quy nạp và xác suất.
+- OWL 2 RL [@w3c-owl2-profiles] — OWL RL profile và cơ chế forward chaining.
+- OWL 2 Direct Semantics [@w3c-owl2-direct-semantics] — ngữ nghĩa OWL 2 cho soundness/completeness.
