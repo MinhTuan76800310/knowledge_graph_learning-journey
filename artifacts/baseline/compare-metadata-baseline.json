@@ -1,0 +1,19 @@
+{
+  "commit": "103432b",
+  "tag": "book-preview-v0.4-baseline-pre-tikz",
+  "date": "2026-08-29",
+  "pdf_path": "artifacts/baseline/knowledge-graph-book-baseline.pdf",
+  "total_pages": 97,
+  "ch4_page_range": "37-68",
+  "ch5_page_range": "69-97",
+  "formal_diagrams_ch4": 0,
+  "formal_diagrams_ch5": 0,
+  "mermaid_blocks_ch4": 0,
+  "mermaid_blocks_ch5": 0,
+  "tables_ch4": 8,
+  "tables_ch5": 12,
+  "code_blocks_ch4": 24,
+  "code_blocks_ch5": 18,
+  "renderer": "text-only (no figure renderer used)",
+  "notes": "All visual concepts conveyed via text, inline math, code blocks, and tables. No Mermaid or TikZ figures present."
+}

@@ -23,6 +23,9 @@ mkdir -p "$DIST"
 echo "build_book: pre-rendering Mermaid figures"
 "$ROOT/scripts/render_mermaid.sh"
 
+echo "build_book: pre-rendering TikZ figures"
+"$ROOT/scripts/render_tikz.sh"
+
 # Ordered source list from the manifest.
 mapfile -t SOURCES < <(sed -n '/^sources:/,/^[^ -]/p' "$ROOT/book/book-manifest.yaml" \
   | sed -n 's/^  - \(.*\.md\)$/\1/p')

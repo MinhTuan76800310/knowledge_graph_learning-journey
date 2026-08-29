@@ -163,6 +163,13 @@ $G_2 = G_1 \cup \{ \text{Place}(\text{Hanoi}) \}$
 
 $$G_\infty = \{ \text{CapitalCity}(\text{Hanoi}), \; \text{City}(\text{Hanoi}), \; \text{Place}(\text{Hanoi}) \}$$
 
+Hình bên dưới tóm tắt quá trình forward chaining qua ba vòng. Mỗi mũi tên biểu thị một vòng
+áp dụng quy tắc với phép thế $\theta$ cụ thể. Vòng 3 không sinh triple mới → fixpoint.
+
+![Forward chaining: $G_0 \to G_1 \to G_2 \to G_3 = G_2$ (fixpoint). Mỗi vòng áp dụng quy
+tắc với phép thế $\theta = \{x \mapsto \text{Hanoi}\}$, thêm triple mới cho đến khi không
+còn gì để thêm.](figures/generated/ch05-forward-fixpoint.pdf)
+
 > 🖊 **Tự kiểm tra:** Tại sao "không còn triple mới" nghĩa là forward chaining đã ổn định?
 > Nếu ở vòng $k$ không có triple mới được thêm, điều gì đảm bảo rằng vòng $k+1$ cũng sẽ
 > không thêm gì? (Gợi ý: tập quy tắc không thay đổi, và đồ thị không thay đổi.)
@@ -503,6 +510,12 @@ ex:Hanoi  ex:name  "Hà Nội" .
 Lặp lại bước 3-6: path `ex:name` bây giờ reach được 1 value node (`"Hà Nội"`). `minCount 1`
 → constraint thỏa mãn. Không có violation cho constraint này.
 
+Hình bên dưới trực quan hóa toàn bộ chuỗi cơ chế SHACL từ target đến result. Đọc từ trên
+xuống: mỗi bước là một phép biến đổi xác định, không phải suy diễn.
+
+![Cơ chế SHACL: Target → Focus Node → Path → Value Nodes → Constraint → Result. Mỗi bước
+là cơ chế xác định. Shape kiểm tra dữ liệu hiện có, không suy ra tri thức mới.](figures/generated/ch05-shacl-mechanism.pdf)
+
 > ⚠ **sh:targetClass KHÔNG phải exact triple grep.** Nó sử dụng SHACL instance semantics,
 > bao gồm subclass reasoning qua `rdfs:subClassOf*`. Tương tự, `sh:class C` kiểm tra xem
 > value node có phải SHACL instance của C không (qua subclass chain), không chỉ kiểm tra
@@ -680,6 +693,12 @@ name" (vi phạm). Cả hai đều đúng — chúng trả lời các câu hỏi
 
 ### Bảng tóm tắt
 
+Hình bên dưới minh họa bốn tổ hợp có thể của hai trục độc lập. Mỗi ô đều có thể xảy ra trong
+thực tế — không có ô nào bị loại trừ.
+
+![Nhất quán (OWL) × Xác nhận (SHACL): bốn tổ hợp đều có thể xảy ra. Hai trục hoàn toàn
+độc lập — biết một không suy ra cái kia.](figures/generated/ch05-consistency-vs-validation.pdf)
+
 | | OWL Consistent | OWL Inconsistent |
 |---|---|---|
 | **SHACL conforms** | ✅ Bình thường | ⚠️ Có thể xảy ra (shapes không cover axiom) |
@@ -807,6 +826,14 @@ quyết định repair nào là đúng.
 
 ### Pipeline repair
 
+Hình bên dưới minh họa pipeline repair như một bài toán quyết định: từ violation đến nhiều
+candidate repairs, qua đánh giá ngữ nghĩa/tri thức, rồi chọn repair phù hợp. Lưu ý thông điệp
+phía dưới: passes validation ≠ becomes true.
+
+![Pipeline Graph Repair: Violation → Candidate Repairs (ADD/DELETE/SHAPE CHANGE/REJECT) →
+Evaluate semantic + epistemic consequences → Select repair → Apply + Revalidate. Passes
+validation ≠ becomes true.](figures/generated/ch05-repair-pipeline.pdf)
+
 ```
 Violation
     ↓
@@ -859,6 +886,14 @@ Thuật toán không bỏ sót kết quả (false negative). Mọi entailment h�
 **Sound + Complete:** $A = E$
 
 Thuật toán trả về chính xác tập hệ quả ngữ nghĩa — không thừa, không thiếu.
+
+Hình bên dưới minh họa ba trường hợp bằng sơ đồ tập hợp. Sound nhưng incomplete: $A$ nằm
+trong $E$ nhưng không phủ hết. Unsound: $A$ tràn ra ngoài $E$ (false positive). Sound +
+complete: $A = E$ hoàn hảo.
+
+![Soundness và Completeness như quan hệ tập hợp. Trái: sound nhưng incomplete ($A \subseteq
+E$, bỏ sót). Giữa: unsound ($A \not\subseteq E$, có false positive). Phải: sound + complete
+($A = E$, chính xác).](figures/generated/ch05-soundness-completeness.pdf)
 
 ### Ba thành phần bắt buộc
 

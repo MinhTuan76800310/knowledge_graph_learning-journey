@@ -1,0 +1,28 @@
+{
+  "commit": "pending",
+  "date": "2026-08-29",
+  "pdf_path": "artifacts/tikz-pilot/knowledge-graph-book-tikz-pilot.pdf",
+  "total_pages": 100,
+  "ch4_page_range": "45-72",
+  "ch5_page_range": "65-100",
+  "formal_diagrams_ch4": 3,
+  "formal_diagrams_ch5": 5,
+  "mermaid_blocks_ch4": 0,
+  "mermaid_blocks_ch5": 0,
+  "tables_ch4": 8,
+  "tables_ch5": 12,
+  "code_blocks_ch4": 24,
+  "code_blocks_ch5": 18,
+  "renderer": "TikZ (standalone .tex → lualatex → vector PDF)",
+  "tikz_figures": [
+    {"id": "ch04-interpretation-domain", "page": 48, "section": "§4.3"},
+    {"id": "ch04-model-entailment", "page": 50, "section": "§4.3"},
+    {"id": "ch04-exists-vs-forall", "page": 54, "section": "§4.6"},
+    {"id": "ch05-forward-fixpoint", "page": 68, "section": "§5.2"},
+    {"id": "ch05-shacl-mechanism", "page": 74, "section": "§5.6"},
+    {"id": "ch05-consistency-vs-validation", "page": 77, "section": "§5.9"},
+    {"id": "ch05-repair-pipeline", "page": 80, "section": "§5.12"},
+    {"id": "ch05-soundness-completeness", "page": 81, "section": "§5.13"}
+  ],
+  "notes": "8 TikZ figures added to Ch4 (3) and Ch5 (5). Total pages increased from 97 to 100 (+3 pages for figures)."
+}

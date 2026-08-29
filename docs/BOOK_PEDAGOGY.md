@@ -200,6 +200,46 @@ This review is distinct from technical correctness review. A chapter can be tech
 
 ---
 
+## 15. Figure Renderer Policy
+
+Formal diagrams must teach a mechanism, not decorate a page. Every figure requires a caption, a meaningful filename, and at least one introductory sentence explaining how to read it.
+
+### Renderer taxonomy
+
+| Diagram class | Preferred renderer | Rationale |
+|---------------|-------------------|-----------|
+| Conceptual flow / process diagrams | Mermaid | Fast iteration, readable in Markdown preview |
+| Formal semantic / logic / set / inference diagrams | TikZ | Precise math alignment, vector output, grayscale-safe |
+| Graph topology diagrams | Graphviz or equivalent | Automatic layout for node-edge structures |
+| Quantitative plots | Plotting tool (matplotlib, etc.) | Data-driven; TikZ only if clearly justified |
+| Code / data examples | Native code blocks | Not diagrams |
+
+### When TikZ is preferred
+
+TikZ is preferred when the figure must align tightly with:
+- Mathematical notation ($\Delta^I$, $\subseteq$, $\theta$, $\models$)
+- Set semantics (Venn/Euler relationships)
+- Logic structure (entailment, model relationships)
+- Inference rounds (forward chaining steps with substitutions)
+- Validation mechanics (SHACL operational flow)
+
+### Figure quality requirements
+
+All figures (regardless of renderer) must be:
+- Grayscale-safe (no color-only distinctions)
+- A4-readable at normal reading size
+- Math symbols rendered correctly (matching manuscript notation)
+- Labels not too dense, no overlapping text
+- No clipped arrows or nodes
+- Line widths readable in print (≥0.4pt for main lines)
+- Terminology consistent with the manuscript
+
+### Architecture
+
+TikZ sources live in `book/figures/tikz/` as standalone `.tex` files that compile independently. Generated PDFs go to `book/figures/generated/`. Manuscripts include generated PDFs via `![caption](../figures/generated/name.pdf)`. The render script `scripts/render_tikz.sh` compiles all sources; the book build calls it automatically.
+
+---
+
 ## Relationship to Other Documents
 
 - **CLAUDE.md**: Project conventions (language, code style, build commands). This document governs pedagogy.

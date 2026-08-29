@@ -194,6 +194,14 @@ capitalOf^I = {(h, v), (p, f)}
 tập các cặp {(h,v), (p,f)}." Nghĩa là: trong diễn giải này, h có quan hệ capitalOf với v,
 và p có quan hệ capitalOf với f.
 
+Hình bên dưới minh họa toàn bộ cấu trúc của một diễn giải: miền $\Delta^I$, các lớp như tập con,
+các cá thể như phần tử cụ thể, và thuộc tính như quan hệ giữa các phần tử. Hãy đọc hình từ
+trái sang phải: tên ký hiệu ở ngoài, phần tử miền ở trong, mũi tên biểu thị quan hệ.
+
+![Diễn giải $I = (\Delta^I, {\cdot}^I)$: miền diễn giải gồm bốn phần tử $\{h,v,p,f\}$;
+$\mathit{City}^I = \{h,p\}$ và $\mathit{Country}^I = \{v,f\}$ là tập con của
+$\mathit{Place}^I = \Delta^I$; mũi tên biểu thị quan hệ $\mathit{capitalOf}^I$.](figures/generated/ch04-interpretation-domain.pdf)
+
 ### Thuộc tính dữ liệu và miền dữ liệu
 
 OWL phân biệt hai loại thuộc tính. **Thuộc tính đối tượng** (object property) nối cá thể với
@@ -321,6 +329,15 @@ toán học của các mô hình.
 > biểu có điều kiện, không phải khẳng định tuyệt đối.
 
 ### Tóm tắt cơ chế
+
+Hình bên dưới trực quan hóa mối quan hệ giữa diễn giải, mô hình và suy diễn. Tập lớn nhất
+là tất cả các diễn giải có thể; tập con xanh là các mô hình của $O$ (thỏa mãn mọi tiên đề);
+$\alpha$ đúng trong mọi mô hình đó nghĩa là $O \models \alpha$. Các diễn giải ngoài tập mô
+hình (như $J_1$, $J_2$) vi phạm ít nhất một tiên đề.
+
+![Mô hình và suy diễn: $\mathrm{Models}(O)$ là tập con của tất cả diễn giải có thể;
+$O \models \alpha$ khi $\alpha$ đúng trong mọi mô hình của $O$. Các diễn giải $J_1$, $J_2$
+không phải mô hình vì vi phạm tiên đề.](figures/generated/ch04-model-entailment.pdf)
 
 ```
 Từ vựng + Tiên đề
@@ -580,6 +597,16 @@ Ngữ nghĩa:
 >   sĩ.
 >
 > Đây là lý do hạn chế phổ quát không thể dùng như một ràng buộc "phải có ít nhất một giá trị".
+
+Hình bên dưới so sánh trực quan hai loại hạn chế. Bên trái: $\exists R.C$ yêu cầu tồn tại ít
+nhất một $R$-liên kết đến phần tử thuộc $C$. Bên phải: $\forall R.C$ yêu cầu *mọi* $R$-liên
+kết đều dẫn đến $C$ — nếu không có liên kết nào, điều kiện đúng trống rỗng. Lưu ý phần cảnh
+báo phía dưới về sự khác biệt giữa vắng mặt trong dữ liệu và vắng mặt trong diễn giải.
+
+![So sánh $\exists R.C$ (hạn chế tồn tại) và $\forall R.C$ (hạn chế phổ quát). Trái: $x$
+thuộc $\exists R.C$ vì tồn tại $y_1 \in C^I$ với $(x,y_1) \in R^I$. Phải: $x$ thuộc
+$\forall R.C$ vì mọi $R$-liên kết đều dẫn đến $C^I$; $z$ thuộc $\forall R.C$ một cách
+trống rỗng vì không có $R$-liên kết nào.](figures/generated/ch04-exists-vs-forall.pdf)
 
 ### Ràng buộc số lượng (Cardinality)
 

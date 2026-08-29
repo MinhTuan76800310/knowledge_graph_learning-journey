@@ -4,7 +4,7 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-08-29 (Ch5 status revised)
+Last updated: 2026-08-29 (TikZ pilot experiment completed)
 
 ## Front matter
 
@@ -52,3 +52,7 @@ Last updated: 2026-08-29 (Ch5 status revised)
 - Chapters 5–10 are written sequentially after the Ch4 checkpoint, following the
   book-first workflow in `docs/BOOK_V0_1_MILESTONE.md`.
 - Deferred lab work is tracked in `docs/LAB_BACKLOG.md` and does not block acceptance.
+- **TikZ pilot experiment** (2026-08-29): 8 formal TikZ figures added to Ch4 (3) and Ch5 (5).
+  Baseline preserved at tag `book-preview-v0.4-baseline-pre-tikz` (commit 103432b).
+  Recommendation: adopt TikZ selectively for formal diagrams from Ch6 onward.
+  Full report: `docs/TIKZ_PILOT_COMPARISON.md`.
