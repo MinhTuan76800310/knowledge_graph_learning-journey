@@ -14,20 +14,20 @@
 ]
 
 % Five stages
-\node[stage, fill=blue!8] (obs) {Quan s\'at\\[-1pt]\scriptsize(Observation)};
+\node[stage, fill=blue!8] (obs) {Quan sát\\[-1pt]\scriptsize(Observation)};
 \node[stage, fill=green!8, right=of obs] (ast) {Khẳng định\\[-1pt]\scriptsize(Assertion)};
-\node[stage, fill=orange!8, right=of ast] (clm) {Ph\'at biểu\\[-1pt]\scriptsize(Claim)};
+\node[stage, fill=orange!8, right=of ast] (clm) {Phát biểu\\[-1pt]\scriptsize(Claim)};
 \node[stage, fill=purple!8, right=of clm] (evd) {Bằng chứng\\[-1pt]\scriptsize(Evidence)};
 \node[stage, fill=red!8, right=of evd] (acc) {Tri thức chấp nhận\\[-1pt]\scriptsize(Accepted Knowledge)};
 
 % Arrows
 \draw[arrow] (obs) -- node[label, above] {biểu diễn} (ast);
 \draw[arrow] (ast) -- node[label, above] {gắn ngữ cảnh} (clm);
-\draw[arrow] (clm) -- node[label, above] {đ\'anh gi\'a} (evd);
+\draw[arrow] (clm) -- node[label, above] {đánh giá} (evd);
 \draw[arrow] (evd) -- node[label, above] {quản trị} (acc);
 
 % Annotations below
-\node[below=0.6cm of obs, font=\scriptsize, align=center, text width=2.5cm] {Dữ liệu th\'o\\từ thế giới};
+\node[below=0.6cm of obs, font=\scriptsize, align=center, text width=2.5cm] {Dữ liệu thô\\từ thế giới};
 \node[below=0.6cm of ast, font=\scriptsize, align=center, text width=2.5cm] {Bộ ba RDF /\\cạnh đồ thị};
 \node[below=0.6cm of clm, font=\scriptsize, align=center, text width=2.5cm] {Đối tượng hạng nhất\\+ nguồn + thời gian};
 \node[below=0.6cm of evd, font=\scriptsize, align=center, text width=2.5cm] {supports /\\contradicts};

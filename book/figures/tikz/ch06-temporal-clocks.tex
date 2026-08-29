@@ -19,10 +19,10 @@
 \node[clock, fill=purple!10, below=2.5cm of assertion] (system) {System\\Time};
 
 % Questions each clock answers
-\node[lbl, below=0.3cm of valid] {Khi n\`ao đ\'ung\\trong thế giới?};
-\node[lbl, below=0.3cm of assertion] {Khi n\`ao hệ thống\\biết điều n\`ay?};
-\node[lbl, below=0.3cm of observation] {Khi n\`ao dữ liệu\\được đo?};
-\node[lbl, below=0.3cm of system] {Khi n\`ao bản ghi\\được lưu?};
+\node[lbl, below=0.3cm of valid] {Khi nào đúng\\trong thế giới?};
+\node[lbl, below=0.3cm of assertion] {Khi nào hệ thống\\biết điều này?};
+\node[lbl, below=0.3cm of observation] {Khi nào dữ liệu\\được đo?};
+\node[lbl, below=0.3cm of system] {Khi nào bản ghi\\được lưu?};
 
 % Example timeline for valid time
 \draw[timeline] ($(valid.east)+(0.2,0)$) -- ++(2.5,0);
@@ -37,7 +37,7 @@
 \node[font=\tiny, above] at ($(system.east)+(1.2,0.2)$) {2020-01-20};
 
 % "NOT interchangeable" annotation
-\node[font=\small\bfseries, text=red!70!black, anchor=center] at ($(valid)!0.5!(system)+(0,0)$) {$\\neq \\neq \\neq$};
+\node[font=\small\bfseries, text=red!70!black, anchor=center] at ($(valid)!0.5!(system)+(0,0)$) {$\neq \neq \neq$};
 
 \end{tikzpicture}
 \end{document}
