@@ -92,7 +92,7 @@ Sách định nghĩa một **mô hình tri thức luận** (epistemic model) g�
 không phải chuẩn W3C — đây là khung khái niệm do sách xây dựng để tổ chức các khái niệm
 trong chương:
 
-![Mô hình tri thức luận: Quan sát → Khẳng định → Phát biểu → Bằng chứng → Tri thức được chấp nhận. Mỗi giai đoạn chuyển đổi dữ liệu từ dạng thô sang đối tượng tri thức luận có ngữ cảnh đầy đủ.](../figures/generated/ch06-epistemic-model.pdf)
+![Mô hình tri thức luận: Quan sát → Khẳng định → Phát biểu → Bằng chứng → Tri thức được chấp nhận. Mỗi giai đoạn chuyển đổi dữ liệu từ dạng thô sang đối tượng tri thức luận có ngữ cảnh đầy đủ.](figures/generated/ch06-epistemic-model.pdf)
 
 ```
 Quan sát → Khẳng định → Phát biểu → Bằng chứng → Tri thức được chấp nhận
@@ -351,7 +351,7 @@ ex:census_2019_activity
 Chuỗi provenance: `population_claim_A ← census_2019_report ← census_2019_activity ←
 survey_questionnaire_2019`. Mỗi bước ghi nhận một tầng xuất xứ.
 
-![Chuỗi provenance PROV-O: Claim → Report (wasDerivedFrom) → Activity (wasGeneratedBy) → Agent (wasAssociatedWith). Đồ thị có hướng ngược về quá khứ, truy nguyên toàn bộ lịch sử của một phát biểu.](../figures/generated/ch06-prov-chain.pdf)
+![Chuỗi provenance PROV-O: Claim → Report (wasDerivedFrom) → Activity (wasGeneratedBy) → Agent (wasAssociatedWith). Đồ thị có hướng ngược về quá khứ, truy nguyên toàn bộ lịch sử của một phát biểu.](figures/generated/ch06-prov-chain.pdf)
 
 > 🖊 **Tự kiểm tra:** Vẽ chuỗi provenance cho một phát biểu "Hà Nội có 12 quận" được
 > trích xuất tự động từ Wikipedia bởi một pipeline NLP. Cần ít nhất ba nút (Entity,
@@ -459,7 +459,7 @@ lý do khác nhau, và mỗi lý do đòi hỏi cách xử lý khác nhau.
 
 Sách định nghĩa năm loại mâu thuẫn:
 
-![Phân loại mâu thuẫn: Năm loại từ mâu thuẫn logic (thực sự) đến bất đồng nguồn (có thể hòa giải bằng ngữ cảnh). Hai loại trên cùng là mâu thuẫn thực sự; ba loại dưới có thể được hòa giải bằng căn chỉnh ngữ cảnh.](../figures/generated/ch06-contradiction-taxonomy.pdf)
+![Phân loại mâu thuẫn: Năm loại từ mâu thuẫn logic (thực sự) đến bất đồng nguồn (có thể hòa giải bằng ngữ cảnh). Hai loại trên cùng là mâu thuẫn thực sự; ba loại dưới có thể được hòa giải bằng căn chỉnh ngữ cảnh.](figures/generated/ch06-contradiction-taxonomy.pdf)
 
 **1. Mâu thuẫn logic (Logical contradiction):** Hai phát biểu không thể cùng đúng trong
 bất kỳ diễn giải nào. Ví dụ: `capitalOf(Hanoi, Vietnam)` và `¬capitalOf(Hanoi, Vietnam)`.
@@ -526,7 +526,7 @@ ba "đồng hồ" chạy song song, và nhầm lẫn giữa chúng là nguồn g
 
 Bốn đồng hồ thời gian cần phân biệt:
 
-![Bốn đồng hồ thời gian: Valid Time (khi nào đúng trong thế giới), Assertion Time (khi nào hệ thống biết), Observation Time (khi nào dữ liệu được đo), System Time (khi nào bản ghi được lưu). Bốn đồng hồ độc lập và không thay thế được nhau.](../figures/generated/ch06-temporal-clocks.pdf)
+![Bốn đồng hồ thời gian: Valid Time (khi nào đúng trong thế giới), Assertion Time (khi nào hệ thống biết), Observation Time (khi nào dữ liệu được đo), System Time (khi nào bản ghi được lưu). Bốn đồng hồ độc lập và không thay thế được nhau.](figures/generated/ch06-temporal-clocks.pdf)
 
 **1. Thời gian hiệu lực (Valid time):** Khoảng thời gian mà phát biểu đúng *trong thế
 giới thực*. "Hà Nội là thủ đô" có valid time = [1976-07-02, now). "Huế là thủ đô" có
@@ -1152,7 +1152,7 @@ không thay thế đồ thị dữ liệu — nó bổ sung metadata tri thức 
 
 Kiến trúc ba tầng:
 
-![Kiến trúc tầng tri thức luận: Tầng Dữ liệu (entities, relations) → Tầng Tri thức luận (claims, evidence, provenance, time) → Tầng Quản trị (status, confidence, review). Mỗi tầng bổ sung metadata cho tầng dưới; phản hồi từ tầng trên xuống tầng dưới.](../figures/generated/ch06-epistemic-layers.pdf)
+![Kiến trúc tầng tri thức luận: Tầng Dữ liệu (entities, relations) → Tầng Tri thức luận (claims, evidence, provenance, time) → Tầng Quản trị (status, confidence, review). Mỗi tầng bổ sung metadata cho tầng dưới; phản hồi từ tầng trên xuống tầng dưới.](figures/generated/ch06-epistemic-layers.pdf)
 
 ```
 ┌─────────────────────────────────────────┐
