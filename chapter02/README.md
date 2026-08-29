@@ -19,19 +19,19 @@ How does the choice of graph representation change what we can express, query, i
 | 2-1 | RDF from first principles / RDFLib | ★★ | ✅ | `exp_2_1_rdf_first_principles.py` |
 | 2-2 | Turtle serialization round-trip | ★★ | ✅ | `exp_2_2_turtle_serialization.py` |
 | 2-3 | SPARQL Basic Graph Patterns | ★★ | ✅ | `exp_2_3_sparql_basic_patterns.py` |
-| 2-4 | Labeled Property Graph / Neo4j | ★★ | 🔲 Designed | *(next slice)* |
-| 2-5 | Cypher traversal | ★★ | 🔲 Designed | *(next slice)* |
-| 2-6 | Same knowledge — RDF vs Property Graph | ★★★ | 🔲 Designed | *(next slice)* |
+| 2-4 | Mechanism RATE_OF_CHANGE via RDF + SPARQL (capstone thread) | ★★ | ✅ | `exp_2_4_mechanism_turtle_sparql.py` |
+| 2-5 | Labeled Property Graph / Neo4j | ★★ | 🔲 Deferred | taught conceptually in chapter text |
+| 2-6 | Cypher traversal | ★★ | 🔲 Deferred | taught conceptually in chapter text |
+| 2-7 | Same knowledge — RDF vs Property Graph | ★★★ | 🔲 Deferred | taught conceptually in chapter text |
 
 ## Domain
 
-All experiments use the same domain for continuity:
+Two domains, intentionally:
 
-- Hanoi → capitalOf → Vietnam
-- Paris → capitalOf → France
-- Hanoi → sisterCity → Paris
-
-This is the same domain introduced in Chapter 1.
+- The city domain for continuity (same as Chapter 1): Hanoi → capitalOf → Vietnam,
+  Paris → capitalOf → France, Hanoi → sisterCity → Paris.
+- The **mechanism domain** (capstone thread, `exp_2_4`): the running dataset at
+  `datasets/mechanism_kg/rate_of_change.ttl` — `RATE_OF_CHANGE` and friends.
 
 ## Running Experiments
 
@@ -39,6 +39,7 @@ This is the same domain introduced in Chapter 1.
 uv run python chapter02/exp_2_1_rdf_first_principles.py
 uv run python chapter02/exp_2_2_turtle_serialization.py
 uv run python chapter02/exp_2_3_sparql_basic_patterns.py
+uv run python chapter02/exp_2_4_mechanism_turtle_sparql.py
 ```
 
 ## Running Tests

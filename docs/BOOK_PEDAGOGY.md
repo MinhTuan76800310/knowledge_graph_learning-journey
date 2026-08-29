@@ -2,7 +2,7 @@
 
 > **Canonical authoring policy.** Every chapter draft, revision, and review MUST comply with this document. It supersedes ad-hoc terminology rules and governs all pedagogical decisions for Chapters 1–10.
 >
-> Last updated: 2026-08-28
+> Last updated: 2026-08-29
 
 ---
 
@@ -237,6 +237,69 @@ All figures (regardless of renderer) must be:
 ### Architecture
 
 TikZ sources live in `book/figures/tikz/` as standalone `.tex` files that compile independently. Generated PDFs go to `book/figures/generated/`. Manuscripts include generated PDFs via `![caption](../figures/generated/name.pdf)`. The render script `scripts/render_tikz.sh` compiles all sources; the book build calls it automatically.
+
+---
+
+## 16. Permanent Concept-Depth Rule
+
+Every **MAJOR** concept (§7) must be taught to a depth sufficient that the reader can
+answer all eleven questions below from the book alone — without consulting later
+chapters, the glossary, or external sources:
+
+1. **Problem** — What problem existed before this concept?
+2. **Definition** — What exactly is the concept?
+3. **Mechanism** — How does it work?
+4. **Boundary** — What are its inputs and outputs?
+5. **Assumption** — What assumption does it rely on?
+6. **Non-implication** — What does it NOT imply?
+7. **Worked example** — Can I execute a worked example?
+8. **Transfer** — Can I recognize it in another domain?
+9. **Mechanism-KG use** — How is it used in the Mechanism Knowledge System?
+10. **New capability** — What can that system do after introducing it?
+11. **Remaining limit** — What still remains impossible afterward?
+
+### Depth scale
+
+Depth is measured on the audit scale:
+
+| Score | Level | Meaning |
+|-------|-------|---------|
+| 0 | Missing | Concept absent |
+| 1 | Definition only | Named and defined, nothing more |
+| 2 | Intuition | Understood at the level of intuition, no mechanism |
+| 3 | Mechanism | Operational mechanism explained with a worked example |
+| 4 | Transfer | Mechanism demonstrated in a second domain (not just the origin example) |
+| 5 | Mechanism-KG/System integration | Mechanism deployed inside the running Mechanism Knowledge System |
+
+### Acceptance targets
+
+| Concept class | Minimum depth |
+|---------------|---------------|
+| MAJOR | ≥ 4 |
+| Mechanism-System-critical (fires the capstone thread) | target = 5 |
+| SUPPORTING | ≥ 3 |
+| INCIDENTAL | ≥ 2, or remove/defer |
+
+### Explanation must support transfer
+
+> # EXPLANATION MUST SUPPORT TRANSFER.
+
+The Mechanism-KG application is **mandatory** for every MAJOR concept. A mechanism-level
+explanation is not complete until question 9 is answered with a concrete, worked
+Mechanism-KG instantiation. Satisfying this rule with a single sentence such as
+"This also applies to the Mechanism Knowledge Graph" is **explanation theater** and does
+not count as transfer.
+
+### Defer depth, never required understanding
+
+> # DEFER DEPTH, NEVER REQUIRED UNDERSTANDING.
+
+Depth of treatment may be deferred to a later chapter (see §2), but the transfer
+requirement of this section is a *depth* target, not an optional add-on: when the book
+teaches a MAJOR concept, the Mechanism-KG application must be present at the level the
+chapter has already reached. If a later chapter is required to make the application
+honest, that is a forward reference that must be marked per §8 — not a reason to omit
+the application.
 
 ---
 

@@ -1,0 +1,228 @@
+# datasets/mechanism_kg/rate_of_change.ttl
+#
+# Canonical running dataset for the Mechanism-Knowledge-Graph scenario (Ch1-6).
+# Seed mechanism: RATE_OF_CHANGE.
+# Canonical source sentence:
+#     "Velocity is the rate of change of position with respect to time."
+#
+# The canonical object vocabulary is frozen in
+#     docs/MECHANISM_KG_CANONICAL_MODEL.md
+#
+# This file accumulates the running graph chapter by chapter. Section comments
+# mark which chapter's concepts each block instantiates. Chapters reference the
+# relevant block instead of re-inventing IRIs.
+#
+# Section map:
+#   Ch1 - recognize RATE_OF_CHANGE as a domain Mechanism
+#   Ch2 - serialize + query the mechanism in RDF
+#   Ch3 - identity/context: DerivativeApplication as reified n-ary object
+#   Ch4 - formal semantics target (the manuscript carries the DL axioms)
+#   Ch5 - CandidateMechanism + validation target
+#   Ch6 - the epistemic layer lives in the manuscript; claims may be added here
+
+@prefix ex:   <http://example.org/kgbook/mks#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# ---------------------------------------------------------------------------
+# Ch1: class skeleton (the running mechanism family)
+# ---------------------------------------------------------------------------
+
+ex:Mechanism a rdfs:Class ;
+    rdfs:label "Mechanism" ;
+    rdfs:comment "A transform/process that takes inputs and produces an output under conditions." .
+
+# Ch1 taxonomy: Mechanism splits into change mechanisms and aggregation mechanisms.
+
+ex:ChangeMechanism a rdfs:Class ;
+    rdfs:label "ChangeMechanism" ;
+    rdfs:comment "A Mechanism that changes some quantity over time or across another variable (rate of change, accumulation, ...)." ;
+    rdfs:subClassOf ex:Mechanism .
+
+ex:AggregationMechanism a rdfs:Class ;
+    rdfs:label "AggregationMechanism" ;
+    rdfs:comment "A Mechanism that aggregates multiple inputs into a single output (average, total, maximum, ...)." ;
+    rdfs:subClassOf ex:Mechanism .
+
+ex:RateOfChangeMechanism a rdfs:Class ;
+    rdfs:label "RateOfChangeMechanism" ;
+    rdfs:comment "A Mechanism that computes a rate of change of one quantity with respect to another." ;
+    rdfs:subClassOf ex:ChangeMechanism .
+
+ex:Operation a rdfs:Class ;
+    rdfs:label "Operation" ;
+    rdfs:comment "A transform primitive a mechanism can perform (generalization)." .
+
+ex:DerivativeOperation a rdfs:Class ;
+    rdfs:label "DerivativeOperation" ;
+    rdfs:comment "The specific operation: differentiate X with respect to Y." ;
+    rdfs:subClassOf ex:Operation .
+
+ex:MechanismApplication a rdfs:Class ;
+    rdfs:label "MechanismApplication" ;
+    rdfs:comment "The act/context of applying a mechanism to concrete inputs." .
+
+ex:DerivativeApplication a rdfs:Class ;
+    rdfs:label "DerivativeApplication" ;
+    rdfs:comment "Reified application binding mechanism, differentiand, reference variable, and operation in one object." ;
+    rdfs:subClassOf ex:MechanismApplication .
+
+ex:Quantity a rdfs:Class ;
+    rdfs:label "Quantity" ;
+    rdfs:comment "A measurable input/output (position, velocity, temperature, ...)." .
+
+ex:ReferenceVariable a rdfs:Class ;
+    rdfs:label "ReferenceVariable" ;
+    rdfs:comment "The independent variable a rate is taken with respect to (time)." .
+
+ex:Condition a rdfs:Class ;
+    rdfs:label "Condition" ;
+    rdfs:comment "A qualifying circumstance in which the mechanism applies." .
+
+ex:CandidateMechanism a rdfs:Class ;
+    rdfs:label "CandidateMechanism" ;
+    rdfs:comment "A mechanism extracted/inferred from evidence, not yet accepted." ;
+    rdfs:subClassOf ex:Mechanism .
+
+# ---------------------------------------------------------------------------
+# Ch1: the primary running individual — RATE_OF_CHANGE
+# "Velocity is the rate of change of position with respect to time."
+# ---------------------------------------------------------------------------
+
+ex:rateOfChange_1 a ex:RateOfChangeMechanism ;
+    rdfs:label "RATE_OF_CHANGE (velocity)" ;
+    rdfs:comment "Computes velocity as the rate of change of position with respect to time." ;
+    ex:hasOperation ex:derivativeOperation_1 ;
+    ex:hasInput ex:position_1 ;
+    ex:hasReferenceVariable ex:time_1 ;
+    ex:hasOutput ex:velocity_1 .
+
+ex:derivativeOperation_1 a ex:DerivativeOperation ;
+    rdfs:label "differentiate position wrt time" .
+
+ex:position_1 a ex:Quantity ;
+    rdfs:label "position" .
+
+ex:time_1 a ex:ReferenceVariable ;
+    rdfs:label "time" .
+
+ex:velocity_1 a ex:Quantity ;
+    rdfs:label "velocity" .
+
+# ---------------------------------------------------------------------------
+# Ch2: serialization — property declarations
+# ---------------------------------------------------------------------------
+
+ex:hasOperation a rdf:Property ;
+    rdfs:label "hasOperation" ;
+    rdfs:comment "Mechanism -> Operation: the operation a mechanism performs." .
+
+ex:hasInput a rdf:Property ;
+    rdfs:label "hasInput" ;
+    rdfs:comment "Mechanism -> Quantity: an input quantity to the mechanism." .
+
+ex:hasOutput a rdf:Property ;
+    rdfs:label "hasOutput" ;
+    rdfs:comment "Mechanism -> Quantity: the quantity the mechanism computes." .
+
+ex:hasReferenceVariable a rdf:Property ;
+    rdfs:label "hasReferenceVariable" ;
+    rdfs:comment "Mechanism -> ReferenceVariable: the independent variable of the rate." .
+
+ex:hasValue a rdf:Property ;
+    rdfs:label "hasValue" ;
+    rdfs:comment "Quantity -> literal: the measured numeric value of a quantity." .
+
+ex:requires a rdf:Property ;
+    rdfs:label "requires" ;
+    rdfs:comment "Mechanism -> Mechanism: a mechanism depends on another." .
+
+# Measured values (used for FILTER/OPTIONAL examples in Ch2, Ch5, Ch6).
+
+ex:position_1 ex:hasValue "12.5"^^xsd:double .
+
+ex:velocity_1 ex:hasValue "3.2"^^xsd:double .
+
+ex:thermalEnergy_1 ex:hasValue "300.0"^^xsd:double .
+
+# ---------------------------------------------------------------------------
+# Ch3: identity/context — DerivativeApplication as reified n-ary object.
+# Binds the four roles into one application so no filler is left dangling.
+# ---------------------------------------------------------------------------
+
+ex:hasApplication a rdf:Property ;
+    rdfs:label "hasApplication" ;
+    rdfs:comment "Mechanism -> MechanismApplication: a concrete application of the mechanism." .
+
+ex:hasCondition a rdf:Property ;
+    rdfs:label "hasCondition" ;
+    rdfs:comment "Mechanism -> Condition: a circumstance constraining application." .
+
+ex:differentiand a rdf:Property ;
+    rdfs:label "differentiand" ;
+    rdfs:comment "DerivativeApplication -> Quantity: the quantity being differentiated." .
+
+ex:withRespectTo a rdf:Property ;
+    rdfs:label "withRespectTo" ;
+    rdfs:comment "DerivativeApplication -> ReferenceVariable: the variable of differentiation." .
+
+ex:rateOfChange_1 ex:hasApplication ex:derivativeApplication_1 .
+
+ex:derivativeApplication_1 a ex:DerivativeApplication ;
+    rdfs:label "application of RATE_OF_CHANGE to position wrt time" ;
+    ex:hasOperation ex:derivativeOperation_1 ;
+    ex:differentiand ex:position_1 ;
+    ex:withRespectTo ex:time_1 .
+
+# ---------------------------------------------------------------------------
+# Ch1-3: a second RateOfChangeMechanism for comparison / identity exercises.
+# "Heat transfer rate is the rate of change of thermal energy with respect to time."
+# ---------------------------------------------------------------------------
+
+ex:heatTransferRate_2 a ex:RateOfChangeMechanism ;
+    rdfs:label "HEAT_TRANSFER_RATE" ;
+    rdfs:comment "Computes heat transfer rate as the rate of change of thermal energy with respect to time." ;
+    ex:hasOperation ex:derivativeOperation_1 ;
+    ex:hasInput ex:thermalEnergy_1 ;
+    ex:hasReferenceVariable ex:time_1 ;
+    ex:hasOutput ex:heatRate_2 .
+
+ex:thermalEnergy_1 a ex:Quantity ;
+    rdfs:label "thermal energy" .
+
+ex:heatRate_2 a ex:Quantity ;
+    rdfs:label "heat transfer rate" .
+
+ex:heatTransferRate_2 ex:hasApplication ex:derivativeApplication_2 .
+
+ex:derivativeApplication_2 a ex:DerivativeApplication ;
+    rdfs:label "application of HEAT_TRANSFER_RATE to thermal energy wrt time" ;
+    ex:hasOperation ex:derivativeOperation_1 ;
+    ex:differentiand ex:thermalEnergy_1 ;
+    ex:withRespectTo ex:time_1 .
+
+# ---------------------------------------------------------------------------
+# Ch1: a composite mechanism showing the `requires` dependency.
+# Newton's law of cooling models a body's temperature change; it needs the
+# rate-of-change capability and the heat-transfer model.
+# ---------------------------------------------------------------------------
+
+ex:newtonCooling_1 a ex:RateOfChangeMechanism ;
+    rdfs:label "NEWTON_COOLING" ;
+    rdfs:comment "Models the rate of change of a body's temperature during cooling." ;
+    ex:requires ex:rateOfChange_1 ;
+    ex:requires ex:heatTransferRate_2 ;
+    ex:hasCondition ex:uniformEnv_1 .
+
+ex:uniformEnv_1 a ex:Condition ;
+    rdfs:label "uniform environment temperature" ;
+    rdfs:comment "Newton's law of cooling applies under the condition that the environment stays at a uniform temperature." .
+
+# ---------------------------------------------------------------------------
+# Ch5: a candidate mechanism awaiting validation (SHACL target).
+# ---------------------------------------------------------------------------
+
+ex:candidateRateOfChange_1 a ex:CandidateMechanism ;
+    rdfs:label "candidate RATE_OF_CHANGE (from textbook B)" ;
+    rdfs:comment "A candidate derived from a second source, awaiting independent validation." .

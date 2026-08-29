@@ -405,3 +405,134 @@ class TestExp23SparqlBasicPatterns:
             )
         )
         assert len(results) == 0
+
+
+# ---------------------------------------------------------------------------
+# Experiment 2-4: RATE_OF_CHANGE qua RDF + SPARQL (capstone thread)
+# ---------------------------------------------------------------------------
+
+EX_MK = "http://example.org/kgbook/mks#"
+
+
+def _load_mechanism_graph():
+    """Load the canonical running dataset (Ch1-6) from datasets/mechanism_kg/."""
+    from rdflib import Graph
+
+    dataset = (
+        Path(__file__).resolve().parents[1] / "datasets" / "mechanism_kg" / "rate_of_change.ttl"
+    )
+    g = Graph()
+    g.parse(dataset, format="turtle")
+    g.bind("ex", EX_MK)
+    return g
+
+
+def _short(term) -> str:
+    return str(term).rsplit("#", 1)[-1]
+
+
+class TestExp24MechanismSparql:
+    """Semantic tests for exp_2_4_mechanism_turtle_sparql.py.
+
+    These assert the chapter's capstone result tables directly against the
+    running dataset at datasets/mechanism_kg/rate_of_change.ttl.
+    """
+
+    def test_dataset_loads(self) -> None:
+        g = _load_mechanism_graph()
+        assert len(g) > 0
+
+    def test_bgp_three_hop_reads_ndarry_application(self) -> None:
+        """Chapter table in §2.1.6: mechanism -> application -> (differentiand, wrt)."""
+        g = _load_mechanism_graph()
+        results = list(
+            g.query(
+                f"""
+                PREFIX ex: <{EX_MK}>
+                SELECT ?mechanism ?applied ?quantity ?wrt
+                WHERE {{
+                    ?mechanism ex:hasApplication ?applied .
+                    ?applied  ex:differentiand   ?quantity .
+                    ?applied  ex:withRespectTo   ?wrt .
+                }}
+                """
+            )
+        )
+        bindings = {
+            (
+                _short(r.mechanism),
+                _short(r.applied),
+                _short(r.quantity),
+                _short(r.wrt),
+            )
+            for r in results
+        }
+        assert bindings == {
+            ("rateOfChange_1", "derivativeApplication_1", "position_1", "time_1"),
+            ("heatTransferRate_2", "derivativeApplication_2", "thermalEnergy_1", "time_1"),
+        }
+
+    def test_rdf_type_subclass_gap(self) -> None:
+        """`?m a ex:Mechanism` matches nothing; the declared type matches 3."""
+        g = _load_mechanism_graph()
+        by_super = list(g.query(f"PREFIX ex: <{EX_MK}> SELECT ?m WHERE {{ ?m a ex:Mechanism }}"))
+        by_declared = list(
+            g.query(f"PREFIX ex: <{EX_MK}> SELECT ?m WHERE {{ ?m a ex:RateOfChangeMechanism }}")
+        )
+        assert len(by_super) == 0  # no subclass reasoning in plain RDF
+        names = {_short(r.m) for r in by_declared}
+        assert names == {"rateOfChange_1", "heatTransferRate_2", "newtonCooling_1"}
+
+    def test_filter_on_value_threshold(self) -> None:
+        """Chapter result: position_1 (12.5) and thermalEnergy_1 (300.0) pass >10."""
+        g = _load_mechanism_graph()
+        results = list(
+            g.query(
+                f"""
+                PREFIX ex: <{EX_MK}>
+                SELECT ?q ?v WHERE {{
+                    ?q ex:hasValue ?v .
+                    FILTER (?v > 10)
+                }}
+                """
+            )
+        )
+        pairs = {(_short(r.q), str(r.v)) for r in results}
+        assert pairs == {("position_1", "12.5"), ("thermalEnergy_1", "300.0")}
+
+    def test_optional_behaves_like_left_join(self) -> None:
+        """Only newtonCooling_1 has a condition; the other two stay unbound."""
+        g = _load_mechanism_graph()
+        results = list(
+            g.query(
+                f"""
+                PREFIX ex: <{EX_MK}>
+                SELECT ?m ?condition WHERE {{
+                    ?m a ex:RateOfChangeMechanism .
+                    OPTIONAL {{ ?m ex:hasCondition ?condition }}
+                }}
+                """
+            )
+        )
+        assert len(results) == 3
+        bound = {_short(r.m): _short(r.condition) for r in results if r.condition is not None}
+        assert bound == {"newtonCooling_1": "uniformEnv_1"}
+        no_cond = {_short(r.m) for r in results if r.condition is None}
+        assert no_cond == {"rateOfChange_1", "heatTransferRate_2"}
+
+    def test_requires_query_answers_dependency_question(self) -> None:
+        """'Cơ chế nào phụ thuộc vào cơ chế nào' over the running dataset."""
+        g = _load_mechanism_graph()
+        results = list(
+            g.query(
+                f"""
+                PREFIX ex: <{EX_MK}>
+                SELECT ?m ?dependency WHERE {{ ?m ex:requires ?dependency }}
+                """
+            )
+        )
+        pairs = {(_short(r.m), _short(r.dependency)) for r in results}
+        assert pairs == {
+            ("newtonCooling_1", "rateOfChange_1"),
+            ("newtonCooling_1", "heatTransferRate_2"),
+        }

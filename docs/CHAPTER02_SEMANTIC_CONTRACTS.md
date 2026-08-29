@@ -93,6 +93,16 @@ Matching semantics (faithful to W3C SPARQL 1.1 Query, §"Basic Graph Pattern Mat
 - This is *subgraph* matching under variable instantiation. It is **not** injective graph
   isomorphism: distinct variables may bind to the same term unless constrained otherwise,
   and the match requires only that the instantiated pattern be contained in the graph.
+- **FILTER** restricts the set of solution mappings to those satisfying a condition; it is
+  evaluated over the bindings produced by pattern matching (match-then-filter, not
+  query-planner table reduction).
+- **OPTIONAL** behaves as a left join: solutions from the group are retained even when the
+  optional group matches nothing (the optional variables are left unbound); it is *not*
+  `OR`.
+- **No subclass reasoning.** SPARQL matches triples present in the graph. A triple pattern
+  `?m rdf:type ex:Mechanism` does not match individuals typed `ex:RateOfChangeMechanism`
+  unless the graph explicitly contains the parent typing (RDFS/OWL entailment is separate,
+  Chapter 5).
 
 ### Boundaries
 

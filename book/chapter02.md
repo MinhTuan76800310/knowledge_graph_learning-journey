@@ -19,6 +19,8 @@
 > - Cypher truy vấn đồ thị thuộc tính
 > - Cùng một tri thức nhưng hai cách biểu diễn: điều gì trở nên dễ, rõ, ngầm định,
 >   hoặc tốn kém trong mỗi bên
+> - Cách biểu diễn và truy vấn cơ chế RATE_OF_CHANGE (mạch capstone) bằng RDF và bằng
+>   LPG — từ đây mỗi khái niệm trong chương đều được chạy thử trên đồ thị cơ chế
 >
 > **Tiên quyết:** Chương 1 (đồ thị, dữ liệu, ngữ nghĩa, ngữ cảnh).
 >
@@ -129,6 +131,24 @@ thể là *cùng một đồ thị* về mặt ngữ nghĩa. Đây chính là l�
 khái niệm **đẳng cấu** (isomorphism) thay vì so sánh chuỗi thô — ta sẽ gặp lại ở mục
 2.1.5. Chương này giữ blank node ở mức trực giác; ngữ nghĩa hình thức đầy đủ được dành
 cho các chương sau.
+
+Blank node có hậu quả thiết kế cụ thể cho capstone. Giả sử ta mô hình hóa ứng dụng đạo
+hàm bằng blank node:
+
+```turtle
+ex:rateOfChange_1 ex:hasApplication _:b1 .
+_:b1 ex:differentiand ex:position_1 ;
+     ex:withRespectTo ex:time_1 .
+```
+
+Câu hỏi thiết kế: nếu sách này được đưa vào hệ thống hai lần (hai lần trích xuất), hai
+blank node `_:b1` và `_:b2` sinh ra có là cùng một ứng dụng không? **Không** — blank node
+không có định danh ổn định để ta có thể khẳng định "đây là chính ứng dụng đó". Đến
+Chương 6, khi cần gắn bằng chứng vào ứng dụng cụ thể này (claim *"ứng dụng này là đúng"*),
+hệ thống cũng không có cách nào trỏ đến blank node một cách bền vững. Bài học thiết kế:
+blank node phù hợp cho cấu trúc tồn tại thoáng qua; khi một đối tượng sẽ được tham chiếu
+lại (định danh, bằng chứng, ngữ cảnh), hãy cho nó một IRI. Chương 3 chính thức hóa bài
+học này qua mô hình n-ary (`DerivativeApplication`).
 
 ### 2.1.4 Biểu diễn miền tri thức bằng RDF
 
@@ -249,6 +269,24 @@ assert set(g) == set(g2)   # đồ thị tương đương
   mọi bộ ba của G₁ thành bộ ba tương ứng trong G₂ → hai đồ thị **đẳng cấu**. Blank node
   là biến tồn tại, không phải tên — nên tên cục bộ của chúng không mang ý nghĩa.
 
+  **Đẳng cấu với capstone:** cùng lập luận áp dụng cho cơ chế. Hai đồ thị sau đây:
+
+  ```
+  H₁ = { (ex:rateOfChange_1, ex:hasApplication, _:a1),
+         (_:a1, ex:differentiand, ex:position_1),
+         (_:a1, ex:withRespectTo, ex:time_1) }
+  H₂ = { (ex:rateOfChange_1, ex:hasApplication, _:z9),
+         (_:z9, ex:differentiand, ex:position_1),
+         (_:z9, ex:withRespectTo, ex:time_1) }
+  ```
+
+  là **cùng một đồ thị**: song ánh _:a1 → _:z9 bảo toàn mọi bộ ba. Cả hai cùng khẳng định
+  "tồn tại một ứng dụng của RATE_OF_CHANGE với biến vi phân là `position_1` và biến tham
+  chiếu là `time_1`". Nói cách khác, đẳng cấu cho phép ta nói "hai lần trích xuất khác
+  nhau đã ghi nhận cùng một ứng dụng" — ngay cả khi blank node của chúng mang tên khác.
+  Chương 3 sẽ bước tiếp: thay vì để ứng dụng đó là biến tồn tại ẩn danh, gán cho nó IRI
+  `ex:derivativeApplication_1` để có thể tham chiếu và gắn ngữ cảnh.
+
 > **Sai lầm phổ biến:** so sánh *chuỗi Turtle thô* để kết luận hai đồ thị giống nhau.
 > Hai tài liệu Turtle khác nhau từng ký tự (khác tiền tố, khác thứ tự dòng, khác cách
 > gom nhóm `;`/`,`) vẫn có thể biểu diễn cùng một đồ thị. Luôn so sánh **ngữ nghĩa đồ
@@ -257,6 +295,50 @@ assert set(g) == set(g2)   # đồ thị tương đương
 Cùng một đồ thị cũng có thể serialize thành N-Triples, RDF/XML hay JSON-LD và parse lại
 thành đồ thị tương đương. Điều này khẳng định: **cú pháp là lớp vỏ có thể thay thế; mô
 hình đồ thị mới là nội dung bất biến.**
+
+#### Biểu diễn cơ chế RATE_OF_CHANGE trong Turtle
+
+Cú pháp trên thực ra đã đủ để biểu diễn capstone. Đây là cơ chế chạy dài của cả cuốn
+sách — RATE_OF_CHANGE — viết trong Turtle (dữ liệu chuẩn được giữ ở
+`datasets/mechanism_kg/rate_of_change.ttl`):
+
+```turtle
+@prefix ex:  <http://example.org/kgbook/mks#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:rateOfChange_1 a ex:RateOfChangeMechanism ;
+    rdfs:label "RATE_OF_CHANGE (velocity)" ;
+    ex:hasOperation ex:derivativeOperation_1 ;
+    ex:hasInput ex:position_1 ;
+    ex:hasReferenceVariable ex:time_1 ;
+    ex:hasOutput ex:velocity_1 .
+
+ex:velocity_1 a ex:Quantity ;
+    rdfs:label "velocity" ;
+    ex:hasValue "3.2"^^xsd:double .
+```
+
+Đồ thị này minh họa **chính sách IRI-vs-literal** (chọn cái gì là tài nguyên, cái gì là
+giá trị):
+
+| Bạn đang ghi | Viết là | Vì sao |
+|---|---|---|
+| Bản thân cơ chế, phép toán, đại lượng, biến tham chiếu (`rateOfChange_1`, `derivativeOperation_1`, `position_1`, `time_1`, `velocity_1`) | IRI | Những thứ này có *đồng nhất* (identity) và sẽ được các chương sau tham chiếu lại: so sánh, gắn ngữ cảnh, gắn bằng chứng. |
+| Nhãn để con người đọc (`"velocity"`, `"RATE_OF_CHANGE (velocity)"`) | literal | Nhãn là dữ liệu trình bày, có thể đổi mà không đổi ý nghĩa. |
+| Giá trị đo được (`"3.2"^^xsd:double`) | literal + kiểu dữ liệu | Một con số không có định danh; nó là *giá trị*, không phải *tài nguyên*. |
+
+Quy tắc gọn: **cái gì sẽ được tham chiếu lại thì cho IRI; cái gì chỉ là dữ liệu thì cho
+literal.** Nếu ta viết `ex:velocity_1` thành literal `"velocity"`, ta mất khả năng hỏi
+*cơ chế này tính ra đại lượng nào*, vì literal không thể làm chủ thể của bộ ba — cũng
+không thể gắn tiếp `hasValue` vào nó. IRI là điểm neo để đồ thị tiếp tục phát triển;
+literal là lá (leaf) của đồ thị.
+
+Đồng thời, chính sách này giải thích tại sao `RATE_OF_CHANGE` cần tới *ba* bộ ba riêng
+biệt (`hasInput`, `hasReferenceVariable`, `hasOutput`) thay vì một vị từ đơn
+`velocityOf`. Mỗi vai diễn (input, biến tham chiếu, output) là một cạnh có ý nghĩa khác
+nhau; mục 2.1.6 sẽ dùng chính các cạnh này trong truy vấn.
 
 ### 2.1.6 SPARQL: khớp mẫu đồ thị
 
@@ -327,6 +409,14 @@ Trên đồ thị 11 bộ ba, truy vấn này trả về hai ánh xạ nghiệm:
 > trả về *ánh xạ* (mapping) thay vì chỉ trả về danh sách các node? Ánh xạ khác danh sách ở
 > điểm nào khi truy vấn có nhiều biến?
 
+*Chỉ dẫn trả lời:* thêm `DaNang` vào đồ thị thì tập ánh xạ có ba phần tử, `?city` lần lượt
+nhận `Hanoi`, `Paris`, `DaNang`. Về câu hỏi thứ hai: kết quả SPARQL là ánh xạ chứ không
+phải danh sách node vì một truy vấn có thể có nhiều biến, và mối quan hệ giữa chúng nằm
+*trong cùng một nghiệm* — `?city ↦ Hanoi` chỉ có ý nghĩa nếu đi cùng `?country ↦ Vietnam`
+trong cùng một nghiệm chứ không phải hai hàng tách rời. Danh sách các node rời nhau sẽ
+mất chính thông tin nối mà mục 2.1.6 phía dưới đang dùng. (Bảng mở rộng từng bước trong
+mục 2.1.6 minh họa chính đặc tính này.)
+
 #### Biến dùng chung tạo phép nối
 
 Khi hai mẫu bộ ba chia sẻ một biến, SPARQL tự động thực hiện phép nối trên biến đó:
@@ -370,6 +460,141 @@ SELECT ?entity ?label WHERE {
 > **"SPARQL là SQL cho đồ thị"** chỉ là một phép loại suy lỏng lẻo, và nên được dùng
 > thận trọng. SPARQL hoạt động trên cấu trúc đồ thị và trả về ánh xạ nghiệm của các mẫu;
 > SQL truy vấn các bộ trong bảng quan hệ. Cơ chế nền tảng của hai ngôn ngữ là khác nhau.
+
+#### Chạy SPARQL trên capstone: một truy vấn, bốn bước khớp mẫu
+
+Ta đưa các kỹ thuật vừa học vào đồ thị cơ chế. Truy vấn trọng tâm của chương này — đọc
+các mảnh ghép của một *ứng dụng cơ chế* n-ary:
+
+```sparql
+PREFIX ex: <http://example.org/kgbook/mks#>
+
+SELECT ?mechanism ?applied ?quantity ?wrt
+WHERE {
+    ?mechanism ex:hasApplication ?applied .
+    ?applied  ex:differentiand   ?quantity .
+    ?applied  ex:withRespectTo   ?wrt .
+}
+```
+
+Để khớp với đồ thị (dữ liệu chuẩn gồm `rateOfChange_1` và `heatTransferRate_2`, mỗi cơ chế
+một `DerivativeApplication`), SPARQL xử lý từng mẫu bộ ba, mỗi mẫu *mở rộng* các ánh xạ
+chưa đầy đủ:
+
+**Bước 1 — khớp mẫu thứ nhất** `?mechanism ex:hasApplication ?applied`:
+
+| ?mechanism | ?applied |
+|---|---|
+| ex:rateOfChange_1 | ex:derivativeApplication_1 |
+| ex:heatTransferRate_2 | ex:derivativeApplication_2 |
+
+Hai ánh xạ từng phần. Ở bước này `?applied` vẫn lỏng lẻo — chưa có ràng buộc gì về nó.
+
+**Bước 2 — nối mẫu thứ hai** `?applied ex:differentiand ?quantity`. Với mỗi hàng hiện có,
+tìm phần mở rộng; hàng không tìm được sẽ bị loại:
+
+| ?mechanism | ?applied | ?quantity |
+|---|---|---|
+| ex:rateOfChange_1 | ex:derivativeApplication_1 | ex:position_1 |
+| ex:heatTransferRate_2 | ex:derivativeApplication_2 | ex:thermalEnergy_1 |
+
+**Bước 3 — nối mẫu thứ ba** `?applied ex:withRespectTo ?wrt`:
+
+| ?mechanism | ?applied | ?quantity | ?wrt |
+|---|---|---|---|
+| ex:rateOfChange_1 | ex:derivativeApplication_1 | ex:position_1 | ex:time_1 |
+| ex:heatTransferRate_2 | ex:derivativeApplication_2 | ex:thermalEnergy_1 | ex:time_1 |
+
+Một truy vấn đọc được toàn bộ cấu trúc chuyên biệt của ứng dụng cơ chế: mỗi cơ chế ghép
+đúng biến vi phân (cái gì thay đổi) với biến tham chiếu (theo cái gì). Biến nối giữa các
+mẫu là `?applied` — và chính vì `DerivativeApplication` là quan hệ n-ary được tái hóa
+(reified) thành đối tượng, phép nối này nằm *trong thân đồ thị*, chứ không phải do câu
+truy vấn tự ghép bảng.
+
+**Phép nối so với tích Đề-các.** Nếu người mới tập viết hai mẫu với hai tên biến khác
+nhau ở chỗ đáng lẽ phải trùng:
+
+```sparql
+SELECT ?m ?a ?q WHERE {
+    ?m ex:hasApplication ?a .
+    ?x ex:differentiand ?q .
+}
+```
+
+mẫu thứ hai (`?x ex:differentiand ?q`) không nối được với `?a` vì không chia sẻ biến nào.
+SPARQL khớp từng mẫu độc lập rồi mới nối trên biến trùng tên — không có biến trùng, nó
+nối bằng *tích Đề-các*: 2 ứng dụng × 2 biến vi phân = **4 hàng**, trong đó có những hàng
+vô nghĩa như `(rateOfChange_1, derivativeApplication_1, thermalEnergy_1)`. Biến dùng
+chung chính là phép nối; đổi tên đi hay bỏ đi, kết quả biến thành tích Đề-các. Đây là lý
+do mục 2.1.6 định nghĩa BGP qua *ánh xạ nghiệm được mở rộng từng bước*: mỗi mẫu mới
+dùng trạng thái biến hiện có để hẹp bớt kết quả, giống phép nối tự nhiên (natural join)
+trên các biến trùng tên — chứ không phải phép ghép ngây thơ mọi cặp hàng.
+
+> 🖊 **Tự kiểm tra:** Nếu bỏ mẫu `?applied ex:withRespectTo ?wrt` khỏi truy vấn, kết quả
+> thành thế nào? Nếu thêm mẫu `?mechanism ex:hasOutput ?output`, cần thêm cột gì và khoá
+> nối là gì? Hai câu hỏi này kiểm tra xem bạn có hiểu "ánh xạ được mở rộng từng bước" hay
+> không — không phải chỉ viết được cú pháp.
+
+**Bẫy `rdf:type` với phân lớp.** Giờ thử truy vấn trực giác nhất:
+
+```sparql
+SELECT ?m WHERE { ?m a ex:Mechanism }
+```
+
+Kết quả **trống** — dù `rateOfChange_1` hiển nhiên là một cơ chế. Lý do: nó được khai
+`a ex:RateOfChangeMechanism`, và RDF thuần **không suy luận phân lớp**
+(`RateOfChangeMechanism rdfs:subClassOf ex:Mechanism`). SPARQL chỉ khớp *bộ ba có mặt
+trong đồ thị*; nó không tự "trèo" lên lớp cha. Muốn hỏi "mọi cơ chế", phải hỏi đúng lớp
+khai báo (`a ex:RateOfChangeMechanism`), hỏi hợp các lớp con cụ thể, hoặc để suy luận
+(RDFS/OWL, Chương 5) bổ sung bộ ba `rdf:type`. Bài học kỹ thuật: khi viết `a ex:X`, hãy
+tự hỏi mình muốn *đúng lớp khai báo* hay *mọi cơ chế* — hai câu hỏi đó là hai truy vấn
+khác nhau.
+
+**FILTER trên giá trị số.** Dữ liệu cơ chế có giá trị đo (`hasValue`). Hỏi "đại lượng nào
+đang vượt ngưỡng 10 đơn vị":
+
+```sparql
+SELECT ?q ?v WHERE {
+    ?q ex:hasValue ?v .
+    FILTER (?v > 10)
+}
+```
+
+| ?q | ?v |
+|---|---|
+| ex:position_1 | 12.5 |
+| ex:thermalEnergy_1 | 300.0 |
+
+`FILTER` đã loại `ex:velocity_1` (3.2 ≤ 10). So với SQL, `FILTER` gần với mệnh đề `WHERE`;
+nhưng vì SPARQL khớp mẫu trước rồi mới lọc, người ta không tối ưu `FILTER` bằng cách "rút
+gọn bảng trước khi nối" như trên lược đồ quan hệ đã chuẩn hóa — thứ tự khớp rồi lọc nằm
+trong ngữ nghĩa, không phải là chi tiết tối ưu hóa.
+
+**OPTIONAL như phép nối trái.** Cơ chế `newtonCooling_1` (Newton cooling) có điều kiện áp
+dụng (`uniformEnv_1`: môi trường đồng nhất), hai cơ chế kia thì không. Hỏi "mọi cơ chế và
+điều kiện nếu có":
+
+```sparql
+SELECT ?m ?condition WHERE {
+    ?m a ex:RateOfChangeMechanism .
+    OPTIONAL { ?m ex:hasCondition ?condition }
+}
+```
+
+Bước 1 khớp chủ thể bên trái → ba ánh xạ. Bước 2, với OPTIONAL, mỗi ánh xạ *thử* khớp
+`ex:hasCondition`; khớp được thì mở rộng, không khớp thì giữ nguyên với biến chưa gán
+(unbound):
+
+| ?m | ?condition |
+|---|---|
+| ex:rateOfChange_1 | — (unbound) |
+| ex:heatTransferRate_2 | — (unbound) |
+| ex:newtonCooling_1 | ex:uniformEnv_1 |
+
+OPTIONAL tương ứng trực tiếp với **LEFT JOIN** trong SQL: hàng bên trái được giữ kể cả khi
+không có bên phải. Trái lại, mẫu BGP thông thường tương ứng **INNER JOIN**: nếu bỏ
+`OPTIONAL`, chỉ `newtonCooling_1` xuất hiện và hai cơ chế kia biến mất. Đây là điểm để so
+sánh với Cypher trong §2.3 khi gặp `OPTIONAL MATCH`.
 
 ### 2.1.7 Phát triển hiện tại: RDF 1.2 và SPARQL 1.2
 
@@ -478,6 +703,46 @@ So với hình RDF ở mục 2.1.4, bạn có thể thấy ngay sự khác biệ
 Cả hai đều biểu diễn cùng tri thức, nhưng **cấu trúc đồ thị thì khác nhau**. Đây chính
 là luận điểm trung tâm của chương, sẽ được phân tích đầy đủ ở mục 2.4.
 
+**Cùng chuyển đổi, miền capstone.** Đồ thị thuộc tính biểu diễn cơ chế RATE_OF_CHANGE
+giống hệt dữ liệu ở mục 2.1.5 — chỉ khác "hình dạng":
+
+```
+(:RateOfChangeMechanism {iri:"http://example.org/kgbook/mks#rateOfChange_1", label:"RATE_OF_CHANGE"})
+  -[:HAS_OPERATION]->         (:DerivativeOperation {iri:"...#derivativeOperation_1"})
+  -[:HAS_INPUT]->             (:Quantity            {iri:"...#position_1", value: 12.5})
+  -[:HAS_REFERENCE_VARIABLE]->(:ReferenceVariable   {iri:"...#time_1"})
+  -[:HAS_OUTPUT]->            (:Quantity            {iri:"...#velocity_1", value: 3.2})
+```
+
+Dễ thấy ba điểm chuyển đổi từ RDF:
+
+- **IRI thành thuộc tính.** LPG không cấp định danh miền sẵn trong mô hình (mục 2.2.2), nên
+  ta lưu IRI — hoặc mã định danh riêng — làm *thuộc tính* `iri` trên nút nếu cần tham chiếu
+  chéo với tầng RDF.
+- **`rdf:type` thành nhãn.** Lớp `RateOfChangeMechanism` thành nhãn nút `:RateOfChangeMechanism`.
+- **Literal thành thuộc tính.** `value: 3.2` nằm ngay trong nút, không phải một bộ ba riêng.
+
+**Quan hệ n-ary đi đâu?** Trong RDF ta phải tái hóa bằng nút `DerivativeApplication`
+(vì bộ ba không mang thuộc tính). LPG có *hai* lựa chọn tự nhiên — và đây là một quyết
+định thiết kế, không phải cú pháp:
+
+1. **Đổ vai diễn lên cạnh:** `-[:HAS_APPLICATION {differentiand: 12.5, wrt: "time"}]->`
+   nếu chỉ cần ghi hai vai diễn của lần áp dụng ấy.
+2. **Dùng nút trung gian:** một nút `:DerivativeApplication` với các cạnh
+   `-[:DIFFERENTIAND]->`, `-[:WRIT]->` — khi lần áp dụng có nhiều thông tin hơn (điều
+   kiện, bằng chứng, thời điểm) và cần được tham chiếu lại.
+
+Chọn 2 thì kết quả là họ "nút hoá quan hệ" giống hệt reification trong RDF — một dấu hiệu
+cho thấy phép n-ary không thuộc riêng mô hình nào: nó là bài toán miền, và mỗi mô hình
+trả lời theo cú pháp của mình.
+
+Trong LPG, khái niệm *tương đương đồ thị* cũng tồn tại nhưng xoay quanh định danh nội bộ
+(mục 2.2.2): hai đồ thị tải hai lần vào hai cơ sở dữ liệu sẽ có các `elementId` khác nhau,
+nhưng nếu cấu trúc nút–cạnh–thuộc tính giống nhau, chúng là "cùng một đồ thị" về mặt dữ
+liệu. Đây chính là bản song song của đẳng cấu trong RDF (mục 2.1.5) — chỉ khác là ở RDF,
+đối tượng mang ý nghĩa là IRI, còn ở LPG, nút không có ý nghĩa định danh miền nào độc lập
+mà ý nghĩa nằm ở thuộc tính `iri` nếu ta tự đặt.
+
 ## 2.3 Cypher: truy vấn đồ thị thuộc tính
 
 **Cypher** là ngôn ngữ truy vấn khai báo do Neo4j phát triển, dùng để đọc và ghi dữ liệu
@@ -529,6 +794,43 @@ cho phép duyệt nhiều bước quan hệ:
 MATCH (a:City)-[:SISTER_CITY]->(b:City)
 RETURN a.name, b.name
 ```
+
+**Cùng bài toán capstone như mục 2.1.6 — nối nhiều bước qua nút trung gian.** Truy vấn
+tìm các mảnh ghép của ứng dụng cơ chế (với mô hình LPG "nút trung gian" đã chọn ở mục
+2.2.4):
+
+```cypher
+MATCH (m:RateOfChangeMechanism)-[:HAS_APPLICATION]->(app:DerivativeApplication)
+      -[:DIFFERENTIAND]->(q:Quantity)
+RETURN m.label, q.label
+```
+
+Về cấu trúc, đây là bản dịch gần như từng ký tự của BGP ba mẫu bên SPARQL: chuỗi
+`-[:HAS_APPLICATION]->...-[:DIFFERENTIAND]->` diễn đạt cùng ba bước khớp (cơ chế →
+ứng dụng → biến vi phân), chỉ với cú pháp ASCII-art. Điểm khác nhau nằm ở *hình dạng đồ
+thị* chứ không phải khả năng truy vấn: trong RDF, `DerivativeApplication` phải là nút vì
+bộ ba không mang thuộc tính; trong LPG, nó *có thể* là nút (như ta chọn) nhưng cũng có
+thể chỉ là thuộc tính trên cạnh `HAS_APPLICATION` — và khi đó truy vấn viết khác hẳn:
+
+```cypher
+MATCH (m:RateOfChangeMechanism)-[a:HAS_APPLICATION]->(q:Quantity)
+RETURN m.label, a.differentiand, a.wrt
+```
+
+Hai truy vấn trả lời cùng một câu hỏi nhưng giả định hai thiết kế khác nhau — đây chính
+là "quyết định biểu diễn nằm trong truy vấn", một chủ đề §2.4 sẽ phân tích.
+
+**OPTIONAL MATCH tương ứng LEFT JOIN.** Cypher dùng `OPTIONAL MATCH` cho vai trò giống
+`OPTIONAL` của SPARQL — hỏi "mọi cơ chế và điều kiện nếu có":
+
+```cypher
+MATCH (m:RateOfChangeMechanism)
+OPTIONAL MATCH (m)-[:HAS_CONDITION]->(c:Condition)
+RETURN m.label, c.label
+```
+
+`rateOfChange_1` và `heatTransferRate_2` vẫn xuất hiện với `c` = NULL — đúng nghĩa
+LEFT JOIN; bỏ `OPTIONAL` đi, chúng biến mất.
 
 ### 2.3.4 Cypher khác với ISO GQL
 
@@ -618,6 +920,32 @@ Những heuristic thực tế:
   bằng cấu trúc hay bằng thuộc tính, quan hệ được "làm giàu" thế nào, và khả năng liên
   tác ra sao.
 
+**Áp dụng vào dữ liệu cơ chế.** Ba khác biệt trong bảng 2.4.1 hóa ra quyết định trực tiếp
+cách hệ thống Mechanism-KG sẽ vận hành:
+
+- **Định danh (mục 2.4.2, khác biệt Hai).** Một cơ chế được tích hợp từ hai nguồn (hai
+  sách giáo khoa) cần một định danh chung để hệ thống biết hai đoạn văn nói về cùng một
+  cơ chế. RDF cấp sẵn IRI; LPG buộc ta phải *tự thiết kế* quy ước định danh (thuộc tính
+  `iri` như ở mục 2.2.4) — không sai, nhưng là công việc mà RDF có sẵn. Chương 3 sẽ dùng
+  chính sự khác biệt này làm điểm khởi đầu cho bài toán đồng nhất định danh.
+- **Siêu dữ liệu của quan hệ (khác biệt Một).** Gắn điều kiện áp dụng vào một lần áp
+  dụng cơ chế: trong LPG, thêm thuộc tính lên cạnh `HAS_APPLICATION`; trong RDF, phải
+  dựng nút `DerivativeApplication` (như dataset chuẩn). Cái giá của RDF là thêm một nút —
+  nhưng cái được là *đối tượng* ứng dụng đó có IRI riêng, sẵn sàng cho việc gắn bằng
+  chứng và ngữ cảnh ở các chương sau. LPG ghi nhanh hơn, nhưng "lần áp dụng" không thành
+  công dân hạng nhất để tham chiếu.
+- **Ngữ nghĩa hình thức (khác biệt Ba).** Hệ thống Mechanism-KG phải *suy ra* mối quan
+  hệ giữa cơ chế này với cơ chế khác (ví dụ `newtonCooling_1 requires rateOfChange_1`,
+  Chương 5). RDF mang tầng entailment chuẩn (RDFS/OWL) để suy diễn có ngữ nghĩa được
+  định nghĩa; LPG để lại việc đó cho quy ước ứng dụng. Với một hệ thống tri thức cần
+  suy luận được kiểm chứng, đây là lợi thế quyết định của RDF — và là lý do chương này
+  đặt RDF làm biểu diễn chính của dataset capstone.
+
+Điều này không phán xử LPG yếu kém — cho đồ thị ứng dụng đóng, LPG tiện lợi hơn. Nó
+minh họa đúng điều mục 2.4.1 hứa: **lựa chọn biểu diễn là lựa chọn kiến trúc**, và hệ
+thống Mechanism-KG, với tham vọng tích hợp đa nguồn và suy luận được kiểm chứng, nghiêng
+về RDF ở tầng tri thức trung tâm.
+
 ## 2.5 Những ngộ nhận thường gặp
 
 1. **"Turtle là RDF."** Sai. Turtle là một cú pháp để viết RDF; RDF là mô hình đồ thị.
@@ -643,6 +971,19 @@ Những heuristic thực tế:
 - ★★★ Cùng một câu hỏi "Những thành phố nào là thủ đô?", hãy so sánh truy vấn SPARQL và
   Cypher tương ứng. Bên nào diễn đạt sát với mô hình dữ liệu của nó hơn?
 
+Trên dữ liệu cơ chế:
+
+- ★ Trong dataset capstone, vì sao `?m a ex:Mechanism` trả về rỗng dù `rateOfChange_1`
+  là một cơ chế? Cách sửa tối thiểu là gì, và cách sửa "bền" là gì (xem Chương 5)?
+- ★★ Bạn được giao thiết kế đồ thị đội bóng: "cầu thủ ghi bàn trong trận đấu". Vẽ nó
+  bằng RDF (cần nút trung gian kiểu `DerivativeApplication`) và bằng LPG (thuộc tính
+  trên cạnh). Với thiết kế nào việc hỏi "cầu thủ này ghi bao nhiêu bàn ở sân nhà" đơn
+  giản hơn? Bài này lặp lại đúng quyết định thiết kế của §2.2.4.
+- ★★★ `ex:hasValue` là literal nên "giá trị 12.5 của `position_1`" không tham gia được
+  vào phép nối (không thể là chủ thể). Thiết kế nào cho phép coi "giá trị" như một thực
+  thể có lịch sử (ai đo, đo lúc nào, sai số bao nhiêu)? Mô hình đó phá vỡ nguyên tắc
+  IRI-vs-literal ở mục 2.1.5 như thế nào — và Chương 6 sẽ cần điều đó.
+
 ## 2.7 Chúng ta đã biết gì
 
 - Đồ thị RDF là tập hợp các bộ ba với ràng buộc vị trí chính xác; IRI là cơ chế định
@@ -655,6 +996,21 @@ Những heuristic thực tế:
 - Cùng một tri thức có thể biểu diễn bằng cả hai mô hình, nhưng cấu trúc đồ thị, định
   danh, siêu dữ liệu quan hệ, và khả năng suy luận sẽ khác nhau.
 
+**Những câu hỏi SPARQL mà Mechanism-KG bây giờ trả lời được.** Kết thúc chương này, đồ
+thị cơ chế (tập tin `rate_of_change.ttl`) đã có thể trả lời các truy vấn sau:
+
+- "Cơ chế RATE_OF_CHANGE có những đầu vào nào?" — `?m ex:hasInput ?q` với
+  `?m = ex:rateOfChange_1`.
+- "Mỗi cơ chế có những ứng dụng nào, ứng dụng đó vi phân theo đại lượng nào và với tham
+  chiếu nào?" — truy vấn ba-mẫu ở mục 2.1.6.
+- "Đại lượng nào đang vượt ngưỡng?" — `FILTER (?v > 10)` trên `hasValue`.
+- "Cơ chế nào có điều kiện áp dụng?" — `OPTIONAL { ?m ex:hasCondition ?condition }`.
+- "Cơ chế nào phụ thuộc vào cơ chế nào?" — `?m ex:requires ?dependency` (trên đồ thị
+  hiện tại chỉ có `newtonCooling_1 requires rateOfChange_1`).
+- Đồng thời, câu hỏi "cơ chế nào là RateOfChangeMechanism" — và câu hỏi "cơ chế nào là
+  Mechanism (nói chung)" — cho thấy sự khác nhau giữa khớp đồ thị và suy luận phân lớp.
+  Câu trước trả lời được ngay, câu sau cần RDFS/OWL (Chương 5).
+
 ## 2.8 Chúng ta chưa làm được gì
 
 - Ta mới nói về *cú pháp* và *mô hình*; chưa có cách nào để máy **hiểu ý nghĩa** của
@@ -664,6 +1020,10 @@ Những heuristic thực tế:
   **định danh** và **đồng nhất**.
 - Ta chưa xét **ngữ cảnh**: thông tin này đến từ đâu, đúng trong khoảng thời gian nào,
   đáng tin đến mức nào.
+- Với chính dataset capstone: ta *chưa* trả lời được "hai đoạn văn từ hai sách có nói về
+  cùng một cơ chế không" (đồng nhất định danh), "cơ chế này đúng về mặt ngữ nghĩa khi
+  nào" (lược đồ/bản thể học hình thức), và "tại sao tin cơ chế này" (bằng chứng, nguồn).
+  Đó chính xác là ba trụ của Chương 3.
 
 ## 2.9 Cầu nối đến Chương 3
 
@@ -672,6 +1032,37 @@ và rằng định danh (IRI) là một cơ chế mạnh nhưng không tự đ�
 hỏi tự nhiên tiếp theo là: **làm sao để tổ chức định danh, lược đồ và ngữ cảnh sao cho
 tri thức vừa nhất quán vừa có thể tích hợp?** Chương 3 — *Lược đồ, Định danh và Ngữ cảnh*
 — sẽ trả lời điều đó, bắt đầu từ chính những khoảng trống mà chương này để lại.
+
+Với mạch capstone, điểm nối rất cụ thể: mục 2.1.3 để ngỏ câu hỏi "hai lần trích xuất có
+sinh ra cùng một ứng dụng không?", và mục 2.1.5 cho thấy hai blank node có thể là cùng
+một đồ thị. Chương 3 trả lời bằng cách gán cho ứng dụng đó định danh ổn định
+(`ex:derivativeApplication_1`) và xây ngữ cảnh quanh nó — bước đầu tiên của mô hình
+n-ary chính thức.
+
+## 2.10 Thang năng lực sau chương này
+
+**Trước chương này** — bạn có thể: nói RDF là "đồ thị bộ ba", SPARQL là "ngôn ngữ truy
+vấn RDF" theo cách nhớ thuật ngữ, mà chưa đọc được cấu trúc đồ thị từ một truy vấn.
+
+**Sau chương này** — bạn có thể:
+
+- Viết Turtle cho một miền bất kỳ (thành phố hay cơ chế) và biện minh từng lựa chọn
+  IRI-vs-literal theo quy tắc "thứ được tham chiếu lại thì cho IRI".
+- Đọc một BGP nhiều mẫu và dự đoán ánh xạ nghiệm qua từng bước khớp — không chỉ chạy
+  rồi tin kết quả.
+- Dịch cùng một cấu trúc sang LPG + Cypher và chỉ ra chỗ hai mô hình khác nhau về hình
+  dạng chứ không khác về khả năng.
+- Giải thích vì sao `?m a ex:Mechanism` có thể trả về rỗng — và điều đó nói lên điều gì
+  về ranh giới giữa khớp mẫu và suy luận.
+
+**Ví dụ cụ thể RATE_OF_CHANGE:** truy vấn ba-mẫu ở mục 2.1.6 trả về đúng cặp
+`(rateOfChange_1, position_1, time_1)` và `(heatTransferRate_2, thermalEnergy_1,
+time_1)` — hai ứng dụng của cùng một khái niệm "tốc độ thay đổi" được đọc thẳng từ đồ
+thị bằng một BGP.
+
+**Vẫn chưa giải quyết:** đồng nhất định danh (hai IRI cùng một cơ chế), lược đồ hình
+thức (ý nghĩa của `hasInput` là gì), suy luận phân lớp, và ngữ cảnh/bằng chứng của mỗi
+bộ ba. Chương 3 bắt đầu từ hai trụ đầu.
 
 
 ## Thuật ngữ đã gặp trong chương này
@@ -693,6 +1084,9 @@ tri thức vừa nhất quán vừa có thể tích hợp?** Chương 3 — *Lư
 | Cypher | Ngôn ngữ truy vấn khai báo cho đồ thị thuộc tính | §2.3 |
 | GQL (Graph Query Language) | Ngôn ngữ truy vấn đồ thị chuẩn ISO | §2.3.4 |
 | ISO (International Organization for Standardization) | Tổ chức Tiêu chuẩn hóa Quốc tế | §2.3.4 |
+| RateOfChangeMechanism | Lớp cơ chế tính tốc độ thay đổi của một đại lượng theo một biến; loại của `rateOfChange_1` | §2.1.5 |
+| DerivativeApplication | Đối tượng n-ary tái hóa: ghim ứng dụng cơ chế với biến vi phân và biến tham chiếu | §2.1.6 |
+| Quantity / ReferenceVariable / Condition | Đại lượng đo được / biến độc lập của tốc độ / điều kiện áp dụng | §2.1.5–2.1.6 |
 | Namespace (không gian tên) | Ánh xạ tiền tố ngắn thành IRI đầy đủ | §2.1.4 |
 | Linked Data (dữ liệu liên kết) | Dữ liệu được định danh bằng IRI để tích hợp | §2.1.2 |
 | Reification (tái hiện) | Kỹ thuật biến bộ ba thành tài nguyên để gắn thêm thông tin | §2.4.2, Chương 3 |
