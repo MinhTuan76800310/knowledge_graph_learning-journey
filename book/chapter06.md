@@ -685,11 +685,11 @@ gì**:
 
 | Loại confidence | Đánh giá gì | Ví dụ |
 |----------------|-------------|-------|
-| Extraction confidence | Độ chính xác của quá trình trích xuất | NER model gán 0.92 cho entity "Hà Nội" |
-| Source reliability | Độ tin cậy của nguồn | GSO được đánh giá 0.95 dựa trên track record |
-| Evidence assessment | Mức độ bằng chứng hỗ trợ | 3 independent sources confirm → 0.9 |
-| Temporal validity | Khả năng phát biểu còn hiệu lực | Last updated 5 years ago → 0.7 |
-| Composite confidence | Kết hợp nhiều yếu tố | Weighted combination of above |
+| Extraction confidence (độ tin cậy trích xuất) | Độ chính xác của quá trình trích xuất | NER model gán 0.92 cho entity "Hà Nội" |
+| Source reliability (độ tin cậy nguồn) | Độ tin cậy của nguồn | GSO được đánh giá 0.95 dựa trên track record |
+| Evidence assessment (đánh giá bằng chứng) | Mức độ bằng chứng hỗ trợ | 3 independent sources confirm → 0.9 |
+| Temporal validity (hiệu lực thời gian) | Khả năng phát biểu còn hiệu lực | Last updated 5 years ago → 0.7 |
+| Composite confidence (độ tin cậy tổng hợp) | Kết hợp nhiều yếu tố | Weighted combination of above |
 
 Không có công thức phổ quát để tính composite confidence. Mỗi hệ thống cần định nghĩa
 chính sách riêng — và chính sách đó phải được ghi nhận tường minh trong hệ thống.
