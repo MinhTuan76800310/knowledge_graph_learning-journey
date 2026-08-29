@@ -25,6 +25,9 @@
 >   ngữ cảnh chứ không làm phát biểu trở thành đúng
 > - Ba trục Schema – Identity – Context là ba bài toán **riêng biệt**, không gộp chung
 >   thành "ontology"
+> - Cả ba trục được áp dụng đồng thời lên knowledge graph cơ chế: lược đồ của
+>   Mechanism, định danh của một cơ chế xuyên qua hai giáo trình, và ngữ cảnh của
+>   một ứng dụng `RATE_OF_CHANGE`
 >
 > **Tiên quyết:** Chương 2 (RDF, IRI, đồ thị thuộc tính, bộ ba, quan hệ).
 >
@@ -229,7 +232,18 @@ Hogan et al. phân biệt ba dạng lược đồ [@hogan-knowledge-graphs]:
    liệu đã có — ví dụ gom nhóm các nút có cùng hình dạng kết nối — thay vì được thiết
    kế từ đầu.
 
-Ba chiến lược này không loại trừ nhau. Trong ví dụ đang chạy của chúng ta, nguồn A và
+Ba chiến lược này không loại trừ nhau. Tiêu chí chọn chiến lược phụ thuộc vào độ
+ổn định của miền và mức độ hiểu biết ban đầu:
+
+- **Thiết kế trước** phù hợp khi miền đã được hiểu rõ — lược đồ cơ chế ở §3.1.7 có
+  thể thiết kế trước vì các khái niệm (Mechanism, Operation, Quantity) là ổn định
+  trong phạm vi giáo khoa.
+- **Tăng dần** phù hợp khi tích hợp nguồn mới không ngừng — mỗi nguồn cơ chế mới
+  có thể bổ sung Operation mới mà không phá vỡ lược đồ hiện tại.
+- **Nổi lên** có ích khi dữ liệu có trước, lược đồ chưa rõ — trích xuất cấu trúc từ
+  kho dữ liệu cơ chế thô mà chưa biết trước lớp nào tồn tại.
+
+Trong ví dụ đang chạy của chúng ta, nguồn A và
 nguồn B mỗi bên mang một "lược đồ ngầm" riêng (`ex:capitalOf` so với `wdt:P36`,
 `ex:name` so với nhãn của Wikidata). Công việc đầu tiên của tích hợp là làm cho hai
 lược đồ ngầm đó nói chuyện được với nhau — bước *schema alignment* sẽ quay lại ở mục
@@ -238,6 +252,44 @@ lược đồ ngầm đó nói chuyện được với nhau — bước *schema 
 > ⚑ **Không ngụ ý:** có lược đồ không có nghĩa là dữ liệu đúng. Lược đồ nói về *kỳ
 > vọng cấu trúc*; dữ liệu cụ thể có thể vẫn sai, thiếu, hoặc lỗi thời. Kiểm chứng dữ
 > liệu là bài toán riêng (Chương 5).
+
+### 3.1.7 Lược đồ cho miền cơ chế
+
+Cùng một tư duy lược đồ — lớp, quan hệ, ràng buộc — được áp dụng cho miền cơ chế
+xuyên suốt cuốn sách. Lược đồ RDFS sau đây mô tả các lớp và quan hệ kỳ vọng trong
+knowledge graph về các cơ chế:
+
+```turtle
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex:   <http://example.org/kgbook/mks#> .
+
+ex:Mechanism              a rdfs:Class .
+ex:RateOfChangeMechanism  rdfs:subClassOf ex:Mechanism .
+ex:Operation              a rdfs:Class .
+ex:DerivativeOperation    rdfs:subClassOf ex:Operation .
+ex:Quantity               a rdfs:Class .
+ex:ReferenceVariable      a rdfs:Class .
+ex:MechanismApplication   a rdfs:Class .
+
+ex:hasOperation  rdfs:domain ex:Mechanism ;
+                 rdfs:range  ex:Operation .
+ex:hasInput      rdfs:domain ex:Mechanism ;
+                 rdfs:range  ex:Quantity .
+ex:hasOutput     rdfs:domain ex:Mechanism ;
+                 rdfs:range  ex:Quantity .
+ex:hasValue      rdfs:domain ex:Quantity ;
+                 rdfs:range  rdfs:Literal .
+```
+
+Đây là một lược đồ RDFS thuần túy: nó khai báo lớp, quan hệ, và miền/giá trị —
+nhưng không nói gì về ngữ nghĩa suy luận (loại trừ, tương đương, điều kiện cần–đủ).
+Nó cho biết `ex:rateOfChange_1` là một `RateOfChangeMechanism`, và `ex:hasOperation`
+nối từ Mechanism đến Operation. Nó không cho biết mỗi Mechanism phải có ít nhất một
+Operation, hay `RateOfChangeMechanism` và `HeatTransferMechanism` loại trừ nhau.
+Những ngữ nghĩa đó thuộc về ontology (Chương 4).
+
+So sánh với lược đồ thành phố ở §3.1.3: cấu trúc RDFS giống hệt nhau — chỉ khác tên
+lớp, tên quan hệ, và miền. Công cụ lược đồ là một; miền áp dụng thay đổi.
 
 ## 3.2 Định danh — đặt tên không phải là hiểu
 
@@ -268,6 +320,20 @@ thực thể khác nhau trùng tên.
 Hệ quả thứ hai: **hai định danh khác nhau không chứng minh hai thực thể khác nhau**.
 `ex:Hanoi` và `wd:Q1858` khác nhau từng ký tự, nhưng rất có thể cùng biểu thị một
 thành phố. Đồ thị không thể tự kết luận điều này — và đó chính là bài toán định danh.
+
+Sự biểu thị (denotation) — quan hệ giữa định danh và thực thể — có ba tính chất
+quan trọng cần ghi nhớ xuyên suốt chương:
+
+1. **Không nội tại:** một IRI như `ex:rateOfChange_1` không tự động biểu thị cơ chế
+   vận tốc; ý nghĩa đó được gán bởi người tạo và người đọc. IRI chỉ là chuỗi ký tự;
+   denotation là quy ước của cộng đồng.
+2. **Có thể tranh chấp:** hai cộng đồng có thể tranh luận rằng `ex:rateOfChange_1`
+   biểu thị "vận tốc tức thời" hay "vận tốc trung bình". Định danh duy nhất không
+   giải quyết được tranh chấp — chỉ có thỏa thuận hoặc tách định danh mới giải quyết.
+3. **Có thể thay đổi theo thời gian:** một định danh `ex:newtonianGravity` biểu thị
+   một lý thuyết vật lý; sau Einstein, nó vẫn biểu thị lý thuyết đó, nhưng hiểu biết
+   về phạm vi đúng của nó đã thay đổi — định danh không thay đổi, denotation không
+   thay đổi, nhưng tri thức gắn với thực thể thay đổi.
 
 ### 3.2.2 Vì sao đồ thị đầy rẫy định danh trùng lặp?
 
@@ -341,6 +407,26 @@ giá chất lượng (Chương 7).
 > việc hai tên gọi là một. Nếu còn do dự, bạn đang có một *ứng viên đồng nhất*, không
 > phải một khẳng định đồng nhất.
 
+**Ví dụ nguy hiểm trên miền cơ chế.** Giả sử một lập trình viên vội vàng ghi:
+
+```turtle
+ex:rateOfChange_1 owl:sameAs ex:heatTransferRate_2 .
+```
+
+Hai cơ chế này đều là `RateOfChangeMechanism` và đều dùng `ex:derivativeOperation_1`,
+nhưng chúng khác nhau về đầu vào: `ex:rateOfChange_1` lấy đạo hàm của
+`ex:position_1`, còn `ex:heatTransferRate_2` lấy đạo hàm của `ex:thermalEnergy_1`.
+Một khẳng định `owl:sameAs` sai sẽ hợp nhất chúng, khiến bộ suy luận kết luận rằng
+`ex:heatTransferRate_2` có đầu vào `ex:position_1` — một suy diễn sai về mặt vật lý.
+Hậu quả lan truyền: mọi truy vấn "cơ chế nào tác động lên position" đều trả về
+`heatTransferRate_2`, và mọi truy vấn về nhiệt lượng đều lẫn lộn dữ liệu vị trí. Một
+cạnh `owl:sameAs` sai trên đồ thị cơ chế gây thiệt hại vượt xa vị trí nó được ghi vì
+suy luận lan truyền nó qua toàn bộ đồ thị.
+
+> ⚑ **Bài học:** trên miền cơ chế, `owl:sameAs` càng nguy hiểm vì các cơ chế khác nhau
+> thường dùng *chung* operation, chung output type, và chỉ khác nhau ở input hoặc điều
+> kiện. Bằng chứng đồng nhất phải đủ chi tiết để phân biệt chúng (xem §3.2.5).
+
 ### 3.2.5 Từ ứng viên đến khẳng định được chấp nhận
 
 Làm sao hệ thống biết `ex:Hanoi` và `wd:Q1858` cùng chỉ một thành phố? Không có phép
@@ -397,6 +483,66 @@ ngữ nào, nhờ vậy ổn định qua đổi tên và trung lập giữa các
 [@hogan-knowledge-graphs] [@wikidata-statements]. Tách *tên gọi* khỏi *định danh* là
 một quyết định thiết kế có chủ đích.
 
+**Ví dụ cơ chế — đồng nhất khái niệm.** Cùng bài toán, nhưng trên miền cơ chế. Hai
+giáo trình vật lý định nghĩa "vận tốc" như sau:
+
+- **Giáo trình A:** "Velocity is the rate of change of position with respect to time."
+- **Giáo trình B:** "Speed in a given direction is the derivative of the position
+  vector with respect to time."
+
+Dù từ ngữ khác nhau, cả hai đều mô tả cùng một cơ chế: `RATE_OF_CHANGE` áp dụng lên
+`position` và `time`. Trong đồ thị dữ liệu, mỗi giáo trình có thể tạo một IRI riêng:
+
+```turtle
+@prefix ex: <http://example.org/kgbook/mks#> .
+@prefix ta: <http://example.org/kgbook/textbookA#> .
+@prefix tb: <http://example.org/kgbook/textbookB#> .
+
+# Giáo trình A
+ta:velocityDef  a  ex:Mechanism ;
+    ex:hasOperation  ex:derivativeOperation_1 ;
+    ex:hasInput      ex:position_1 ;
+    ex:hasOutput     ex:velocity_1 .
+
+# Giáo trình B
+tb:speedDef  a  ex:Mechanism ;
+    ex:hasOperation  ex:derivativeOperation_1 ;
+    ex:hasInput      ex:position_1 ;
+    ex:hasOutput     ex:velocity_1 .
+```
+
+Bằng chứng đồng nhất: (1) cùng operation `ex:derivativeOperation_1`, (2) cùng input
+`ex:position_1`, (3) cùng output `ex:velocity_1`. Đây là bằng chứng **định nghĩa**
+(definitional evidence), không phải địa lý — nó dựa trên nội dung khái niệm (cùng
+phép biến đổi trên cùng đại lượng), không phải tọa độ hay dân số. Sau xem xét,
+khẳng định được chấp nhận:
+
+```turtle
+ta:velocityDef owl:sameAs tb:speedDef .
+```
+
+Còn `ex:heatTransferRate_2` cũng dùng `ex:derivativeOperation_1`, nhưng khác input
+(`ex:thermalEnergy_1` thay vì `ex:position_1`). Nó là ứng viên đồng nhất bị **loại**
+ở bước bằng chứng vì tham gia khác. Quy tắc rút ra: *bằng chứng đồng nhất phải đủ để
+phân biệt với thực thể gần giống nhất* — nếu nhìn bề ngoài hai cơ chế giống nhau
+(cùng operation), chỉ có so sánh đầy đủ các tham gia mới phân biệt được.
+
+**Định danh chính tắc trên miền cơ chế.** Sau khi công nhận đồng nhất, hệ thống cần
+chọn **định danh chính tắc** (canonical identifier) — tên "thật" mà mọi truy cập quy
+về. Tiêu chí chọn (được áp dụng cho `ex:rateOfChange_1`, so với
+`ta:velocityDef` và `tb:speedDef`):
+
+- **Ổn định:** định danh chính tắc không đổi khi nguồn đổi tên. IRI của cơ chế trong
+  chính hệ thống (`ex:rateOfChange_1`) ổn định hơn IRI mang tên một giáo trình cụ thể.
+- **Trung lập với nguồn:** không gắn với một nguồn cụ thể; nếu giáo trình A ngừng tồn
+  tại, `ta:velocityDef` vẫn còn đó nhưng không còn là tên hợp lý.
+- **Thuộc sở hữu miền:** do hệ thống (hoặc cộng đồng miền) kiểm soát, không do bên
+  thứ ba đặt tiền lệ.
+
+Các định danh còn lại trở thành **bí danh** (alias): vẫn hợp lệ để tra cứu, được nối
+về định danh chính tắc bằng `owl:sameAs`. Vòng đời của định danh chính tắc khép kín
+như vậy: ứng viên → bằng chứng → chấp nhận → ghi nhận như bí danh.
+
 > ⚑ **Phạm vi:** chương này dạy *bài toán* và *quy trình khái niệm* của giải quyết
 > định danh. Các thuật toán công nghiệp — chặn (blocking), khớp (matching), học máy —
 > thuộc Chương 7.
@@ -441,6 +587,30 @@ ex:sourceB {
     wd:Q1858 wdt:P36 wd:Q881 .
 }
 ```
+
+Cùng kỹ thuật này áp dụng cho miền cơ chế. Ta phân vùng dữ liệu cơ chế theo nguồn:
+
+```trig
+@prefix ex:  <http://example.org/kgbook/mks#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:textbookA {
+    ex:rateOfChange_1  ex:hasOperation  ex:derivativeOperation_1 ;
+                       ex:hasInput      ex:position_1 ;
+                       ex:hasOutput     ex:velocity_1 .
+}
+
+ex:experimentData {
+    ex:position_1  ex:hasValue  "12.5"^^xsd:double .
+    ex:velocity_1  ex:hasValue  "3.2"^^xsd:double .
+}
+```
+
+`ex:textbookA` chứa định nghĩa khái niệm, `ex:experimentData` chứa dữ liệu thực
+nghiệm đo được. Tách biệt này cho phép truy vấn riêng từng nguồn (SPARQL `GRAPH`,
+Chương 2) và gắn provenance cho cả nhóm — ví dụ hỏi "bộ giá trị nào đến từ thực
+nghiệm?" mà không lẫn với định nghĩa sách giáo khoa. Lưu ý ranh giới bên dưới: ý
+nghĩa "nguồn đã khẳng định" là quy ước ứng dụng, không phải ngữ nghĩa RDF nội tại.
 
 Named graph cho phép **gom nhóm** các phát biểu và gắn cả nhóm với một tên — rất tiện
 để phân vùng dữ liệu theo nguồn, theo phiên bản, theo góc nhìn.
@@ -509,7 +679,43 @@ Một chi tiết ngữ nghĩa đáng giá từ Hogan et al.: **cạnh được t
 không hề khẳng định nó [@hogan-knowledge-graphs]. Biểu diễn và khẳng định là hai việc
 khác nhau.
 
+Kỹ thuật dựng thực thể trung gian có tên gọi riêng: **reification** (sự tái hiện
+hóa, "coi một phát biểu như một đối tượng"). Một quan hệ được *reify* khi ta thay
+cạnh hai ngôi bằng một thực thể có thể mang thêm thuộc tính — đúng cái đã làm với
+`CapitalStatus` ở trên.
+
+**Trên miền cơ chế, hãy reify ứng dụng của cơ chế `RATE_OF_CHANGE`.** Phát biểu
+"vận tốc là đạo hàm của vị trí theo thời gian" không phải quan hệ hai ngôi: nó có
+bốn tham gia — cơ chế, phép toán, đại lượng bị đạo hàm, và biến tham chiếu. Mở rộng
+trực tiếp từ `CapitalStatus` (3 tham gia) lên `DerivativeApplication` (4 tham gia),
+từ mô hình chính tắc của cuốn sách (MECHANISM_KG_CANONICAL_MODEL):
+
+```turtle
+ex:rateOfChange_1           ex:hasApplication  ex:derivativeApplication_1 .
+ex:derivativeApplication_1  a                  ex:DerivativeApplication ;
+    ex:hasOperation         ex:derivativeOperation_1 ;
+    ex:differentiand        ex:position_1 ;
+    ex:withRespectTo        ex:time_1 .
+```
+
+Bốn cạnh từ `ex:derivativeApplication_1` ràng buộc bốn "chỗ trống" (slots) của quan
+hệ n-ary: *cơ chế nào* (qua `ex:hasApplication` ngược về `ex:rateOfChange_1`), *phép
+toán nào* (`ex:hasOperation`), *đại lượng nào được đạo hàm* (`ex:differentiand`), và
+*theo biến nào* (`ex:withRespectTo`). Giờ đây có thể nói về chính sự ứng dụng đó —
+nó được xác nhận bởi ai, đo trong thí nghiệm nào, đúng từ bao giờ — mà không làm bẩn
+quan hệ vận tốc ở tầng dữ liệu. Chính `DerivativeApplication` này sẽ được trang bị
+ngữ nghĩa hình thức đầy đủ (axiom) ở Chương 4 và được xác nhận bằng rule/SHACL ở
+Chương 5.
+
 > 🖊 **Tự kiểm tra:** Giả sử bạn cần biểu diễn "Alice làm việc tại công ty X từ 2020 đến 2023, với vai trò kỹ sư phần mềm". Hãy phác thảo cấu trúc n-ary cho phát biểu này: thực thể trung gian đại diện cho điều gì? Có bao nhiêu cạnh nối từ nó? Nếu sau này Alice quay lại công ty X với vai trò khác, cấu trúc của bạn xử lý được không?
+>
+> *Chỉ dẫn trả lời:* thực thể trung gian đại diện cho *sự kiện làm việc* (employment),
+> không phải Alice cũng không phải công ty — nó có thể mang `employee`, `employer`,
+> `startDate`, `endDate`, `role`. Cạnh nối từ nó: tối thiểu hai thực thể tham gia (nếu
+> coi sự kiện là quan hệ nhị phân có thuộc tính), bốn nếu tách cả role và khoảng
+> thời gian thành cạnh riêng. Alice quay lại với vai trò khác = một sự kiện làm việc
+> *mới*, không ghi đè sự kiện cũ — đây chính là lợi thế của n-ary so với một giá trị
+> thuộc tính duy nhất: lịch sử được giữ, chứ không bị thay thế.
 
 ### 3.3.4 Thuộc tính của quan hệ: cách của đồ thị thuộc tính
 
@@ -552,6 +758,27 @@ qualifier chỉ bổ sung thông tin chứ không thay thế nội dung cốt l�
 [@wikidata-qualifiers]. Ngữ cảnh làm phát biểu **chính xác hơn để đánh giá**, không
 thay thế phát biểu.
 
+Mẫu tổng quát đằng sau các ví dụ trên là một cơ chế biểu diễn thứ năm, bổ sung cho
+bốn cơ chế ở §3.3.2–3.3.5: **qualifier** — cặp (thuộc tính, giá trị) gắn vào một
+phát biểu để thêm *một chiều ngữ cảnh* mà không dựng nút mới. Khác với thực thể
+n-ary (thêm cấu trúc, cho phép nói về chính phát biểu), qualifier chỉ *làm rõ phạm
+vi* của phát biểu đó. Chọn qualifier khi: chiều ngữ cảnh đơn lẻ, không cần tham chiếu
+tới chính phát biểu, và giá trị cốt lõi phải vẫn đọc được độc lập.
+
+**Áp dụng cho miền cơ chế** — hai con số đo được của cùng một đại lượng, không phải
+mâu thuẫn khi biết đa chiều ngữ cảnh:
+
+| Phát biểu | Chiều ngữ cảnh cần gắn |
+|-----------|------------------------|
+| `ex:position_1 ex:hasValue "12.5"` | *as of* 14:00, *method*: GPS |
+| `ex:position_1 ex:hasValue "12.3"` | *as of* 14:05, *method*: GPS |
+| `ex:velocity_1 ex:hasValue "3.2"`  | *derived* từ chuỗi vị trí, *rank*: preferred |
+
+Cùng một IRI (`ex:position_1`) có hai giá trị khác nhau không phải lỗi — mỗi giá trị
+ghi kèm thời điểm và phương pháp; người đọc truy vấn theo ngữ cảnh để chọn giá trị
+đúng. Đây là cách ngữ cảnh giúp đánh giá hai phát biểu cạnh tranh mà không cần xóa
+phát biểu nào — nền tảng cho quản lý mâu thuẫn và claim ở Chương 6.
+
 ### 3.3.7 Ngữ cảnh không tạo ra sự thật
 
 Bốn cơ chế vừa xét — named graph, thực thể n-ary, thuộc tính quan hệ, triple term —
@@ -589,6 +816,44 @@ hai nguồn và lược đồ đích [@stanford-cs520-kg-from-data]:
   `capitalOf`.
 - `ex:Vietnam` và `wd:Q881` cùng đóng vai quốc gia Việt Nam → lớp `Country`.
 - Hai nút thành phố đều thuộc lớp `City`.
+
+Từ vựng không tự khớp; các ánh xạ trên là **kết quả của một quy trình**, không phải
+điều hiển nhiên. Quy trình gióng hàng có ba bước lặp:
+
+1. **Sinh ứng viên (candidate generation):** dựa trên tín hiệu bề mặt — tên giống
+   nhau, định nghĩa có từ chung, phạm vi (domain/range) trông khớp. Ở đây:
+   `capitalOf` và `wdt:P36` cùng có chủ thể là lớp dạng "thành phố".
+2. **Thu bằng chứng (evidence):** kiểm tra *cấu trúc* — miền và phạm vi của hai quan
+   hệ; kiểm tra *thực thể trùng* — hai nút cùng nối tới `Vietnam`/`wd:Q881`; kiểm tra
+   *ngữ nghĩa* — định nghĩa văn bản "thủ đô của" khớp nhau.
+3. **Xác nhận hoặc bác bỏ (validate / reject):** ánh xạ được chấp nhận khi bằng chứng
+   đủ mạnh và *không có ứng viên thay thế cạnh tranh*; ngược lại bị loại hoặc gắn cờ
+   chờ xem xét của con người.
+
+**Ví dụ miền cơ chế — ánh xạ bị bác bỏ.** Hai giáo trình mô tả cùng một cơ chế bằng
+hai quan hệ khác nhau:
+
+```turtle
+@prefix ex: <http://example.org/kgbook/mks#> .
+@prefix ta: <http://example.org/kgbook/textbookA#> .
+@prefix tc: <http://example.org/kgbook/textbookC#> .
+
+# Giáo trình A
+ta:velocityDef  ex:hasOperation  ex:derivativeOperation_1 ;
+                ex:hasOutput     ex:velocity_1 .
+# Giáo trình C
+tc:speedDef      ex:involves      ex:derivativeOperation_1 ;
+                 ex:involves      ex:velocity_1 .
+```
+
+`ex:involves` trông giống `ex:hasOperation` (cùng liên kết tới `derivativeOperation_1`),
+nhưng bằng chứng cấu trúc bác bỏ ánh xạ: `ex:involves` còn liên kết tới `velocity_1`
+một đại lượng đầu ra — nó có phạm vi rộng hơn (`Operation` *hoặc* `Quantity`), trong
+khi `ex:hasOperation` có phạm vi hẹp (chỉ `Operation`). Dù trùng một instance, hai
+quan hệ có chữ ký cấu trúc (signature) khác nhau → **không ánh xạ**. Nếu gượng ép
+ánh xạ vì "trông giống", mọi truy vấn "cơ chế nào dùng phép toán gì" sau này sẽ trả
+về cả số liệu đầu ra lẫn lộn. Quy trình gióng hàng phải *biết từ chối*, không chỉ
+biết nối.
 
 *Thông tin được thêm:* các tương ứng từ vựng (vocabulary mappings). Đồ thị dữ liệu chưa
 thay đổi; thay đổi nằm ở tầng lược đồ.
@@ -697,6 +962,26 @@ trúc khái niệm.
   thế nào để họ thấy "khóa chính khác nhau" trong thế giới RDF/OWL không còn là bằng
   chứng của "hai thực thể khác nhau"?
 
+---
+
+**Câu hỏi miền cơ chế** — đặt trên knowledge graph về các cơ chế (MECHANISM_KG):
+
+- ★ Trên đồ thị cơ chế, `ex:rateOfChange_1` và `ex:velocity_1` khác nhau về bản chất
+  định danh thế nào (một cơ chế so với một đại lượng)? Bằng chứng nào bạn cần để chắc
+  chắn `ta:velocityDef` và `tb:speedDef` là cùng một cơ chế, thay
+  vì "gần giống"?
+- ★★ Phát biểu "vận tốc là đạo hàm của vị trí theo thời gian" khi tái hiện thành
+  `ex:derivativeApplication_1` có bốn tham gia. Chiều ngữ cảnh nào (nguồn, thời gian,
+  phương pháp đo) bạn sẽ gắn vào ứng dụng đó, và tại sao lại gắn vào nút trung gian
+  thay vì một trong bốn cạnh?
+- ★★ Giả sử có một định danh chính tắc `ex:heatTransferRate_2` và bí danh
+  `tc:coolingRateDef` từ một giáo trình thứ ba. Nếu giáo trình C thật ra
+  định nghĩa một khái niệm khác (tốc độ làm lạnh trung bình, không phải tức thời),
+  bước nào trong quy trình ứng viên → bằng chứng → chấp nhận đã thất bại?
+- ★★★ Bạn có hai nguồn cơ chế: một mô tả quan hệ `ex:hasOperation`, một mô tả
+  `ex:involves` với phạm vi rộng hơn. Vẽ quy trình gióng hàng lược đồ bạn sẽ chạy để
+  giữ ánh xạ đúng và bác bỏ ánh xạ sai (§3.4) — bằng chứng nào quyết định?
+
 ## 3.7 Chúng ta đã biết gì — và chưa làm được gì
 
 **Đã biết.** Ba trục độc lập để biến đồ thị dữ liệu thành tri thức có tổ chức:
@@ -724,6 +1009,66 @@ luận được loại trừ, tương đương, và điều kiện cần–đủ
 
 **Chương 4 — Bản thể học và Ngữ nghĩa Hình thức** (Ontologies and Formal Meaning) sẽ
 cung cấp tầng đó.
+
+## 3.8 Mechanism Knowledge System — Năng lực đạt được
+
+**TRƯỚC CHƯƠNG NÀY** — hệ thống biểu diễn và truy vấn cơ chế bằng RDF và SPARQL
+(Chương 2), nhưng hai nguồn dữ liệu về cùng một cơ chế tồn tại thành hai cụm cô lập
+không biết đến nhau; không thể trả lời "cơ chế rateOfChange_1 trong giáo trình A có
+phải là cơ chế speedDef trong giáo trình B không", và không có cách nào gắn bối cảnh
+nguồn gốc, thời gian, phạm vi cho các phát biểu về cơ chế.
+
+**SAU CHƯƠNG NÀY** — hệ thống có ba trục để tổ chức tri thức cơ chế:
+
+- **Lược đồ:** kiến trúc RDFS mô tả lớp, quan hệ, miền/giá trị cho toàn bộ
+  mechanism knowledge graph (Mechanism, Operation, Quantity, ReferenceVariable,...).
+- **Định danh:** cơ chế được gán định danh chính tắc (`ex:rateOfChange_1`), có bí
+  danh và `owl:sameAs` xuyên nguồn; quy trình ứng viên → bằng chứng → chấp nhận có
+  thể phân biệt đồng nhất thật (cùng định nghĩa, cùng tham gia) khỏi chỉ gần giống.
+- **Ngữ cảnh:** các phát biểu cơ chế được phân vùng theo nguồn (named graph
+  `ex:textbookA`, `ex:experimentData`); ứng dụng của RATE_OF_CHANGE được reify thành
+  `ex:derivativeApplication_1` với bốn tham gia; giá trị đo được gắn qualifier thời
+  điểm và phương pháp.
+
+**VÍ DỤ RATE_OF_CHANGE CỤ THỂ** — câu *"Velocity is the rate of change of position
+with respect to time"* nay được gắn vào một khung tích hợp gồm:
+
+- Lược đồ RDFS khai báo `RateOfChangeMechanism`, `DerivativeOperation`, `Quantity`,
+  `ReferenceVariable` và các quan hệ giữa chúng (§3.1.7).
+- Hai giáo trình A và B cùng mô tả cơ chế này, được nối bằng `owl:sameAs` sau khi
+  đối chiếu bằng chứng định nghĩa và loại trừ `heatTransferRate_2` (§3.2.5).
+- Ứng dụng đạo hàm được reify thành `ex:derivativeApplication_1` với bốn ràng buộc
+  tham gia, cho phép gắn thêm ngữ cảnh mà không làm bẩn quan hệ hai ngôi (§3.3.3).
+- Giá trị thực nghiệm của position và velocity được phân vùng vào named graph
+  `ex:experimentData`, tách biệt khỏi định nghĩa sách giáo khoa trong
+  `ex:textbookA` (§3.3.2).
+
+**VẪN CHƯA GIẢI QUYẾT** — lược đồ RDFS chưa có ngữ nghĩa suy luận (loại trừ lớp,
+tương đương thuộc tính, điều kiện cần–đủ); `owl:sameAs` mới là khẳng định đồng nhất
+chưa có cơ chế kiểm tra; ngữ cảnh mới ở mức biểu diễn, chưa có mô hình claim–bằng
+chứng–mâu thuẫn. Chương 4 mở ba nấc tiếp theo: *ngữ nghĩa hình thức, ontology, suy
+luận tự động*.
+
+## Thuật ngữ đã gặp trong chương này
+
+| Thuật ngữ | Nghĩa ngắn | Học chi tiết |
+|-----------|------------|--------------|
+| Schema (lược đồ) | Mô tả cấu trúc và từ vựng được kỳ vọng của đồ thị dữ liệu | §3.1 |
+| RDFS (RDF Schema) | Từ vựng mô tả lớp, subclass, domain/range với ngữ nghĩa suy luận | §3.1.3 |
+| Schema alignment (gióng hàng lược đồ) | Quy trình tìm và xác nhận tương ứng từ vựng giữa các nguồn | §3.4 |
+| Identifier (định danh) | Chuỗi ký tự dùng để gọi tên thực thể trong hệ thống | §3.2.1 |
+| Denotation (sự biểu thị) | Quan hệ "định danh này chỉ đến thực thể kia" | §3.2.1 |
+| Entity resolution (giải quyết định danh) | Suy luận hai định danh có cùng một thực thể hay không | §3.2.5 |
+| Record linkage (liên kết bản ghi) | Tên gọi của bài toán ghép bản ghi trong tích hợp dữ liệu | §3.2.5 |
+| Canonical identifier (định danh chính tắc) | Định danh duy nhất được chọn làm "tên thật" của thực thể | §3.2.5 |
+| Alias (bí danh) | Những tên khác cùng biểu thị thực thể, nối về định danh chính tắc | §3.2.5 |
+| owl:sameAs | Khẳng định hai định danh là một, kéo theo lan truyền thông tin | §3.2.4 |
+| Unique name assumption | Giả định tên khác nhau thì thực thể khác nhau — OWL không có | §3.2.3 |
+| Named graph (đồ thị có tên) | Cơ chế gom nhóm phát biểu trong RDF dataset | §3.3.2 |
+| N-ary relation (quan hệ n-ngôi) | Quan hệ nhiều hơn hai tham gia hoặc cần thuộc tính riêng | §3.3.3 |
+| Reification (sự tái hiện hóa) | Coi một phát biểu như một đối tượng có thể mang thuộc tính | §3.3.3 |
+| Qualifier (định ngữ ngữ cảnh) | Cặp (thuộc tính, giá trị) gắn vào phát biểu để thêm chiều ngữ cảnh | §3.3.6 |
+| Context (ngữ cảnh) | Phạm vi của sự đúng: nguồn, thời gian, phạm vi, độ tin cậy | §3.3.1 |
 
 ## Đọc thêm
 
