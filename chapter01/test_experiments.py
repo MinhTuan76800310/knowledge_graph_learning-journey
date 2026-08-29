@@ -6,11 +6,15 @@ that the core data structures behave as documented.
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 CHAPTER01_DIR = Path(__file__).parent
+
+_UTF8_ENV = os.environ.copy()
+_UTF8_ENV["PYTHONIOENCODING"] = "utf-8"
 
 
 # ---------------------------------------------------------------------------
@@ -77,6 +81,7 @@ class TestExp11:
             capture_output=True,
             text=True,
             timeout=30,
+            env=_UTF8_ENV,
         )
         assert result.returncode == 0
         assert "Plain Graph Without Semantics" in result.stdout
@@ -141,6 +146,7 @@ class TestExp12:
             capture_output=True,
             text=True,
             timeout=30,
+            env=_UTF8_ENV,
         )
         assert result.returncode == 0
         assert "Data Graph vs Taxonomy" in result.stdout
@@ -160,6 +166,7 @@ class TestExp13:
             capture_output=True,
             text=True,
             timeout=30,
+            env=_UTF8_ENV,
         )
         assert result.returncode == 0
         assert "Progressive Transformation" in result.stdout
@@ -170,6 +177,7 @@ class TestExp13:
             capture_output=True,
             text=True,
             timeout=30,
+            env=_UTF8_ENV,
         )
         assert "symmetric" in result.stdout.lower() or "INFERRED" in result.stdout
 
@@ -179,6 +187,7 @@ class TestExp13:
             capture_output=True,
             text=True,
             timeout=30,
+            env=_UTF8_ENV,
         )
         assert "subclass" in result.stdout.lower() or "Settlement" in result.stdout
 
@@ -197,6 +206,7 @@ class TestExp14:
             capture_output=True,
             text=True,
             timeout=30,
+            env=_UTF8_ENV,
         )
         assert result.returncode == 0
         assert "Data Graph" in result.stdout
@@ -207,6 +217,7 @@ class TestExp14:
             capture_output=True,
             text=True,
             timeout=30,
+            env=_UTF8_ENV,
         )
         assert "INFERRED" in result.stdout or "Inferred" in result.stdout
 
@@ -216,6 +227,7 @@ class TestExp14:
             capture_output=True,
             text=True,
             timeout=30,
+            env=_UTF8_ENV,
         )
         assert "Region" in result.stdout
 
@@ -234,6 +246,7 @@ class TestExp15:
             capture_output=True,
             text=True,
             timeout=30,
+            env=_UTF8_ENV,
         )
         assert result.returncode == 0
         assert "Semantics of a Relation" in result.stdout

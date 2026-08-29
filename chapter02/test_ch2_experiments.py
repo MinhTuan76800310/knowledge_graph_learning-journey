@@ -14,6 +14,10 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
+rdflib = pytest.importorskip("rdflib")
+
 CHAPTER02_DIR = Path(__file__).parent
 if str(CHAPTER02_DIR) not in sys.path:
     sys.path.insert(0, str(CHAPTER02_DIR))
