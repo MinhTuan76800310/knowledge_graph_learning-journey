@@ -196,7 +196,7 @@ $$r_{sub}: A \text{ rdfs:subClassOf } B, \; x \text{ rdf:type } A \to x \text{ r
 - $\theta_1(\text{body})$ gồm `ex:RateOfChangeMechanism rdfs:subClassOf ex:ChangeMechanism` và `ex:rateOfChange_1 a ex:RateOfChangeMechanism`, cả hai đều $\in G_0$ ✓
 - Thêm $\theta_1(\text{head}) =$ `ex:rateOfChange_1 a ex:ChangeMechanism`
 
-$G_1 = G_0 \cup \{ \text{`ex:rateOfChange_1 a ex:ChangeMechanism`} \}$
+$G_1 = G_0 \cup \{ \text{ex:rateOfChange\_1 a ex:ChangeMechanism} \}$
 
 **Vòng 2:**
 - Áp dụng $r_{sub}$ với
@@ -204,7 +204,7 @@ $G_1 = G_0 \cup \{ \text{`ex:rateOfChange_1 a ex:ChangeMechanism`} \}$
 - $\theta_2(\text{body})$ gồm `ex:ChangeMechanism rdfs:subClassOf ex:Mechanism` và `ex:rateOfChange_1 a ex:ChangeMechanism` (vừa suy ra ở vòng 1) ✓
 - Thêm $\theta_2(\text{head}) =$ `ex:rateOfChange_1 a ex:Mechanism`
 
-$G_2 = G_1 \cup \{ \text{`ex:rateOfChange_1 a ex:Mechanism`} \}$
+$G_2 = G_1 \cup \{ \text{ex:rateOfChange\_1 a ex:Mechanism} \}$
 
 **Vòng 3:** Không còn cặp `(A rdfs:subClassOf B, x : A)` mới nào để áp dụng. $G_3 = G_2$.
 

@@ -26,6 +26,13 @@ echo "build_book: pre-rendering Mermaid figures"
 echo "build_book: pre-rendering TikZ figures"
 "$ROOT/scripts/render_tikz.sh"
 
+# TikZ output lands in book/figures/generated; chapters reference
+# figures/generated/... relative to their own directory, so the PDFs must
+# be present under build/figures/generated/ for Pandoc (run from build/) to resolve.
+echo "build_book: copying generated PDF figures into build/"
+mkdir -p "$BUILD/figures/generated"
+cp "$ROOT"/book/figures/generated/*.pdf "$BUILD/figures/generated/"
+
 # Ordered source list from the manifest.
 mapfile -t SOURCES < <(sed -n '/^sources:/,/^[^ -]/p' "$ROOT/book/book-manifest.yaml" \
   | sed -n 's/^  - \(.*\.md\)$/\1/p')

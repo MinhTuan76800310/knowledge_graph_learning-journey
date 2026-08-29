@@ -58,3 +58,11 @@ Last updated: 2026-08-29 (Chapter 6 accepted)
   Baseline preserved at tag `book-preview-v0.4-baseline-pre-tikz` (commit 103432b).
   Recommendation: adopt TikZ selectively for formal diagrams from Ch6 onward.
   Full report: `docs/TIKZ_PILOT_COMPARISON.md`.
+- **Whole-book depth remediation** (2026-08-30): Chapters 1–6 remediated per
+  `docs/BOOK_DEPTH_REMEDIATION_PLAN.md` and `docs/BOOK_CONCEPT_DEPTH_AUDIT.md`. Every
+  audit row received a mechanism transfer; capability ladders standardized across all six
+  chapters; 13 generated TikZ figures replaced the earlier 8 (Ch4–6). Verification:
+  `docs/POST_REMEDIATION_AUDIT.md`. Chapters remain ACCEPTED; no content was cut.
+- **PDF build notes (2026-08-30):** `scripts/build_book.sh` now copies generated PDF
+  figures into `build/figures/generated/` so Pandoc resolves them; fixed two
+  backtick-in-math LaTeX errors in Ch5 §5.2 ($G_1$, $G_2$ lines).
