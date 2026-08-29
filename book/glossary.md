@@ -24,6 +24,48 @@ làm tên quy chiếu của một thực thể; các tên khác được giữ n
 tạp: giao (⊓), hợp (⊔), phủ định (¬), hạn chế tồn tại (∃R.C), hạn chế phổ quát (∀R.C).
 Mỗi biểu thức có ngữ nghĩa tập hợp chính xác trong diễn giải.
 
+**Completeness (Tính đầy đủ).** Tính chất của thủ tục suy diễn: mọi hệ quả logic thực sự đều
+được sinh ra. Không có âm tính giả. Phải ghi rõ ngôn ngữ/hồ sơ + chế độ suy diễn + tác vụ
+suy luận. OWL RL forward chaining không complete cho OWL 2 DL đầy đủ trên đồ thị RDF tùy ý.
+
+**Conformance (Sự phù hợp).** Dữ liệu thỏa mãn các shapes SHACL đã định nghĩa. Phù hợp không
+có nghĩa dữ liệu đúng với thực tế; vi phạm không có nghĩa dữ liệu sai.
+
+**Entailment Regime (Chế độ suy diễn).** Tập quy tắc ngữ nghĩa áp dụng khi tính toán hệ quả
+logic. Cùng đồ thị, regime khác nhau cho kết quả khác nhau (Simple, RDFS, OWL RL, OWL
+Direct, OWL RDF-Based). Mọi khẳng định về soundness/completeness phải ghi rõ regime.
+
+**Forward Chaining (Suy diễn tiến).** Thuật toán suy diễn lặp: G_{i+1} = G_i ∪ consequences(G_i),
+dừng khi đạt điểm bất động (fixpoint) G_{n+1} = G_n. Đảm bảo dừng với quy tắc đơn điệu trên
+đồ thị hữu hạn.
+
+**Materialization (Vật chất hóa).** Chiến lược triển khai suy diễn bằng cách tính toán trước
+bao đóng và lưu trữ kết quả. Khác với bản thân quan hệ entailment (là khái niệm ngữ nghĩa,
+không phải thao tác tính toán). Có thể không khả thi với ontology quá biểu cảm.
+
+**Rule (Quy tắc).** Mệnh đề dạng Horn: head ← body₁ ∧ ... ∧ bodyₙ. Trong KG, head và body
+là mẫu triple. Quy tắc Horn đơn điệu, đảm bảo dừng trên đồ thị hữu hạn. Không biểu diễn được
+phủ định hay disjunction trong head.
+
+**SHACL (Shapes Constraint Language).** Ngôn ngữ chuẩn W3C để xác nhận dữ liệu RDF dựa trên
+shapes. Shapes định nghĩa ràng buộc kiểm tra, không phải tiên đề suy diễn. Kết quả là
+validation report (conforms/violation), không phải tri thức mới.
+
+**Shape.** Điều kiện kiểm tra trong SHACL nhắm đến tập nút dữ liệu. Shape không tham gia
+vào RDFS/OWL entailment. Khác với ontology axiom: shape kiểm tra thông tin, axiom thêm
+thông tin.
+
+**Soundness (Tính đúng đắn).** Tính chất của thủ tục suy diễn: mọi kết quả sinh ra đều là hệ
+quả logic thực sự. Không có dương tính giả. Phải ghi rõ ngôn ngữ/hồ sơ + chế độ suy diễn +
+tác vụ suy luận.
+
+**SWRL (Semantic Web Rule Language).** Mở rộng OWL bằng quy tắc Horn-clause. W3C Member
+Submission (2004), KHÔNG phải Recommendation. Kết hợp OWL DL + SWRL nói chung không quyết
+định được (undecidable).
+
+**Validation Report (Báo cáo xác nhận).** Kết quả SHACL validation: sh:conforms (true/false)
+và danh sách sh:ValidationResult. Vi phạm chỉ ra sự không phù hợp, không chỉ ra cách sửa.
+
 **Consistency (Tính nhất quán).** Ontology nhất quán khi tồn tại ít nhất một mô hình. Khác với
 satisfiability (một lớp có thể có thành viên) và entailment (một phát biểu đúng trong mọi mô
 hình).
@@ -43,8 +85,8 @@ danh không phải là thực thể; sự biểu thị do quy ước và con ng�
 **Entailment (Suy diễn logic).** O ⊨ α nghĩa là α đúng trong mọi mô hình của ontology O. Suy
 diễn là quan hệ ngữ nghĩa mô tả hệ quả logic; bản thân nó không thay đổi hay thêm triple vào
 đồ thị. Hệ thống có thể tính toán, vật chất hóa, hoặc lưu cache các hệ quả — nhưng đó là hành
-vi triển khai, không phải bản thân quan hệ suy diễn. Khác với validation: validation kiểm tra
-dữ liệu, entailment mô tả hệ quả logic.
+vi triển khai, không phải bản thân quan hệ suy diễn (§5.4). Khác với validation (§5.5):
+validation kiểm tra dữ liệu, entailment mô tả hệ quả logic. Luôn ghi rõ entailment regime (§5.9).
 
 **Entity (Thực thể).** Một đối tượng trong thế giới thực hoặc miền vấn đề, được biểu diễn bằng
 một nút trong đồ thị.
@@ -149,8 +191,9 @@ mô hình RDF.
 các thực thể khác nhau. OWL không có giả định này: khác tên không ngụ ý khác thực thể; muốn
 khẳng định khác nhau phải dùng owl:differentFrom.
 
-**Validation (Xác nhận).** Kiểm tra dữ liệu có tuân thủ các ràng buộc đã định hay không (ví dụ
-SHACL). Khác với entailment: validation có thể từ chối dữ liệu.
+**Validation (Xác nhận).** Kiểm tra dữ liệu có tuân thủ các ràng buộc đã định hay không.
+SHACL là ngôn ngữ chuẩn cho RDF validation (§5.5). Khác với entailment: validation kiểm
+tra thông tin hiện có, entailment suy ra tri thức mới. Conformance ≠ truth; violation ≠ repair.
 
 **Satisfiability (Tính thỏa được).** Lớp C thỏa được đối với ontology O khi tồn tại ít nhất một
 mô hình của O trong đó C^I ≠ ∅. Khác với consistency (toàn bộ ontology có mô hình) và

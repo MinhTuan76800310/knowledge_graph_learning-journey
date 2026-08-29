@@ -551,6 +551,63 @@
       ],
       "research_note_path": "docs/research_notes/OWL-06.md",
       "key_finding": "Gives semantics directly to RDF graphs. Annotations are NOT semantically inert under RDF-Based (unlike Direct Semantics). Serialization syntax ≠ semantic regime. Direct Semantics conclusions are subset of RDF-Based conclusions."
+    },
+    {
+      "id": "SWRL-01",
+      "canonical_url": "https://www.w3.org/Submission/SWRL/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-29T06:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/Submission/SWRL/",
+      "title": "SWRL: A Semantic Web Rule Language Combining OWL and RuleML",
+      "document_status": "W3C Member Submission",
+      "publication_date": "2004-05-21",
+      "used_in_chapters": ["5"],
+      "research_note_path": "docs/research_notes/SWRL-01.md",
+      "stability": "NOT_RECOMMENDATION",
+      "key_finding": "Horn-clause rules extending OWL DL; undecidable in general when combined with OWL DL. Safety condition requires head variables appear in body. NOT a W3C Recommendation."
+    },
+    {
+      "id": "RIF-01",
+      "canonical_url": "https://www.w3.org/TR/rif-core/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-29T06:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/rif-core/",
+      "title": "RIF Core Dialect",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2013-02-05",
+      "used_in_chapters": ["5"],
+      "research_note_path": "docs/research_notes/RIF-01.md",
+      "key_finding": "Definite Horn rules without function symbols (= Datalog). Safeness conditions guarantee forward-chaining termination. First-order semantics. Stable normative reference for rule interchange."
+    },
+    {
+      "id": "HOGAN-CH5",
+      "canonical_url": "https://kgbook.org/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-29T06:00:00Z",
+      "http_status": 200,
+      "final_url": "https://kgbook.org/",
+      "title": "Knowledge Graphs (Hogan et al.), Rules and Reasoning sections",
+      "document_status": "Academic textbook",
+      "publication_date": "2021",
+      "used_in_chapters": ["5"],
+      "research_note_path": "docs/research_notes/HOGAN-CH5.md",
+      "key_finding": "Formal rule definition R := (B,H); materialization as R*(G) = union of R^k(G); fixpoint reached when R^{k'}(G) = R^{k'+1}(G); soundness vs completeness definitions; RDFS rules correct but incomplete; OWL RL rules incomplete for negation/existentials/counting."
+    },
+    {
+      "id": "OWL-RL-SPEC",
+      "canonical_url": "https://www.w3.org/TR/owl2-profiles/#OWL_2_RL",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-29T06:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/owl2-profiles/",
+      "title": "OWL 2 Web Ontology Language Profiles — OWL 2 RL section",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2012-12-11",
+      "used_in_chapters": ["5"],
+      "research_note_path": "docs/research_notes/OWL-RL-SPEC.md",
+      "key_finding": "Six rule tables (Tables 4-9) covering equality, properties, classes, class axioms, datatypes, schema vocabulary. prp-dom/prp-rng demonstrate domain/range as inference rules. Theorem PR1 gives conditional completeness. Sound but not complete on arbitrary RDF."
     }
   ]
 }

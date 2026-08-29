@@ -460,3 +460,84 @@ concepts:
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Non-empty extension in at least one model; ≠ ontology consistency"
+
+  # === Chapter 5 concepts ===
+  forward_chaining:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Fixpoint algorithm G_{i+1} = G_i ∪ consequences(G_i); monotonicity required for termination"
+
+  materialization:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Implementation strategy of pre-computing closure; ≠ entailment itself; may be infeasible"
+
+  rule:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Horn clause: head ← body₁ ∧ ... ∧ bodyₙ; monotonic; finite-graph termination guaranteed"
+
+  validation_report:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "SHACL output: conforms (bool) + list of ValidationResult; violation ≠ repair"
+
+  shape:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "SHACL constraint definition; targets nodes; ≠ ontology axiom"
+
+  soundness:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Everything derived is entailed; must specify language + regime + task"
+
+  completeness:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Everything entailed is derived; OWL RL not complete on arbitrary RDF"
+
+  conformance:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Data satisfies shapes; ≠ factual truth; ≠ logical consistency"
+
+  entailment_regime:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Specifies which semantic rules apply; different regimes → different consequences"
+
+  swrl:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: intuition
+    incidental_gloss: false
+    notes: "W3C Member Submission (NOT Rec); extends OWL with Horn rules; undecidable with OWL DL"

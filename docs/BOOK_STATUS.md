@@ -23,7 +23,7 @@ Last updated: 2026-08-29
 | 2 — Data Models and Query Languages | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 3 — Schema, Identity, and Context | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 4 — Ontologies and Formal Meaning | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
-| 5 — Deduction, Rules, and Validation | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
+| 5 — Deduction, Rules, and Validation | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 6 — Claims, Evidence, Provenance, Time, Contradiction | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 | 7 — Knowledge Acquisition and Integration | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 | 8 — Inductive Knowledge and Learning from Graphs | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
