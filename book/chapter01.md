@@ -353,8 +353,9 @@ báo lỗi dữ liệu "sai".
 (Hanoi) --[:capitalOf {source: wikidata, validFrom: 1976}]--> (Vietnam)
 ```
 
-Máy biết tuyên bố này đến từ Wikidata, đúng từ năm 1976. Nếu có tuyên bố mâu thuẫn từ nguồn
-khác, hệ thống có thể so sánh và đánh giá.
+Máy biết rằng nguồn Wikidata khẳng định tuyên bố này có hiệu lực từ năm 1976. Metadata ngữ
+cảnh cho phép đánh giá và so sánh — nhưng bản thân metadata không tạo ra sự thật. Nếu có
+tuyên bố mâu thuẫn từ nguồn khác, hệ thống có thể so sánh và đánh giá độ tin cậy (Chương 6).
 
 ## 1.7 Các thiết kế thay thế
 
@@ -437,7 +438,7 @@ chính của chương đứng vững độc lập với chúng. Trong phiên b�
 
 ## 1.12 Chúng ta chưa làm được gì
 
-- Biểu diễn và truy vấn đồ thị bằng ngôn ngữ chuẩn (cần RDF/**SPARQL** (Simple Protocol and RDF Query Language — ngôn ngữ truy vấn RDF, sẽ học ở Chương 2) hoặc **Cypher** (ngôn ngữ truy vấn đồ thị thuộc tính, sẽ học ở Chương 2)).
+- Biểu diễn và truy vấn đồ thị bằng ngôn ngữ chuẩn (cần RDF/**SPARQL** (SPARQL Protocol and RDF Query Language — ngôn ngữ truy vấn RDF, sẽ học ở Chương 2) hoặc **Cypher** (ngôn ngữ truy vấn đồ thị thuộc tính, sẽ học ở Chương 2)).
 - Phân biệt rõ ràng giữa RDF và Property Graph trong thực hành.
 - Xử lý identity resolution khi cùng một entity có nhiều tên/IRI.
 - Biểu diễn **n-ary relations** (quan hệ có nhiều hơn hai thành phần, hoặc quan hệ cần mang thêm thuộc tính) vượt quá binary triples.
@@ -463,7 +464,7 @@ Những giới hạn này dẫn trực tiếp đến **Chương 2: Mô hình D�
 | RDFS (RDF Schema) | Từ vựng và ngữ nghĩa bổ sung cho RDF (lớp, subclass, domain/range) | Chương 2 |
 | OWL (Web Ontology Language) | Ngôn ngữ bản thể học chuẩn W3C | Chương 4 |
 | SHACL (Shapes Constraint Language) | Ngôn ngữ ràng buộc dữ liệu RDF | Chương 5 |
-| SPARQL (Simple Protocol and RDF Query Language) | Ngôn ngữ truy vấn RDF | Chương 2 |
+| SPARQL (SPARQL Protocol and RDF Query Language) | Ngôn ngữ truy vấn RDF | Chương 2 |
 | Cypher | Ngôn ngữ truy vấn đồ thị thuộc tính | Chương 2 |
 | Schema (lược đồ) | Mô tả cấu trúc và từ vựng được kỳ vọng | §1.2, Chương 3 |
 | Provenance (nguồn gốc) | Ai/đâu/bằng cách nào tạo ra phát biểu | §1.4, Chương 6 |

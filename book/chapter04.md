@@ -581,7 +581,7 @@ Ngữ nghĩa:
 >
 > Đây là lý do hạn chế phổ quát không thể dùng như một ràng buộc "phải có ít nhất một giá trị".
 
-### Lực lượng (Cardinality)
+### Ràng buộc số lượng (Cardinality)
 
 OWL cung cấp các hạn chế về số lượng:
 
@@ -596,9 +596,12 @@ OWL cung cấp các hạn chế về số lượng:
 > không có giả định tên duy nhất:
 >
 > - $\geq 1\ hasChild.Person$ không yêu cầu dữ liệu RDF phải chứa một triple hasChild tường minh.
->   Bộ suy luận có thể suy diễn sự tồn tại của một Person ẩn.
+>   Ontology đòi hỏi rằng trong mọi mô hình, tồn tại một Person phù hợp. Bộ suy luận có thể
+>   biểu diễn witness nội bộ hoặc vật chất hóa một nút ẩn — nhưng đó là hành vi triển khai,
+>   không phải bản thân quan hệ suy diễn.
 > - $\leq 1\ hasNationalCapital.City$ với hai tên `Hanoi` và `HaNoiCity` không tự động gây lỗi.
->   Thay vào đó, bộ suy luận có thể suy diễn `Hanoi owl:sameAs HaNoiCity` (Chương 3).
+>   Ontology suy diễn rằng Hanoi và HaNoiCity biểu thị cùng một cá thể (Chương 3). Bộ suy luận
+>   có thể biểu diễn hệ quả này bằng `owl:sameAs`, nhưng đó là hành vi triển khai.
 >
 > Validation theo nghĩa "kiểm tra dữ liệu tuân thủ quy tắc" là công việc của SHACL (Chương 5),
 > không phải OWL.
@@ -783,7 +786,7 @@ mô hình hợp lệ.
 
 Validation theo nghĩa "từ chối dữ liệu không tuân thủ" thuộc về SHACL (Chương 5).
 
-> 🖊 **Tự kiểm tra:** Giả sử ontology có $Person \sqsubseteq \exists hasName.String$ ("mọi Person đều có ít
+> 🖊 **Tự kiểm tra:** Giả sử ontology có $Person \sqsubseteq \exists hasName.xsd\text{:}string$ ("mọi Person đều có ít
 > nhất một tên"). Đồ thị RDF chứa `ex:Alice rdf:type ex:Person` nhưng không có triple
 > `ex:Alice ex:hasName ...` nào. Theo OWL, ontology có nhất quán không? Alice có phải là
 > Person hợp lệ không? Giải thích tại sao câu trả lời khác với trực giác cơ sở dữ liệu.

@@ -73,7 +73,7 @@
 | 2 | **Linked Data** | §2.1.2, dòng ~95 | Dùng để giải thích lý do IRI tồn tại, nhưng chưa định nghĩa. | Thêm: “Linked Data (dữ liệu liên kết: dữ liệu được định danh bằng IRI để dễ tích hợp giữa các hệ thống)”. |
 | 3 | **Namespace** | §2.1.4, dòng ~140–142 | Code dùng `Namespace(...)` nhưng khái niệm namespace chưa giải thích. | Thêm đoạn ngắn: “Namespace (không gian tên) là tiền tố dùng để viết gọn IRI…”. |
 | 4 | **RDF / RDFS trong `from rdflib import RDF, RDFS`** | §2.1.4, dòng ~140 | Hai namespace chuẩn được import nhưng chưa giải thích. | Giải thích rằng đây là các namespace chuẩn của W3C; `RDF.type` = `rdf:type`, `RDFS.label` = `rdfs:label`. |
-| 5 | **SPARQL** | §2.1.6, dòng ~241 | Tên SPARQL xuất hiện nhưng không giải thích tên đầy đủ. | Thêm: “SPARQL (Simple Protocol and RDF Query Language) — ngôn ngữ truy vấn chuẩn cho RDF”. |
+| 5 | **SPARQL** | §2.1.6, dòng ~241 | Tên SPARQL xuất hiện nhưng không giải thích tên đầy đủ. | Thêm: “SPARQL (SPARQL Protocol and RDF Query Language) — ngôn ngữ truy vấn chuẩn cho RDF”. |
 | 6 | **Reification / reifier / triple term** | §2.4.1 bảng so sánh, dòng ~509; §2.4.2, dòng ~528; §2.1.7, dòng ~326–327 | “Tái hiện (reification)” được nhắc nhưng chưa giải thích cơ chế. | Thêm một câu: “reification là kỹ thuật biến một bộ ba thành một tài nguyên để gắn thêm thông tin cho nó; chi tiết ở Chương 3/6”. |
 | 7 | **Entailment** | §2.4.1 bảng so sánh, dòng ~512; §2.4.2, dòng ~544 | Dùng trong bảng so sánh nhưng chưa định nghĩa. | Giải thích: “entailment (suy diễn logic)”. |
 | 8 | **ISO / ISO/IEC 39075:2024** | §2.3.4, dòng ~485 | Nhắc đến tổ chức ISO và số hiệu chuẩn. | Có thể thêm: “ISO (International Organization for Standardization)”. |
@@ -86,7 +86,7 @@
 |-----|-------------|--------|---------|
 | 1 | **W3C** | Chương 1 (nên mở rộng tại đó) | Giải thích tại Chương 1. |
 | 2 | **ISO** | §2.3.4 | Mở rộng: “ISO (International Organization for Standardization)”. |
-| 3 | **SPARQL** | §2.1.6 | Mở rộng: “Simple Protocol and RDF Query Language”. |
+| 3 | **SPARQL** | §2.1.6 | Mở rộng: “SPARQL Protocol and RDF Query Language”. |
 | 4 | **GQL** | §2.3.4 | Đã giải thích là “Graph Query Language” qua ngữ cảnh, nhưng nên viết rõ: “GQL (Graph Query Language)”. |
 | 5 | **JSON-LD** | §2.1.5 | Mở rộng: “JSON for Linked Data”. |
 | 6 | **RDF/XML** | §2.1.5 | Không cần mở rộng nếu đã giải thích RDF, nhưng nên gọi tên là “một định dạng tuần tự hóa RDF theo cú pháp XML”. |

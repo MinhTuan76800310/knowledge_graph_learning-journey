@@ -23,10 +23,10 @@ Lấy cảm hứng từ cấu trúc và triết lý học tập của các giáo
 
 - **Một trừu tượng thống nhất** xuyên suốt toàn bộ sách: Mental Model 1 (`Knowledge Graph = Data Graph + Semantics + Context`) và Mental Model 2 (`Knowledge System = KG + Acquisition + Inference + Validation + Evolution`).
 - **Chương trình tăng dần độ khó**: mỗi chương xây dựng trên nền tảng của chương trước.
-- **Lý thuyết đi kèm thực hành**: mỗi khái niệm đều có experiment chạy được.
+- **Lý thuyết đi kèm thực hành**: mỗi khái niệm có experiment đồng hành. Các experiment được triển khai tiến dần theo milestone; hiểu bản thảo không phụ thuộc vào việc chạy chúng. Trạng thái chạy được/hoãn hiện tại được ghi trong repository.
 - **Đánh giá độ khó rõ ràng**: ★ (cơ bản), ★★ (trung cấp), ★★★ (thử thách nghiên cứu/thiết kế).
 - **Câu hỏi tư duy**: yêu cầu suy luận, không chỉ ghi nhớ.
-- **Môi trường tái tạo được**: mọi experiment đều chạy cục bộ trên Ubuntu laptop.
+- **Môi trường tái tạo được**: các experiment chạy cục bộ trên laptop Linux/Windows. Trạng thái từng experiment (chạy độc lập / cần dependency / hoãn) được ghi rõ trong repository.
 - **Trạng thái experiment minh bạch**: mỗi experiment ghi rõ là "chạy độc lập", "cần dependency bên ngoài", hay "bài tập thiết kế/nghiên cứu".
 
 ## Hai mô hình tinh thần

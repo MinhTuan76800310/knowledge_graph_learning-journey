@@ -260,7 +260,7 @@ hình đồ thị mới là nội dung bất biến.**
 
 ### 2.1.6 SPARQL: khớp mẫu đồ thị
 
-**SPARQL** (Simple Protocol and RDF Query Language) là ngôn ngữ truy vấn chuẩn cho RDF [@w3c-sparql11-overview]. Khác với SQL truy
+**SPARQL** (SPARQL Protocol and RDF Query Language) là ngôn ngữ truy vấn chuẩn cho RDF [@w3c-sparql11-overview]. Khác với SQL truy
 vấn các hàng trong bảng, SPARQL **khớp mẫu đồ thị** (graph pattern matching)
 [@w3c-sparql11-query].
 
@@ -280,9 +280,10 @@ nhận IRI, và chủ thể không nhận literal.
 #### Basic Graph Pattern và ánh xạ nghiệm
 
 Một **Basic Graph Pattern** (BGP) là một tập hợp các mẫu bộ ba. Kết quả truy vấn là một
-tập các **ánh xạ nghiệm** (solution mappings): mỗi ánh xạ gán mỗi biến với một hạng mục
+**đa tập** (multiset) các **ánh xạ nghiệm** (solution mappings): mỗi ánh xạ gán mỗi biến với một hạng mục
 của đồ thị sao cho khi thay biến bằng hạng mục đó, toàn bộ BGP trở thành một đồ thị con
-của đồ thị đang truy vấn.
+của đồ thị đang truy vấn. Lưu ý: đa tập có thể chứa nghiệm trùng lặp; `SELECT DISTINCT` loại
+bỏ trùng lặp một cách tường minh.
 
 Để thấy cơ chế này hoạt động cụ thể, xét BGP gồm một mẫu bộ ba:
 
@@ -562,7 +563,7 @@ kém?*
 | **Khả năng liên tác** | Cao — chuẩn W3C cho cả mô hình dữ liệu lẫn định dạng trao đổi | Hội tụ về *ngôn ngữ truy vấn* qua GQL; trao đổi dữ liệu vẫn phụ thuộc hệ thống, chưa có chuẩn tuần tự hóa liên hệ thống tương đương Turtle/N-Triples |
 | **Mô hình truy vấn** | Khớp mẫu đồ thị (SPARQL), ánh xạ nghiệm | Khớp mẫu đồ thị (Cypher/GQL), duyệt theo đường dẫn |
 | **Tuần tự hóa** | Nhiều chuẩn: Turtle, N-Triples, RDF/XML, JSON-LD | Thường là định dạng riêng của từng hệ thống |
-| **Gắn với triển khai** | Mô hình chuẩn độc lập triển khai | Mô hình gắn chặt với hệ quản trị cụ thể |
+| **Gắn với triển khai** | Mô hình chuẩn độc lập triển khai | Mô hình dữ liệu có thể thảo luận độc lập, nhưng chi tiết (danh tính nội bộ, tuần tự hóa, lược đồ, ràng buộc, khả năng di chuyển) phụ thuộc mạnh hơn vào hệ sinh thái triển khai |
 
 ### 2.4.2 Ba khác biệt đáng suy nghĩ nhất
 
@@ -685,7 +686,7 @@ tri thức vừa nhất quán vừa có thể tích hợp?** Chương 3 — *Lư
 | N-Triples | Định dạng dòng đơn giản, mỗi dòng một bộ ba | §2.1.5 |
 | RDF/XML | Định dạng tuần tự hóa RDF theo cú pháp XML | §2.1.5 |
 | JSON-LD (JSON for Linked Data) | Định dạng JSON cho dữ liệu liên kết | §2.1.5 |
-| SPARQL (Simple Protocol and RDF Query Language) | Ngôn ngữ truy vấn chuẩn cho RDF | §2.1.6 |
+| SPARQL (SPARQL Protocol and RDF Query Language) | Ngôn ngữ truy vấn chuẩn cho RDF | §2.1.6 |
 | Basic Graph Pattern (BGP) | Tập hợp các mẫu bộ ba trong truy vấn SPARQL | §2.1.6 |
 | Solution mapping (ánh xạ nghiệm) | Phép gán biến với hạng mục đồ thị khớp mẫu | §2.1.6 |
 | Labeled Property Graph (Đồ thị Thuộc tính có nhãn) | Mô hình đồ thị gồm nút, nhãn, thuộc tính, quan hệ | §2.2 |

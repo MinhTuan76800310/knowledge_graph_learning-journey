@@ -59,7 +59,7 @@ Khi một nhóm thuật ngữ liên quan được nhắc đến trước khi h�
 > - **RDFS** (RDF Schema): tầng lược đồ/lớp của RDF.
 > - **OWL** (Web Ontology Language): ngôn ngữ bản thể học.
 > - **SHACL** (Shapes Constraint Language): ngôn ngữ ràng buộc dữ liệu RDF.
-> - **SPARQL** (Simple Protocol and RDF Query Language): ngôn ngữ truy vấn RDF.
+> - **SPARQL** (SPARQL Protocol and RDF Query Language): ngôn ngữ truy vấn RDF.
 >
 > Chi tiết về từng thuật ngữ sẽ có ở Chương 2 (RDF, SPARQL) và Chương 4–5 (RDFS, OWL, SHACL).
 ```
@@ -153,7 +153,7 @@ Entity có identity (danh tính) — thường là **IRI** (Internationalized Re
 > - **RDFS** (RDF Schema): tầng lược đồ/lớp của RDF.
 > - **OWL** (Web Ontology Language): ngôn ngữ bản thể học.
 > - **SHACL** (Shapes Constraint Language): ngôn ngữ ràng buộc dữ liệu RDF.
-> - **SPARQL** (Simple Protocol and RDF Query Language): ngôn ngữ truy vấn RDF.
+> - **SPARQL** (SPARQL Protocol and RDF Query Language): ngôn ngữ truy vấn RDF.
 >
 > Bạn không cần nhớ chi tiết ngay; mỗi thuật ngữ sẽ được giải thích đầy đủ khi đến chương tương ứng.
 ```
