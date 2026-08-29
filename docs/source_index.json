@@ -553,6 +553,34 @@
       "key_finding": "Gives semantics directly to RDF graphs. Annotations are NOT semantically inert under RDF-Based (unlike Direct Semantics). Serialization syntax ≠ semantic regime. Direct Semantics conclusions are subset of RDF-Based conclusions."
     },
     {
+      "id": "RDF-MT-01",
+      "canonical_url": "https://www.w3.org/TR/rdf11-mt/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-29T14:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/rdf11-mt/",
+      "title": "RDF 1.1 Semantics",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2014-02-25",
+      "used_in_chapters": ["5"],
+      "research_note_path": "docs/research_notes/RDF-MT-01.md",
+      "key_finding": "Normative model-theoretic semantics for RDF/RDFS. Section 9 defines RDFS interpretations and entailment patterns (rdfs2-domain, rdfs3-range, rdfs9-subClassOf, etc.). Appendix A shows rule-based operationalization is correct but not complete on standard RDF; completeness requires generalized RDF syntax."
+    },
+    {
+      "id": "SP11-ENT",
+      "canonical_url": "https://www.w3.org/TR/sparql11-entailment/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-29T14:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/sparql11-entailment/",
+      "title": "SPARQL 1.1 Entailment Regimes",
+      "document_status": "W3C Recommendation",
+      "publication_date": "2013-03-21",
+      "used_in_chapters": ["5"],
+      "research_note_path": "docs/research_notes/SP11-ENT.md",
+      "key_finding": "Entailment regimes are specified via SPARQL Service Description (sd:defaultEntailmentRegime, sd:entailmentRegime), NOT via FROM clause. Standard regime IRIs defined for RDF, RDFS, D, OWL-Direct, OWL-RDF-Based. FROM selects graphs, not regimes."
+    },
+    {
       "id": "SWRL-01",
       "canonical_url": "https://www.w3.org/Submission/SWRL/",
       "fetch_status": "FETCHED_AND_VERIFIED",

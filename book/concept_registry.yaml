@@ -541,3 +541,75 @@ concepts:
     explanation_level: intuition
     incidental_gloss: false
     notes: "W3C Member Submission (NOT Rec); extends OWL with Horn rules; undecidable with OWL DL"
+
+  substitution:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Binding θ mapping variables to concrete values; bridges abstract rules to graph entities"
+
+  fixpoint:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "G_{n+1} = G_n; no new facts derived; closure stabilized"
+
+  monotonicity:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "G ⊆ G' → Consequences(G) ⊆ Consequences(G'); defined over knowledge base, not rule body"
+
+  focus_node:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Node being validated against a shape; selected by target mechanism"
+
+  value_node:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Nodes reached from focus node via path; for node shapes, value nodes = {focus node}"
+
+  shacl_instance:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "SHACL class membership includes rdfs:subClassOf* chain; not just explicit rdf:type"
+
+  effective_validation_graph:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Graph actually validated; may be asserted, expanded, or hybrid; architectural decision"
+
+  graph_repair:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Decision problem, not syntactic patch; multiple candidate repairs; passes validation ≠ becomes true"
+
+  backward_chaining:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Goal-driven reasoning; from query → subgoals → assertions; contrasted with forward chaining"

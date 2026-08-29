@@ -29,6 +29,8 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | GQL-02 | `neo4j-cypher-gql-conformance` | Neo4j Cypher GQL conformance |
 | R12-01 | `w3c-rdf12-concepts` | RDF 1.2 Concepts (emerging) |
 | SP12-01 | `w3c-sparql12-query` | SPARQL 1.2 Query (emerging) |
+| RDF-MT-01 | `w3c-rdf11-mt` | RDF 1.1 Semantics |
+| SP11-ENT | `w3c-sparql11-entailment` | SPARQL 1.1 Entailment Regimes |
 
 ## Rules
 

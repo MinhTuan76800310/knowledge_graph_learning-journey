@@ -24,32 +24,65 @@ làm tên quy chiếu của một thực thể; các tên khác được giữ n
 tạp: giao (⊓), hợp (⊔), phủ định (¬), hạn chế tồn tại (∃R.C), hạn chế phổ quát (∀R.C).
 Mỗi biểu thức có ngữ nghĩa tập hợp chính xác trong diễn giải.
 
+**Backward Chaining (Suy diễn lùi).** Chiến lược suy diễn goal-driven: bắt đầu từ câu hỏi, tìm
+quy tắc có head khớp, tạo subgoal từ body, đệ quy cho đến khi đạt assertion. Ngược hướng với
+forward chaining (data-driven). Phù hợp khi ít truy vấn trên đồ thị lớn.
+
 **Completeness (Tính đầy đủ).** Tính chất của thủ tục suy diễn: mọi hệ quả logic thực sự đều
-được sinh ra. Không có âm tính giả. Phải ghi rõ ngôn ngữ/hồ sơ + chế độ suy diễn + tác vụ
-suy luận. OWL RL forward chaining không complete cho OWL 2 DL đầy đủ trên đồ thị RDF tùy ý.
+được sinh ra ($E \subseteq A$). Không có âm tính giả. Phải ghi rõ ngôn ngữ/hồ sơ + chế độ suy
+diễn + tác vụ suy luận. OWL RL forward chaining không complete cho OWL 2 DL đầy đủ trên đồ
+thị RDF tùy ý; complete dưới các điều kiện syntactic cụ thể (Theorem PR1).
 
 **Conformance (Sự phù hợp).** Dữ liệu thỏa mãn các shapes SHACL đã định nghĩa. Phù hợp không
 có nghĩa dữ liệu đúng với thực tế; vi phạm không có nghĩa dữ liệu sai.
 
+**Effective Validation Graph (Đồ thị xác nhận hiệu lực).** Đồ thị thực sự được SHACL validator
+xem xét. Có thể là asserted graph, expanded graph (sau materialization), hoặc hybrid. Là
+quyết định kiến trúc, phải được document rõ trong hệ thống production.
+
 **Entailment Regime (Chế độ suy diễn).** Tập quy tắc ngữ nghĩa áp dụng khi tính toán hệ quả
 logic. Cùng đồ thị, regime khác nhau cho kết quả khác nhau (Simple, RDFS, OWL RL, OWL
-Direct, OWL RDF-Based). Mọi khẳng định về soundness/completeness phải ghi rõ regime.
+Direct, OWL RDF-Based). Mọi khẳng định về soundness/completeness phải ghi rõ regime. Trong
+SPARQL, regime được chỉ định qua Service Description, không phải FROM clause.
 
-**Forward Chaining (Suy diễn tiến).** Thuật toán suy diễn lặp: G_{i+1} = G_i ∪ consequences(G_i),
-dừng khi đạt điểm bất động (fixpoint) G_{n+1} = G_n. Đảm bảo dừng với quy tắc đơn điệu trên
-đồ thị hữu hạn.
+**Fixpoint (Điểm bất động).** Trạng thái $G_{n+1} = G_n$ trong forward chaining: vòng lặp
+không sinh triple mới, bao đóng đã ổn định. Là điều kiện dừng của thuật toán.
+
+**Focus Node (Nút trọng tâm).** Trong SHACL: nút dữ liệu đang được đánh giá chống lại một
+shape. Được chọn bởi cơ chế target (sh:targetClass, sh:targetNode, etc.).
+
+**Forward Chaining (Suy diễn tiến).** Thuật toán suy diễn lặp dùng phép thế $\theta$:
+$G_{i+1} = G_i \cup \{ \theta(\text{head}(r)) \mid r \in R, \; \theta(\text{body}(r)) \subseteq G_i \}$,
+dừng khi đạt điểm bất động (fixpoint) $G_{n+1} = G_n$. Đảm bảo dừng khi thỏa mãn các điều
+kiện: đồ thị hữu hạn, quy tắc hữu hạn, function-free, safe variables.
+
+**Graph Repair (Sửa chữa đồ thị).** Quá trình biến đổi đồ thị để đạt SHACL conformance. Là
+bài toán quyết định (decision problem), không phải vá lỗi cú pháp: nhiều candidate repairs
+có thể tồn tại, chỉ domain knowledge/governance mới chọn được repair đúng về mặt tri thức.
+Passes validation ≠ becomes true.
 
 **Materialization (Vật chất hóa).** Chiến lược triển khai suy diễn bằng cách tính toán trước
 bao đóng và lưu trữ kết quả. Khác với bản thân quan hệ entailment (là khái niệm ngữ nghĩa,
-không phải thao tác tính toán). Có thể không khả thi với ontology quá biểu cảm.
+không phải thao tác tính toán). Có thể không khả thi với ontology quá biểu cảm. So sánh với
+query-time reasoning (§5.4).
+
+**Monotonicity (Tính đơn điệu).** Tính chất của chế độ suy diễn: nếu $G \subseteq G'$ thì
+$\text{Consequences}(G) \subseteq \text{Consequences}(G')$. Thêm thông tin vào đồ thị không
+bao giờ làm mất kết luận cũ. Khác với termination, completeness, và consistency.
 
 **Rule (Quy tắc).** Mệnh đề dạng Horn: head ← body₁ ∧ ... ∧ bodyₙ. Trong KG, head và body
-là mẫu triple. Quy tắc Horn đơn điệu, đảm bảo dừng trên đồ thị hữu hạn. Không biểu diễn được
-phủ định hay disjunction trong head.
+là mẫu triple chứa biến. Phép thế $\theta$ gán biến với giá trị cụ thể để kết nối quy tắc
+trừu tượng với dữ liệu đồ thị. Quy tắc Horn đơn điệu, đảm bảo dừng trên đồ thị hữu hạn với
+các điều kiện an toàn. Không biểu diễn được phủ định hay disjunction trong head.
+
+**SHACL Instance.** Trong SHACL: quan hệ thành viên lớp bao gồm chuỗi `rdfs:subClassOf*`.
+Một nút typed CapitalCity là SHACL instance của City nếu CapitalCity rdfs:subClassOf City.
+Khác với exact rdf:type triple grep.
 
 **SHACL (Shapes Constraint Language).** Ngôn ngữ chuẩn W3C để xác nhận dữ liệu RDF dựa trên
 shapes. Shapes định nghĩa ràng buộc kiểm tra, không phải tiên đề suy diễn. Kết quả là
-validation report (conforms/violation), không phải tri thức mới.
+validation report (conforms/violation), không phải tri thức mới. SHACL không phải "OWL với
+Closed World Assumption."
 
 **Shape.** Điều kiện kiểm tra trong SHACL nhắm đến tập nút dữ liệu. Shape không tham gia
 vào RDFS/OWL entailment. Khác với ontology axiom: shape kiểm tra thông tin, axiom thêm
@@ -59,12 +92,22 @@ thông tin.
 quả logic thực sự. Không có dương tính giả. Phải ghi rõ ngôn ngữ/hồ sơ + chế độ suy diễn +
 tác vụ suy luận.
 
+**Substitution (Phép thế).** Ánh xạ $\theta$ gán mỗi biến trong quy tắc với một giá trị cụ thể
+(IRI, literal, blank node). Cầu nối giữa quy tắc trừu tượng và dữ liệu đồ thị: $\theta(\text{body})$
+là phần thân đã ground, $\theta(\text{head})$ là kết luận đã ground.
+
 **SWRL (Semantic Web Rule Language).** Mở rộng OWL bằng quy tắc Horn-clause. W3C Member
 Submission (2004), KHÔNG phải Recommendation. Kết hợp OWL DL + SWRL nói chung không quyết
 định được (undecidable).
 
 **Validation Report (Báo cáo xác nhận).** Kết quả SHACL validation: sh:conforms (true/false)
-và danh sách sh:ValidationResult. Vi phạm chỉ ra sự không phù hợp, không chỉ ra cách sửa.
+và danh sách sh:ValidationResult. Mỗi result gồm focusNode, resultPath, sourceShape,
+sourceConstraintComponent, severity, message, và value (khi applicable). Vi phạm chỉ ra sự
+không phù hợp, không chỉ ra cách sửa.
+
+**Value Node (Nút giá trị).** Trong SHACL: nút reachable từ focus node qua property path.
+Với node shape, value nodes = {focus node}. Với property shape, value nodes là các đích của
+path từ focus node. Constraint được đánh giá trên tập value nodes.
 
 **Consistency (Tính nhất quán).** Ontology nhất quán khi tồn tại ít nhất một mô hình. Khác với
 satisfiability (một lớp có thể có thành viên) và entailment (một phát biểu đúng trong mọi mô
@@ -192,8 +235,9 @@ các thực thể khác nhau. OWL không có giả định này: khác tên khô
 khẳng định khác nhau phải dùng owl:differentFrom.
 
 **Validation (Xác nhận).** Kiểm tra dữ liệu có tuân thủ các ràng buộc đã định hay không.
-SHACL là ngôn ngữ chuẩn cho RDF validation (§5.5). Khác với entailment: validation kiểm
+SHACL là ngôn ngữ chuẩn cho RDF validation (§5.6). Khác với entailment: validation kiểm
 tra thông tin hiện có, entailment suy ra tri thức mới. Conformance ≠ truth; violation ≠ repair.
+Consistency ≠ validation — hai trục độc lập (§5.9).
 
 **Satisfiability (Tính thỏa được).** Lớp C thỏa được đối với ontology O khi tồn tại ít nhất một
 mô hình của O trong đó C^I ≠ ∅. Khác với consistency (toàn bộ ontology có mô hình) và

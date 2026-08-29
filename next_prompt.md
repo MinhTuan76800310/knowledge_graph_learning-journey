@@ -1,14 +1,17 @@
-# Chapter 5 — ACCEPTED (2026-08-29)
+# Chapter 5 — ACCEPTED (after semantic closure, 2026-08-29)
 
-Chapter 5 (Suy diễn, Quy tắc và Xác nhận) has been drafted, reviewed, and accepted.
+Chapter 5 (Suy diễn, Quy tắc và Xác nhận) has been drafted, reviewed, semantically closed, and accepted.
 
 ## Current state
 
 - Chapters 1–5 are ACCEPTED
-- Book PDF builds to 86 pages (was 74 with Ch1-4)
+- Book PDF builds to 97 pages (was 86 before semantic closure; was 74 with Ch1-4)
 - All tests pass: 43 passed, 1 skipped (rdflib optional dependency)
-- Semantic contracts: docs/CHAPTER05_SEMANTIC_CONTRACTS.md (14 records)
+- Semantic contracts: docs/CHAPTER05_SEMANTIC_CONTRACTS.md (28 records, expanded from 14 during closure)
 - Checkpoint: docs/CHAPTER05_BOOK_CHECKPOINT.md
+- Manuscript: 22 sections (§5.1–§5.22), ~700+ lines
+- 12 misconceptions, 5 self-explanation checkpoints
+- Primary sources added: RDF-MT-01 (RDF 1.1 Semantics), SP11-ENT (SPARQL 1.1 Entailment Regimes)
 
 ## Next chapter: Chapter 6 — Claims, Evidence, Provenance, Time, Contradiction
 
