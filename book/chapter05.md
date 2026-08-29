@@ -1297,6 +1297,18 @@ xây dựng. Bốn ví dụ làm việc đầy đủ:
    report tương ứng (§5.6, §5.7). Mỗi Mechanism phải có ít nhất một `ex:Operation`; mỗi
    `ex:Condition` phải liên kết với ít nhất một Mechanism — đều là các shape cùng dạng.
 
+   `Condition` không phải là tên trống: nó là một cá thể gắn với cơ chế qua
+   `ex:hasCondition`, chẳng hạn:
+
+   ```turtle
+   ex:uniformEnv_1 a ex:Condition ;
+       rdfs:label "uniform environment (T constant, h constant)" .
+   ex:newtonCooling_1 ex:hasCondition ex:uniformEnv_1 .
+   ```
+
+   Shape tương ứng kiểm tra mọi `ex:hasCondition` value node phải là SHACL instance của
+   `ex:Condition` (`sh:path ex:hasCondition ; sh:class ex:Condition`).
+
 3. **Hai trục độc lập:** Ví dụ 2×2 consistency-vs-validation trên dữ liệu cơ chế (ontology
    disjoint bị vi phạm nhưng SHACL vẫn conformant; candidate thiếu output thì OWL-consistent
    nhưng SHACL-violating) (§5.9).
