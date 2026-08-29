@@ -210,6 +210,33 @@ thời gian.
 > khẳng định RDF biểu diễn P, và (b) một phát biểu (claim) chứa khẳng định đó kèm
 > nguồn và thời gian. Giải thích vì sao (a) và (b) không thay thế được nhau.
 
+**Ví dụ trên miền cơ chế.** Lấy mệnh đề P₇₂ = "Velocity là rate of change của position
+theo thời gian" (câu nguồn chính của cuốn sách). Ba mức độ:
+
+- **Mệnh đề:** P₇₂ — nội dung trừu tượng, không phụ thuộc từ vựng.
+- **Khẳng định:** bộ ba trần `ex:rateOfChange_1 ex:hasOutput ex:velocity_1` — cấu trúc
+  dữ liệu, không nói ai nói, khi nào, dựa trên gì. Chính kiểu triple này Ch2/Ch4 đã dùng.
+- **Phát biểu:** hai claim riêng biệt cùng mang P₇₂ nhưng khác nguồn — cũng là tình
+  huống `ta:velocityDef` và `tb:speedDef` của Ch3 §3.2.5:
+
+```turtle
+ex:claim_roc_A  a            ex:Claim ;
+                ex:content   ex:prop_velocity_rate_of_change ;
+                ex:statedBy  ex:textbook_A ;
+                ex:statedAt  "2021-06-01"^^xsd:date ;
+                ex:status    ex:Accepted .
+
+ex:claim_roc_B  a            ex:Claim ;
+                ex:content   ex:prop_velocity_rate_of_change ;   # cùng mệnh đề!
+                ex:statedBy  ex:textbook_B ;
+                ex:statedAt  "2023-02-14"^^xsd:date ;
+                ex:status    ex:Candidate .
+```
+
+Hai claim chia sẻ cùng mệnh đề nhưng là hai đối tượng riêng — một Accepted từ textbook A,
+một Candidate mới từ textbook B. **Bẫy 2 (§6.2): nếu dùng chính mệnh đề P₇₂ làm định
+danh claim, ta gộp hai nguồn thành một và mất khả năng đánh dấu B chưa được chấp nhận.**
+
 ## 6.3 Nguồn khác Bằng chứng
 
 ### Trực giác
@@ -330,6 +357,41 @@ survey_questionnaire_2019`. Mỗi bước ghi nhận một tầng xuất xứ.
 > trích xuất tự động từ Wikipedia bởi một pipeline NLP. Cần ít nhất ba nút (Entity,
 > Activity, Agent) và các quan hệ phù hợp.
 
+**Ví dụ trên miền cơ chế.** Claim về `ex:rateOfChange_1` từ sách giáo khoa đi qua chuỗi
+provenance đầy đủ:
+
+```turtle
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+ex:claim_roc_A  a ex:Claim ;
+    prov:wasDerivedFrom ex:textbookA_sec42 ;
+    prov:wasAttributedTo ex:textbook_A .
+
+ex:textbookA_sec42  a prov:Entity ;
+    prov:wasGeneratedBy ex:extraction_activity_7 ;
+    prov:wasAttributedTo ex:textbook_A .
+
+ex:extraction_activity_7  a prov:Activity ;
+    prov:used ex:textbookA_sec42_raw ;
+    prov:wasAssociatedWith ex:extractor_pipeline_v3 .
+```
+
+Chuỗi: `claim_roc_A ← textbookA_sec42 ← extraction_activity_7 ←
+textbookA_sec42_raw`. Mỗi mắt xích trả lời một câu "từ đâu, do ai, thế nào". Nếu một
+mắt xích thiếu, chuỗi **đứt gãy**:
+
+```turtle
+ex:claim_roc_C  a ex:Claim ;
+    prov:wasDerivedFrom ex:unknown_section ;
+    ex:statedBy ex:unknown_author .    # không Agent, không Activity, không Entity xác định
+```
+
+Đây là **broken chain**: hệ thống không thể trả lời "claim này đến từ đâu, ai chịu
+trách nhiệm". Chuỗi provenance đứt gãy không làm claim *sai*, nhưng làm claim *không
+kiểm chứng được* — hệ thống không có đường truy ngược để đánh giá. Trong quản trị tri
+thức (§6.12), claim có provenance đứt gãy nên bị giữ ở trạng thái `Candidate`, không
+được nâng lên `Accepted` mà không có bằng chứng độc lập.
+
 ## 6.5 Quan hệ bằng chứng: supports, contradicts, isRelevantTo
 
 ### Trực giác
@@ -368,6 +430,23 @@ hệ thống. Không có công thức phổ quát để tính confidence từ t�
 > ⚠️ **Ngộ nhận phổ biến:** "Nhiều bằng chứng hỗ trợ → phát biểu đúng." Sai. Nhiều
 > nguồn có thể lặp lại cùng một sai lầm (echo chamber). Chất lượng bằng chứng quan trọng
 > hơn số lượng.
+
+**Ranh giới phân loại mơ hồ.** Ba quan hệ trên không phải lúc nào cũng rạch ròi. Một
+mảnh bằng chứng có thể *nửa hỗ trợ, nửa phản bác* tùy vào ngữ cảnh. Ví dụ trên miền cơ
+chế: claim C₁ nói "RATE_OF_CHANGE chỉ hợp lệ trong miền vĩ mô, vận tốc thấp". Một thí
+nghiệm quan sát hạt chuyển động nhanh chứng tỏ công thức cổ điển sai ở tốc độ gần ánh
+sáng — nó **contradicts** phiên bản bất định (không có giới hạn), nhưng **supports**
+phiên bản có giới hạn vĩ mô.
+
+```turtle
+ex:fast_particle_exp  ex:contradicts  ex:claim_roc_universal ;
+                     ex:supports     ex:claim_roc_restricted .
+```
+
+Phân loại một mảnh bằng chứng đòi hỏi xác định *với claim nào* ta đang đối chiếu. Cùng
+một phép đo có thể là bằng chứng ủng hộ cho claim này và phản bác cho claim khác. Đây
+là lý do evidence relation phải ghi rõ cặp `(evidence, claim)`, không phải gán "độ tin
+cậy" cho evidence trên bảng riêng.
 
 ## 6.6 Phân loại mâu thuẫn
 
@@ -419,6 +498,22 @@ Nếu sau khi căn chỉnh bốn chiều mà mâu thuẫn vẫn tồn tại, đ�
 > 🖊 **Tự kiểm tra:** Cho hai phát biểu: (A) "Dân số Việt Nam là 96 triệu" (nguồn:
 > World Bank, 2019) và (B) "Dân số Việt Nam là 98 triệu" (nguồn: GSO, 2021). Hãy phân
 > loại mâu thuẫn này theo taxonomy trên. Ngữ cảnh nào có thể hòa giải?
+
+**Năm loại mâu thuẫn trên miền cơ chế.** Cùng taxonomy, áp dụng vào dữ liệu Mechanism-KG:
+
+| Loại | Ví dụ cơ chế | Ngữ cảnh hòa giải |
+|------|--------------|-------------------|
+| **Logic** | `rateOfChange_1 hasInput position_1` và claim nói `rateOfChange_1 KHÔNG có input nào` | Không hòa giải được — ít nhất một bên sai |
+| **Giá trị** | Hai claim gán `differentiand` của `derivativeApplication_1` lần lượt là `position_1` và `distance_1`, cùng định nghĩa "position" | Không hòa giải được — đo bằng hai định nghĩa khác nhau? Đối chiếu vị từ |
+| **Thời gian** | "Cơ chế RATE_OF_CHANGE đúng" (valid [1687, 1905) — cơ học Newton) và "RATE_OF_CHANGE cổ điển sai" (valid [1905, nay) — tương đối tính) | Hòa giải bằng valid time (§6.7) |
+| **Phạm vi** | "RATE_OF_CHANGE của vận tốc theo thời gian" (vₓ) và "RATE_OF_CHANGE theo quãng đường" (dₛ) | Hòa giải bằng `withRespectTo`: đồ thị ghi rõ reference variable |
+| **Nguồn** | textbook A định nghĩa velocity = ds/dt; textbook B định nghĩa speed = \|ds/dt\| | Không hòa giải bằng ngữ cảnh — cần đánh giá nguồn, bằng chứng (§6.11) |
+
+Hàng **Thời gian** là ví dụ then chốt: hai câu "cơ chế đúng" và "cơ chế sai" đều đúng —
+mỗi câu trong khoảng hiệu lực riêng. Nếu không biểu diễn valid time, hệ thống tưởng
+chúng mâu thuẫn và gắn `Contested`; thực ra chúng chỉ cần gắn nhãn thời gian chính xác.
+Hàng **Phạm vi** tương tự: khác `withRespectTo` nghĩa là khác cơ chế con, không phải
+mâu thuẫn — Ch3 §3.3.3 đã chuẩn bị cho điều này bằng reification.
 
 ## 6.7 Nhiều đồng hồ thời gian
 
@@ -491,6 +586,84 @@ ex:claim_pop_A  ex:assertedAt  "2020-01-15"^^xsd:date ;
 > khái niệm thời gian built-in. Mọi temporal annotation là quy ước ứng dụng. OWL-Time
 > cung cấp từ vựng, nhưng việc gán ý nghĩa (valid vs assertion vs system) là trách
 > nhiệm của người thiết kế.
+
+**Thực thể thời gian (Temporal Entity).** Trước khi gắn thời gian, cần một định nghĩa
+đứng một mình. Trong OWL-Time [@owl-time], một **thực thể thời gian** (`time:TemporalEntity`)
+là một đối tượng biểu thị một khoảng hoặc khoảnh khắc thời gian, và có thể được dùng làm
+giá trị của `time:hasTime`. Kiểu con quan trọng nhất là `time:ProperInterval` — *một
+khoảng thời gian có điểm bắt đầu và điểm kết thúc, hai mốc không trùng nhau*:
+
+```turtle
+@prefix time: <http://www.w3.org/2006/time#> .
+
+ex:validity_newtonian a time:ProperInterval ;
+    time:hasBeginning [ time:inXSDDateTime "1687-07-05T00:00:00Z"^^xsd:dateTime ] ;
+    time:hasEnd       [ time:inXSDDateTime "1905-09-26T00:00:00Z"^^xsd:dateTime ] .
+```
+
+**Hiệu lực thời gian của một cơ chế.** Áp dụng khái niệm này cho chính cơ chế
+RATE_OF_CHANGE. Trong cơ học cổ điển, vận tốc là đạo hàm $ds/dt$ không có giới hạn về
+tốc độ. Từ 1905, cơ học tương đối tính thay thế: vận tốc bị chặn bởi tốc độ ánh sáng.
+Hai claim về *cùng* cơ chế có valid time khác nhau — không loại trừ nhau:
+
+```turtle
+ex:claim_roc_classical  ex:content    ex:prop_roc_velocity_unbounded ;
+                        ex:hasTime    ex:validity_newtonian ;
+                        ex:status     ex:Superseded .
+
+ex:claim_roc_relativist ex:content    ex:prop_roc_velocity_bounded ;
+                        ex:hasTime    [
+                            a            time:ProperInterval ;
+                            time:hasBeginning [ time:inXSDDateTime "1905-09-26T00:00:00Z"^^xsd:dateTime ]
+                        ] ;
+                        ex:status     ex:Accepted .
+```
+
+Câu trả lời đúng cho "cơ chế RATE_OF_CHANGE có đúng không" phụ thuộc *thời điểm bạn hỏi*:
+trước 1905 claim cổ điển là đúng nhất; từ 1905, claim tương đối tính là đúng nhất. Đây
+chính là **temporal disagreement** được hòa giải bằng valid time (§6.6).
+
+**Truy vấn bitemporal cho cơ chế.** Kết hợp valid time + system time ta có thể trả lời:
+"Ngày 2021-06-01, hệ thống tin gì về tốc độ tối đa của RATE_OF_CHANGE?" — truy vấn *hồi
+tốc* (retrospective). State bitemporal được biểu diễn bằng hai khoảng:
+
+```turtle
+ex:claim_roc_unbounded  ex:content  ex:prop_roc_velocity_unbounded ;
+    ex:validInterval [
+        a time:ProperInterval ;
+        time:hasBeginning [ time:inXSDDateTime "1687-07-05T00:00:00Z"^^xsd:dateTime ] ;
+        time:hasEnd       [ time:inXSDDateTime "1905-09-26T00:00:00Z"^^xsd:dateTime ]
+    ] ;
+    ex:systemInterval [
+        a time:ProperInterval ;
+        time:hasBeginning [ time:inXSDDateTime "2020-01-20T10:30:00Z"^^xsd:dateTime ] ;
+        time:hasEnd       [ time:inXSDDateTime "2024-06-01T11:05:00Z"^^xsd:dateTime ]   # đã bị supersede
+    ] .
+```
+
+Truy vấn SPARQL "hệ thống tin gì ngày 2021-06-01?" — với điều kiện ngày hỏi nằm *trong
+cả hai* khoảng:
+
+```sparql
+PREFIX ex: <http://example.org/kgbook/mks#>
+PREFIX time: <http://www.w3.org/2006/time#>
+
+SELECT ?claim ?content WHERE {
+    ?claim ex:content ?content ;
+           ex:validInterval [ time:hasBeginning ?vb ; time:hasEnd ?ve ] ;
+           ex:systemInterval [ time:hasBeginning ?sb ; time:hasEnd ?se ] .
+    FILTER ("2021-06-01T00:00:00Z"^^xsd:dateTime >= ?vb
+        && "2021-06-01T00:00:00Z"^^xsd:dateTime <= ?ve
+        && "2021-06-01T00:00:00Z"^^xsd:dateTime >= ?sb
+        && "2021-06-01T00:00:00Z"^^xsd:dateTime <= ?se)
+}
+```
+
+Ở ngày 2021-06-01, truy vấn trả về `claim_roc_unbounded` — và chỉ nó: claim tương đối
+tính chưa được nhập vào hệ thống (system interval của nó bắt đầu từ 2024-06-01 khi nó
+thay thế claim cũ). Bản ghi cũ không bị xóa (bảo tồn mâu thuẫn, §6.14); nó vẫn truy hỏi
+được trong khung system time của nó. Đây là câu trả lời thực hành cho "hệ thống đã tin
+gì, khi nào".
 
 ## 6.8 Thời gian của phát biểu khác thời gian của sự kiện
 
@@ -671,6 +844,24 @@ Sách chọn **Lựa chọn 1 (n-ary pattern)** làm biểu diễn mặc định
 - Tương thích với PROV-O (claim entity = prov:Entity)
 - Phù hợp với mental model "Claim là đối tượng hạng nhất"
 
+**Ví dụ phản biện: claim thiếu thành phần bắt buộc.** Không phải mọi tri thức ngoài kia
+đều là một claim hợp lệ. Một claim thiếu nguồn, thiếu thời gian, hoặc thiếu bằng chứng
+thì không thể được đánh giá:
+
+```turtle
+ex:claim_malformed_1  a ex:Claim ;
+    ex:content [ ex:rateOfChange_1 ex:hasOutput ex:velocity_1 ] .
+    #   KHÔNG ex:statedBy       — ai nói?
+    #   KHÔNG ex:statedAt       — khi nào?
+    #   KHÔNG ex:evidenceFor    — dựa trên gì?
+    #   KHÔNG ex:status         — đã qua đánh giá chưa?
+```
+
+Đây là **malformed claim**: thiếu metadata đến mức hệ thống không thể quyết định nên tin
+hay không. Nó đúng ra chỉ nên là một Assertion (bộ ba trần), không phải Claim. Một claim
+hợp lệ tối thiểu phải có: nguồn (`ex:statedBy`), thời điểm (`ex:statedAt`), và trạng
+thái (`ex:status`). Ví dụ `ex:claim_roc_A` ở §6.17 là một claim hợp lệ đầy đủ.
+
 ## 6.11 Ngữ nghĩa độ tin cậy: Confidence phải nói rõ đang đánh giá gì
 
 ### Trực giác
@@ -710,6 +901,43 @@ ex:claim_X  ex:sourceReliability  0.95 ;   # Nguồn rất uy tín
 > đánh giá chủ quan phụ thuộc vào chính sách và ngữ cảnh. Nó không phải xác suất khách
 > quan trừ khi hệ thống định nghĩa rõ ràng semantics probabilistic.
 
+**Chính sách có thể tính toán được.** "Phụ thuộc chính sách" không có nghĩa là tùy
+tiện. Một chính sách tốt là một *hàm tính được*: cùng đầu vào luôn cho cùng đầu ra, và
+công thức được ghi trong metadata. Ví dụ, hệ thống Mechanism-KG định nghĩa:
+
+```
+composite(C) = 0.6 · sourceReliability(C) + 0.4 · evidenceScore(C)
+```
+
+với `sourceReliability` lấy từ mô hình xếp hạng nguồn bên dưới, `evidenceScore` do quy
+trình đánh giá bằng chứng tính. Áp dụng cho claim cơ chế từ §6.2:
+
+```turtle
+ex:claim_roc_A  ex:sourceReliability  0.9 ;
+                ex:evidenceScore      0.8 ;
+                ex:compositeConfidence 0.86 .   # 0.6·0.9 + 0.4·0.8
+```
+
+Giá trị 0.86 là *hệ quả của chính sách*, có thể tái tính và đối chiếu — không phải con
+số ngẫu nhiên. Khi chính sách thay đổi, toàn bộ composite cũ phải được đánh dấu quá
+hạn chứ không giữ nguyên.
+
+**Mô hình độ tin cậy nguồn cho cơ chế.** "Nguồn uy tín" cần được lượng hóa. Một mô hình
+đơn giản: xếp hạng theo tầng, mỗi nguồn gán điểm cơ sở, có thể điều chỉnh bằng lịch sử:
+
+| Tầng | Ví dụ nguồn | Điểm cơ sở | Ghi chú |
+|------|-------------|-----------|---------|
+| 1. Bình duyệt (peer-reviewed) | Bài báo về suy luận cơ chế | 0.95 | Có quy trình đánh giá độc lập |
+| 2. Sách giáo khoa | textbook A, textbook B | 0.85 | Uy tín nhưng chậm cập nhật |
+| 3. Tài liệu kỹ thuật / chuẩn | RDFS/OWL spec | 0.90 | Chuẩn hóa, được duy trì |
+| 4. Trích xuất tự động (LLM, NLP) | pipeline LLM | 0.60 | Nhanh, rẻ, nhưng dễ hallucinate |
+
+Điểm cơ sở có thể bị điều chỉnh: một nguồn tầng 2 có track record tốt (nhiều claim
+Accepted được kiểm chứng) được nâng lên; một nguồn tầng 1 có lịch sử sai sót bị hạ. Quan
+trọng nhất: đây là *model công khai*, được lưu trong đồ thị, để bất kỳ ai cũng có thể
+giải thích vì sao `claim_roc_B` (từ textbook B, Candidate) được đánh giá thấp hơn
+`claim_roc_A` (từ textbook A, Accepted).
+
 ## 6.12 Trạng thái quản trị tri thức: Candidate, Accepted, Rejected, Contested, Superseded
 
 ### Trực giác
@@ -729,6 +957,56 @@ Năm trạng thái quản trị (governance states):
 | **Rejected** | Đã qua đánh giá, bị từ chối (sai, thiếu bằng chứng) | Giữ để truy vết, không dùng |
 | **Contested** | Đang bị thách thức bởi bằng chứng mới hoặc phát biểu khác | Giữ, đánh dấu cần review |
 | **Superseded** | Được thay thế bởi phát biểu mới hơn/tốt hơn | Giữ để lịch sử, trỏ đến replacement |
+
+**Máy trạng thái (FSM).** Năm trạng thái này tạo thành một máy trạng thái hữu hạn. Mỗi
+lượt chuyển là một **sự kiện quản trị** có ghi lại — không phải thay đổi ngẫu nhiên:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Candidate
+    Candidate --> Accepted: đánh giá + bằng chứng đủ
+    Candidate --> Rejected: bằng chứng chống mạnh
+    Candidate --> Contested: bằng chứng mâu thuẫn mới
+    Accepted --> Contested: bằng chứng mới thách thức
+    Accepted --> Superseded: claim tốt hơn thay thế
+    Contested --> Accepted: phục hồi sau review
+    Contested --> Rejected: review kết luận sai
+    Superseded --> Contested: claim thay thế bị bác
+    Rejected --> [*]
+```
+
+Vòng lặp quan trọng: `Contested → Accepted` cho phép một claim bị thách thức nhưng sau
+đó được phục hồi khi bằng chứng mới ủng hộ nó. Không có luật nào nói trạng thái chỉ đi
+một chiều.
+
+**Vòng đời của một claim cơ chế.** Theo dõi claim về định nghĩa vận tốc xuyên suốt:
+
+| Thời điểm | Sự kiện | Trạng thái | Vì sao |
+|-----------|---------|-----------|--------|
+| 2021-06-01 | `claim_roc_A` từ textbook A vào hệ thống | Candidate | Chưa đánh giá |
+| 2021-06-10 | Kiểm chứng: khớp với textbook B, đúng ngữ pháp cơ chế | Accepted | Bằng chứng đủ, nguồn tầng 2 |
+| 2024-05-20 | `claim_roc_relativist` xuất hiện với valid time [1905, nay) | Contested | Bằng chứng mới thách thức phạm vi |
+| 2024-06-01 | Đối chiếu: hai claim khác valid time, không phải mâu thuẫn | Accepted (cũ) → Superseded | `claim_roc_relativist` tốt hơn cho hiện tại; cái cũ vẫn đúng trong khoảng của nó |
+
+Lưu ý bước cuối: claim cổ điển **không bị bác** — nó được *thay thế* trong khi vẫn đúng
+trong valid time của nó. Đây là Supersession ≠ Contradiction (§6.13).
+
+**Ngữ nghĩa truy vấn của Accepted.** Trạng thái này là **mặc định truy vấn** của hệ
+thống: khi người dùng hỏi "định nghĩa vận tốc hiện nay là gì?", hệ thống chỉ xét claim
+có `ex:status ex:Accepted` (và còn hiệu lực theo valid time). Candidate/Rejected/Contested
+không được dùng cho trả lời mặc định — chúng chỉ xuất hiện trong truy vấn quản trị:
+
+```sparql
+PREFIX ex: <http://example.org/kgbook/mks#>
+SELECT ?claim ?content WHERE {
+    ?claim ex:content ?content ;
+           ex:status  ex:Accepted .
+}
+```
+
+Nếu chạy truy vấn này sau 2024-06-01, kết quả trả về `claim_roc_relativist` chứ không
+phải `claim_roc_A` (đã Superseded). Query semantics của Accepted chính là câu trả lời
+cho "hệ thống *tin* gì" — khác với "hệ thống *biết* gì" (tất cả claim trong ledger).
 
 ### Accepted ≠ Chân lý vĩnh viễn
 
@@ -797,6 +1075,24 @@ Ví dụ: "Hà Nội có 12 quận" và "Hà Nội có 30 quận" (cùng thời 
 > ⚠️ **Ngộ nhận phổ biến:** "Phát biểu mới luôn đúng hơn phát biểu cũ." Sai. Mới hơn
 > không có nghĩa là đúng hơn. Một nguồn cũ có thể chính xác hơn một nguồn mới nhưng kém
 > uy tín. Supersession là quyết định quản trị, không phải quy luật tự nhiên.
+
+**Supersession của thuật toán — bản cũ không sai, chỉ là cũ.** Nguyên tắc trên áp dụng cả
+cho *chính bộ trích xuất* (extractor) trong pipeline Mechanism-KG. Trong §6.16 ta có
+`extractor_pipeline_v1` tạo ra các claim Candidate. Khi đội phát triển phát hành
+`extractor_pipeline_v3` với nhận diện quan hệ tốt hơn (ví dụ: đọc được cấu trúc
+"velocity *is the rate of change of* position" thay vì chỉ nhặt cụm "rate of change"),
+thì version mới **supersede** version cũ:
+
+- `extractor_pipeline_v3 prov:wasDerivedFrom extractor_pipeline_v1` — v3 kế thừa và cải
+  tiến.
+- V1 không bị đánh dấu Rejected: kết quả của nó không sai, chỉ thô hơn.
+- Nhưng claim mới tạo ra **bắt buộc** ghi provenance trỏ về v3, và khi bộ đánh giá chọn
+  claim nào được nâng lên Accepted (§6.11), claim từ v3 được ưu tiên hơn so với claim
+  cùng nội dung từ v1.
+
+Điều này tạo ra một **hệ thống giống git cho tri thức**: mỗi phiên bản thuật toán là một
+"release", mỗi claim là một "commit" có provenance. Suy diễn sau này kế thừa toàn bộ
+lịch sử — không xóa, chỉ thêm lớp.
 
 ## 6.14 Đồ thị bằng chứng và Bảo tồn mâu thuẫn
 
@@ -934,17 +1230,119 @@ nhưng cần external evidence để trở thành *tri thức được chấp nh
 > — tạo ra thông tin nghe hợp lý nhưng sai. Headline confidence (LLM tự tin) ≠ actual
 > correctness. Always require independent evidence.
 
+**Cơ chế trích xuất bởi LLM → CandidateMechanism.** Nối với Chương 5: khi pipeline LLM
+trích xuất một cơ chế mới từ tài liệu, đầu ra đi vào hệ thống dưới dạng
+`ex:CandidateMechanism` (Ch5 §5.6 — chính là đối tượng mà `CandidateMechanismShape` kiểm
+tra). Bốn bước xử lý:
+
+```turtle
+ex:candidateRateOfChange_1  a ex:CandidateMechanism ;
+    rdfs:label "RATE_OF_CHANGE (draft)" ;
+    ex:hasOperation ex:derivativeOperation_1 ;
+    ex:hasInput ex:position_1 ;
+    prov:wasGeneratedBy ex:llm_extraction_run_42 ;
+    prov:wasAttributedTo ex:LLM_pipeline_v3 ;
+    ex:status ex:Candidate .
+```
+
+1. **Gán trạng thái Candidate.** Đầu ra LLM chưa qua đánh giá; nó *chưa* được nâng lên
+   `AcceptedKnowledge`.
+2. **Ghi provenance.** LLM là `prov:Agent`; extraction run là `prov:Activity`; văn bản
+   nguồn là input entity. Chú ý: LLM không phải *nguồn* — `ex:LLM_pipeline_v3` chỉ chịu
+   trách nhiệm về hoạt động trích xuất, không chứng minh nội dung.
+3. **Xác nhận cấu trúc.** Chạy `CandidateMechanismShape` (Ch5 §5.6): nếu thiếu
+   `ex:hasOutput`, báo violation → candidate giữ ở Candidate, chờ repair (Ch5 §5.12).
+4. **Yêu cầu bằng chứng độc lập.** Để nâng từ Candidate lên Accepted, cần ít nhất một
+   nguồn độc lập (ví dụ textbook B từ §3.2.5) xác nhận cùng nội dung. Việc dùng chính
+   LLM để "kiểm tra" đầu ra của nó là circular verification — không phải bằng chứng.
+
+Reasoner cũng là một loại Agent: khi bộ suy luận OWL (Ch4) suy ra
+`ex:rateOfChange_1 a ex:Mechanism` từ subClassOf, triple suy ra được gán
+`prov:wasGeneratedBy ex:reasoner_run_7 ; prov:wasAttributedTo ex:reasoner_owl2rl_v2` —
+phân biệt với triple asserted từ dữ liệu gốc. Đây chính là "inferred ≠ asserted" của
+Ch5 §5.4, giờ có metadata provenance đi kèm.
+
 ## 6.17 Ví dụ Mechanism KG: Áp dụng tầng tri thức luận
 
 ### Trực giác
 
-Hãy áp dụng toàn bộ khung khái niệm của chương vào mechanism knowledge graph — domain
-capstone của sách.
+Chương 1–5 đã xây dựng liên tục một cơ chế trung tâm: RATE_OF_CHANGE — `ex:rateOfChange_1`
+nhận `ex:position_1` làm `differentiand`, `ex:time_1` làm reference variable, sinh ra
+`ex:velocity_1`. Đến chương này, hệ thống chuyển từ "biết mô hình hóa cơ chế" sang "biết
+*quản lý tri thức* về cơ chế": mỗi tuyên bố về cơ chế có nguồn, bằng chứng, thời gian,
+trạng thái. Đây là áp dụng toàn bộ khung tri thức luận vừa học.
 
 ### Cơ chế
 
-Giả sử ta đang xây dựng KG về các cơ chế (mechanisms) trong khoa học máy tính. Một
-claim điển hình:
+**Pipeline đầy đủ: từ quan sát đến tri thức được chấp nhận.** Theo dõi một mảnh tri thức
+xuyên năm giai đoạn của §6.1:
+
+**Bước 1 — Quan sát (Observation):** câu nguồn của cuốn sách —
+*"Velocity is the rate of change of position with respect to time"* — được quan sát
+trong textbook A, trang 42. Đây là dữ liệu thô, chưa vào đồ thị:
+
+```turtle
+ex:obs_velocity_def_1  a ex:Observation ;
+    ex:observedAt "2021-06-01T09:00:00Z"^^xsd:dateTime ;
+    ex:observedBy ex:extractor_pipeline_v3 ;
+    ex:sourceText "Velocity is the rate of change of position with respect to time" .
+```
+
+**Bước 2 — Khẳng định (Assertion):** quan sát được biểu diễn thành các bộ ba RDF
+(đúng như Ch2/Ch4 đã dùng, giờ là dữ liệu được cung cấp):
+
+```turtle
+ex:rateOfChange_1  ex:hasOperation       ex:derivativeOperation_1 ;
+                   ex:hasInput           ex:position_1 ;
+                   ex:hasReferenceVariable ex:time_1 ;
+                   ex:hasOutput          ex:velocity_1 .
+```
+
+**Bước 3 — Phát biểu (Claim):** các khẳng định trên được bọc thành đối tượng tri thức
+luận hạng nhất với nguồn + thời gian + trạng thái:
+
+```turtle
+ex:claim_roc_A  a           ex:Claim ;
+    ex:content  ex:assertion_roc_1 ;
+    ex:statedBy ex:textbook_A ;
+    ex:statedAt "2021-06-01"^^xsd:date ;
+    ex:status   ex:Accepted ;
+    prov:wasDerivedFrom ex:obs_velocity_def_1 .
+```
+
+**Bước 4 — Bằng chứng (Evidence):** hai mảnh bằng chứng độc lập gắn vào claim:
+
+```turtle
+ex:evidence_derivative_calc  ex:supports ex:claim_roc_A .
+ex:textbookB_velocity_def    ex:supports ex:claim_roc_A .
+```
+
+**Bước 5 — Tri thức được chấp nhận:** sau khi bằng chứng đủ, claim được giữ ở
+`Accepted` (§6.12). Không phải chân lý vĩnh viễn: khi `claim_roc_relativist` xuất hiện
+với valid time [1905, nay) (§6.7), `claim_roc_A` chuyển `Contested` rồi `Superseded` —
+trong khi vẫn đúng trong khoảng hiệu lực của nó.
+
+**Đồ thị bằng chứng của cơ chế.** Nối tất cả lại:
+
+```turtle
+# Claim B — cùng mệnh đề từ textbook B, mới vào hệ thống (Chương 3 §3.2.5)
+ex:claim_roc_B  a ex:Claim ;
+    ex:content ex:assertion_roc_1 ;
+    ex:statedBy ex:textbook_B ;
+    ex:statedAt "2023-02-14"^^xsd:date ;
+    ex:status   ex:Candidate .
+
+ex:evidence_derivative_calc  ex:supports     ex:claim_roc_A .
+ex:textbookB_velocity_def    ex:supports     ex:claim_roc_B .
+ex:claim_roc_relativist      ex:contradicts  ex:claim_roc_A_temporal .  # temporal, §6.7
+```
+
+Bằng chứng `textbookB_velocity_def` hỗ trợ cả hai claim (chúng chia sẻ mệnh đề) nhưng
+không tự nâng `claim_roc_B` lên Accepted — việc nâng cấp là quyết định quản trị dựa trên
+đánh giá nguồn (§6.12, §6.11).
+
+**Claim về cơ chế tính toán (Chương 5).** Không chỉ cơ chế vật lý — tri thức về *bản
+thân các cơ chế suy luận* cũng là claim. Ví dụ từ Ch5 §5.2:
 
 "Cơ chế forward chaining đảm bảo dừng khi đồ thị hữu hạn, tập quy tắc hữu hạn, không
 hàm, biến an toàn."
@@ -966,6 +1364,20 @@ Nếu một nguồn khác nói "forward chaining không đảm bảo dừng vớ
 không phải mâu thuẫn với claim trên. SWRL rules vượt ra ngoài phạm vi "finite,
 function-free, safe" — đây là **scope disagreement** (§6.6). Ngữ cảnh hòa giải: claim
 trên áp dụng cho Horn clauses/Datalog; claim mới áp dụng cho SWRL.
+
+**Ba claim cơ chế — tóm tắt.** Chương này đã dùng ít nhất ba claim cơ chế với metadata
+đầy đủ:
+
+| Claim | Nội dung | Nguồn | Trạng thái | Valid time | Biết thêm ở |
+|-------|----------|-------|------------|-----------|-------------|
+| `claim_roc_A` | Velocity = rate of change (pos, time) | textbook A | Accepted → Superseded | [1687, 1905) | §6.2, §6.17 |
+| `claim_roc_B` | Cùng mệnh đề, từ nguồn B | textbook B | Candidate | [1687, 1905) | §6.2 |
+| `claim_roc_relativist` | Vận tốc bị chặn bởi tốc độ ánh sáng | [tương đối tính] | Accepted | [1905, nay) | §6.7 |
+| `claim_fc_term` | Forward chaining dừng trong phạm vi an toàn | Hogan et al. | Accepted | [2021, nay) | §6.17 |
+
+Đây chính là "reader có thể quản lý tri thức cơ chế theo hướng tri thức luận từ đầu đến
+cuối" — từ câu văn quan sát được, qua khẳng định RDF, tới claim với bằng chứng, thời
+gian, và trạng thái quản trị.
 
 ## 6.18 Pipeline phát hiện mâu thuẫn
 
@@ -1137,6 +1549,64 @@ Không yêu cầu toán học mới beyond Ch4.
 
 > 🖊 Giải thích vì sao hệ thống có thể chứa hai phát biểu mâu thuẫn mà vẫn nhất quán về
 > mặt logic.
+
+## 6.23 Mechanism Knowledge System — Năng lực đạt được
+
+**TRƯỚC CHƯƠNG NÀY** — hệ thống có ontology OWL (Ch4), suy diễn và xác nhận (Ch5).
+Nhưng toàn bộ dữ liệu đều được *cho sẵn*: `rate_of_change.ttl` được nhập bằng tay, coi
+mọi triple là đúng, không có câu hỏi "ai nói thế?", "từ bao giờ?", "hai nguồn khác nhau
+nói khác nhau thì tin ai?".
+
+**SAU CHƯƠNG NÀY** — hệ thống có một tầng tri thức luận (epistemic layer) đứng trước
+tầng ontology:
+- **Tách nội dung khỏi nguồn gốc:** mỗi phát biểu là một `Claim` với đầy đủ provenance
+  (ai nói, khi nào, từ đâu — PROV-O), khác biệt với nội dung trần của nó (§6.2, §6.4).
+- **Đánh giá:** `Evidence` supports/contradicts từng claim (§6.5); 5 loại mâu thuẫn được
+  phân loại và hòa giải (§6.6); confidence tính được từ độ tin cậy nguồn và độ mạnh bằng
+  chứng (§6.11).
+- **Thời gian:** 4 đồng hồ (valid/assertion/observation/system), biểu diễn bitemporal
+  bằng OWL-Time (§6.7, §6.8).
+- **Quản trị:** claim đi qua vòng đời Candidate → Accepted → (Contested →) Superseded;
+  Supersession ≠ Contradiction (§6.12, §6.13). Claim ledger bảo toàn mâu thuẫn thay vì
+  xóa (§6.14, §6.15).
+- **LLM:** đầu ra LLM là `CandidateKnowledge`, không bao giờ tự động trở thành tri thức
+  chấp nhận (§6.16, §6.17).
+
+**VÍ DỤ RATE_OF_CHANGE CỤ THỂ** — `claim_roc_A` (textbook A) trở thành Accepted sau khi
+có `evidence_derivative_calc`; `claim_roc_B` (textbook B, cùng nội dung) vẫn là Candidate
+vì thiếu bằng chứng độc lập (§6.2, §6.11, §6.17). Claim cổ điển "vận tốc không giới
+hạn" mang valid interval [1687, 1905) và bị Superseded bởi claim tương đối tính có valid
+interval [1905, now) — không bị bác, chỉ bị thay thế trong phạm vi thời gian của nó
+(§6.7, §6.13). Truy vấn bitemporal trả về "định nghĩa vận tốc đúng ngày 2021-06-01" khác
+với "định nghĩa hiện nay" (§6.7, §6.12).
+
+**VẪN CHƯA GIẢI QUYẾT** — tầng tri thức luận giả định claim đã *nằm* trong ledger với
+provenance đầy đủ. Câu hỏi "tri thức mới đến từ đâu?" — LLM trích xuất từ văn bản, khớp
+nối thực thể (entity resolution), tích hợp nhiều nguồn — chưa có lời giải. Chương 7
+(Knowledge Acquisition and Integration) mở ra nấc tiếp theo: *làm sao để một agent thu
+thập và hợp nhất tri thức mà không làm hỏng graph đã được quản trị*.
+
+## Thuật ngữ đã gặp trong chương này
+
+| Thuật ngữ | Nghĩa ngắn | Học chi tiết |
+|-----------|-----------|--------------|
+| Epistemic model (mô hình tri thức luận) | Chuỗi Observation → Assertion → Claim → Evidence → Accepted Knowledge | §6.1 |
+| Proposition / Assertion / Claim | Nội dung trừu tượng / thể hiện trong ngôn ngữ / bản ghi có metadata | §6.2 |
+| Provenance (xuất xứ) | Ai tạo, từ đâu, khi nào — PROV-O Entity/Activity/Agent | §6.4 |
+| Evidence (bằng chứng) | Bản ghi tác động đến độ tin của claim — khác với nguồn | §6.3, §6.5 |
+| supports / contradicts / isRelevantTo | Ba quan hệ bằng chứng giữa evidence và claim | §6.5 |
+| Contradiction taxonomy | 5 loại: logical, value, temporal, scope, source | §6.6 |
+| Valid / assertion / observation / system time | Bốn đồng hồ khác nhau của cùng một phát biểu | §6.7, §6.8 |
+| Bitemporal (song thời gian) | Lưu cả valid time lẫn system time | §6.7 |
+| ProperInterval (OWL-Time) | Khoảng thời gian có điểm đầu và điểm cuối | §6.7 |
+| Qualified statement (n-ary) | Gói quan hệ thành object để gắn metadata (Wikidata pattern) | §6.9 |
+| Governance states | Candidate, Accepted, Rejected, Contested, Superseded | §6.12 |
+| Supersession ≠ Contradiction | Thay thế = tốt hơn; Mâu thuẫn = ít nhất một bên sai | §6.13 |
+| Claim ledger | Nhật ký bất biến chứa mọi claim, kể cả mâu thuẫn | §6.15 |
+| CandidateKnowledge | Đầu ra LLM — cần bằng chứng độc lập trước khi Accepted | §6.16 |
+| Confidence policy | 0.6·sourceReliability + 0.4·evidenceScore | §6.11 |
+| Negation ≠ Absence | Claim(¬P) khác "không có claim nào về P" | §6.20 |
+| Contradiction ≠ Inconsistency | Mâu thuẫn ở nội dung; nhất quán ở metadata | §6.21 |
 
 ## Tài liệu tham khảo
 
