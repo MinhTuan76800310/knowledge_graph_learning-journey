@@ -613,3 +613,84 @@ concepts:
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Goal-driven reasoning; from query → subgoals → assertions; contrasted with forward chaining"
+
+  # === Chapter 6 concepts ===
+  claim:
+    first_mentioned_chapter: 3
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: true
+    notes: "First-class epistemic object: assertion + source + time + evidence + status; distinct from proposition and assertion"
+
+  evidence:
+    first_mentioned_chapter: 3
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: true
+    notes: "Information supporting or challenging a claim; supports/contradicts/isRelevantTo relations; ≠ source"
+
+  epistemic_model:
+    first_mentioned_chapter: 6
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Book-defined framework: Observation → Assertion → Claim → Evidence → Accepted Knowledge"
+
+  proposition:
+    first_mentioned_chapter: 6
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Abstract content P, independent of representation; distinguished from assertion and claim"
+
+  governance_state:
+    first_mentioned_chapter: 6
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Candidate/Accepted/Rejected/Contested/Superseded; Accepted ≠ eternal truth"
+
+  contradiction_taxonomy:
+    first_mentioned_chapter: 6
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Five types: logical, value conflict, temporal, scope, source; context dissolution before declaring contradiction"
+
+  valid_time:
+    first_mentioned_chapter: 3
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: true
+    notes: "When statement applies to the world; distinguished from assertion/observation/system time"
+
+  bitemporal:
+    first_mentioned_chapter: 6
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: intuition
+    incidental_gloss: false
+    notes: "Valid time + system time; enables 'what did system believe at time T?' queries"
+
+  supersession:
+    first_mentioned_chapter: 6
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "New claim replaces old because better, not because old is wrong; ≠ contradiction"
+
+  confidence_semantics:
+    first_mentioned_chapter: 6
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Must specify WHAT is assessed; source reliability ≠ claim confidence; no universal formula"
