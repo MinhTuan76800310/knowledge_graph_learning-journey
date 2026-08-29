@@ -1039,30 +1039,36 @@ một đồ thị. Chương 3 trả lời bằng cách gán cho ứng dụng đ�
 (`ex:derivativeApplication_1`) và xây ngữ cảnh quanh nó — bước đầu tiên của mô hình
 n-ary chính thức.
 
-## 2.10 Thang năng lực sau chương này
+## 2.10 Mechanism Knowledge System — Năng lực đạt được
 
-**Trước chương này** — bạn có thể: nói RDF là "đồ thị bộ ba", SPARQL là "ngôn ngữ truy
-vấn RDF" theo cách nhớ thuật ngữ, mà chưa đọc được cấu trúc đồ thị từ một truy vấn.
+**TRƯỚC CHƯƠNG NÀY** — hệ thống có các đối tượng cơ chế được nhận diện phi hình thức
+(Chương 1): `rateOfChange_1`, `position_1`, `time_1`, `velocity_1` mới tồn tại trong mô
+hình tinh thần và bảng minh họa; chưa có biểu diễn chuẩn để lưu và truy vấn, chưa đọc
+được cấu trúc đồ thị cơ chế từ một truy vấn.
 
-**Sau chương này** — bạn có thể:
+**SAU CHƯƠNG NÀY** — hệ thống biểu diễn và truy vấn cơ chế bằng ngôn ngữ chuẩn:
 
-- Viết Turtle cho một miền bất kỳ (thành phố hay cơ chế) và biện minh từng lựa chọn
-  IRI-vs-literal theo quy tắc "thứ được tham chiếu lại thì cho IRI".
-- Đọc một BGP nhiều mẫu và dự đoán ánh xạ nghiệm qua từng bước khớp — không chỉ chạy
-  rồi tin kết quả.
-- Dịch cùng một cấu trúc sang LPG + Cypher và chỉ ra chỗ hai mô hình khác nhau về hình
-  dạng chứ không khác về khả năng.
-- Giải thích vì sao `?m a ex:Mechanism` có thể trả về rỗng — và điều đó nói lên điều gì
-  về ranh giới giữa khớp mẫu và suy luận.
+- **RDF/Turtle:** cơ chế được biểu diễn thành đồ thị bộ ba; từng lựa chọn IRI-vs-literal
+  được biện minh theo quy tắc "thứ được tham chiếu lại thì cho IRI" (§2.1.5).
+- **SPARQL:** truy vấn BGP nhiều mẫu trả về ánh xạ nghiệm qua từng bước khớp — không
+  chỉ chạy rồi tin kết quả; biến dùng chung tạo phép nối; FILTER và OPTIONAL (§2.1.6).
+- **LPG/Cypher:** cùng một cấu trúc tri thức được dịch sang đồ thị thuộc tính có nhãn và
+  truy vấn Cypher; phân biệt được chỗ hai mô hình khác nhau về hình dạng chứ không về
+  khả năng (§2.2–2.4).
+- **Ranh giới khớp mẫu/suy luận:** hệ thống giải thích được vì sao `?m a ex:Mechanism`
+  có thể trả về rỗng — và điều đó nói lên điều gì về ranh giới giữa khớp mẫu và suy
+  luận (§2.7).
 
-**Ví dụ cụ thể RATE_OF_CHANGE:** truy vấn ba-mẫu ở mục 2.1.6 trả về đúng cặp
-`(rateOfChange_1, position_1, time_1)` và `(heatTransferRate_2, thermalEnergy_1,
-time_1)` — hai ứng dụng của cùng một khái niệm "tốc độ thay đổi" được đọc thẳng từ đồ
-thị bằng một BGP.
+**VÍ DỤ RATE_OF_CHANGE CỤ THỂ** — truy vấn ba-mẫu ở mục 2.1.6 đọc thẳng từ đồ thị đúng
+cặp `(rateOfChange_1, position_1, time_1)` và `(heatTransferRate_2, thermalEnergy_1,
+time_1)` — hai ứng dụng của cùng một khái niệm "tốc độ thay đổi" được truy xuất bằng
+một BGP; câu *"Velocity is the rate of change of position with respect to time"* được
+biểu diễn thành Turtle `ex:rateOfChange_1` (§2.1.5).
 
-**Vẫn chưa giải quyết:** đồng nhất định danh (hai IRI cùng một cơ chế), lược đồ hình
+**VẪN CHƯA GIẢI QUYẾT** — đồng nhất định danh (hai IRI cùng một cơ chế), lược đồ hình
 thức (ý nghĩa của `hasInput` là gì), suy luận phân lớp, và ngữ cảnh/bằng chứng của mỗi
-bộ ba. Chương 3 bắt đầu từ hai trụ đầu.
+bộ ba. Chương 3 mở ra nấc tiếp theo: *lược đồ RDFS, định danh chính tắc, ngữ cảnh theo
+nguồn*.
 
 
 ## Thuật ngữ đã gặp trong chương này
