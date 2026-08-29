@@ -24,10 +24,8 @@ for src in "$SRCDIR"/*.tex; do
   stem="$(basename "$src" .tex)"
   pdf_out="$OUTDIR/${stem}.pdf"
 
-  # Skip if source is older than output
-  if [ -f "$pdf_out" ] && [ "$src" -ot "$pdf_out" ]; then
-    continue
-  fi
+  # Always recompile: figures may depend on shared fonts/packages that
+  # change independently of the .tex source. Compilation cost is low (~2s/figure).
 
   echo "render_tikz: compiling $stem.tex"
   # Compile in tmp dir to avoid cluttering source dir with aux files

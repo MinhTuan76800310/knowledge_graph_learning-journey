@@ -1,18 +1,43 @@
 # TikZ Pilot Comparison Report
 
-**Date:** 2026-08-29
+**Date:** 2026-08-29 (integrity-checked)
 **Baseline commit:** 103432b (tag: book-preview-v0.4-baseline-pre-tikz)
-**Experiment branch:** exp/tikz-pilot
+**Pilot commit:** 2cfa337 (main HEAD)
+**Experiment branch:** exp/tikz-pilot (points to baseline 103432b — see note below)
+
+---
+
+## Git preservation state
+
+| Item | Value | Verified |
+|------|-------|----------|
+| HEAD | 2cfa337 | ✅ |
+| Tag book-preview-v0.4-baseline-pre-tikz | 103432b | ✅ resolves exactly to baseline |
+| Branch exp/tikz-pilot | 103432b | ✅ points to baseline (not pilot) |
+| Working tree | clean (only untracked: generated PDFs, preview/) | ✅ |
+
+**Branch purpose clarification:** `exp/tikz-pilot` was created at the baseline commit as a safety reference point. The actual TikZ pilot work was done on `main` (commit 2cfa337). The branch name is slightly misleading — it preserves the pre-TikZ state, not the pilot state. The canonical baseline reference is the **tag**, not the branch.
+
+## Baseline artifact policy
+
+- **Git tag** (`book-preview-v0.4-baseline-pre-tikz`) is the canonical reproducible baseline.
+- **Generated PDFs** (`artifacts/baseline/*.pdf`, `artifacts/tikz-pilot/*.pdf`) are NOT tracked by Git — they remain as local build artifacts only.
+- Future comparison baselines should prefer: tag + metadata JSON + optionally GitHub Release artifacts.
+- Binary PDFs should not accumulate in the repo history.
 
 ---
 
 ## Summary
 
+All page ranges below use **physical PDF page index** (1-based, as reported by `pdfinfo`). Printed page numbers differ by a fixed offset of 6 pages (front matter + TOC).
+
 | Metric | Baseline | TikZ Pilot | Delta |
 |--------|----------|------------|-------|
-| Total pages | 97 | 100 | +3 |
-| Ch4 page range | 37–68 | 45–72 | shifted by front matter |
-| Ch5 page range | 69–97 | 65–100 | shifted |
+| Total physical pages | 97 | 100 | +3 |
+| Ch4 physical pages | 50–69 | 50–70 | +1 (figures added within Ch4) |
+| Ch5 physical pages | 70–97 | 71–100 | +3 (figures added within Ch5) |
+| Ch4 printed pages | 44–63 | 44–64 | +1 |
+| Ch5 printed pages | 64–91 | 65–94 | +3 |
 | Formal diagrams (Ch4+Ch5) | 0 | 8 | +8 |
 | Mermaid blocks (Ch4+Ch5) | 0 | 0 | 0 |
 | Tables (Ch4+Ch5) | 20 | 20 | 0 |
@@ -21,6 +46,8 @@
 | LaTeX errors | 0 | 0 | — |
 | Missing glyph warnings | ✅ (U+2705 only) | ✅ (same) | — |
 | Tests | 18 passed | 18 passed | — |
+
+**Page range correction note:** The previous report used inconsistent numbering (mixing physical and printed pages, with unexplained overlap). The ranges above are computed directly from each PDF using `pdftotext` per-page search for chapter markers. Ch4 starts at the same physical page (50) in both versions because front matter is unchanged. Ch5 shifts by 1 page because Ch4 gained 1 page from figures.
 
 ## Figure-by-figure comparison
 
@@ -129,9 +156,76 @@ Do NOT retrofit Chapters 1–3 in this session. Consider a future migration pass
 | Broken image references | ✅ None |
 | Figure clipping/overflow | ✅ None observed |
 
+## Integrity check results (2026-08-29)
+
+### TikZ font consistency
+
+Verified via `pdffonts` on standalone figure PDFs and final book PDF:
+
+| Font role | TikZ figures | Book PDF | Match? |
+|-----------|-------------|----------|--------|
+| Text font | TimesNewRomanPSMT / BoldMT / ItalicMT | TimesNewRomanPSMT / BoldMT / ItalicMT | ✅ |
+| Math font | CambriaMath (3 subsets) | CambriaMath (3 subsets) | ✅ |
+| Fallback to Computer Modern? | No | No | ✅ |
+
+All TikZ standalone documents load `\usepackage{fontspec}`, `\setmainfont{Times New Roman}`, `\usepackage{unicode-math}`, `\setmathfont{Cambria Math}` — identical to the book's `header.tex` font policy. No silent fallback to Latin Modern/Computer Modern detected.
+
+**Note:** Each figure currently duplicates the font setup inline. A shared `tikz-common.tex` preamble would reduce duplication but is not required for correctness. Deferred as optional future improvement.
+
+### Vector output verification
+
+Verified via `pdfimages -list` on the final book PDF:
+
+- Total raster images in 100-page PDF: 7 (all from Ch1–3 Mermaid figures)
+- Raster images on TikZ figure pages (physical pages 53, 55, 59, 73, 79, 82, 85, 86): **0**
+- TikZ figures are embedded as vector PDFs via Pandoc's `\includegraphics` — no rasterization occurs in the pipeline.
+
+Pipeline confirmed: TikZ `.tex` → lualatex → vector `.pdf` → Pandoc `\includegraphics` → embedded vector in final book PDF.
+
+### Figure reference integrity
+
+| Check | Result |
+|-------|--------|
+| Generated files exist (8/8) | ✅ |
+| Manuscript references resolve (3 in Ch4, 5 in Ch5) | ✅ |
+| All figures have captions | ✅ |
+| Figure numbering sequential (Fig 8–15) | ✅ |
+| No duplicate figure labels | ✅ |
+| No broken references | ✅ |
+| No figure included twice | ✅ |
+| No raw standalone-PDF metadata leaks | ✅ |
+
+### TikZ cache/dependency correctness
+
+**Issue found:** `render_tikz.sh` previously skipped recompilation when the `.tex` source was older than the output PDF. This would incorrectly reuse stale generated PDFs if a shared dependency (fonts, packages, common preamble) changed.
+
+**Fix applied:** Removed the timestamp-based skip logic. All figures now recompile on every build run. Compilation cost is low (~2s per figure, ~16s total for 8 figures). This is the simplest correct approach.
+
+### Representative visual comparison (3 figures)
+
+| Figure | Understanding speed | Math/text consistency | Print readability | Whitespace cost | Page-flow impact |
+|--------|-------------------|----------------------|-------------------|-----------------|------------------|
+| Model/entailment (§4.3) | **Major improvement**: Venn-like diagram makes "α true in all models" instantly graspable vs. ASCII pipeline | ✅ Same fonts as manuscript | ✅ Grayscale-safe, readable at A4 | ~0.3 pages | Natural placement after entailment explanation |
+| Forward fixpoint (§5.2) | **Major improvement**: iterative rounds with θ annotations are visually traceable vs. text walkthrough | ✅ θ, G_i notation matches | ✅ Clear step progression | ~0.4 pages | Strongest pedagogical figure in pilot |
+| SHACL mechanism (§5.6) | **Major improvement**: 6-step operational flow makes SHACL mechanistic vs. numbered text | ✅ sh:targetClass etc. match | ✅ Vertical flow readable | ~0.5 pages | Transforms syntax listing into process |
+
+**Verdict:** All three figures compress understanding enough to justify the added page space. The whitespace cost (~0.3–0.5 pages per figure) is proportional to the pedagogical gain.
+
+### Renderer policy verdict
+
+`docs/BOOK_PEDAGOGY.md` §15 correctly defines:
+- Mermaid: conceptual/process diagrams without strong mathematical alignment needs ✅
+- TikZ: formal semantics, logic, sets, inference, validation mechanisms ✅
+- Graphviz: graph topology where useful ✅
+- Tables: structured comparisons ✅
+- Criterion: "Does the figure materially improve reconstruction of the mechanism?" ✅
+
+TikZ is NOT set as default for all diagrams — only for formal/mathematical ones. Policy is sound.
+
 ## Known remaining limitations
 
 1. MiKTeX "major issue" warnings about updates — cosmetic, does not affect output
 2. U+2705 (✅) missing glyph warning — known false positive, emoji renders via fallback
 3. Verify script "title missing" failures — known false positive from Vietnamese diacritics in PDF text extraction
 4. TikZ figures are static — no interactivity (acceptable for print PDF)
+5. Font setup duplicated per figure — shared preamble deferred as optional improvement
