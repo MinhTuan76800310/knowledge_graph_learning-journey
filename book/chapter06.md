@@ -176,9 +176,9 @@ với ngữ cảnh tri thức luận đầy đủ:
 ```turtle
 ex:claim_1  a              ex:Claim ;
             ex:content     [ ex:Hanoi ex:capitalOf ex:Vietnam ] ;
-            ex:statedBy    ex:Government_Decree_72 ;
+            ex:hasSource    ex:Government_Decree_72 ;
             ex:statedAt    "1976-07-02"^^xsd:date ;
-            ex:evidenceFor ex:evidence_legal_document ;
+            ex:hasEvidence ex:evidence_legal_document ;
             ex:status      ex:Accepted .
 ```
 
@@ -222,13 +222,13 @@ theo thời gian" (câu nguồn chính của cuốn sách). Ba mức độ:
 ```turtle
 ex:claim_roc_A  a            ex:Claim ;
                 ex:content   ex:prop_velocity_rate_of_change ;
-                ex:statedBy  ex:textbook_A ;
+                ex:hasSource  ex:textbook_A ;
                 ex:statedAt  "2021-06-01"^^xsd:date ;
                 ex:status    ex:Accepted .
 
 ex:claim_roc_B  a            ex:Claim ;
                 ex:content   ex:prop_velocity_rate_of_change ;   # cùng mệnh đề!
-                ex:statedBy  ex:textbook_B ;
+                ex:hasSource  ex:textbook_B ;
                 ex:statedAt  "2023-02-14"^^xsd:date ;
                 ex:status    ex:Candidate .
 ```
@@ -257,9 +257,9 @@ khác hỗ trợ/phản bác.
 Ví dụ:
 
 ```turtle
-ex:claim_pop_2019  ex:statedBy     ex:GSO_Vietnam ;       # NGUỒN
-                   ex:evidenceFor  ex:census_2019_data ;  # BẰNG CHỨNG
-                   ex:evidenceFor  ex:sampling_methodology .
+ex:claim_pop_2019  ex:hasSource     ex:GSO_Vietnam ;       # NGUỒN
+                   ex:hasEvidence  ex:census_2019_data ;  # BẰNG CHỨNG
+                   ex:hasEvidence  ex:sampling_methodology .
 ```
 
 Nguồn là `ex:GSO_Vietnam` (Tổng cục Thống kê). Bằng chứng là `ex:census_2019_data`
@@ -272,10 +272,12 @@ có thể đưa ra phát biểu được hỗ trợ bởi bằng chứng mạnh.
 
 ### Ứng dụng
 
-Trong Wikidata, **reference** đóng vai trò bằng chứng, còn **statement** tự thân ghi
-nhận nguồn qua property `stated in` (P248). Một statement có thể có nhiều reference —
-mỗi reference là một mảnh bằng chứng độc lập. Rank (preferred/normal/deprecated) phản
-ánh đánh giá tổng hợp, không phải bằng chứng trực tiếp [@wikidata-statements].
+Trong Wikidata, **reference** là con trỏ tới nguồn ngoài (thường qua property
+`stated in` (P248)), không phải bản thân bằng chứng — bằng chứng nằm ở nguồn được dẫn.
+Một statement có thể có nhiều reference, nhưng nhiều reference chưa chắc là nhiều mảnh
+bằng chứng độc lập: độc lập chỉ đúng khi các nguồn đích thực tách biệt. Rank
+(preferred/normal/deprecated) phản ánh đánh giá tổng hợp, không phải bằng chứng trực
+tiếp [@wikidata-statements].
 
 > ⚠️ **Ngộ nhận phổ biến:** "Nguồn uy tín → phát biểu đúng." Sai. Nguồn uy tín làm
 > tăng *xác suất* phát biểu đúng, nhưng không đảm bảo. Bằng chứng mới là yếu tố quyết
@@ -300,12 +302,19 @@ PROV-O định nghĩa ba lớp cốt lõi [@prov-dm]:
 - **Activity** (prov:Activity): "Một quá trình xảy ra trong thời gian, tác động lên
   hoặc sử dụng entity." Ví dụ: điều tra dân số, chạy pipeline ETL, phân tích dữ liệu.
 
-- **Agent** (prov:Agent): "Một thực thể chịu trách nhiệm cho một activity, một entity,
-  hoặc activity của agent khác." Ví dụ: Tổng cục Thống kê, một nhà nghiên cứu, một hệ
-  thống tự động.
+- **Agent** (prov:Agent): "Một chủ thể chịu trách nhiệm cho một activity, cho sự tồn tại
+  của một entity, hoặc cho activity của một agent khác." Ví dụ: Tổng cục Thống kê, một
+  nhà nghiên cứu, một hệ thống tự động.
 
-Ba lớp này **rời nhau**: một activity không phải là entity; một agent là một loại entity
-đặc biệt (có trách nhiệm).
+Quan hệ giữa ba lớp này theo PROV-DM [@prov-dm]:
+
+- **Entity và Activity rời nhau:** "An activity is not an entity" — một activity không
+  phải là entity, và một entity không phải là activity.
+
+- **Agent không bị khóa vào hai lớp trên:** PROV-DM nói một agent "may be a particular
+  type of entity or activity" — một agent có thể là một entity (người, tổ chức) hoặc một
+  activity (quy trình tự động). Vì vậy ba lớp này **không** rời nhau từng đôi một, và
+  **Agent không phải là kiểu con phổ quát của Entity**.
 
 Các quan hệ cốt lõi:
 
@@ -342,8 +351,8 @@ ex:census_2019_report
 
 ex:census_2019_activity
     a                prov:Activity ;
-    prov:startedAtTime "2019-04-01"^^xsd:date ;
-    prov:endedAtTime   "2019-07-01"^^xsd:date ;
+    prov:startedAtTime "2019-04-01T00:00:00Z"^^xsd:dateTime ;
+    prov:endedAtTime   "2019-07-01T00:00:00Z"^^xsd:dateTime ;
     prov:wasAssociatedWith ex:GSO_Vietnam ;
     prov:used          ex:survey_questionnaire_2019 .
 ```
@@ -364,10 +373,10 @@ provenance đầy đủ:
 @prefix prov: <http://www.w3.org/ns/prov#> .
 
 ex:claim_roc_A  a ex:Claim ;
-    prov:wasDerivedFrom ex:textbookA_sec42 ;
+    prov:wasDerivedFrom ex:obs_velocity_def_1 ;
     prov:wasAttributedTo ex:textbook_A .
 
-ex:textbookA_sec42  a prov:Entity ;
+ex:obs_velocity_def_1  a prov:Entity ;    # cũng là ex:Observation; mô tả đầy đủ ở §6.17 Bước 1
     prov:wasGeneratedBy ex:extraction_activity_7 ;
     prov:wasAttributedTo ex:textbook_A .
 
@@ -376,14 +385,14 @@ ex:extraction_activity_7  a prov:Activity ;
     prov:wasAssociatedWith ex:extractor_pipeline_v3 .
 ```
 
-Chuỗi: `claim_roc_A ← textbookA_sec42 ← extraction_activity_7 ←
+Chuỗi: `claim_roc_A ← obs_velocity_def_1 ← extraction_activity_7 ←
 textbookA_sec42_raw`. Mỗi mắt xích trả lời một câu "từ đâu, do ai, thế nào". Nếu một
 mắt xích thiếu, chuỗi **đứt gãy**:
 
 ```turtle
 ex:claim_roc_C  a ex:Claim ;
     prov:wasDerivedFrom ex:unknown_section ;
-    ex:statedBy ex:unknown_author .    # không Agent, không Activity, không Entity xác định
+    ex:hasSource ex:unknown_author .    # không Agent, không Activity, không Entity xác định
 ```
 
 Đây là **broken chain**: hệ thống không thể trả lời "claim này đến từ đâu, ai chịu
@@ -471,7 +480,7 @@ một thuộc tính của cùng một thực thể, trong cùng một ngữ cả
 hoặc lỗi.
 
 **3. Bất đồng thời gian (Temporal disagreement):** Hai phát biểu đúng ở các thời điểm
-khác nhau. Ví dụ: "Huế là thủ đô" (đúng trước 1976) và "Hà Nội là thủ đô" (đúng từ
+khác nhau. Ví dụ: "Huế là thủ đô" (đúng 1802–1945) và "Hà Nội là thủ đô" (đúng từ
 1976). Đây không phải mâu thuẫn thực sự — chỉ cần gắn nhãn thời gian chính xác.
 
 **4. Bất đồng phạm vi (Scope disagreement):** Hai phát biểu đúng trong các phạm vi khác
@@ -488,7 +497,7 @@ Trước khi tuyên bố hai phát biểu "mâu thuẫn", hãy kiểm tra xem **
 được không**. Bốn chiều ngữ cảnh cần căn chỉnh:
 
 1. **Định danh thực thể:** Hai phát biểu có nói về cùng một thực thể không? (Ch3: identity resolution)
-2. **Ý nghĩa vị từ:** Hai vị từ có cùng ngữ nghĩa không? (`population` có thể là de jure vs de facto)
+2. **Ý nghĩa vị từ:** Hai vị từ có cùng ngữ nghĩa không? (`population` có thể là de jure — theo đăng ký chính thức — so với de facto — theo thực tế)
 3. **Phạm vi thời gian:** Hai phát biểu có áp dụng trong cùng khoảng thời gian không?
 4. **Phạm vi không gian/pháp lý:** Hai phát biểu có cùng jurisdiction không?
 
@@ -530,7 +539,7 @@ Bốn đồng hồ thời gian cần phân biệt:
 
 **1. Thời gian hiệu lực (Valid time):** Khoảng thời gian mà phát biểu đúng *trong thế
 giới thực*. "Hà Nội là thủ đô" có valid time = [1976-07-02, now). "Huế là thủ đô" có
-valid time = [1802, 1976-07-02). Valid time trả lời "khi nào điều này đúng trong thế
+valid time = [1802, 1945-08-30). Valid time trả lời "khi nào điều này đúng trong thế
 giới?"
 
 **2. Thời gian khẳng định (Assertion time):** Thời điểm phát biểu được *đưa vào hệ
@@ -675,8 +684,11 @@ truy vấn nghiêm trọng.
 
 ### Cơ chế
 
-**Thời gian sự kiện (Event time)** là valid time của nội dung phát biểu — khi nào điều
-được mô tả xảy ra trong thế giới.
+**Thời gian sự kiện (Event time)** là khi nào sự kiện (hoặc trạng thái) được mô tả xảy
+ra trong thế giới. Với phát biểu mô tả trạng thái, event time thường trùng với valid
+time — "Huế là thủ đô" có sự kiện và trạng thái đúng cùng trong [1802, 1945). Nhưng
+hai khái niệm không đồng nhất phổ quát: một phát biểu khẳng định "sự kiện X đã xảy ra
+lúc t" có event time là điểm t, còn valid time của phát biểu kéo dài từ t đến nay.
 
 **Thời gian phát biểu (Claim time)** là assertion time — khi nào phát biểu được đưa vào
 hệ thống.
@@ -685,7 +697,7 @@ Ví dụ:
 
 | Phát biểu | Event time | Claim time |
 |-----------|-----------|------------|
-| "Huế là thủ đô" | [1802, 1976) | 2020-01-15 |
+| "Huế là thủ đô" | [1802, 1945) | 2020-01-15 |
 | "Hà Nội là thủ đô" | [1976, now) | 2020-01-15 |
 | "Hà Nội là thủ đô" (cập nhật) | [1976, now) | 2024-06-01 |
 
@@ -702,7 +714,7 @@ Khi truy vấn "thủ đô của Việt Nam hiện nay là gì?", hệ thống c
    gần nhất (hoặc evidence mạnh nhất).
 
 Nếu hệ thống nhầm lẫn event time và claim time, nó có thể trả về "Huế" vì phát biểu về
-Huế được nhập vào hệ thống *gần đây hơn* — dù nội dung của nó đã hết hiệu lực từ 1976.
+Huế được nhập vào hệ thống *gần đây hơn* — dù nội dung của nó đã hết hiệu lực từ 1945.
 
 ## 6.9 Mô hình phát biểu Wikidata: subject–property–value + qualifiers + references + rank
 
@@ -750,8 +762,9 @@ statement deprecated vẫn tồn tại trong đồ thị — nó không bị xó
 ### References không phải chứng minh
 
 Reference trong Wikidata ghi nhận *nguồn dẫn*, không phải *chứng minh*. Một statement
-có thể có nhiều reference — mỗi reference là một mảnh bằng chứng độc lập. Sự hiện diện
-của reference không đảm bảo statement đúng; nó cho phép người đọc *kiểm tra*.
+có thể có nhiều reference, nhưng nhiều reference chưa chắc là nhiều mảnh bằng chứng độc
+lập — chúng có thể trỏ về cùng một nguồn gốc. Sự hiện diện của reference không đảm bảo
+statement đúng; nó cho phép người đọc *kiểm tra*.
 
 ### Liên hệ với mô hình sách
 
@@ -766,6 +779,13 @@ của reference không đảm bảo statement đúng; nó cho phép người đ�
 
 Wikidata chứng minh rằng một hệ thống tri thức sản xuất cần coi ngữ cảnh là hạng nhất.
 Một cặp property–value trần hiếm khi là toàn bộ câu chuyện [@wikidata-qualifiers].
+
+> ⚑ **Trùng tên thuật ngữ "claim".** Wikidata dùng từ "claim" theo nghĩa riêng của nó:
+> trong Wikidata, claim là statement **chưa có reference** (subject–property–value +
+> qualifiers), còn statement = claim + references. Khái niệm này **khác hẳn** Claim của
+> mô hình sách: Claim (sách) là phát biểu đầy đủ — nội dung, nguồn, bằng chứng, thời
+> gian, trạng thái quản trị. Hai từ cùng viết "claim" nhưng là hai khái niệm khác nhau;
+> khi đọc tài liệu Wikidata, hiểu đúng nghĩa của họ.
 
 > 🖊 **Tự kiểm tra:** Trong Wikidata, một item có thể có nhiều statement cho cùng một
 > property với các rank khác nhau. Hãy giải thích vì sao đây không phải là "lỗi dữ liệu"
@@ -791,10 +811,10 @@ ex:claim_1  a              ex:Claim ;
             ex:subject     ex:Hanoi ;
             ex:predicate   ex:capitalOf ;
             ex:object      ex:Vietnam ;
-            ex:statedBy    ex:Gov_Decree_72 ;
+            ex:hasSource    ex:Gov_Decree_72 ;
             ex:validFrom   "1976-07-02"^^xsd:date ;
             ex:status      ex:Accepted ;
-            ex:evidenceFor ex:evidence_legal_doc .
+            ex:hasEvidence ex:evidence_legal_doc .
 ```
 
 Ưu điểm: linh hoạt, mỗi chiều ngữ cảnh là một cạnh hạng nhất. Nhược điểm: truy vấn phải
@@ -810,7 +830,7 @@ ex:claim_1_graph {
     ex:Hanoi ex:capitalOf ex:Vietnam .
 }
 
-ex:claim_1_graph  ex:statedBy   ex:Gov_Decree_72 ;
+ex:claim_1_graph  ex:hasSource   ex:Gov_Decree_72 ;
                   ex:validFrom  "1976-07-02"^^xsd:date ;
                   ex:status     ex:Accepted .
 ```
@@ -825,7 +845,7 @@ RDF 1.2 đang phát triển cơ chế triple term cho phép tham chiếu trực 
 [@w3c-rdf12-concepts]:
 
 ```turtle
-<< ex:Hanoi ex:capitalOf ex:Vietnam >>  ex:statedBy  ex:Gov_Decree_72 ;
+<< ex:Hanoi ex:capitalOf ex:Vietnam >>  ex:hasSource  ex:Gov_Decree_72 ;
                                         ex:validFrom "1976-07-02"^^xsd:date .
 ```
 
@@ -851,15 +871,15 @@ thì không thể được đánh giá:
 ```turtle
 ex:claim_malformed_1  a ex:Claim ;
     ex:content [ ex:rateOfChange_1 ex:hasOutput ex:velocity_1 ] .
-    #   KHÔNG ex:statedBy       — ai nói?
+    #   KHÔNG ex:hasSource       — ai nói?
     #   KHÔNG ex:statedAt       — khi nào?
-    #   KHÔNG ex:evidenceFor    — dựa trên gì?
+    #   KHÔNG ex:hasEvidence    — dựa trên gì?
     #   KHÔNG ex:status         — đã qua đánh giá chưa?
 ```
 
 Đây là **malformed claim**: thiếu metadata đến mức hệ thống không thể quyết định nên tin
 hay không. Nó đúng ra chỉ nên là một Assertion (bộ ba trần), không phải Claim. Một claim
-hợp lệ tối thiểu phải có: nguồn (`ex:statedBy`), thời điểm (`ex:statedAt`), và trạng
+hợp lệ tối thiểu phải có: nguồn (`ex:hasSource`), thời điểm (`ex:statedAt`), và trạng
 thái (`ex:status`). Ví dụ `ex:claim_roc_A` ở §6.17 là một claim hợp lệ đầy đủ.
 
 ## 6.11 Ngữ nghĩa độ tin cậy: Confidence phải nói rõ đang đánh giá gì
@@ -876,8 +896,8 @@ gì**:
 
 | Loại confidence | Đánh giá gì | Ví dụ |
 |----------------|-------------|-------|
-| Extraction confidence (độ tin cậy trích xuất) | Độ chính xác của quá trình trích xuất | NER model gán 0.92 cho entity "Hà Nội" |
-| Source reliability (độ tin cậy nguồn) | Độ tin cậy của nguồn | GSO được đánh giá 0.95 dựa trên track record |
+| Extraction confidence (độ tin cậy trích xuất) | Độ chính xác của quá trình trích xuất | Named Entity Recognition (NER — nhận dạng thực thể có tên) gán 0.92 cho entity "Hà Nội" |
+| Source reliability (độ tin cậy nguồn) | Độ tin cậy của nguồn | GSO được đánh giá 0.95 dựa trên track record (thành tích đã ghi nhận) |
 | Evidence assessment (đánh giá bằng chứng) | Mức độ bằng chứng hỗ trợ | 3 independent sources confirm → 0.9 |
 | Temporal validity (hiệu lực thời gian) | Khả năng phát biểu còn hiệu lực | Last updated 5 years ago → 0.7 |
 | Composite confidence (độ tin cậy tổng hợp) | Kết hợp nhiều yếu tố | Weighted combination of above |
@@ -937,6 +957,51 @@ Accepted được kiểm chứng) được nâng lên; một nguồn tầng 1 c�
 trọng nhất: đây là *model công khai*, được lưu trong đồ thị, để bất kỳ ai cũng có thể
 giải thích vì sao `claim_roc_B` (từ textbook B, Candidate) được đánh giá thấp hơn
 `claim_roc_A` (từ textbook A, Accepted).
+
+### Assessment phải là một đối tượng có cấu trúc
+
+Một con số confidence trần (ví dụ `0.86`) không tự chứng minh được — nó đến từ đâu, do
+ai, bằng cách nào, khi nào? Hệ thống cần biểu diễn **assessment** (đánh giá) như một đối
+tượng riêng với cấu trúc tường minh:
+
+| Thành phần | Ý nghĩa | Ví dụ |
+|------------|---------|-------|
+| target | Cái gì được đánh giá | `ex:claim_roc_A` |
+| assessor | Ai/tự động gì đánh giá | `ex:kg_admin_1`, `ex:evidence_processor_2` |
+| method | Phương pháp đánh giá | Đối chiếu chéo nguồn, review thủ công, công thức |
+| scale | Thang điểm | 0–1, 1–5, {low, medium, high} |
+| value | Giá trị trên thang | 0.86 |
+| assessedAt | Thời điểm đánh giá | 2021-06-10 |
+| rationale | Lý do — quy trình, bằng chứng đã dùng | "Khớp textbook B; đúng ngữ pháp cơ chế" |
+
+```turtle
+ex:assessment_roc_A_1  a ex:Assessment ;
+    ex:target     ex:claim_roc_A ;
+    ex:assessor   ex:kg_reviewer_1 ;
+    ex:method     ex:cross_source_check ;
+    ex:scale      ex:scale_0_to_1 ;
+    ex:value      0.86 ;
+    ex:assessedAt "2021-06-10"^^xsd:date ;
+    ex:rationale  "Khớp textbook B về định nghĩa rate of change; đúng ngữ pháp cơ chế; nguồn tầng 2" .
+```
+
+Vì assessment là đối tượng riêng, một claim có thể có nhiều assessment theo thời gian —
+mỗi lần đánh giá lại tạo một bản ghi mới, không ghi đè bản cũ. Điều này cho phép truy
+vết lịch sử: "ai tin gì, khi nào, dựa trên đâu".
+
+**Bốn loại assessment cần phân biệt** — khác target, khác ý nghĩa:
+
+| Loại assessment | Target | Hỏi gì |
+|-----------------|--------|--------|
+| Extraction assessment | Quá trình trích xuất (extractor) | Trích xuất có chính xác không? |
+| Source assessment | Nguồn (source) | Nguồn này đáng tin cậy không? |
+| Evidence assessment | Bằng chứng (evidence) | Bằng chứng hỗ trợ phát biểu mạnh/ yếu? |
+| Claim assessment | Claim | Tổng hợp: claim có đáng Accepted không? |
+
+Nhầm lẫn giữa bốn loại này là nguồn gốc của "confidence không nói rõ đang đánh giá gì"
+(§6.11 đầu). Trong ví dụ trên, `ex:assessment_roc_A_1` là *claim assessment* — còn
+extraction/source/evidence assessments của cùng claim được lưu ở các đối tượng khác với
+target tương ứng.
 
 ## 6.12 Trạng thái quản trị tri thức: Candidate, Accepted, Rejected, Contested, Superseded
 
@@ -1050,12 +1115,31 @@ chỉ là cập nhật — cùng một câu hỏi, câu trả lời tốt hơn.
 ### Cơ chế
 
 **Supersession (Thay thế):** Phát biểu mới thay thế phát biểu cũ vì nó *tốt hơn* — mới
-hơn, chi tiết hơn, dựa trên bằng chứng mạnh hơn. Phát biểu cũ không nhất thiết *sai*;
-nó chỉ không còn là lựa chọn tốt nhất.
+hơn, chi tiết hơn, dựa trên bằng chứng mạnh hơn — cho **cùng một câu hỏi, cùng một bối
+cảnh tham chiếu**. Phát biểu cũ không nhất thiết *sai*; nó chỉ không còn là lựa chọn tốt
+nhất.
 
-Ví dụ: Dân số Hà Nội 2019 = 8.093.100 (từ census 2019) được superseded bởi dân số 2024
-= 8.418.883 (từ census 2024). Số liệu 2019 không sai — nó đúng *tại thời điểm 2019*.
-Nhưng với câu hỏi "dân số hiện nay", số liệu 2024 tốt hơn.
+Ví dụ: Cùng câu hỏi "dân số Hà Nội năm 2024 là bao nhiêu?". Đầu năm, một ước tính nhanh
+ghi `population = 8.400.000` (từ dự báo tăng trưởng). Cuối năm, census chính thức công
+bố `population = 8.418.883`. Ước tính nhanh bị **supersede** bởi con số census — cùng
+bối cảnh tham chiếu (Hà Nội, năm 2024), con số sau đến từ nguồn đáng tin hơn. Ước tính
+cũ không bị xóa: nó được giữ với trạng thái `Superseded` và lý do `supersededBy`.
+
+**Đừng nhầm với thế giới thay đổi (temporal evolution).** So sánh với §6.7: số liệu
+"dân số Hà Nội 2019 = 8.093.100" và "dân số Hà Nội 2024 = 8.418.883" cùng đúng — mỗi
+số đúng *tại thời điểm của nó*. Qua thời gian dân số thực tăng; đây là **thế giới thay
+đổi**, không phải tri thức của ta bị sửa, và không phát biểu nào "thay thế" phát biểu
+nào. Chỉ khi **cùng bối cảnh tham chiếu** và kết quả được hiệu chỉnh/hoàn thiện thì mới
+là supersession.
+
+> ⚑ **Thế giới thay đổi ≠ tri thức của ta được sửa (WORLD CHANGED ≠ OUR KNOWLEDGE WAS
+> REVISED).** Hai tình huống có dấu hiệu ngoài giống nhau — "một con số mới vào hệ
+> thống" — nhưng bản chất khác nhau:
+> - **Thế giới thay đổi:** dữ liệu mới cho thời điểm mới (dân số 2024 khác dân số 2019).
+>   Cả hai phát biểu cùng đúng; valid time hòa giải (§6.7).
+> - **Tri thức được sửa:** cùng câu hỏi, cùng thời điểm, kết quả mới tốt hơn (ước tính →
+>   census). Phát biểu cũ bị supersede (`supersededBy`).
+> Xử lý khác nhau: evolution dùng valid time; supersession dùng `supersededBy`.
 
 **Contradiction (Mâu thuẫn):** Hai phát biểu không thể cùng đúng trong cùng một ngữ
 cảnh. Ít nhất một bên sai.
@@ -1065,23 +1149,24 @@ Ví dụ: "Hà Nội có 12 quận" và "Hà Nội có 30 quận" (cùng thời 
 
 ### Phân biệt trong thực hành
 
-| Tiêu chí | Supersession | Contradiction |
-|----------|-------------|---------------|
-| Phát biểu cũ sai? | Chưa chắc | Ít nhất một bên sai |
-| Nguyên nhân | Dữ liệu mới, tốt hơn | Lỗi, bất đồng, thay đổi thực tế |
-| Xử lý | Mark Superseded, keep old | Mark Contested, investigate |
-| Trạng thái cũ | Superseded | Contested hoặc Rejected |
+| Tiêu chí | Supersession | Contradiction | Temporal evolution |
+|----------|-------------|---------------|--------------------|
+| Bối cảnh tham chiếu | Cùng | Cùng | Khác (thời điểm khác) |
+| Phát biểu cũ sai? | Chưa chắc | Ít nhất một bên sai | Không — vẫn đúng trong valid time của nó |
+| Nguyên nhân | Bằng chứng tốt hơn, cải tiến | Lỗi, bất đồng | Thế giới thực thay đổi |
+| Xử lý | Mark Superseded, keep old | Mark Contested, investigate | Giữ nguyên, phân biệt bằng valid time |
+| Trạng thái cũ | Superseded | Contested hoặc Rejected | Không đổi |
 
 > ⚠️ **Ngộ nhận phổ biến:** "Phát biểu mới luôn đúng hơn phát biểu cũ." Sai. Mới hơn
 > không có nghĩa là đúng hơn. Một nguồn cũ có thể chính xác hơn một nguồn mới nhưng kém
 > uy tín. Supersession là quyết định quản trị, không phải quy luật tự nhiên.
 
 **Supersession của thuật toán — bản cũ không sai, chỉ là cũ.** Nguyên tắc trên áp dụng cả
-cho *chính bộ trích xuất* (extractor) trong pipeline Mechanism-KG. Trong §6.16 ta có
-`extractor_pipeline_v1` tạo ra các claim Candidate. Khi đội phát triển phát hành
-`extractor_pipeline_v3` với nhận diện quan hệ tốt hơn (ví dụ: đọc được cấu trúc
-"velocity *is the rate of change of* position" thay vì chỉ nhặt cụm "rate of change"),
-thì version mới **supersede** version cũ:
+cho *chính bộ trích xuất* (extractor) trong pipeline Mechanism-KG. Hãy tưởng tượng lịch
+sử trước §6.17: phiên bản đầu tiên `extractor_pipeline_v1` tạo ra các claim Candidate.
+Khi đội phát triển phát hành `extractor_pipeline_v3` với nhận diện quan hệ tốt hơn (ví
+dụ: đọc được cấu trúc "velocity *is the rate of change of* position" thay vì chỉ nhặt
+cụm "rate of change"), thì version mới **supersede** version cũ:
 
 - `extractor_pipeline_v3 prov:wasDerivedFrom extractor_pipeline_v1` — v3 kế thừa và cải
   tiến.
@@ -1189,6 +1274,71 @@ claim có:
 Claim Ledger không phải một cấu trúc dữ liệu riêng — nó là tập hợp các claim nodes
 trong cùng đồ thị RDF, được truy vấn bằng SPARQL như bất kỳ dữ liệu nào khác.
 
+### Tri thức chuẩn hóa (Canonical Knowledge View)
+
+**Trực giác.** Claim Ledger chứa *mọi* phát biểu — kể cả phát biểu mâu thuẫn, bị từ
+chối, hoặc lỗi thời. Nhưng khi hệ thống trả lời câu hỏi của người dùng, nó không thể trả
+về cả sổ cái. Nó cần một **tầng nhìn chuẩn hóa** (Canonical Knowledge View): tập hợp các
+phát biểu mà hệ thống coi là "đúng" tại thời điểm hiện tại, theo một chính sách chiếu
+(projection policy) được xác định trước.
+
+![Claim Ledger → Assessment/Governance → Projection Policy → Canonical Knowledge View. Các claim Candidate/Rejected/Contested/Superseded vẫn tồn tại trong ledger nhưng không được chiếu vào tầng nhìn chuẩn hóa; I30: lưu claim ≠ khẳng định nội dung; I31: chính sách chiếu các nội dung không tương thích có thể tạo ra inconsistency trong tầng nhìn.](figures/generated/ch06-claim-ledger-projection.pdf)
+
+**Cơ chế.**
+
+Ba điểm then chốt phân biệt Claim Ledger với Canonical Knowledge View:
+
+**1. Lưu claim không tự động khẳng định nội dung (I30).** Khi một claim vào ledger, nội
+dung khẳng định của nó **chưa** trở thành "sự thật" của hệ thống. Claim `ex:claim_roc_A`
+ở trạng thái Candidate có thể chứa assertion "velocity là rate of change của position",
+nhưng assertion đó không được dùng để trả lời truy vấn cho đến khi claim được đánh giá
+và chấp nhận. Ledger lưu trữ; Canonical View khẳng định. Hai tầng này không tự đồng bộ.
+
+**2. Chính sách chiếu là quyết định thiết kế.** Canonical Knowledge View được tạo ra
+mỗi lần truy vấn (hoặc được materialize định kỳ) bằng cách lọc ledger theo policy:
+
+- Chỉ giữ claim có trạng thái `Accepted`.
+- Lọc theo valid time: chỉ giữ claim còn hiệu lực tại thời điểm truy vấn.
+- Nếu nhiều claim cùng thỏa mãn: ưu tiên evidence mạnh nhất hoặc claim time gần nhất.
+
+Policy khác nhau cho use case khác nhau — một hệ thống lưu trữ lịch sử có thể chiếu cả
+claim `Superseded` để tái hiện tri thức tại một thời điểm trong quá khứ.
+
+**3. Cạnh tranh có thể tạo inconsistency (I31).** Hai claim mâu thuẫn có thể **cùng
+tồn tại** trong ledger: `claim_roc_A` nói velocity = 10 m/s, `claim_roc_B` nói velocity
+= 11 m/s, cả hai Accepted, cùng valid time. Ledger hoàn toàn nhất quán với chính nó —
+nó *ghi nhận* cả hai. Nhưng khi projection policy chiếu cả hai vào Canonical View, tầng
+nhìn trở nên không nhất quán: cùng một thực thể, cùng một thuộc tính, hai giá trị khác
+nhau. Inconsistency không nằm ở ledger — nó nằm ở **ranh giới projection**. Đây là tín
+hiệu cho hệ thống: cần đánh giá lại hoặc thay đổi policy, không phải xóa bừa một claim.
+
+### Ứng dụng
+
+```sparql
+PREFIX ex: <http://example.org/kgbook/mks#>
+
+# Canonical Knowledge View = Accepted + còn hiệu lực
+SELECT ?content WHERE {
+    ?claim ex:status ex:Accepted ;
+           ex:content ?content ;
+           ex:validFrom ?vf .
+    FILTER (?vf <= NOW())
+}
+```
+
+Truy vấn này trả về tri thức chuẩn hóa. Truy vấn toàn bộ ledger (không có `ex:status
+ex:Accepted`) trả về "mọi thứ hệ thống biết" — dùng cho audit, không dùng cho trả lời
+mặc định.
+
+> ⚑ **Phân biệt hai tầng nhìn.** Claim Ledger = "mọi thứ hệ thống biết" (đầy đủ, giữ
+> cả mâu thuẫn). Canonical Knowledge View = "mọi thứ hệ thống tin" (đã lọc theo policy).
+> Người dùng truy vấn tầng nhìn; quản trị viên audit sổ cái. Nhầm lẫn hai tầng này dẫn
+> đến lỗi thiết kế kinh điển: coi việc lưu một claim là việc khẳng định nó đúng.
+
+> 🖊 **Tự kiểm tra:** Ledger chứa hai claim Accepted: "velocity = 10 m/s" và "velocity
+> = 11 m/s", cùng valid time. Giải thích vì sao ledger không "sai" khi chứa cả hai, và
+> vì sao Canonical Knowledge View có thể trở nên không nhất quán. Hệ thống nên làm gì?
+
 ## 6.16 Đầu ra LLM là CandidateKnowledge
 
 ### Trực giác
@@ -1213,15 +1363,17 @@ ex:llm_claim_1  a              ex:Claim ;
                 ex:content     [ ... ] ;
                 ex:status      ex:Candidate ;
                 prov:wasGeneratedBy ex:llm_inference_run_42 ;
-                prov:wasAttributedTo ex:GPT4 ;
-                ex:evidenceFor ex:none_yet .  # Chờ bằng chứng độc lập
+                prov:wasAttributedTo ex:GPT4 .
+    # Chưa có liên kết bằng chứng nào — chính sự thiếu vắng đó thể hiện trạng thái Candidate.
 ```
 
 ### Tại sao LLM output không tự verify
 
-LLM hoạt động bằng cách dự đoán token tiếp theo dựa trên training data. Nó không có
-khả năng truy cập thế giới thực để kiểm chứng. Khi LLM "kiểm tra" đầu ra của chính
-mình, nó đang so sánh prediction với prediction — không phải với reality.
+LLM hoạt động bằng cách dự đoán token tiếp theo dựa trên training data và ngữ cảnh đầu
+vào. Quá trình sinh này không tự thân là kiểm chứng: dù LLM có thể được nối với công cụ
+truy xuất (web search, retrieval, API), việc nó "kiểm tra" đầu ra của chính mình vẫn là
+so sánh prediction với prediction — không phải với reality. Kiểm chứng phải đến từ nguồn
+độc lập với quá trình sinh.
 
 Điều này không có nghĩa là LLM output vô giá trị. Nó có giá trị cao như *ứng viên* —
 nhưng cần external evidence để trở thành *tri thức được chấp nhận*.
@@ -1279,7 +1431,9 @@ xuyên năm giai đoạn của §6.1:
 
 **Bước 1 — Quan sát (Observation):** câu nguồn của cuốn sách —
 *"Velocity is the rate of change of position with respect to time"* — được quan sát
-trong textbook A, trang 42. Đây là dữ liệu thô, chưa vào đồ thị:
+trong textbook A, trang 42. Đây là dữ liệu thô ở mức quan sát, chưa phải khẳng định RDF.
+Chính là entity `obs_velocity_def_1` đã xuất hiện trong chuỗi provenance của §6.4, giờ
+được mô tả đầy đủ với các trường tri thức luận:
 
 ```turtle
 ex:obs_velocity_def_1  a ex:Observation ;
@@ -1303,8 +1457,8 @@ luận hạng nhất với nguồn + thời gian + trạng thái:
 
 ```turtle
 ex:claim_roc_A  a           ex:Claim ;
-    ex:content  ex:assertion_roc_1 ;
-    ex:statedBy ex:textbook_A ;
+    ex:content  ex:prop_velocity_rate_of_change ;
+    ex:hasSource ex:textbook_A ;
     ex:statedAt "2021-06-01"^^xsd:date ;
     ex:status   ex:Accepted ;
     prov:wasDerivedFrom ex:obs_velocity_def_1 .
@@ -1327,14 +1481,16 @@ trong khi vẫn đúng trong khoảng hiệu lực của nó.
 ```turtle
 # Claim B — cùng mệnh đề từ textbook B, mới vào hệ thống (Chương 3 §3.2.5)
 ex:claim_roc_B  a ex:Claim ;
-    ex:content ex:assertion_roc_1 ;
-    ex:statedBy ex:textbook_B ;
+    ex:content ex:prop_velocity_rate_of_change ;   # cùng mệnh đề!
+    ex:hasSource ex:textbook_B ;
     ex:statedAt "2023-02-14"^^xsd:date ;
     ex:status   ex:Candidate .
 
 ex:evidence_derivative_calc  ex:supports     ex:claim_roc_A .
 ex:textbookB_velocity_def    ex:supports     ex:claim_roc_B .
-ex:claim_roc_relativist      ex:contradicts  ex:claim_roc_A_temporal .  # temporal, §6.7
+# KHÔNG viết: ex:claim_roc_relativist ex:contradicts ex:claim_roc_classical .
+# Cặp cổ điển/tương đối tính chỉ khác valid time (§6.7) — bất đồng thời gian được hòa giải,
+# không phải mâu thuẫn. Pipeline §6.18 chạy đúng ví dụ này.
 ```
 
 Bằng chứng `textbookB_velocity_def` hỗ trợ cả hai claim (chúng chia sẻ mệnh đề) nhưng
@@ -1352,12 +1508,12 @@ ex:claim_fc_term  a              ex:Claim ;
     ex:subject     ex:ForwardChaining ;
     ex:predicate   ex:terminationGuarantee ;
     ex:object      ex:FiniteGraphSafeRules ;
-    ex:statedBy    ex:Hogan_et_al_2021 ;
+    ex:hasSource    ex:Hogan_et_al_2021 ;
     ex:validFrom   "2021-01-01"^^xsd:date ;
     ex:status      ex:Accepted ;
     prov:wasDerivedFrom ex:hogan_ch4_section_4_3 ;
-    ex:evidenceFor ex:rif_safeness_theorem ;
-    ex:evidenceFor ex:datalog_termination_proof .
+    ex:hasEvidence ex:rif_safeness_theorem ;
+    ex:hasEvidence ex:datalog_termination_proof .
 ```
 
 Nếu một nguồn khác nói "forward chaining không đảm bảo dừng với SWRL rules" — đây
@@ -1405,6 +1561,61 @@ Pipeline này **không tự động giải quyết mâu thuẫn**. Nó chỉ ph�
 quyết mâu thuẫn đòi hỏi đánh giá chất lượng nguồn, bằng chứng, và ngữ cảnh — những việc
 đòi hỏi judgment, không chỉ computation.
 
+**Thực thi trên cặp claim thật.** Lấy hai claim mà §6.7 đã xây: `ex:claim_roc_classical`
+("vận tốc không bị chặn", valid [1687-07-05, 1905-09-26)) và `ex:claim_roc_relativist`
+("vận tốc bị chặn bởi tốc độ ánh sáng", valid [1905-09-26, nay)) — cùng nói về cơ chế
+`ex:rateOfChange_1`. Chạy pipeline:
+
+| Bước | Thao tác trên cặp claim | Kết quả |
+|------|-------------------------|---------|
+| 1. Alignment | Entity: cả hai nói về `rateOfChange_1` → khớp. Vị từ: cả hai nói về giới hạn tốc độ của cơ chế → khớp. Temporal scope: [1687, 1905) vs [1905, nay) → **khác** | Chưa thể so sánh nội dung trực tiếp |
+| 2. Comparison | Sau khi căn chỉnh temporal scope, so sánh: "không bị chặn" vs "bị chặn" | Nhìn bề ngoài là xung đột giá trị (loại 2, §6.6) |
+| 3. Contextualization | Bất đồng thời gian (loại 3): gắn valid time cho từng bên | Hòa giải được — mỗi câu đúng trong khoảng riêng |
+| 4. Flagging | Không còn mâu thuẫn thực sự sau hòa giải | Không đánh dấu vĩnh viễn; `claim_roc_classical` giữ `Superseded`, `claim_roc_relativist` giữ `Accepted` (§6.12) |
+
+Nếu hệ thống khởi động bằng so sánh thô rồi mới chạy context, nó sẽ đánh dấu `Contested`
+**tạm thời** khi `claim_roc_relativist` xuất hiện (chính là mốc 2024-05-20 trong vòng
+đời §6.12) — nhưng sau bước Đối chiếu (2024-06-01), mâu thuẫn được hòa giải và claim cũ
+được tái phân loại thành `Superseded`. Cách nào cũng đi đến cùng một kết luận: đây không
+phải mâu thuẫn thực sự. Điểm khác nhau là *phát hiện thô trước, hòa giải sau* hay *hòa
+giải trước khi kết luận* — bảng trên theo cách thứ hai.
+
+Bảng trên cũng là lý do hai claim khác valid time **không tự động** bị kết luận là mâu
+thuẫn. Nếu bỏ qua bước 1–3, hệ thống sẽ tuyên bố `contradicts` vĩnh viễn cho một cặp
+không hề xung đột — đúng kiểu ngộ nhận "phát biểu mới luôn đúng hơn phát biểu cũ" (§6.12).
+
+**Trường hợp không hòa giải được.** Giữ nguyên entity, vị từ và temporal scope — cả hai
+claim đều áp dụng cho hiện tại:
+
+```turtle
+ex:claim_roc_now_1  a ex:Claim ;
+    ex:content  ex:prop_roc_velocity_unbounded ;
+    ex:validFrom "2020-01-01"^^xsd:date ;
+    ex:hasSource ex:textbook_A ;
+    ex:status   ex:Candidate .
+
+ex:claim_roc_now_2  a ex:Claim ;
+    ex:content  ex:prop_roc_velocity_bounded ;
+    ex:validFrom "2020-01-01"^^xsd:date ;
+    ex:hasSource ex:textbook_B ;
+    ex:status   ex:Candidate .
+```
+
+| Bước | Kết quả |
+|------|---------|
+| 1. Alignment | Khớp entity, vị từ, temporal scope, phạm vi — có thể so sánh |
+| 2. Comparison | Mâu thuẫn logic (loại 1): cùng bối cảnh, hai nội dung loại trừ nhau |
+| 3. Contextualization | Không có ngữ cảnh hòa giải nào |
+| 4. Flagging | Cả hai → `Contested`; ghi `ex:contradicts`; chờ đánh giá nguồn và bằng chứng (§6.11) |
+
+```turtle
+ex:claim_roc_now_1  ex:contradicts  ex:claim_roc_now_2 .
+```
+
+Cùng một pipeline, hai kết cục: cặp đầu được hòa giải bằng valid time, cặp sau là mâu
+thuẫn thực sự. Sự khác biệt nằm ở bước Alignment và Contextualization — bỏ qua chúng,
+cả hai cặp đều bị đánh dấu sai.
+
 ## 6.19 Định danh phát biểu khác Định danh thực thể
 
 ### Trực giác
@@ -1430,11 +1641,11 @@ Ví dụ:
 
 ```turtle
 ex:claim_A  ex:content  ex:prop_hanoi_capital ;
-            ex:statedBy ex:GSO ;
+            ex:hasSource ex:GSO ;
             ex:status   ex:Accepted .
 
 ex:claim_B  ex:content  ex:prop_hanoi_capital ;  # Cùng nội dung!
-            ex:statedBy ex:Wikidata ;
+            ex:hasSource ex:Wikidata ;
             ex:status   ex:Candidate .
 ```
 

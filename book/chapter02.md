@@ -535,6 +535,13 @@ trên các biến trùng tên — chứ không phải phép ghép ngây thơ m�
 > nối là gì? Hai câu hỏi này kiểm tra xem bạn có hiểu "ánh xạ được mở rộng từng bước" hay
 > không — không phải chỉ viết được cú pháp.
 
+*Chỉ dẫn trả lời:* Bỏ mẫu `?applied ex:withRespectTo ?wrt` thì kết quả dừng lại ở bảng bước 2 —
+hai hàng, ba cột `?mechanism ?applied ?quantity`, không còn cột `?wrt`. Thêm mẫu
+`?mechanism ex:hasOutput ?output` thì cần thêm cột `?output`; khoá nối là `?mechanism` (biến
+dùng chung giữa mẫu `ex:hasApplication` và `ex:hasOutput`), nên mỗi cơ chế khớp đúng đầu ra
+của nó: `rateOfChange_1` → `velocity_1`, `heatTransferRate_2` → `heatRate_2`. Cả hai câu đều
+kiểm tra phép nối trên biến trùng tên chứ không phải tích Đề-các.
+
 **Bẫy `rdf:type` với phân lớp.** Giờ thử truy vấn trực giác nhất:
 
 ```sparql
@@ -598,7 +605,7 @@ sánh với Cypher trong §2.3 khi gặp `OPTIONAL MATCH`.
 
 ### 2.1.7 Phát triển hiện tại: RDF 1.2 và SPARQL 1.2
 
-> ⚑ **RDF 1.2** (W3C Candidate Recommendation) giới thiệu cơ chế tái hiện dựa trên
+> ⚑ **RDF 1.2** (W3C Candidate Recommendation Snapshot, 2026-04-07) giới thiệu cơ chế tái hiện dựa trên
 > triple-term (`rdf:reifies`) như cách hiện đại được ưu tiên để tham chiếu một mệnh đề;
 > từ vựng tái hiện kiểu cũ của RDF 1.1 vẫn được giữ lại như từ vựng kế thừa cho tương
 > thích [@w3c-rdf12-concepts].
@@ -708,10 +715,10 @@ giống hệt dữ liệu ở mục 2.1.5 — chỉ khác "hình dạng":
 
 ```
 (:RateOfChangeMechanism {iri:"http://example.org/kgbook/mks#rateOfChange_1", label:"RATE_OF_CHANGE"})
-  -[:HAS_OPERATION]->         (:DerivativeOperation {iri:"...#derivativeOperation_1"})
-  -[:HAS_INPUT]->             (:Quantity            {iri:"...#position_1", value: 12.5})
-  -[:HAS_REFERENCE_VARIABLE]->(:ReferenceVariable   {iri:"...#time_1"})
-  -[:HAS_OUTPUT]->            (:Quantity            {iri:"...#velocity_1", value: 3.2})
+  -[:hasOperation]->         (:DerivativeOperation {iri:"...#derivativeOperation_1"})
+  -[:hasInput]->             (:Quantity            {iri:"...#position_1", value: 12.5})
+  -[:hasReferenceVariable]->(:ReferenceVariable   {iri:"...#time_1"})
+  -[:hasOutput]->            (:Quantity            {iri:"...#velocity_1", value: 3.2})
 ```
 
 Dễ thấy ba điểm chuyển đổi từ RDF:
@@ -726,10 +733,10 @@ Dễ thấy ba điểm chuyển đổi từ RDF:
 (vì bộ ba không mang thuộc tính). LPG có *hai* lựa chọn tự nhiên — và đây là một quyết
 định thiết kế, không phải cú pháp:
 
-1. **Đổ vai diễn lên cạnh:** `-[:HAS_APPLICATION {differentiand: 12.5, wrt: "time"}]->`
+1. **Đổ vai diễn lên cạnh:** `-[:hasApplication {differentiand: 12.5, withRespectTo: "time"}]->`
    nếu chỉ cần ghi hai vai diễn của lần áp dụng ấy.
 2. **Dùng nút trung gian:** một nút `:DerivativeApplication` với các cạnh
-   `-[:DIFFERENTIAND]->`, `-[:WRIT]->` — khi lần áp dụng có nhiều thông tin hơn (điều
+   `-[:differentiand]->`, `-[:withRespectTo]->` — khi lần áp dụng có nhiều thông tin hơn (điều
    kiện, bằng chứng, thời điểm) và cần được tham chiếu lại.
 
 Chọn 2 thì kết quả là họ "nút hoá quan hệ" giống hệt reification trong RDF — một dấu hiệu
@@ -800,21 +807,21 @@ tìm các mảnh ghép của ứng dụng cơ chế (với mô hình LPG "nút t
 2.2.4):
 
 ```cypher
-MATCH (m:RateOfChangeMechanism)-[:HAS_APPLICATION]->(app:DerivativeApplication)
-      -[:DIFFERENTIAND]->(q:Quantity)
+MATCH (m:RateOfChangeMechanism)-[:hasApplication]->(app:DerivativeApplication)
+      -[:differentiand]->(q:Quantity)
 RETURN m.label, q.label
 ```
 
 Về cấu trúc, đây là bản dịch gần như từng ký tự của BGP ba mẫu bên SPARQL: chuỗi
-`-[:HAS_APPLICATION]->...-[:DIFFERENTIAND]->` diễn đạt cùng ba bước khớp (cơ chế →
+`-[:hasApplication]->...-[:differentiand]->` diễn đạt cùng ba bước khớp (cơ chế →
 ứng dụng → biến vi phân), chỉ với cú pháp ASCII-art. Điểm khác nhau nằm ở *hình dạng đồ
 thị* chứ không phải khả năng truy vấn: trong RDF, `DerivativeApplication` phải là nút vì
 bộ ba không mang thuộc tính; trong LPG, nó *có thể* là nút (như ta chọn) nhưng cũng có
-thể chỉ là thuộc tính trên cạnh `HAS_APPLICATION` — và khi đó truy vấn viết khác hẳn:
+thể chỉ là thuộc tính trên cạnh `hasApplication` — và khi đó truy vấn viết khác hẳn:
 
 ```cypher
-MATCH (m:RateOfChangeMechanism)-[a:HAS_APPLICATION]->(q:Quantity)
-RETURN m.label, a.differentiand, a.wrt
+MATCH (m:RateOfChangeMechanism)-[a:hasApplication]->(q:Quantity)
+RETURN m.label, a.differentiand, a.withRespectTo
 ```
 
 Hai truy vấn trả lời cùng một câu hỏi nhưng giả định hai thiết kế khác nhau — đây chính
@@ -825,7 +832,7 @@ là "quyết định biểu diễn nằm trong truy vấn", một chủ đề §
 
 ```cypher
 MATCH (m:RateOfChangeMechanism)
-OPTIONAL MATCH (m)-[:HAS_CONDITION]->(c:Condition)
+OPTIONAL MATCH (m)-[:hasCondition]->(c:Condition)
 RETURN m.label, c.label
 ```
 
@@ -929,7 +936,7 @@ cách hệ thống Mechanism-KG sẽ vận hành:
   `iri` như ở mục 2.2.4) — không sai, nhưng là công việc mà RDF có sẵn. Chương 3 sẽ dùng
   chính sự khác biệt này làm điểm khởi đầu cho bài toán đồng nhất định danh.
 - **Siêu dữ liệu của quan hệ (khác biệt Một).** Gắn điều kiện áp dụng vào một lần áp
-  dụng cơ chế: trong LPG, thêm thuộc tính lên cạnh `HAS_APPLICATION`; trong RDF, phải
+  dụng cơ chế: trong LPG, thêm thuộc tính lên cạnh `hasApplication`; trong RDF, phải
   dựng nút `DerivativeApplication` (như dataset chuẩn). Cái giá của RDF là thêm một nút —
   nhưng cái được là *đối tượng* ứng dụng đó có IRI riêng, sẵn sàng cho việc gắn bằng
   chứng và ngữ cảnh ở các chương sau. LPG ghi nhanh hơn, nhưng "lần áp dụng" không thành

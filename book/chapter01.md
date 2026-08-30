@@ -121,11 +121,11 @@ Sự phân biệt tương tự đúng với **miền capstone của cuốn sách
 (mechanism)**. Xét đồ thị về RATE_OF_CHANGE, cơ chế "vận tốc bằng tốc độ biến thiên của vị
 trí theo thời gian":
 
-- **Trường hợp C**: Đồ thị chứa `(rateOfChange_1) --[:HAS_OPERATION]--> (derivativeOperation_1)`
-  nhưng không định nghĩa `:HAS_OPERATION` nghĩa là gì, không có nguồn, không có thời điểm.
+- **Trường hợp C**: Đồ thị chứa `(rateOfChange_1) --[:hasOperation]--> (derivativeOperation_1)`
+  nhưng không định nghĩa `:hasOperation` nghĩa là gì, không có nguồn, không có thời điểm.
   Máy chỉ thấy hai nút có tên — nó không biết `rateOfChange_1` là một cơ chế, cũng không biết
   câu trên đến từ đâu. Đây vẫn là data graph.
-- **Trường hợp D**: Cùng triple đó, nhưng `:HAS_OPERATION` được khai báo là quan hệ giữa
+- **Trường hợp D**: Cùng triple đó, nhưng `:hasOperation` được khai báo là quan hệ giữa
   mechanism và phép toán (operation) nó thực hiện; triple mang nguồn `source: Textbook A`,
   khẳng định `confidence: 0.9` và thời điểm ghi nhận. Giờ hệ thống có thể đánh giá: ai khẳng
   định RATE_OF_CHANGE thực hiện phép đạo hàm, khi nào, đáng tin thế nào. Đây là knowledge graph.
@@ -449,11 +449,11 @@ phép toán `derivativeOperation_1` (phép đạo hàm), quantity `position_1` (
 gì:
 
 ```
-(rateOfChange_1) --[:HAS_OPERATION]--> (derivativeOperation_1)
-(rateOfChange_1) --[:HAS_INPUT]--> (position_1)
+(rateOfChange_1) --[:hasOperation]--> (derivativeOperation_1)
+(rateOfChange_1) --[:hasInput]--> (position_1)
 ```
 
-Máy thấy ba nút và hai nhãn — nhưng `:HAS_OPERATION` nghĩa là gì? `derivativeOperation_1` là
+Máy thấy ba nút và hai nhãn — nhưng `:hasOperation` nghĩa là gì? `derivativeOperation_1` là
 một phép toán hay một cơ chế? Máy chưa biết. Đây đúng là hiện trạng khi trích xuất thô từ văn
 bản.
 
@@ -486,6 +486,23 @@ Nghĩa là: một cơ chế "rate of change" được mô hình hóa thông qua 
 (withRespectTo), bằng phép toán gì (hasOperation). Đây chưa phải cú pháp OWL (Chương 4), nhưng
 nó cho máy cấu trúc để nói *"cơ chế nào, áp dụng vào cái gì"*.
 
+`DerivativeApplication` ở trên là một **lớp** (mẫu). Trong đồ thị dữ liệu của chúng ta, lớp đó
+được **instantiate thành một cá thể cụ thể** — đúng một đối tượng đại diện cho "ứng dụng đạo hàm
+vào vị trí theo thời gian":
+
+```
+(derivativeApplication_1) --[:hasOperation]--> (derivativeOperation_1)
+(derivativeApplication_1) --[:differentiand]--> (position_1)
+(derivativeApplication_1) --[:withRespectTo]--> (time_1)
+```
+
+Vì sao cần một đối tượng trung gian như `derivativeApplication_1` thay vì ba triple rời? Nếu chỉ
+nối `(rateOfChange_1) --[:hasOperation]--> (derivativeOperation_1)` như Bước 2', máy không có chỗ
+gắn "đạo hàm *của vị trí* *theo thời gian*" — ba quan hệ đó treo lơ lửng, không ai cho biết chúng
+thuộc về *cùng một ứng dụng*. `derivativeApplication_1` là "chỗ buộc" đó: nó gom mọi vai trò của
+một lần áp dụng cơ chế vào một mảnh đồ thị có IRI riêng. Ở đây chỉ là cấu trúc đồ thị — diễn giải
+hình thức và suy diễn sẽ đến ở Chương 4, validation ở Chương 5.
+
 **Bước 5' — Context của phát biểu cơ chế.** Gắn ngữ cảnh vào chính phát biểu của chúng ta:
 
 ```
@@ -505,9 +522,9 @@ giá; context không tạo ra sự thật.**
 **Gộp lại — một mini Mechanism-KG.** Sau năm bước, đồ thị cơ chế của chúng ta là một
 knowledge graph theo mô hình kỹ thuật của sách:
 
-- **Data Graph (K):** các triple về `rateOfChange_1`, `derivativeOperation_1`, `position_1`,
-  `time_1`, `velocity_1` — dữ liệu chạy xuyên suốt các chương được lưu trong
-  `datasets/mechanism_kg/rate_of_change.ttl`.
+- **Data Graph (K):** các triple về `rateOfChange_1`, `derivativeApplication_1`,
+  `derivativeOperation_1`, `position_1`, `time_1`, `velocity_1` — dữ liệu chạy xuyên
+  suốt các chương được lưu trong `datasets/mechanism_kg/rate_of_change.ttl`.
 - **Semantics (T):** taxonomy cơ chế (Bước 3') và mô hình tối thiểu
   `RateOfChangeMechanism → DerivativeApplication` (Bước 4').
 - **Context (C):** nguồn, thời điểm, độ tin cậy gắn trên phát biểu (Bước 5').
@@ -542,7 +559,8 @@ qualifiers/references/ranks thay vì OWL axioms.
 
 **Embedding-based "Knowledge".** Graph embeddings biểu diễn entity/relation dưới dạng vector
 trong không gian liên tục. Có thể dự đoán quan hệ mới nhưng kết quả là xác suất, không phải
-entailment. Chương 8 sẽ phân biệt rõ induction vs deduction.
+entailment. Chương 8 sẽ phân biệt rõ induction (quy nạp — khái quát từ dữ liệu quan sát) vs
+deduction (suy diễn — rút ra kết luận từ tiền đề).
 
 ## 1.8 Những ngộ nhận thường gặp
 
@@ -568,8 +586,9 @@ accepted knowledge trong hệ thống tri thức thực tế. Phân biệt hai c
   promote một assertion thành accepted knowledge? Điều này phụ thuộc vào provenance,
   validation, confidence, và chính sách của hệ thống.
 
-Chương 6 sẽ phân tích sâu sự phân biệt: Observation ≠ Assertion ≠ Claim ≠ Evidence ≠ Accepted
-Knowledge.
+Chương 6 sẽ phân tích sâu sự phân biệt: Observation (quan sát — dữ liệu thô về thế giới) ≠
+Assertion (tuyên bố — khẳng định trong đồ thị) ≠ Claim (khẳng định tri thức luận — phát biểu
+kèm nguồn/thời gian/độ tin cậy) ≠ Evidence (bằng chứng) ≠ Accepted Knowledge.
 
 Áp dụng ngay vào capstone: khi Textbook B khẳng định triple `(rateOfChange_1, hasOperation,
 derivativeOperation_1)` (xem §1.6 Bước 5'), đó là một **assertion** — nó nằm trong đồ thị và

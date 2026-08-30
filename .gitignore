@@ -10,3 +10,7 @@ dist/
 build/
 .env
 .research/cache/
+.claude/
+artifacts/
+preview/
+user_prompt/

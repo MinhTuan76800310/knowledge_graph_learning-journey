@@ -338,7 +338,7 @@ nghĩa RDFS, ngay cả khi nó vô nghĩa trong miền ứng dụng. Đây chín
 
 $$\text{suy diễn (inference)} \neq \text{xác nhận (validation)}$$
 
-Việc kiểm tra xem dữ liệu có "khớp" với kỳ vọng hay không là nhiệm vụ của SHACL (§5.5),
+Việc kiểm tra xem dữ liệu có "khớp" với kỳ vọng hay không là nhiệm vụ của SHACL (§5.6),
 không phải RDFS.
 
 **Ví dụ trên miền cơ chế.** Trong ontology cơ chế:
@@ -432,7 +432,7 @@ Vật chất hóa hoạt động tốt khi:
 
 Vật chất hóa trở nên không khả thi khi:
 
-- Ontology quá biểu cảm (xem §5.8 về OWL 2 DL)
+- Ontology quá biểu cảm (xem §5.15 về OWL 2 DL)
 - Đồ thị rất lớn (bao đóng có thể lớn hơn nhiều so với đồ thị gốc)
 - Dữ liệu thay đổi thường xuyên (phải tính lại bao đóng mỗi lần cập nhật)
 
@@ -1115,6 +1115,71 @@ Ví dụ đúng: "Forward chaining với tập quy tắc OWL RL là sound và co
 instance checking trên ontology OWL 2 RL thỏa mãn các hạn chế syntactic của profile."
 
 Ví dụ sai: "Reasoner X là sound và complete." (Thiếu cả ba thành phần.)
+
+### Ba trường hợp trên dữ liệu cơ chế thật
+
+Trừu tượng "$A \subseteq E$" chỉ trọn nghĩa khi thấy A và E *cụ thể*. Dùng chính dữ liệu
+RATE_OF_CHANGE từ §5.2:
+
+```
+G0 (dữ liệu khai báo):
+ex:rateOfChange_1 a ex:RateOfChangeMechanism .
+ex:RateOfChangeMechanism rdfs:subClassOf ex:ChangeMechanism .
+ex:ChangeMechanism rdfs:subClassOf ex:Mechanism .
+```
+
+Chế độ suy diễn: RDFS, tác vụ: instance classification. Tập hệ quả ngữ nghĩa
+$E = \{ \texttt{rateOfChange\_1 a ChangeMechanism},\ \texttt{rateOfChange\_1 a Mechanism} \}$
+— đây là *chuẩn* mà mọi thuật toán được so vào.
+
+**CASE 1 — Sound nhưng incomplete ($A \subset E$).** Thuật toán, do thiếu quy tắc
+`ChangeMechanism rdfs:subClassOf Mechanism` (hoặc quên nạp tầng taxonomy), chỉ suy ra một
+bước:
+
+```
+A = { rateOfChange_1 a ChangeMechanism }
+```
+
+Mọi phần tử của A đều nằm trong E (sound ✓) nhưng bỏ sót `rateOfChange_1 a Mechanism`
+(not complete ✗). Kết luận nào cũng đúng, chỉ là hệ thống trả lời thưa hơn mức có thể.
+
+**CASE 2 — Unsound ($A \not\subseteq E$).** Quy tắc bị viết sai: `RateOfChangeMechanism
+rdfs:subClassOf AggregationMechanism` (nhầm nhánh taxonomy). Thuật toán suy ra:
+
+```
+A = { rateOfChange_1 a ChangeMechanism,
+      rateOfChange_1 a Mechanism,
+      rateOfChange_1 a AggregationMechanism }   ← false positive!
+```
+
+`rateOfChange_1 a AggregationMechanism` nằm ngoài E — một kết luận *sai ngữ nghĩa*.
+Đây là lỗi nghiêm trọng nhất của ba trường hợp (xem "Ý nghĩa kỹ thuật" bên dưới).
+
+**CASE 3 — Sound + Complete ($A = E$).** Bộ quy tắc đầy đủ và đúng đắn:
+
+```
+A = { rateOfChange_1 a ChangeMechanism, rateOfChange_1 a Mechanism } = E
+```
+
+Không thừa, không thiếu — thuật toán trả về chính xác tập hệ quả.
+
+### Ý nghĩa kỹ thuật cho hệ thống tri thức
+
+- **Unsound nguy hiểm hơn incomplete.** Một kết luận sai (false positive) sẽ *lan truyền*
+  vào mọi truy vấn phía sau: nếu hệ thống tin `rateOfChange_1` là `AggregationMechanism`,
+  nó có thể trả về cơ chế này cho câu hỏi "cơ chế nào gộp nhiều đầu vào?" — câu trả lời
+  sai nhưng trông hợp lệ. Incomplete chỉ gây "không có kết quả" — người dùng thấy được,
+  còn unsound tạo ra kết quả sai mà không ai hay.
+- **Khi buộc chọn, ưu tiên sound-not-complete cho KG.** Một knowledge graph trả lời
+  "không suy ra được" có thể được cải thiện (thêm quy tắc, thêm dữ liệu); một KG trả về
+  khẳng định sai sẽ phá hủy lòng tin ngay lập tức.
+- **Incomplete thường là phí cố ý.** OWL RL đánh đổi completeness để lấy tính khả thi
+  của rule-based reasoning (mục sau); chi phí là *trả lời thưa*, lợi ích là dừng được và
+  chạy trên rule engine thông thường.
+- **Kiểm chứng thực nghiệm.** Với tác vụ đơn giản như classification, có thể kiểm chứng
+  CASE 1/3 bằng cách chạy forward chaining (công cụ như RDFLib) và so A với E liệt kê
+  thủ công — nhưng với tác vụ khó hơn, "complete" là kết quả lý thuyết (theorem), không
+  phải thứ đo được bằng test.
 
 ### OWL RL: Sound nhưng completeness có điều kiện
 

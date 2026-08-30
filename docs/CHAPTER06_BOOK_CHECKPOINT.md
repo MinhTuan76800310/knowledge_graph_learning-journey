@@ -72,7 +72,7 @@
 - Do NOT resume deferred labs
 - Do NOT install Neo4j
 - SHACL 1.2 Core (SH-02) = CURRENT DEVELOPMENT ONLY; stable baseline is SH-01
-- OWL-Time is stable REC (2020), not CR Draft — correctly labeled in manuscript
+- OWL-Time stable baseline is W3C Recommendation (First Edition, 2017-10-19); the 2022-11-15 Candidate Recommendation Draft is a revision in progress, not a Second Edition — verified against live W3C TR page
 - Book quality > lab completeness
 - All external claims cite sources from docs/SOURCES.md / references.bib
 - Use GitHub MCP for commits so author shows as "MinhTuan76800310"

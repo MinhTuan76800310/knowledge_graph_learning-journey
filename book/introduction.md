@@ -65,7 +65,7 @@ Mô hình này xuất hiện dần qua các chương và trở thành kiến tr�
 
 ## Miền Capstone: Mechanism Knowledge Graph
 
-Thay vì dùng ví dụ rời rạc ở mỗi chương, chúng ta duy trì **một đồ thị tiến hóa liên tục** xuyên suốt cuốn sách. Các khái niệm cốt lõi bao gồm: Concept, Definition, Mechanism, MechanismInput, MechanismOperation, Condition, Claim, Evidence, Observation, Experiment, Experience, Event, TimeInterval, Hypothesis.
+Thay vì dùng ví dụ rời rạc ở mỗi chương, chúng ta duy trì **một đồ thị tiến hóa liên tục** xuyên suốt cuốn sách. Các khái niệm cốt lõi bao gồm: Concept, Definition, Mechanism, Operation, Quantity, ReferenceVariable, Condition, Claim, Evidence, Source, Observation, Experiment, Experience, Event, TimeInterval, Hypothesis.
 
 Ontology này **không được xác định trước**. Mỗi quyết định mô hình hóa đều phải được nghiên cứu và biện minh. Đặc biệt, chúng ta sẽ khám phá câu hỏi: *làm sao hệ thống suy ra rằng các khái niệm trong các miền khác nhau cùng instantiate một mechanism?*
 

@@ -48,13 +48,14 @@ This document is the semantic contract against which `book/chapter06.md` is revi
 ## PROV-O Core Classes (Entity, Activity, Agent)
 
 - **Source:** PROV-01 (PROV-O); PROV-DM-01
-- **Formal meaning:** Entity = "a physical, digital, conceptual, or other kind of thing with some fixed aspects." Activity = "something that occurs over a period of time and acts upon or with entities." Agent = "something that bears responsibility for an activity, existing entity, or another agent's activity." These three classes are disjoint. Agent is a subclass of Entity. Activities and Entities are disjoint.
+- **Formal meaning:** Entity = "a physical, digital, conceptual, or other kind of thing with some fixed aspects." Activity = "something that occurs over a period of time and acts upon or with entities." Agent = "something that bears some form of responsibility for an activity taking place, for the existence of an entity, or for another agent's activity." Entity and Activity are disjoint: "An activity is not an entity." Agent is a separate concept: PROV-DM states an agent "may be a particular type of entity or activity" — Agent is NOT a universal subclass of Entity, and the three classes are NOT pairwise disjoint.
 - **Book wording:** "Entity là vật có khía cạnh cố định. Activity là quá trình xảy ra trong thời gian. Agent chịu trách nhiệm."
-- **Dangerous simplification:** Saying Agent is not an Entity; saying Activity can be an Entity.
+- **Dangerous simplification:** Saying the three classes are pairwise disjoint; saying Agent is always an Entity; saying an Agent can never be an Entity.
 - **MUST NOT infer:**
-  - MUST NOT say an Activity is an Entity.
-  - MUST NOT say an Agent is not an Entity.
-  - MUST NOT treat these classes as overlapping.
+  - MUST NOT say an Activity is an Entity (Entity ⊥ Activity).
+  - MUST NOT say Entity, Activity, and Agent are all pairwise disjoint.
+  - MUST NOT say Agent is a universal subclass of Entity.
+  - MUST NOT treat the three classes as fully overlapping.
 
 ## PROV-O Core Relations
 

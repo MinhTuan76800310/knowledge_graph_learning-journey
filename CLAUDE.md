@@ -1,66 +1,150 @@
-# CLAUDE.md — Knowledge Graph Book
+# CLAUDE.md — Knowledge Graph Learning Journey
 
-## Project Overview
+## Goal
 
-An open-source executable textbook on Knowledge Graphs, from first principles to production knowledge systems. Written in Vietnamese with English technical terminology. Target audience: experienced software engineers who want to understand KG mechanisms deeply enough to design custom knowledge systems for AI agents.
+Build this repo as:
 
-## Key Commands
+1. a high-quality Knowledge Graph learning book, and
+2. a traceable GitHub project.
 
-```bash
-# Install dependencies
-uv sync
+Keep communication and workflow simple.
 
-# Run all tests
-uv run pytest
+---
 
-# Run Chapter 1 experiments
-cd chapter01 && uv run python exp_1_1_plain_graph.py
+## GitHub workflow
 
-# Lint
-uv run ruff check .
+For meaningful work, always follow:
 
-# Format check
-uv run ruff format --check .
-
-# Type check
-uv run mypy .
-
-# Start Neo4j (for Ch2+ experiments)
-docker compose up -d neo4j
+```text
+Issue → Branch → Commits → PR → Validate → Merge
 ```
 
-## Architecture
+Rules:
 
-- `book/` — Main book content (Vietnamese markdown)
-- `chapterNN/` — Per-chapter experiments with README.md
-- `common/` — Shared utilities (graph, rdf, neo4j, datasets, visualization)
-- `datasets/` — Toy datasets and mechanism_kg evolving capstone data
-- `docs/` — Research artifacts, source matrix, glossary, design decisions
-- `capstone/mechanism_knowledge_system/` — Evolving capstone domain
+* Do not do planned work directly on `main`.
+* Every non-trivial task needs a real GitHub Issue.
+* Create a branch from updated `main`.
+* One branch = one coherent task.
+* Push meaningful checkpoints.
+* Open a PR to `main`.
+* Never invent Issue/PR/tag/release numbers.
+* Verify GitHub state before saying work is pushed, merged, released, or done.
++ Don't commit Co-Authored
 
-## Conventions
+`next_prompt.md` is only a handoff note.
+The active GitHub Issue is the real assignment.
 
-- Python 3.12+, type hints required
-- Experiments follow fixed template: Question → Hypothesis → Architecture → Run → Observe → Explain → Fail → Extend
-- Difficulty: ★ beginner, ★★ intermediate, ★★★ research/design challenge
-- Status: ✅ independently runnable, 📖 reproduction/external dependency, 🚧 design/research exercise
-- Never mark ✅ without executing and capturing evidence
-- Technical terms: English on first occurrence with Vietnamese gloss, e.g., "thực thể (entity)"
-- Diagrams: Mermaid or generated SVG, never copyrighted figures
-- All external claims must cite a source from docs/SOURCES.md
-- **Pedagogy:** Before writing or revising any chapter content, read `docs/BOOK_PEDAGOGY.md`. It is the canonical authoring policy governing concept introduction, forward references, math notation, and reader-friction review.
+---
 
-## Standards Version Policy
+## Before working
 
-- Stable W3C Recommendations = main curriculum
-- Candidate Recommendations / Working Drafts = clearly labeled "Current developments" callouts
-- Never teach a draft as if it were stable
-- As of 2026-08-25: RDF 1.2 is CR, SPARQL 1.2 is WD, SHACL 1.0 is stable REC, OWL 2 is stable REC, PROV-O is stable REC
+Check Git status/history and read:
 
-## Copyright Rules
+```text
+CLAUDE.md
+AGENTS.md
+docs/BOOK_STATUS.md
+next_prompt.md
+docs/BOOK_PEDAGOGY.md
+```
 
-- ALL writing must be original. No copied passages from any source.
-- Paraphrase and cite. Every external claim traceable to docs/SOURCES.md.
-- Third-party code requires license verification and attribution.
-- Hogan et al. (kgbook.org) is research reference only — no reproduced content.
+For chapter work, also inspect its semantic contracts, checkpoint, sources, concept registry, and glossary.
 
+Do not start the next chapter unless the current GitHub task/status allows it.
+
+---
+
+## Book rules
+
+* Book prose: Vietnamese.
+* Keep English technical terms on first occurrence.
+* Write original explanations; do not copy sources.
+* External claims must be traceable to registered sources.
+* Stable standards are the curriculum baseline.
+* Draft standards must be clearly labeled.
+* Passing tests does not prove semantic correctness.
+
+For standards-sensitive work:
+
+```text
+source → semantic contract → manuscript/code → test
+```
+
+Follow `docs/BOOK_PEDAGOGY.md`.
+
+Keep the **Mechanism Knowledge Graph** model consistent across chapters.
+
+---
+
+## Validation
+
+Before merge, run relevant checks:
+
+```bash
+uv run pytest
+uv run ruff check .
+uv run ruff format --check .
+```
+
+For book changes also verify when applicable:
+
+* semantic contracts,
+* citations,
+* glossary/concept registry,
+* diagrams,
+* PDF build and affected pages,
+* editorial review.
+
+Never report unverified results.
+
+---
+
+## Release
+
+Stable book milestones must be released by Claude using GitHub CLI.
+
+```text
+accepted book milestone
+→ build and validate PDF
+→ tag exact commit
+→ push tag
+→ gh release create
+→ attach versioned PDF
+```
+
+Example:
+
+```bash
+git tag v0.5.0
+git push origin v0.5.0
+
+gh release create v0.5.0 \
+  dist/knowledge-graph-book-v0.5.0.pdf \
+  --title "Knowledge Graph Book v0.5.0" \
+  --generate-notes
+```
+
+Before new development, backfill previous stable PDF versions from Git history when their exact source commits can be verified.
+
+Claude owns the release process. The user should not need to create releases manually.
+
+
+
+## Done means GitHub proves it
+
+At the end report only:
+
+```text
+Issue:
+Branch:
+PR:
+Commit:
+Validation:
+Merge:
+Release:
+Remaining:
+```
+
+A local commit is not done.
+A pushed branch is not done.
+A stable book milestone without its PDF Release is not done.

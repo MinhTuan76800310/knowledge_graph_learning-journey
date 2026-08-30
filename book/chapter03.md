@@ -543,6 +543,23 @@ Các định danh còn lại trở thành **bí danh** (alias): vẫn hợp lệ
 về định danh chính tắc bằng `owl:sameAs`. Vòng đời của định danh chính tắc khép kín
 như vậy: ứng viên → bằng chứng → chấp nhận → ghi nhận như bí danh.
 
+### Pipeline 6 bước trên hai nguồn cơ chế
+
+Tổng kết quy trình tích hợp `ta:velocityDef` và `tb:speedDef` thành một pipeline 6 bước:
+
+| Bước | Thao tác | Dữ liệu vào | Dữ liệu ra |
+|------|----------|-------------|------------|
+| **1. Phát hiện** | Nhận ra hai nguồn mô tả cùng lĩnh vực (vận tốc) | `ta:velocityDef`, `tb:speedDef` | Tập ứng viên cần xử lý |
+| **2. Gióng hàng lược đồ** | So sánh từ vựng: cả hai dùng `ex:hasOperation`/`ex:hasInput`/`ex:hasOutput` — khớp; nếu một bên dùng `ex:involves`, cần ghi ánh xạ `involves → hasOperation` | Các property của hai nguồn | Ánh xạ từ vựng (hoặc xác nhận khớp) |
+| **3. Ứng viên đồng nhất** | Đề xuất giả thuyết: `ta:velocityDef` và `tb:speedDef` cùng mô tả một cơ chế | IRI, nhãn, quan hệ bề mặt | `ta:velocityDef owl:sameAs tb:speedDef` (đề xuất) |
+| **4. Bằng chứng** | So sánh operation, input, output; phân biệt với `ex:heatTransferRate_2` (cùng operation, khác input) | Cấu trúc đồ thị của từng nguồn | Bằng chứng mạnh (định nghĩa) hoặc bác bỏ |
+| **5. Xác nhận** | Chấp nhận hoặc bác bỏ mapping dựa trên bằng chứng | Bằng chứng + quy tắc tổ chức | `ta:velocityDef owl:sameAs tb:speedDef` (đã xác nhận) |
+| **6. Định danh chính tắc** | Chọn `ex:rateOfChange_1` làm tên chính thức; ghi `ta:velocityDef` và `tb:speedDef` làm bí danh | Tập IRI đã xác nhận đồng nhất | `ex:rateOfChange_1` (chính tắc), `ta:velocityDef` (bí danh), `tb:speedDef` (bí danh) |
+
+Pipeline này cho thấy mỗi bước thêm đúng một loại thông tin: lược đồ (B2) thêm ánh xạ từ
+vựng, định danh (B3–B5) thêm khẳng định đồng nhất, chính tắc hóa (B6) chọn tên ổn định.
+Không bước nào thêm dữ liệu đồ thị sai — pipeline chỉ từ chối hoặc tích hợp, không phá hủy.
+
 > ⚑ **Phạm vi:** chương này dạy *bài toán* và *quy trình khái niệm* của giải quyết
 > định danh. Các thuật toán công nghiệp — chặn (blocking), khớp (matching), học máy —
 > thuộc Chương 7.
@@ -910,7 +927,7 @@ Bảng tổng kết mỗi bước thêm gì:
 |------|--------|--------------------|
 | Gióng hàng lược đồ | ánh xạ từ vựng, lớp, quan hệ | "hai từ vựng này cùng nói một chuyện" |
 | Giải quyết định danh | `owl:sameAs` / định danh chính tắc + bí danh | "hai tên này là một thực thể" |
-| Gắn ngữ cảnh | named graph / thực thể n-ary / thuộc tính quan hệ | "phát biểu này do nguồn nào khẳng định, áp dụng trong khoảng thời gian nào, trong phạm vi/jurisdiction nào" |
+| Gắn ngữ cảnh | named graph / thực thể n-ary / thuộc tính quan hệ | "phát biểu này do nguồn nào khẳng định, áp dụng trong khoảng thời gian nào, trong phạm vi/jurisdiction (thẩm quyền pháp lý) nào" |
 
 Ba bước này là khung xương của mọi quy trình tích hợp knowledge graph — các thuật toán
 công nghiệp ở Chương 7 chỉ làm cho chúng chạy được ở quy mô lớn, không thay đổi cấu

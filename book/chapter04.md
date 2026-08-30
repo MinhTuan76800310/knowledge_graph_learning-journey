@@ -614,6 +614,10 @@ Ngữ nghĩa: $(C \sqcup D)^I = C^I \cup D^I$
 
 Tập các phần tử thuộc C **hoặc** D (hoặc cả hai).
 
+Trên miền cơ chế: `Quantity ⊔ ReferenceVariable` là lớp mọi thứ hoặc là một đại lượng đầu
+vào/đầu ra, hoặc là một biến tham chiếu. Ví dụ: `position_1 : Quantity` và `time_1 :
+ReferenceVariable` — cả hai đều thuộc lớp hợp này.
+
 ### Phủ định (Complement)
 
 ```
@@ -624,6 +628,11 @@ Ngữ nghĩa: $(\neg C)^I = \Delta^I \setminus C^I$
 
 Tập các phần tử trong miền **không** thuộc C. Lưu ý: phủ định tính tương đối so với miền
 diễn giải $\Delta^I$, không phải "mọi thứ trong vũ trụ".
+
+Trên miền cơ chế: `¬RateOfChangeMechanism` là lớp mọi thực thể **không phải** cơ chế tốc
+độ biến thiên. Cá thể `derivativeOperation_1 : DerivativeOperation` (phép toán đạo hàm,
+§4.3) thuộc lớp phủ định này, vì nó là một phép toán, không phải một cơ chế. Phủ định cho
+phép nói "X không thuộc loại Y" mà không cần liệt kê tường minh.
 
 ### Hạn chế tồn tại (Existential Restriction)
 
@@ -824,6 +833,10 @@ OWL còn hỗ trợ ba đặc trưng bổ sung:
 
 **Reflexive (phản xạ):** mọi cá thể đều có quan hệ với chính nó. `Reflexive(hasIdentity)` — mọi
 thứ đều có quan hệ hasIdentity với chính nó. $R^I$ chứa $\{(x,x) \mid x \in \Delta^I\}$.
+Trên miền cơ chế: `ex:rateOfChange_1 ex:hasIdentity ex:rateOfChange_1` — mỗi cơ chế liên
+kết với chính nó qua hasIdentity. Tính chất này hiếm khi dùng cho các quan hệ nội dung
+(chẳng hạn `requires` không được khai báo Reflexive) — nó chủ yếu phục vụ quan hệ định
+danh.
 
 **Irreflexive (phản xạ đảo):** không cá thể nào có quan hệ với chính nó. `Irreflexive(hasProperPart)`.
 Trên miền cơ chế: `Irreflexive(requires)` — một cơ chế không thể `requires` chính nó. $R^I \cap \{(x,x) \mid x \in \Delta^I\} = \varnothing$.

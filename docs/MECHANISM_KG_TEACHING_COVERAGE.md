@@ -53,8 +53,8 @@ The Mechanism Knowledge Graph — the book's stated capstone differentiator — 
 | Graph Isomorphism | NONE | none | Merging mechanism KGs from two sources | Two textbook graphs describing same mechanism, checked for isomorphism |
 | SPARQL Triple Pattern | NONE | none | No mechanism-domain pattern | `(?mech, ex:hasOperation, ?op)` finding all mechanisms with derivative operations |
 | BGP | NONE | none | No multi-hop mechanism traversal | BGP chain: Mechanism → hasApplication → DerivativeApplication → differentiand → Quantity |
-| LPG | NONE | none | No mechanism nodes in property graph | `(:Mechanism {name:"RATE_OF_CHANGE"})-[:HAS_OPERATION]->(:DerivativeOperation)` |
-| Cypher | NONE | none | No mechanism query | `MATCH (m:Mechanism)-[:HAS_OPERATION]->(o:DerivativeOperation) RETURN m, o` |
+| LPG | NONE | none | No mechanism nodes in property graph | `(:Mechanism {name:"RATE_OF_CHANGE"})-[:hasOperation]->(:DerivativeOperation)` |
+| Cypher | NONE | none | No mechanism query | `MATCH (m:Mechanism)-[:hasOperation]->(o:DerivativeOperation) RETURN m, o` |
 | RDF vs LPG Tradeoffs | NONE | none | No mechanism-specific tradeoff analysis | RATE_OF_CHANGE as IRI (interoperable, needs reification for metadata) vs LPG node (properties natural, loses interop) |
 
 **Ch2 requirement:** Reader can serialize and query mechanism structures in both paradigms. **Currently absent entirely — 0 of 7 key MechKG questions answered.**
