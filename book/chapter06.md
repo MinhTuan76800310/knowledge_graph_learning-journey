@@ -65,9 +65,9 @@ ex:claim_B  a           ex:PopulationClaim ;
 Hai con số khác nhau: 8.093.100 so với 8.053.663. Hệ thống nên làm gì?
 
 Cách tiếp cận ngây thơ: chọn một, xóa một. Nhưng cách này mất thông tin. Con số
-8.093.100 đúng *theo Tổng cục Thống kê, tại thời điểm 2019*. Con số 8.053.663 đúng
-*theo Wikidata, tại thời điểm truy cập 2024*. Cả hai đều có thể đúng — trong ngữ cảnh
-riêng của chúng.
+8.093.100 là số liệu Tổng cục Thống kê công bố năm 2019. Con số 8.053.663 là dữ liệu
+Wikidata trả về khi truy cập 2024 (valid time riêng — §6.7). Cả hai đều có thể đúng —
+trong ngữ cảnh riêng của chúng.
 
 Chương này xây dựng tầng tri thức luận (epistemic layer) cho knowledge graph: thay vì
 lưu trữ các bộ ba như sự thật tuyệt đối, ta coi mỗi phát biểu là một **đối tượng tri
@@ -89,8 +89,8 @@ gốc, bằng chứng hỗ trợ, và thời điểm áp dụng. Knowledge graph
 ### Cơ chế
 
 Sách định nghĩa một **mô hình tri thức luận** (epistemic model) gồm năm giai đoạn. Đây
-không phải chuẩn W3C — đây là khung khái niệm do sách xây dựng để tổ chức các khái niệm
-trong chương:
+là một khung **BOOK-DEFINED** (khung do sách xây dựng, không phải chuẩn W3C): sách dùng
+nó để tổ chức các khái niệm trong chương:
 
 ![Mô hình tri thức luận: Quan sát → Khẳng định → Phát biểu → Bằng chứng → Tri thức được chấp nhận. Mỗi giai đoạn chuyển đổi dữ liệu từ dạng thô sang đối tượng tri thức luận có ngữ cảnh đầy đủ.](figures/generated/ch06-epistemic-model.pdf)
 
@@ -853,8 +853,11 @@ RDF 1.2 đang phát triển cơ chế triple term cho phép tham chiếu trực 
 (Candidate Recommendation); tooling hạn chế; không hỗ trợ mọi trường hợp n-ary.
 
 > ⚑ **Phát triển hiện tại.** RDF 1.2 Triple Terms là Candidate Recommendation (2026-04).
-> Sách dùng n-ary pattern làm baseline ổn định; triple term được nhắc đến như hướng phát
-> triển tương lai.
+> RDF 1.2 phân biệt triple term `<<( s p o )>>` (bộ ba dùng làm hạng từ trong bộ ba khác
+> — chỉ tham chiếu nội dung, chưa khẳng định gì) và reifier triple `<< s p o >>` (cú
+> pháp ngắn cho một reifier mới `rdf:reifies <<( s p o )>>`, thường kèm annotation — ngả
+> về phía "khẳng định" một claim). Sách dùng n-ary pattern làm baseline ổn định; cả hai
+> được nhắc đến như hướng phát triển tương lai.
 
 ### Lựa chọn của sách
 
@@ -1199,12 +1202,14 @@ Ví dụ:
 ```turtle
 # Claim A: Dân số HN = 8.093.100 (GSO 2019)
 # Claim B: Dân số HN = 8.053.663 (Wikidata 2024)
+#   — Khác valid time → không phải mâu thuẫn thực sự (§6.6)
+# Claim C: Dân số HN = 8.500.000 (cùng 2019, nguồn khác — mâu thuẫn thực sự)
 # Evidence E1: Census 2019 methodology doc
 # Evidence E2: Wikidata edit history showing multiple revisions
 
 ex:evidence_E1  ex:supports     ex:claim_A .
 ex:evidence_E2  ex:isRelevantTo ex:claim_B .
-ex:claim_A      ex:contradicts  ex:claim_B .  # Value conflict
+ex:claim_A      ex:contradicts  ex:claim_C .  # Value conflict, cùng valid time
 ```
 
 ### Bảo tồn mâu thuẫn
@@ -1334,6 +1339,11 @@ mặc định.
 > cả mâu thuẫn). Canonical Knowledge View = "mọi thứ hệ thống tin" (đã lọc theo policy).
 > Người dùng truy vấn tầng nhìn; quản trị viên audit sổ cái. Nhầm lẫn hai tầng này dẫn
 > đến lỗi thiết kế kinh điển: coi việc lưu một claim là việc khẳng định nó đúng.
+>
+> ⚠️ **Lưu ý:** "Mọi thứ hệ thống biết" là tuyên bố về tất cả các claim đã nạp vào
+> ledger — đó là lựa chọn thiết kế ở tầng ứng dụng, không phải cam kết ngữ nghĩa. Khác
+> với OWA (§6.20): sự vắng mặt của một claim trong ledger không có nghĩa là claim đó
+> sai, chỉ là hệ thống chưa xem xét nó.
 
 > 🖊 **Tự kiểm tra:** Ledger chứa hai claim Accepted: "velocity = 10 m/s" và "velocity
 > = 11 m/s", cùng valid time. Giải thích vì sao ledger không "sai" khi chứa cả hai, và

@@ -724,6 +724,23 @@ quan hệ vận tốc ở tầng dữ liệu. Chính `DerivativeApplication` nà
 ngữ nghĩa hình thức đầy đủ (axiom) ở Chương 4 và được xác nhận bằng rule/SHACL ở
 Chương 5.
 
+**Vì sao không dùng ba cạnh nhị phân thay cho nút trung gian?** Giả sử ta biểu diễn
+cùng ứng dụng bằng ba cạnh trực tiếp từ cơ chế (kiểu biểu diễn phẳng ở Chương 2):
+
+```turtle
+ex:rateOfChange_1  ex:hasOperation  ex:derivativeOperation_1 ;
+                   ex:hasInput      ex:position_1 ;
+                   ex:hasReferenceVariable  ex:time_1 .
+```
+
+Ba cạnh này mô tả đúng ba vai diễn — nhưng không có gì *ràng buộc* chúng thuộc về cùng
+một ứng dụng. Khi cơ chế được áp dụng lần thứ hai (đạo hàm của `velocity_1` theo
+`time_1`), ba cạnh mới sinh thêm ba quan hệ song song; để biết `hasInput position_1`
+đi với `hasOperation derivativeOperation_1` hay một phép toán khác, không có mối nối
+nào trả lời. Nút trung gian giải quyết đúng điểm này: nó là điểm neo chung mà mọi vai
+diễn cùng trỏ về, và là nơi duy nhất để gắn thuộc tính (bằng chứng, thời gian) về
+*chính sự ứng dụng đó*.
+
 > 🖊 **Tự kiểm tra:** Giả sử bạn cần biểu diễn "Alice làm việc tại công ty X từ 2020 đến 2023, với vai trò kỹ sư phần mềm". Hãy phác thảo cấu trúc n-ary cho phát biểu này: thực thể trung gian đại diện cho điều gì? Có bao nhiêu cạnh nối từ nó? Nếu sau này Alice quay lại công ty X với vai trò khác, cấu trúc của bạn xử lý được không?
 >
 > *Chỉ dẫn trả lời:* thực thể trung gian đại diện cho *sự kiện làm việc* (employment),
