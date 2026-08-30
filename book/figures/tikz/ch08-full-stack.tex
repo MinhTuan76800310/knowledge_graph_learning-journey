@@ -1,0 +1,42 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{shapes.geometric,positioning,fit,backgrounds,arrows.meta,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  layer/.style={rectangle, draw, rounded corners, align=center, minimum width=9.5cm, minimum height=0.95cm, font=\small},
+  arrow/.style={-{Stealth[length=2.5mm]}, thick},
+  label/.style={font=\scriptsize\itshape},
+]
+
+% === Layered stack: Ch1 (bottom) → Ch8 (top) ===
+\node[layer, fill=gray!12] (ch1) at (0, -0.0) {Chương 1 — Từ Đồ thị đến Tri thức\\[-2pt]\scriptsize (entity ≠ node ≠ IRI, bốn phân biệt)};
+\node[layer, fill=gray!12, above=0.28cm of ch1] (ch2) {Chương 2 — Mô hình Dữ liệu và Ngôn ngữ Truy vấn\\[-2pt]\scriptsize (RDF, SPARQL, n-ary)};
+\node[layer, fill=gray!12, above=0.28cm of ch2] (ch3) {Chương 3 — Lược đồ, Định danh và Ngữ cảnh\\[-2pt]\scriptsize (owl:sameAs — định danh ≠ đồng dạng)};
+\node[layer, fill=gray!12, above=0.28cm of ch3] (ch4) {Chương 4 — Bản thể học và Ngữ nghĩa Hình thức\\[-2pt]\scriptsize (OWA, entailment, interpretations)};
+\node[layer, fill=gray!12, above=0.28cm of ch4] (ch5) {Chương 5 — Suy diễn, Quy tắc và Xác nhận\\[-2pt]\scriptsize (rules, SHACL — conformance ≠ truth)};
+\node[layer, fill=gray!12, above=0.28cm of ch5] (ch6) {Chương 6 — Phát biểu, Bằng chứng, Xuất xứ, Thời gian, Mâu thuẫn\\[-2pt]\scriptsize (Claim Ledger, evidence, governance)};
+\node[layer, fill=gray!12, above=0.28cm of ch6] (ch7) {Chương 7 — Thu nhận và Tích hợp Tri thức\\[-2pt]\scriptsize (pipeline, entity resolution, SHACL gate)};
+\node[layer, draw=red!70, very thick, fill=red!8, above=0.28cm of ch7] (ch8) {Chương 8 — Tri thức Quy nạp và Học từ Đồ thị\\[-2pt]\scriptsize (giả thuyết ứng viên — điểm số ≠ chân lý)};
+
+% === Future Ch9 ===
+\node[layer, draw, dashed, gray!55, fill=white, above=0.28cm of ch8] (ch9) {Chương 9 — Truy vấn, Hỏi đáp và GraphRAG\\[-2pt]\scriptsize (chưa được xây dựng)};
+
+\draw[arrow] (ch1) -- (ch2);
+\draw[arrow] (ch2) -- (ch3);
+\draw[arrow] (ch3) -- (ch4);
+\draw[arrow] (ch4) -- (ch5);
+\draw[arrow] (ch5) -- (ch6);
+\draw[arrow] (ch6) -- (ch7);
+\draw[arrow] (ch7) -- (ch8);
+\draw[arrow, dashed, gray!55] (ch8) -- (ch9);
+
+% === Side annotation ===
+\node[label, align=center, text width=4.2cm, right=0.8cm of ch8.east, anchor=west]
+  {nấc hiện tại\\ Mỗi nấc thêm một\\ năng lực mới,\\ đứng trên nấc trước.};
+
+\end{tikzpicture}
+\end{document}
