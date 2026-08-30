@@ -140,11 +140,11 @@ bao giờ làm mất kết luận cũ. Khác với termination, completeness, v�
 **Representation learning (Học biểu diễn).** Học vector từ dữ liệu thay vì thiết kế đặc trưng thủ công. Vector học được không phải thực thể và không mang ngữ nghĩa hình thức.
 
 **Rule (Quy tắc).** Mệnh đề dạng Horn: head ← body₁ ∧ ... ∧ bodyₙ. Trong KG, head và body
-**Rule induction (Học quy tắc).** Học quy tắc tượng trưng từ đồ thị. AMIE+ sinh quy tắc đường đi r1(x,y) ∧ r2(y,z) → r3(x,z) dưới giả định PCA. Quy tắc học được là giả thuyết, không phải định luật logic.
-
 là mẫu triple chứa biến. Phép thế $\theta$ gán biến với giá trị cụ thể để kết nối quy tắc
 trừu tượng với dữ liệu đồ thị. Quy tắc Horn đơn điệu, đảm bảo dừng trên đồ thị hữu hạn với
 các điều kiện an toàn. Không biểu diễn được phủ định hay disjunction trong head.
+
+**Rule induction (Học quy tắc).** Học quy tắc tượng trưng từ đồ thị. AMIE+ sinh quy tắc đường đi r1(x,y) ∧ r2(y,z) → r3(x,z) dưới giả định PCA. Quy tắc học được là giả thuyết, không phải định luật logic.
 
 **Rule-mining confidence (Độ tin cậy khai phá quy tắc).** Tần suất quy tắc dưới giả định PCA (Partial Completeness Assumption). Khác với độ tin cậy tri thức luận (epistemic confidence) của Chương 6 — hai khái niệm khác nhau, cùng tên 'confidence'.
 
