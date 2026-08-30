@@ -160,22 +160,30 @@ tục.
 > cầu Docker hay dịch vụ bên ngoài.
 
 ```python
-from rdflib import Graph, Literal, Namespace, RDF, RDFS  # RDF và RDFS là các namespace chuẩn của W3C
+from rdflib import (
+    Graph,
+    Literal,
+    Namespace,
+    RDF,
+    RDFS,
+)  # RDF và RDFS là các namespace chuẩn của W3C
 
-EX = Namespace("http://example.org/")  # Namespace (không gian tên): ánh xạ tiền tố ngắn thành IRI đầy đủ
+EX = Namespace(
+    "http://example.org/"
+)  # Namespace (không gian tên): ánh xạ tiền tố ngắn thành IRI đầy đủ
 g = Graph()
 
-g.add((EX.Hanoi,   RDF.type,     EX.City))
-g.add((EX.Hanoi,   RDFS.label,   Literal("Hà Nội")))
-g.add((EX.Hanoi,   EX.capitalOf, EX.Vietnam))
-g.add((EX.Paris,   RDF.type,     EX.City))
-g.add((EX.Paris,   RDFS.label,   Literal("Paris")))
-g.add((EX.Paris,   EX.capitalOf, EX.France))
-g.add((EX.Hanoi,   EX.sisterCity, EX.Paris))
-g.add((EX.Vietnam, RDF.type,     EX.Country))
-g.add((EX.France,  RDF.type,     EX.Country))
-g.add((EX.Hanoi,   EX.population, Literal(8000000)))
-g.add((EX.Paris,   EX.population, Literal(2161000)))
+g.add((EX.Hanoi, RDF.type, EX.City))
+g.add((EX.Hanoi, RDFS.label, Literal("Hà Nội")))
+g.add((EX.Hanoi, EX.capitalOf, EX.Vietnam))
+g.add((EX.Paris, RDF.type, EX.City))
+g.add((EX.Paris, RDFS.label, Literal("Paris")))
+g.add((EX.Paris, EX.capitalOf, EX.France))
+g.add((EX.Hanoi, EX.sisterCity, EX.Paris))
+g.add((EX.Vietnam, RDF.type, EX.Country))
+g.add((EX.France, RDF.type, EX.Country))
+g.add((EX.Hanoi, EX.population, Literal(8000000)))
+g.add((EX.Paris, EX.population, Literal(2161000)))
 ```
 
 Đồ thị này có **11 bộ ba**. Mỗi dòng `g.add(...)` thêm đúng một bộ ba; mỗi bộ ba là một
@@ -244,7 +252,7 @@ Kiểm chứng rằng đoạn Turtle trên đúng là đồ thị ban đầu, ta
 turtle_text = g.serialize(format="turtle")  # serialize: chuyển đồ thị RDF thành văn bản
 g2 = Graph()
 g2.parse(data=turtle_text, format="turtle")  # parse: đọc văn bản thành đồ thị RDF
-assert set(g) == set(g2)   # đồ thị tương đương
+assert set(g) == set(g2)  # đồ thị tương đương
 ```
 
 Ở đây cần nói rõ về **cách so sánh đồ thị**:

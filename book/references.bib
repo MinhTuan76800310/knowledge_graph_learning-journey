@@ -285,9 +285,9 @@
   booktitle    = {Knowledge Graphs},
   publisher    = {Springer},
   year         = {2021},
-  chapter      = {6},
+  chapter      = {4},
   url          = {https://kgbook.org/},
-  note         = {Internal source ID: HOGAN-CH6.}
+  note         = {Internal source ID: HOGAN-CH6. Book chapter 4 per verified kgbook.org table of contents.}
 }
 
 % ---------------------------------------------------------------------------
@@ -402,6 +402,88 @@
   year         = {2017},
   url          = {https://www.w3.org/TR/owl-time/},
   note         = {First Edition. Stable baseline. The W3C TR page currently lists a revision in progress (Candidate Recommendation Draft 2022-11-15); no Second Edition exists. Hobbs \& Pan are editors of the 2006 Working Draft, not of the Recommendation. Internal source ID: OWL-TIME-01.}
+}
+
+% ---------------------------------------------------------------------------
+% Chapter 7 — Knowledge Acquisition and Integration
+% ---------------------------------------------------------------------------
+
+@techreport{w3c-r2rml,
+  title        = {R2RML: RDB to RDF Mapping Language},
+  author       = {Das, Souripriya and Sundara, Seema and Cyganiak, Richard},
+  institution  = {World Wide Web Consortium},
+  type         = {W3C Recommendation},
+  year         = {2012},
+  month        = sep,
+  url          = {https://www.w3.org/TR/r2rml/},
+  note         = {Stable. Internal source ID: R2RML-01. Triples Map, Subject Map, Predicate-Object Map; custom RDB-to-RDF mapping.}
+}
+
+@techreport{w3c-direct-mapping,
+  title        = {A Direct Mapping of Relational Data to RDF},
+  author       = {Bizer, Christian and Cyganiak, Richard and Wood, David},
+  institution  = {World Wide Web Consortium},
+  type         = {W3C Recommendation},
+  year         = {2012},
+  month        = sep,
+  url          = {https://www.w3.org/TR/rdb-direct-mapping/},
+  note         = {Stable. Internal source ID: DIRECT-MAP-01. Default RDB-to-RDF mapping; contrast with R2RML custom mapping.}
+}
+
+@techreport{w3c-tabular-data-model,
+  title        = {Model for Tabular Data and Metadata on the Web},
+  author       = {Pollock, Jeni and Tennison, Jeni and Kellogg, Gregg and Herman, Ivan},
+  institution  = {World Wide Web Consortium},
+  type         = {W3C Recommendation},
+  year         = {2015},
+  month        = dec,
+  url          = {https://www.w3.org/TR/tabular-data-model/},
+  note         = {Stable. Internal source ID: CSVW-01. Tabular data model + annotations; csv2rdf companion spec.}
+}
+
+@article{fellegi-sunter-1969,
+  title        = {A Theory for Record Linkage},
+  author       = {Fellegi, Ivan P. and Sunter, Alan B.},
+  journal      = {Journal of the American Statistical Association},
+  volume       = {64},
+  number       = {328},
+  pages        = {1183--1210},
+  year         = {1969},
+  url          = {https://www.jstor.org/stable/2282359},
+  note         = {Stable. Internal source ID: RL-01. Comparison vector, m/u probabilities, two-threshold decision rule.}
+}
+
+@article{rahm-bernstein-2001,
+  title        = {A Survey of Approaches to Automatic Schema Matching},
+  author       = {Rahm, Erhard and Bernstein, Philip A.},
+  journal      = {The VLDB Journal},
+  volume       = {10},
+  number       = {4},
+  pages        = {334--350},
+  year         = {2001},
+  url          = {https://link.springer.com/article/10.1007/s007780100057},
+  note         = {Stable. Internal source ID: SM-01. Element vs structure level; schema vs instance vs hybrid matchers.}
+}
+
+@inproceedings{lenzerini-2002,
+  title        = {Data Integration: A Theoretical Perspective},
+  author       = {Lenzerini, Maurizio},
+  booktitle    = {Proceedings of the 21st ACM SIGMOD-SIGACT-SIGART Symposium on Principles of Database Systems (PODS 2002)},
+  pages        = {233--246},
+  year         = {2002},
+  publisher    = {ACM},
+  url          = {https://dl.acm.org/doi/10.1145/543613.543644},
+  note         = {Stable. Internal source ID: DI-01. Data integration system (G, S, M); GAV/LAV; sound/complete/exact mappings.}
+}
+
+@incollection{hogan-creation-enrichment,
+  title        = {Creation and Enrichment},
+  author       = {Hogan, Aidan and others},
+  booktitle    = {Knowledge Graphs},
+  publisher    = {Springer},
+  year         = {2021},
+  url          = {https://kgbook.org/},
+  note         = {Internal source ID: HOGAN-CREATE-01. Academic framing for acquisition + integration pipelines.}
 }
 
 % ---------------------------------------------------------------------------

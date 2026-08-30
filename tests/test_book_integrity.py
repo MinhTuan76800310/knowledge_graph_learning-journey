@@ -5,8 +5,6 @@ Catches common terminology errors and formatting issues across all chapters.
 
 from pathlib import Path
 
-import pytest
-
 BOOK_DIR = Path(__file__).resolve().parent.parent / "book"
 
 
@@ -15,7 +13,8 @@ def _all_chapter_files():
 
 
 class TestSparqlExpansion:
-    """SPARQL must be expanded as 'SPARQL Protocol and RDF Query Language', not 'Simple Protocol'."""
+    """SPARQL expansion: 'SPARQL Protocol and RDF Query Language',
+    not 'Simple Protocol'."""
 
     WRONG_EXPANSION = "Simple Protocol and RDF Query Language"
     CORRECT_EXPANSION = "SPARQL Protocol and RDF Query Language"
@@ -32,6 +31,4 @@ class TestSparqlExpansion:
         glossary = BOOK_DIR / "glossary.md"
         if glossary.exists():
             text = glossary.read_text(encoding="utf-8")
-            assert self.WRONG_EXPANSION not in text, (
-                f"glossary.md contains wrong SPARQL expansion."
-            )
+            assert self.WRONG_EXPANSION not in text, "glossary.md contains wrong SPARQL expansion."
