@@ -1,0 +1,43 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{shapes.geometric,positioning,fit,backgrounds,arrows.meta,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  lvl/.style={rectangle, draw, rounded corners, minimum width=9.2cm, minimum height=0.85cm,
+              font=\scriptsize, align=center},
+  current/.style={lvl, fill=yellow!25, thick},
+  done/.style={lvl, fill=blue!8},
+  arrow/.style={-{Stealth[length=2.5mm]}, thick},
+]
+
+\node[done] (l1) at (0, 3.6) {Ch1--2 \; Đồ thị — node, cạnh, kiểu, đường đi};
+\node[done] (l2) at (0, 2.7) {Ch3 \; Định danh — sameAs, dấu vân tay};
+\node[done] (l3) at (0, 1.8) {Ch4 \; Ngữ nghĩa — lớp, thuộc tính, OWA};
+\node[done] (l4) at (0, 0.9) {Ch5 \; Suy diễn — SPARQL, entailment};
+\node[done] (l5) at (0, 0.0) {Ch6 \; Tri thức luận — Claim Ledger, PROV, đồng hồ};
+\node[done] (l6) at (0, -0.9) {Ch7 \; Thu nhận — nguồn, governance, chiếu hình};
+\node[done] (l7) at (0, -1.8) {Ch8 \; Học quy nạp — giả thuyết cơ chế, hybrid pipeline};
+\node[current] (l8) at (0, -2.7) {Ch9 \; Truy xuất và hỏi đáp — retrieval + QA + GraphRAG};
+\node[done, fill=gray!10] (l9) at (0, -3.6) {Ch10 \; Quản trị hệ thống và vận hành (đặt trước)};
+
+\draw[arrow] (l1) -- (l2);
+\draw[arrow] (l2) -- (l3);
+\draw[arrow] (l3) -- (l4);
+\draw[arrow] (l4) -- (l5);
+\draw[arrow] (l5) -- (l6);
+\draw[arrow] (l6) -- (l7);
+\draw[arrow] (l7) -- (l8);
+\draw[arrow, dashed] (l8) -- (l9);
+
+\node[right=0.15cm of l8.east, font=\scriptsize\itshape, text=red!70!black]
+  {nấc hiện tại};
+
+\node[font=\footnotesize, align=center] at (0, 4.4)
+  {\textbf{Cửa sổ giao tiếp với người dùng}: mọi nấc tri thức hội tụ về đây};
+
+\end{tikzpicture}
+\end{document}

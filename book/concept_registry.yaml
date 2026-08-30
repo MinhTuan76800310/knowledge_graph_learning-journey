@@ -1389,3 +1389,619 @@ concepts:
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Training lineage is provenance, not direct evidence; echo/duplicate sources"
+
+  question_interpretation:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Interpretation maps NL question to structured intent; result may be wrong and must be recorded"
+
+  query_intent:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "9-type intent taxonomy (factual/structural/comparative/explanatory/provenance/temporal/contradiction/discovery/multi-hop) selects retrieval target"
+
+  entity_linking_query:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Mention -> candidates -> contextual scoring -> decision/ambiguity; highest score is not correctness"
+
+  query_decomposition:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Complex question -> subquestions with dependency graph; a plan, not a truth computation"
+
+  retrieval_plan:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Ordered retrieval operations with bounds and stopping conditions; completion does not imply sufficiency"
+
+  query_execution_router:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "BOOK-DEFINED: intent -> execution path (KGQA/symbolic/text RAG/GraphRAG/ledger) -> Evidence Packet"
+
+  retrieval_unit:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Kind of object a retrieval step returns; unit choice determines recall, precision, context coherence, provenance"
+
+  search_index:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Index is a derived access structure over KG content; may lag; index state != KG state"
+
+  symbolic_graph_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Exact graph query (SPARQL) when schema/entities/relations known; exact match, not semantic similarity"
+
+  multi_hop_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Walk edges across hops; a path shows connectivity, not a proof"
+
+  path_bounds:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Max depth/edge types/direction/branching are epistemic boundaries; beyond them is unseen"
+
+  relation_aware_traversal:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Choose traversed edge types by intent; filter may discard decisive paths"
+
+  k_hop_neighborhood:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "All nodes within k edges; mostly noise; within-k-hop != relevant"
+
+  subgraph_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Coherent subgraph selection is a retrieval problem; minimal sufficient subgraph is policy-based, not provably minimal"
+
+  bm25:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Lexical ranking: idf x tf-saturation x length normalization; ranking utility, not probability"
+
+  dense_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Dual-encoder dot-product retrieval; captures paraphrase; similarity != relevance"
+
+  query_embedding:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Query vector is a learned representation for ranking, not the query's full meaning"
+
+  hybrid_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Lexical+dense+graph combined; reduces misses, does not raise truth"
+
+  rank_fusion:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "RRF = sum 1/(k+rank_i); position-based fusion; fused score is retrieval utility only"
+
+  graph_first_text_first:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Order of access (graph->text or text->graph) chosen by intent; no universal winner"
+
+  canonical_view_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Answers what is accepted now; empty projection does not imply empty ledger"
+
+  claim_ledger_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Answers history/contradictions/provenance; required for temporal/contradiction questions"
+
+  governance_aware_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Filter/priority by governance state per intent; Accepted != true, Rejected != false"
+
+  temporal_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Multiple clocks: valid/publication/system time; never collapse"
+
+  provenance_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Retrieve Claim->Evidence->SourceFragment->SourceArtifact chain; existence is not correctness"
+
+  contradiction_aware_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Retrieve competing claims with scopes; do not force LLM to pick a side without policy"
+
+  evidence_diversity:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Source/type/viewpoint/time diversity; duplicate-source passages are not independent evidence"
+
+  top_k_epistemic_bound:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Model cannot reason over evidence it does not see; not-in-top_k != irrelevant/absent"
+
+  precision:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "|relevant n retrieved| / |retrieved|; measures retrieval quality, not truth"
+
+  recall:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "|relevant n retrieved| / |relevant|; high recall matters for explanations/contradictions"
+
+  precision_at_k:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Relevant among top-K / K; ranked cutoff metric"
+
+  recall_at_k:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Relevant among top-K / total relevant; measures cutoff coverage"
+
+  mrr_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Mean reciprocal rank of first relevant result; for first-hit use cases"
+
+  ndcg:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Graded relevance, log discount, normalized by ideal; ranking quality, not epistemic confidence"
+
+  reranking:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Two-stage: broad first stage + precise pair scorer; cannot recover first-stage recall misses"
+
+  context_assembly:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Select/group/order evidence into model input; order affects reliability"
+
+  context_compression:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Dedupe/select/summarize; summaries are derived artifacts with provenance"
+
+  lost_in_the_middle:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Start/end of long context used more reliably than middle; empirical, model-specific"
+
+  graph_serialization:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Triples/tables/JSON/NL tradeoffs; no serialization is lossless"
+
+  evidence_packet:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "BOOK-DEFINED: structured container between retrieval and answer synthesis; full fields != sufficient evidence"
+
+  answer_generation:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Map (question, Evidence Packet) -> draft; no inventing relations outside the packet"
+
+  answer_claim:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Answer decomposes into claims, each traceable to evidence/path/claim"
+
+  grounded_answer:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Supported by identified sources (AIS); grounded != true"
+
+  citation:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Claim -> actual supporting evidence; citation presence != support"
+
+  citation_completeness:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Citation recall/precision per claim; count of citations != quality"
+
+  faithfulness:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Answer stays within supplied context; faithful != correct"
+
+  correctness_groundedness:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "2x2: C target (right+grounded); B = faithful to wrong source; process does not move B to C"
+
+  abstention:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Say insufficient evidence rather than fabricate; abstention != false"
+
+  unknown_vs_not_found:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Not retrieved != not in index != not in KG != known false != unknown"
+
+  retrieval_failure_vs_knowledge_absence:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Correct claim in ledger but retriever misses it = retrieval failure, not knowledge absence"
+
+  query_planning:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Rule/LLM/hybrid planners; LLM planner is not mandatory"
+
+  agentic_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Iterative retrieve-inspect-refine; risks drift, noise, cost, confirmation bias"
+
+  stopping_condition:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Explicit termination: slots filled, no new info, threshold, budget, contradiction"
+
+  query_drift:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Successive subqueries deviate from original intent; preserve original query record"
+
+  confirmation_bias:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "One-sided retrieval only confirms; counterexamples are primary data"
+
+  hypothesis_testing_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Retrieve supporting AND challenging evidence for candidate mechanism hypotheses"
+
+  local_global_questions:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Local = entity-anchored; global = corpus-wide; different strategies"
+
+  graphrag:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Family of architectures using graph structure in retrieval/context; not one standard algorithm"
+
+  kgqa:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Question answering via structured query/reasoning over the KG; != GraphRAG"
+
+  rag_kgqa_graphrag_decision:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Decision table: exact queries -> KGQA; open questions -> text RAG; structure+evidence -> GraphRAG"
+
+  path_explanation:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Path is an explanation of structure, not a logical proof"
+
+  path_explosion:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Number of paths grows exponentially; bounds + decisive-path priority required"
+
+  community_retrieval:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Leiden communities + bottom-up summaries for global questions; summaries are derived artifacts"
+
+  caching:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Cache query/subgraph/summary/answer results; keys need KG/index/ontology versions"
+
+  index_consistency:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Ledger changes but index does not -> stale answers despite correct pipeline"
+
+  retrieval_provenance:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Record query, interpretation, retrievers, index snapshot, filters, top_k, scores, timestamps"
+
+  answer_provenance:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "BOOK-DEFINED Answer artifact: generatedFor/usedEvidence/generatedBy/modelVersion/citations/status"
+
+  qa_answer_not_ingestion:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "QA answers do not become knowledge without Ch7 governance pipeline"
+
+  score_semantics:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "BM25/cosine/reranker/graph scores are ranking signals, not probabilities of truth"
+
+  asserted_derived_predicted:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Three epistemic statuses in the Evidence Packet; never conflate"
+
+  retrieval_evaluation_layers:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "7 layers: linking/retrieval/evidence sufficiency/grounding/correctness/citation/boundary behavior"
+
+  gold_evidence:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Annotated relevance set per question; annotation, not metaphysical truth"
+
+  retrieval_failure_walkthrough:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Failure cases: stale index (B), misinterpretation, path-as-proof"
+
+  hallucination_taxonomy:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Relation fabrication/misattribution/number fabrication/false certainty"
+
+  claim_evidence_alignment:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "SUPPORTED/PARTIALLY_SUPPORTED/UNSUPPORTED/CONTESTED per answer claim"
+
+  graph_vs_llm_reasoning:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Symbolic reasoning is reproducible; LLM is probabilistic; allocate by question type"
+
+  when_not_to_use_rag:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Exact query suffices, authoritative facts, unacceptable hallucination risk, out-of-scope"

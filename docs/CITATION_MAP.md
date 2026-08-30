@@ -65,6 +65,20 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | SHORTCUT-01 | `geirhos-shortcut-2020` | Shortcut Learning in Deep Neural Networks |
 | CALIB-01 | `guo-calibration-2017` | On Calibration of Modern Neural Networks |
 | COLLAPSE-01 | `shumailov-collapse-2024` | AI models collapse when trained on recursively generated data |
+| RAG-01 | `lewis-rag-2020` | Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks |
+| DPR-01 | `karpukhin-dpr-2020` | Dense Passage Retrieval for Open-Domain Question Answering |
+| GRAPHRAG-01 | `edge-graphrag-2024` | From Local to Global: A Graph RAG Approach to Query-Focused Summarization |
+| BM25-01 | `robertson-bm25-2009` | The Probabilistic Relevance Framework: BM25 and Beyond |
+| IRBOOK-01 | `manning-ir-2008` | Introduction to Information Retrieval |
+| NDCG-01 | `jarvelin-ndcg-2002` | Cumulated gain-based evaluation of IR techniques |
+| RRF-01 | `cormack-rrf-2009` | Reciprocal rank fusion outperforms condorcet and individual rank learning methods |
+| RRANK-01 | `nogueira-rerank-2019` | Passage Re-ranking with BERT |
+| LOSTMID-01 | `liu-lostmid-2023` | Lost in the Middle: How Language Models Use Long Contexts |
+| AIS-01 | `rashkin-ais-2021` | Measuring Attribution in Natural Language Generation Models |
+| CITE-01 | `gao-cite-2023` | Enabling Large Language Models to Generate Text with Citations |
+| KGQA-01 | `chakraborty-kgqa-2019` | Introduction to Neural Network based Approaches for Question Answering over Knowledge Graphs |
+| LLMKG-01 | `zhu-llmkg-2023` | Unifying Large Language Models and Knowledge Graphs: A Roadmap |
+| MAGRAPH-01 | `microsoft-graphrag-docs` | Microsoft GraphRAG Documentation |
 | GRLBOOK-01 | `hamilton-grl-2020` | Graph Representation Learning (Hamilton) |
 
 ## Rules

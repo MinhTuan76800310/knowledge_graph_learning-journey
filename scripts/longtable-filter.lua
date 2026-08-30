@@ -33,23 +33,79 @@ local function replace_symbols(s)
   return s
 end
 
+-- Split a string on the earliest occurrence of any mapped symbol.
+-- Returns the plain prefix and the symbol + its replacement command, or
+-- (nil, nil, nil) when the string contains no mapped symbol.
+local function split_symbol(s)
+  local idx, len, cmd
+  for ch, c in pairs(SYMBOL_MAP) do
+    local at = s:find(ch, 1, true)
+    if at and (not idx or at < idx) then
+      idx, len, cmd = at, #ch, c
+    end
+  end
+  if not idx then
+    return nil, nil, nil
+  end
+  return s:sub(1, idx - 1), s:sub(idx, idx + len - 1), cmd
+end
+
+-- Return the given inline elements (from a Str) or a Code span with the same
+-- text, splitting out mapped symbols into RawInline LaTeX. Everything that is
+-- not a mapped symbol stays a normal element so the LaTeX writer escapes it
+-- correctly (e.g. underscores in RATE_OF_CHANGE become \_).
+local function split_symbols_inlines(text)
+  local out = {}
+  local rest = text
+  while rest and rest ~= "" do
+    local prefix, sym, cmd = split_symbol(rest)
+    if not sym then
+      out[#out + 1] = pandoc.Str(rest)
+      break
+    end
+    if prefix ~= "" then
+      out[#out + 1] = pandoc.Str(prefix)
+    end
+    out[#out + 1] = pandoc.RawInline("latex", cmd)
+    rest = rest:sub(#prefix + #sym + 1)
+  end
+  return out
+end
+
 function Str(el)
   if FORMAT:match("latex") then
-    local replaced = replace_symbols(el.text)
-    if replaced ~= el.text then
-      return pandoc.RawInline("latex", replaced)
+    local out = split_symbols_inlines(el.text)
+    if #out == 1 and out[1].t == "Str" and out[1].text == el.text then
+      return el
     end
+    return out
   end
   return el
 end
 
 function Code(el)
   if FORMAT:match("latex") then
-    local replaced = replace_symbols(el.text)
-    if replaced ~= el.text then
-      -- Wrap in \texttt{} so the LaTeX commands render in monospace context
-      return pandoc.RawInline("latex", "\\texttt{" .. replaced .. "}")
+    local parts = split_symbols_inlines(el.text)
+    if #parts == 1 and parts[1].t == "Str" and parts[1].text == el.text then
+      return el
     end
+    local out = {}
+    local plain = {}
+    for _, part in ipairs(parts) do
+      if part.t == "Str" then
+        plain[#plain + 1] = part.text
+      else
+        if #plain > 0 then
+          out[#out + 1] = pandoc.Code(table.concat(plain))
+          plain = {}
+        end
+        out[#out + 1] = part
+      end
+    end
+    if #plain > 0 then
+      out[#out + 1] = pandoc.Code(table.concat(plain))
+    end
+    return out
   end
   return el
 end
