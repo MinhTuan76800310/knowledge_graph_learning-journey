@@ -694,3 +694,340 @@ concepts:
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Must specify WHAT is assessed; source reliability ≠ claim confidence; no universal formula"
+
+  # === Chapter 7 concepts ===
+  knowledge_acquisition:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Bringing source content into the system as candidate knowledge with provenance; distinct from integration"
+
+  knowledge_integration:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Reconciling, validating, resolving candidate knowledge before Claim Ledger insertion; grounded in classification"
+
+  source_artifact:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Registered addressable record of a source (IRI + metadata); ≠ physical source; registration ≠ reliability"
+
+  source_fragment:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Delimited addressable portion of a Source Artifact; fragment-granular provenance"
+
+  extraction:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Turning raw content into candidate structured records; content-specific patterns; not error-free"
+
+  extraction_activity:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "PROV Activity recording a specific extraction execution; breadcrumb for provenance"
+
+  extraction_confidence:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Confidence about the extraction, not about the extracted content's truth"
+
+  normalization:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Canonical comparable values (units, dates, numbers); lossy; keep raw value traceable"
+
+  structuring:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Producing RDF triples from normalized records under a target schema"
+
+  entity_resolution:
+    first_mentioned_chapter: 3
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: true
+    notes: "End-to-end: do two records denote the same entity? Candidate generation → comparison → decision → merge; record linkage is its quantitative core"
+
+  record_linkage:
+    first_mentioned_chapter: 3
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: true
+    notes: "Fellegi–Sunter: comparison vector γ, m/u probabilities, likelihood ratio, two-threshold decision rule; problem named in Ch3 §3.2.5"
+
+  candidate_generation:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Recall-oriented coarse pairing; candidates are not decisions"
+
+  blocking:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Grouping by blocking key to avoid O(n²) comparisons; trades recall for tractability"
+
+  candidate_matching:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Comparison vector γ evidence over attributes; not a truth judgment"
+
+  identity_decision:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Outcome: match / possible (clerical) / non-match; decisions carry residual error"
+
+  schema_alignment:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Semantic correspondences between schema elements; element vs structure level; schema/instance/hybrid matchers"
+
+  mapping_specification:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Explicit versioned artifact: source → target graph; reviewable and replayable (R2RML triples map)"
+
+  direct_mapping:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Automatic W3C default RDB→RDF: table→class, row→resource, column→predicate; shape follows DB schema"
+
+  semantic_mapping:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Custom mapping to a target ontology (R2RML / CSVW); author decisions shape RDF; lossy"
+
+  deduplication:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Detecting exact/near duplicates; reconcile evidence, never silently drop"
+
+  idempotent_ingestion:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Re-running ingestion yields same ledger state; enabled by determinism + content hashes"
+
+  content_hash:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Deterministic digest of canonical record; key for dedup/idempotency; ≠ claim identity, ≠ provenance"
+
+  structural_validation:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "SHACL shape conformance; checks shape not truth"
+
+  integration_decision:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Accept / reject / defer to review; recorded rationale; not a proof of truth"
+
+  conflict_detection:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Overlaps with Ch6 contradiction taxonomy; not every text difference is a conflict; completeness not guaranteed"
+
+  merge_outcome:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Ledger result of a candidate cluster: insert/strengthen/supersede/merge; losing claims preserved"
+
+  claim_ledger_insertion:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Committed write with full epistemic envelope; ledger is system of record"
+
+  canonical_projection:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Materialized view from ledger after governance; rebuilt, not independent of truth"
+
+  lineage:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Provenance path from ledger claim back to source fragments; ≠ evidence"
+
+  evidence_vs_lineage:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Lineage answers 'from where?'; evidence answers 'why believe?'; rich lineage ≠ strong evidence"
+
+  human_review:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Clerical review zone (Fellegi–Sunter) / policy-deferred cases; decisions recorded in ledger"
+
+  data_quality_dimension:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Multiple dimensions: accuracy, completeness, consistency, timeliness, provenance, conformance; no single score"
+
+  failure_modes:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Catalog: extraction/normalization/blocking/linkage/mapping/idempotency/validation/echo/partial/chunk/policy-drift; each with signal + recovery"
+
+  echo_source:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Derived source with no independent evidence; echoing inflates apparent support"
+
+  pipeline_versioning:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Every output-shaping component versioned and stamped into provenance"
+
+  reprocessing:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Re-running pipeline after version change; safe only with idempotency; re-gated"
+
+  chunking:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Splitting long documents into bounded addressable fragments; boundaries are a decision"
+
+  retrieval_bound:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Fragment may only assert what its own content supports within its context; OWA preserved"
+
+  extraction_schema:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Declared intermediate record structure; conformance ≠ semantic correctness"
+
+  unresolved_value:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Explicitly modeled unknown; never guessed, never interpreted as false (OWA)"
+
+  integration_policy:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Versioned decision rules operationalizing Ch6 governance; not neutral or universal"
+
+  acquisition_invariant:
+    first_mentioned_chapter: 7
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "I1–I7: provenance, version stamp, hash uniqueness, validation accompanies, no overwrite, idempotency, recorded rationale"
