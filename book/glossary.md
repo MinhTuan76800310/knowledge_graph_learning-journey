@@ -339,3 +339,122 @@ entailment (phát biểu đúng trong mọi mô hình).
 **Universal Restriction (Hạn chế phổ quát).** ∀R.C — lớp các cá thể mà mọi R-liên kết đều dẫn
 đến phần tử thuộc C. Không khẳng định sự tồn tại của R-liên kết; nếu không có liên kết nào
 thì điều kiện được thỏa mãn một cách trống rỗng (vacuously true).
+
+
+**Abstention (Kiêng trả lời).** Khi bằng chứng không đủ — không có claim liên quan, thực thể mơ hồ chưa phân giải, mâu thuẫn chưa phân xử, hỗ trợ yếu, ngoài phạm vi, truy xuất không chắc — hệ thống nói rõ 'không đủ bằng chứng' thay vì bịa. Kiêng trả lời không có nghĩa sự kiện là sai (Chương 9).
+
+**Agentic retrieval (Truy xuất có tác nhân).** Truy xuất lặp: sau mỗi lượt, kiểm tra khoảng trống và phát hành lượt truy vấn tiếp theo. Cần điều kiện dừng tường minh; rủi ro trôi câu hỏi, leo thang nhiễu/chi phí, thiên kiến xác nhận. Không tự động tốt hơn truy xuất tĩnh (Chương 9).
+
+**Answer claim (Claim con của câu trả lời).** Câu trả lời phân rã thành các claim con, mỗi claim vết được về bằng chứng/đường cấu trúc/claim được chấp nhận. Cho phép trích dẫn và đối chiếu theo từng câu (Chương 9).
+
+**Answer generation (Sinh câu trả lời).** Tầng ánh xạ (câu hỏi, Gói bằng chứng) thành bản nháp câu trả lời với bốn kỷ luật: không thêm quan hệ ngoài gói, tách bạch phát ngôn, trình bày mâu thuẫn, tự kiểm tra. Văn bản trôi chảy không có nghĩa đúng (Chương 9).
+
+**Answer provenance (Hồ sơ câu trả lời).** Bản ghi BOOK-DEFINED của một câu trả lời: generatedFor → Câu hỏi, usedEvidence → Evidence Packet, generatedBy, generatedAt, modelVersion, citations, answerStatus. Provenance là dữ kiện tái hiện được, không phải bằng chứng đúng (Chương 9).
+
+**BM25.** Hàm xếp hạng từ vựng: score = Σ idf(t) · [f(t,D)(k1+1)] / [f(t,D) + k1(1 − b + b·|D|/avgdl)]. idf nhấn từ hiếm, k1 bão hòa tần suất từ, b chuẩn hóa độ dài tài liệu. Là tiện ích xếp hạng, không phải xác suất đúng (Chương 9).
+
+**Canonical View (Chiếu hình).** Trạng thái 'hiện được chấp nhận là gì' — phép chiếu từ Sổ cái claim. Trả lời câu hỏi hiện hành; chiếu hình trống không có nghĩa Sổ cái trống (Chương 9).
+
+**Citation (Trích dẫn).** Gắn một claim con của câu trả lời với bằng chứng thực sự hỗ trợ nó và nguồn gốc của bằng chứng. Có trích dẫn ≠ được hỗ trợ; trích dẫn phải trỏ tới đoạn thật sự chứa thông tin hỗ trợ (Chương 9).
+
+**Claim Ledger (Sổ cái claim).** Kho bất biến mọi claim có provenance, trạng thái, lịch sử. Truy xuất lịch sử/mâu thuẫn/provenance phải vào Sổ cái, không phải chiếu hình (Chương 9).
+
+**Community retrieval (Truy xuất cộng đồng).** Phân cụm đồ thị (Leiden) và tóm tắt cộng đồng từ dưới lên để trả lời câu hỏi toàn cục. Tóm tắt là đồ tạo tác dẫn xuất có provenance, có thể lỗi thời và mất bằng chứng — không phải nguồn (Chương 9).
+
+**Context assembly (Lắp ráp ngữ cảnh).** Chọn, nhóm, sắp thứ tự, dán nhãn các đơn vị bằng chứng thành đầu vào cho LLM. Thứ tự ảnh hưởng độ tin cậy (lost in the middle); là giao diện suy luận, không phải phép nối chuỗi (Chương 9).
+
+**Contradiction-aware retrieval (Truy xuất nhạy mâu thuẫn).** Khi chủ đề đang tranh cãi, truy xuất các claim cạnh tranh kèm phạm vi và trạng thái, không ép mô hình chọn bên. Không hợp nhất các claim mâu thuẫn mất phạm vi (Chương 9).
+
+**Correctness (Tính đúng).** Quan hệ giữa câu trả lời và thế giới: phát biểu có đúng với sự thật bên ngoài không. Khác với groundedness (quan hệ câu trả lời–nguồn). Bảng 2×2: đúng × có căn cứ, mục tiêu là ô C (Chương 9).
+
+**Dense retrieval (Truy xuất mật độ).** Nhúng câu hỏi và đoạn vào vector (dual encoder, DPR) và chấm bằng tích vô hướng/cosine. Bắt được paraphrase; tương tự nhúng là tín hiệu xếp hạng, không phải liên quan chắc chắn hay chân lý (Chương 9).
+
+**Entity linking (Liên kết thực thể).** Ánh xạ mention trong câu hỏi sang các ứng viên thực thể: sinh ứng viên → chấm điểm ngữ cảnh → quyết định/ghi nhận mơ hồ. Chọn điểm cao nhất không phải bước bắt buộc; mơ hồ phải được ghi nhận (Chương 9).
+
+**Evidence diversity (Đa dạng bằng chứng).** Đa nguồn, đa loại, đa quan điểm, đa thời điểm của bằng chứng. Nhiều đoạn trùng nguồn gốc không phải nhiều bằng chứng độc lập (Chương 9).
+
+**Evidence Packet (Gói bằng chứng).** Khái niệm BOOK-DEFINED: container có cấu trúc là giao diện duy nhất giữa tầng truy xuất và tầng sinh câu trả lời. Chứa câu hỏi, intent, thực thể, claim, đường đi, đoạn nguồn, provenance, thời gian, đánh giá, metadata truy xuất, và nhãn asserted/derived/predicted. Gói đầy đủ trường ≠ đủ bằng chứng (Chương 9).
+
+**Faithfulness (Tính trung thành).** Quan hệ giữa câu trả lời và ngữ cảnh được cấp: câu trả lời không bịa ngoài Gói bằng chứng. Trung thành ≠ đúng với thế giới; trung thành với nguồn sai vẫn sai (Chương 9).
+
+**Gold evidence (Bằng chứng vàng).** Tập chú thích 'đơn vị nào nên được truy xuất cho câu hỏi này' trong benchmark. Là chú thích của bộ dữ liệu, không phải chân lý siêu hình (Chương 9).
+
+**Governance-aware retrieval (Truy xuất theo quản trị).** Lọc/ưu tiên theo trạng thái quản trị của claim theo intent: sản xuất ưu tiên Accepted, nghiên cứu/lịch sử gồm Contested/Superseded. Accepted ≠ đúng, Rejected ≠ sai (Chương 9).
+
+**Graph-first / Text-first (Đồ thị trước / Văn bản trước).** Hai hướng truy xuất: từ đồ thị ra văn bản (graph-first) hay từ văn bản vào đồ thị (text-first). Chọn theo intent; không có bên nào luôn thắng (Chương 9).
+
+**GraphRAG.** Họ kiến trúc retrieval-augmented generation dùng cấu trúc đồ thị tường minh khi truy xuất/lắp ráp ngữ cảnh. Không phải một thuật toán chuẩn duy nhất; Microsoft GraphRAG là một hiện thực. Không đảm bảo trả lời tốt hơn hay loại bỏ hallucination (Chương 9).
+
+**Graph serialization (Tuần tự hóa đồ thị).** Chuyển cấu trúc đồ thị thành dạng LLM đọc được: triple, bảng, JSON, lời văn gọn, thẻ bằng chứng. Không dạng nào mất mát bằng không; lời văn dễ bị nhầm thành suy luận của mô hình (Chương 9).
+
+**Grounded answer (Câu trả lời có căn cứ).** Câu trả lời được hỗ trợ bởi các nguồn mà hệ thống đã xác định (AIS). Có căn cứ ≠ đúng — nguồn có thể sai, lỗi thời, diễn giải sai (Chương 9).
+
+**Hybrid retrieval (Truy xuất lai).** Kết hợp lexical + dense + ràng buộc/đồ thị rồi gộp danh sách (ví dụ RRF). Làm giảm rủi ro bỏ sót, không làm tăng độ đúng nội dung (Chương 9).
+
+**Hypothesis-testing retrieval (Truy xuất kiểm định giả thuyết).** Truy xuất cho giả thuyết cơ chế ứng viên: lấy cả bằng chứng ủng hộ lẫn thách thức (âm tính khó, phản ví dụ, định nghĩa ranh giới). Không-thấy-thách-thức ≠ giả thuyết được chấp nhận (Chương 9).
+
+**Index (Chỉ mục truy xuất).** Cấu trúc truy cập dẫn xuất từ KG để tìm nhanh (chuỗi token hóa, vector nhúng, nhãn, lân cận). Không phải KG, không phải Sổ cái; có thể tụt hậu so với trạng thái hiện tại (Chương 9).
+
+**KGQA (Knowledge Graph Question Answering / Hỏi đáp đồ thị tri thức).** Trả lời bằng truy vấn/suy luận cấu trúc trên đồ thị (SPARQL/path) sau bước entity linking + relation linking. Khác với RAG (sinh từ đoạn văn) và GraphRAG (đồ thị dẫn dắt truy xuất) (Chương 9).
+
+**k-hop neighborhood (Vùng lân cận k-chặng).** Mọi nút/cạnh trong bán kính k của nút neo. Đa số là nhiễu với một câu hỏi cụ thể; trong-k-chặng ≠ liên quan, ngoài-k-chặng ≠ không liên quan (Chương 9).
+
+**Lexical retrieval (Truy xuất từ vựng).** Khớp từ chính xác giữa câu hỏi và tài liệu với trọng số (BM25). Giỏi thuật ngữ chính xác, dốt đồng nghĩa/paraphrase không có từ chung (Chương 9).
+
+**Lost in the Middle.** Hiệu ứng thực nghiệm: mô hình ngôn ngữ dùng thông tin ở đầu/cuối cửa sổ ngữ cảnh đáng tin cậy hơn thông tin ở giữa. Hệ quả kỹ thuật: thứ tự lắp ráp ngữ cảnh ảnh hưởng chất lượng trả lời (Chương 9).
+
+**Multi-hop retrieval (Truy xuất đa chặng).** Bước theo cạnh qua nhiều hop để nối các thực thể trong câu hỏi. Đường đi thể hiện sự kết nối cấu trúc, không phải chứng minh (Chương 9).
+
+**nDCG (Normalized Discounted Cumulative Gain).** Độ đo chất lượng xếp hạng với độ liên quan bậc thang, chiết khấu theo vị trí log, chuẩn hóa bằng thứ tự lý tưởng. Đo chất lượng xếp hạng, không phải độ đúng hay độ tin cậy (Chương 9).
+
+**Path bound (Giới hạn đường đi).** Độ sâu tối đa, loại cạnh, chiều, kiểu nút, nhánh tối đa của phép duyệt. Là ranh giới tri thức luận ngầm: ngoài giới hạn là không được nhìn thấy (Chương 9).
+
+**Path explosion (Bùng nổ đường đi).** Số đường đi giữa các nút tăng theo cấp số nhân khi đồ thị lớn. Cần giới hạn cấu trúc và ưu tiên đường quyết định (Chương 9).
+
+**Precision (Độ chính xác).** Trong số đơn vị đã truy xuất, bao nhiêu là liên quan: |R∩A|/|A|. Đo chất lượng truy xuất, không phải độ đúng của câu trả lời (Chương 9).
+
+**Precision@K / Recall@K.** Độ đo theo cutoff: P@K = liên quan trong top-K / K; R@K = liên quan trong top-K / tổng liên quan. P@K cao + R@K thấp = hệ thống đẹp bề ngoài nhưng giấu bằng chứng (Chương 9).
+
+**Provenance-aware retrieval (Truy xuất nguồn gốc).** Lấy chuỗi Claim→Evidence→SourceFragment→SourceArtifact và các đánh giá/quản trị để trả lời 'vì sao hệ thống tin X'. Sự tồn tại chuỗi là dữ kiện, không phải bằng chứng đúng (Chương 9).
+
+**Query decomposition (Phân rã câu hỏi).** Tách câu hỏi phức thành câu con + đồ thị phụ thuộc. Là một kế hoạch, không phải phép tính chân lý; câu con đúng không tự cộng thành câu trả lời đúng (Chương 9).
+
+**Query drift (Trôi câu hỏi).** Lỗi tích lũy của truy xuất lặp: mỗi lượt subquery lệch thêm khỏi intent gốc. Phải giữ bản ghi intent gốc và provenance của từng subquery (Chương 9).
+
+**Query embedding (Vector câu hỏi).** Biểu diễn học được của câu hỏi dùng để truy xuất. Vector ≠ ý nghĩa; hai phiên bản encoder cho hai thứ hạng khác nhau (Chương 9).
+
+**Query intent (Ý định truy vấn).** Nhãn có cấu trúc của điều câu hỏi muốn: factual, structural, comparative, explanatory, provenance, temporal, contradiction, discovery, multi-hop. Quyết định nguồn truy xuất và loại bằng chứng (Chương 9).
+
+**Query planning (Lập kế hoạch truy vấn).** Chọn và sắp thứ tự các phép truy xuất theo intent. Planner có thể là quy tắc, LLM, hay lai — LLM không bắt buộc; kế hoạch không phải chân lý (Chương 9).
+
+**Query Execution Router (Bộ điều hướng truy vấn).** Khái niệm BOOK-DEFINED: thành phần quyết định đường thực thi từ câu hỏi đã hiểu — KGQA, suy luận tượng trưng, Text RAG, GraphRAG/hybrid, ledger — rồi đóng Evidence Packet cho tầng sinh. Đường chính xác nhất đủ trả lời thắng (Chương 9).
+
+**RAG (Retrieval-Augmented Generation / Sinh có truy xuất).** Kiến trúc kết hợp bộ nhớ tham số (mô hình) với bộ nhớ phi tham số (chỉ mục vector/đoạn văn): truy xuất top-k rồi sinh câu trả lời [Lewis et al. 2020]. RAG ≠ suy luận logic (Chương 9).
+
+**Rank fusion (Hợp hạng).** Gộp nhiều danh sách xếp hạng thành một. RRF dùng hạng (1/(k+rank_i)) nên bền với các thang điểm khác nhau. Điểm hợp là tiện ích truy xuất, không phải độ tin cậy (Chương 9).
+
+**Recall (Độ bao phủ).** Trong số đơn vị đáng lấy, đã lấy được bao nhiêu: |R∩A|/|R|. Câu hỏi giải thích/mâu thuẫn cần recall cao; recall=1 không có nghĩa câu trả lời đúng (Chương 9).
+
+**Reranking (Tái xếp hạng).** Hai giai đoạn: tầng một rộng/rẻ lấy túi ứng viên, tầng hai chấm từng cặp (question, candidate) cho sắc. Không cứu được recall của tầng một (Chương 9).
+
+**Retrieval plan (Kế hoạch truy xuất).** Bộ có thứ tự các phép truy xuất với giới hạn và điều kiện dừng, sinh từ intent + thực thể + phân rã. Kế hoạch chạy xong ≠ đã lấy đủ bằng chứng (Chương 9).
+
+**Retrieval provenance (Provenance truy xuất).** Ghi lại câu hỏi, diễn giải, retriever và phiên bản, index snapshot, bộ lọc, top_k, điểm số, re-ranker, thời gian — đủ để tái hiện. Không chứng minh tính đúng (Chương 9).
+
+**Retrieval unit (Đơn vị truy xuất).** Loại đối tượng một bước truy xuất trả về: thực thể, triple, claim, evidence, đoạn nguồn, đường đi, đồ thị con, tóm tắt, câu trả lời chuẩn. Loại đơn vị quyết định recall/precision và khả năng vết nguồn (Chương 9).
+
+**RRF (Reciprocal Rank Fusion).** Hàm hợp hạng: RRF(d) = Σ 1/(k + rank_i(d)), k≈60. Chỉ dùng hạng, không dùng điểm thô; bền với các thang không so sánh được (Chương 9).
+
+**Score semantics (Ngữ nghĩa điểm số).** Mọi điểm trong đường ống truy xuất (BM25, cosine, re-ranker, khoảng cách đồ thị, độ ưu tiên luật) đều là tín hiệu xếp hạng — không tín hiệu nào là xác suất đúng của câu trả lời (Chương 9).
+
+**Stopping condition (Điều kiện dừng).** Chính sách kết thúc truy xuất lặp: đủ ô bằng chứng, không có thông tin mới, dưới ngưỡng liên quan, hết ngân sách, mâu thuẫn cần con người. Dừng-tìm ≠ đầy đủ (Chương 9).
+
+**Subgraph retrieval (Truy xuất đồ thị con).** Chọn một đồ thị con gắn kết (ứng dụng, cơ chế, vai trò, claim, đoạn nguồn) làm ngữ cảnh. 'Đủ tối thiểu' là theo chính sách, không phải cực tiểu toán học (Chương 9).
+
+**Symbolic graph retrieval (Truy xuất đồ thị tượng trưng).** Truy vấn chính xác (SPARQL) khi lược đồ, thực thể, quan hệ đã biết. Chính xác theo nghĩa khớp mẫu; không xử lý paraphrase chưa có mapping; phản ánh đồ thị, không phản ánh thế giới (Chương 9).
+
+**Temporal retrieval (Truy xuất thời gian).** Truy xuất theo nhiều đồng hồ độc lập: valid time, publication/assertion time, transaction/system time. 'Năm 2020' có nghĩa khác nhau theo từng đồng hồ; không trộn lẫn (Chương 9).
+
+**top_k (Giới hạn kết quả).** Ngưỡng cắt danh sách xếp hạng truy xuất. Là ranh giới tri thức luận: mô hình không suy luận trên bằng chứng ngoài top_k; 'không trong top_k' ≠ không liên quan/không tồn tại (Chương 9).
+
+**Unknown vs Not Found (Không biết vs Không tìm thấy).** Chuỗi phân biệt: không truy xuất được ≠ không có trong index ≠ không có trong KG ≠ đã biết sai ≠ chưa biết. Lỗi truy xuất ≠ thiếu tri thức (Chương 9).

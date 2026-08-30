@@ -825,7 +825,7 @@ Một câu hỏi kiến trúc quan trọng: khi bắt đầu truy xuất, nên *
 
 Trong GraphRAG, hai chế độ truy vấn chính phản ánh đúng hai hướng này: **Local Search**
 khởi đầu từ thực thể (graph-first) cho câu hỏi về thực thể; **Global Search** khởi đầu
-từ tóm tắt cộng đồng cho câu hỏi toàn cục [@edge-graphrag-2024] [@microsoft-graphrag].
+từ tóm tắt cộng đồng cho câu hỏi toàn cục [@edge-graphrag-2024] [@microsoft-graphrag-docs].
 
 **Nguyên tắc trung thực:** không có bên nào luôn thắng. Câu hỏi cơ chế trong hệ tri thức
 của chúng ta thường *thiên graph-first* (schema đã biết); câu hỏi định nghĩa mở từ nguồn
@@ -1145,7 +1145,7 @@ Kỹ thuật 3 là nơi nguy hiểm nhất:
 
 Đây cũng là nguyên tắc vận hành của tóm tắt cộng đồng trong GraphRAG (§9.56): chúng là
 sản phẩm LLM có provenance, là đầu vào ứng viên — không phải tri thức chuẩn
-[@edge-graphrag-2024] [@microsoft-graphrag].
+[@edge-graphrag-2024] [@microsoft-graphrag-docs].
 
 **MUST NOT suy ra:**
 - Không được khẳng định tóm tắt tương đương nguồn.
@@ -1606,7 +1606,7 @@ TextUnits → LLM trích thực thể/quan hệ/claim
 ```
 
 Tài liệu chính thức của Microsoft mô tả một hiện thực hiện công khai (MIT license) với
-các chế độ search: Global, Local, DRIFT, Basic [@microsoft-graphrag]. Điều quan trọng cho
+các chế độ search: Global, Local, DRIFT, Basic [@microsoft-graphrag-docs]. Điều quan trọng cho
 ngữ nghĩa của cuốn sách:
 
 > **Microsoft GraphRAG là MỘT hiện thực của họ GraphRAG — không phải định nghĩa của
@@ -1709,7 +1709,7 @@ Ba đối sách (BOOK-DEFINED):
 
 Khi đồ thị lớn, một chiến lược cho câu hỏi toàn cục là **phân cụm rồi tóm tắt theo cấp**:
 phát hiện cộng đồng (trong GraphRAG gốc dùng Leiden) và sinh tóm tắt từ dưới lên cho từng
-cộng đồng [@edge-graphrag-2024] [@microsoft-graphrag]. Truy xuất global sau đó map-reduce
+cộng đồng [@edge-graphrag-2024] [@microsoft-graphrag-docs]. Truy xuất global sau đó map-reduce
 trên các tóm tắt này để trả lời câu hỏi về toàn cục.
 
 Ba rủi ro phải quản lý:
@@ -2454,7 +2454,7 @@ kiểm soát.**
 - Dense Passage Retrieval for Open-Domain Question Answering (Karpukhin et al., EMNLP
   2020) [@karpukhin-dpr-2020]
 - From Local to Global: A Graph RAG Approach (Edge et al., 2024) [@edge-graphrag-2024]
-- Microsoft GraphRAG Documentation [@microsoft-graphrag]
+- Microsoft GraphRAG Documentation [@microsoft-graphrag-docs]
 - The Probabilistic Relevance Framework: BM25 and Beyond (Robertson & Zaragoza, 2009)
   [@robertson-bm25-2009]
 - Introduction to Information Retrieval (Manning, Raghavan & Schutze, 2008)
