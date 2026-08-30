@@ -401,11 +401,11 @@ Q01–Q15: **ALL YES** (see MASTER ACCEPTANCE TABLE Q01–Q15 rows for evidence)
 
 ## FINAL REPORT
 
-**Issue:** #91 (Priority E: Final independent re-verification)
-**Branch:** main (audit document committed post-closure)
-**PR:** — (closure work already merged at 74e31ae; this document is a post-hoc deliverable committed to the Ch7 branch)
-**Commit:** (pending — see Remaining)
-**Validation:** 73 passed, 0 skipped; PDF 173pp, 0 errors, 0 citation errors; 195/195 criteria PASS
+**Issue:** #91 (Priority E: Final independent re-verification — tracked as task; no separate GitHub issue created for this documentation deliverable)
+**Branch:** main
+**PR:** — (closure work already merged at 74e31ae; this document is a post-hoc closure deliverable committed directly to main per established closure pattern)
+**Commit:** 2caf287 (docs audit, main)
+**Validation:** 73 passed, 0 skipped; PDF 173pp, 0 LaTeX errors, 0 citation errors; 195/195 criteria PASS
 **Merge:** Closure already merged at 74e31ae (main)
 **Release:** v0.5.0 (depth-remediation baseline) — stable book milestone release pending Ch7 acceptance
 **Remaining:** 3 MINOR items (✅ glyph, pre-existing ruff, uncited bib entries); none block Chapter 7
