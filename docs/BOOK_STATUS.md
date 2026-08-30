@@ -4,7 +4,7 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-08-30 (Chapter 7 accepted)
+Last updated: 2026-08-30 (Chapter 8 drafted)
 
 ## Front matter
 
@@ -26,7 +26,7 @@ Last updated: 2026-08-30 (Chapter 7 accepted)
 | 5 — Deduction, Rules, and Validation | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 6 — Claims, Evidence, Provenance, Time, Contradiction | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 7 — Knowledge Acquisition and Integration | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
-| 8 — Inductive Knowledge and Learning from Graphs | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
+| 8 — Inductive Knowledge and Learning from Graphs | ✅ | ✅ | ✅ | 🔲 | ✅ | DRAFTED |
 | 9 — Retrieval, Question Answering, and GraphRAG | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 | 10 — Building a Living Knowledge System | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 
@@ -55,7 +55,10 @@ Last updated: 2026-08-30 (Chapter 7 accepted)
   and `docs/CHAPTER07_DEPTH_REVIEW.md`. Semantic review 45/45 PASS; depth review PASS;
   capability test Q1–Q38 ALL = YES; PDF verified (214 print pages, Ch7 = physical
   pages 170–206).
-- Chapter 8 is NOT_STARTED; per `next_prompt.md`, do not begin it until explicitly requested.
+- Chapter 8 is DRAFTED (2026-08-30): research notes + source registration + semantic
+  contracts + manuscript `book/chapter08.md` + 8 TikZ figures complete; semantic review,
+  editorial review, PDF verification, and acceptance pending in the Chapter 8 checkpoint
+  workflow.
 - Chapters 5–10 are written sequentially after the Ch4 checkpoint, following the
   book-first workflow in `docs/BOOK_V0_1_MILESTONE.md`.
 - Deferred lab work is tracked in `docs/LAB_BACKLOG.md` and does not block acceptance.

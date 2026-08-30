@@ -1,0 +1,44 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{shapes.geometric,shapes.misc,positioning,fit,backgrounds,arrows.meta,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  stage/.style={rounded rectangle, draw, align=center, minimum width=5.2cm, minimum height=1.1cm, font=\small},
+  arrow/.style={-{Stealth[length=2.5mm]}, very thick},
+  label/.style={font=\scriptsize\itshape, text=gray!60!black},
+]
+
+% === Layer 1: ML candidates ===
+\node[stage, fill=blue!8, text width=7.2cm] (ml) at (0, 3.8)
+  {Tầng 1 — ML sinh ứng viên\\[-2pt]\scriptsize KGE / GNN / rule mining $\rightarrow$ bộ ba, quy tắc, giả thuyết};
+\node[label, below=0.05cm of ml.south] {điểm số (ModelAssessment)};
+
+% === Layer 2: symbolic filter ===
+\node[stage, fill=green!8, text width=7.2cm, below=1.4cm of ml]
+  (sym) {Tầng 2 — Tượng trưng lọc\\[-2pt]\scriptsize kiểu / ontology (Ch4) · cổng SHACL (Ch5, Ch7) · SPARQL};
+
+% === Layer 3: epistemic + governance ===
+\node[stage, fill=orange!8, text width=7.2cm, below=1.4cm of sym]
+  (epi) {Tầng 3 — Tri thức luận + quản trị\\[-2pt]\scriptsize bằng chứng, đánh giá, xung đột (Ch6) · quyết định (Ch6–7)};
+
+% === Ledger ===
+\node[stage, fill=red!8, text width=7.2cm, below=1.4cm of epi]
+  (ledger) {Claim Ledger → Chiếu hình\\[-2pt]\scriptsize (Canonical View)};
+
+\draw[arrow] (ml) -- (sym);
+\draw[arrow] (sym) -- (epi);
+\draw[arrow] (epi) -- (ledger);
+
+% === Feedback: rejected / review back to ML ===
+\draw[arrow, dashed, gray!60] (epi.west) -- ++(-2.4,0) node[label, left, align=center] {reject / review\\return} |- (ml.west);
+
+% === Annotation ===
+\node[label, align=center, text width=6.4cm, right=1.1cm of sym.south east, anchor=south west]
+  {Kiến trúc do sách xây dựng\\ (BOOK-DEFINED).\\ Không tầng nào chứng minh\\ chân lý; một mình quản trị\\ quyết định.};
+
+\end{tikzpicture}
+\end{document}

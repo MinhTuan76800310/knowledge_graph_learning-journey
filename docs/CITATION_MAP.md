@@ -52,6 +52,20 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | SM-01 | `rahm-bernstein-2001` | A Survey of Approaches to Automatic Schema Matching |
 | DI-01 | `lenzerini-2002` | Data Integration: A Theoretical Perspective |
 | HOGAN-CREATE-01 | `hogan-creation-enrichment` | Knowledge Graphs (Hogan et al.), Creation and Enrichment |
+| HOGAN-IND-01 | `hogan-inductive` | Knowledge Graphs (Hogan et al.), Inductive Knowledge |
+| TRANSE-01 | `bordes-transe-2013` | Translating Embeddings for Modeling Multi-relational Data (TransE) |
+| DISTMULT-01 | `yang-distmult-2015` | Embedding Entities and Relations for Learning and Inference in Knowledge Bases (DistMult) |
+| COMPLEX-01 | `trouillon-complex-2016` | Complex Embeddings for Simple Link Prediction (ComplEx) |
+| RGCN-01 | `schlichtkrull-rgcn-2018` | Modeling Relational Data with Graph Convolutional Networks (R-GCN) |
+| AMIE-01 | `galarraga-amie-2015` | Fast Rule Mining in Ontological Knowledge Bases with AMIE+ |
+| GRAIL-01 | `teru-grail-2020` | Inductive Relation Prediction by Subgraph Reasoning (GraIL) |
+| NICKEL-01 | `nickel-relational-ml-2016` | A Review of Relational Machine Learning for Knowledge Graphs |
+| NEGSAMP-01 | `mikolov-negativesampling-2013` | Distributed Representations of Words and Phrases and their Compositionality |
+| OVERSMOOTH-01 | `li-oversmoothing-2018` | Deeper Insights into Graph Convolutional Networks for Semi-Supervised Learning |
+| SHORTCUT-01 | `geirhos-shortcut-2020` | Shortcut Learning in Deep Neural Networks |
+| CALIB-01 | `guo-calibration-2017` | On Calibration of Modern Neural Networks |
+| COLLAPSE-01 | `shumailov-collapse-2024` | AI models collapse when trained on recursively generated data |
+| GRLBOOK-01 | `hamilton-grl-2020` | Graph Representation Learning (Hamilton) |
 
 ## Rules
 

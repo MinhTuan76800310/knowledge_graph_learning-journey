@@ -1031,3 +1031,361 @@ concepts:
     explanation_level: mechanism
     incidental_gloss: false
     notes: "I1–I7: provenance, version stamp, hash uniqueness, validation accompanies, no overwrite, idempotency, recorded rationale"
+  # === Chapter 8 concepts ===
+  induction:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Generalizing patterns from observations; fallible; distinct from deduction"
+  deduction_vs_induction:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Central distinction chain: prediction != entailment"
+  abduction:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: intuition
+    incidental_gloss: false
+    notes: "Inference to best explanation; taught to prevent terminology confusion"
+  prediction:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Score-based model output; prediction != entailment"
+  statistical_knowledge:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: intuition
+    incidental_gloss: false
+    notes: "Learned representations/scores vs symbolic explicit structures"
+  feature_representation:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: intuition
+    incidental_gloss: false
+    notes: "Hand-chosen encodings; model sees only chosen representation"
+  representation_learning:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Learning vector representations from data; entity != embedding"
+  knowledge_graph_embedding:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "E,R embeddings + scoring function; higher score = more plausible not true"
+  scoring_function:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "f(h,r,t) real-valued plausibility"
+  transe:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "h + r ~= t; translation geometry; 1-to-N limitations"
+  bilinear_model:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "DistMult: <h,r,t> symmetric limitation"
+  complex_embedding:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "ComplEx: Hermitian dot product handles antisymmetry"
+  inductive_bias:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: intuition
+    incidental_gloss: false
+    notes: "Design-family structural assumptions about what patterns matter"
+  negative_sampling:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Training-time corruption device; OWA: absence != falsity"
+  false_negative:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "True triples used as negatives because KG incomplete; distorts boundary"
+  link_prediction:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Ranking candidate triples; top rank != truth"
+  mrr:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Mean reciprocal rank; position metric only"
+  hits_at_k:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: intuition
+    incidental_gloss: false
+    notes: "Fraction of correct answers in top-K"
+  filtered_evaluation:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Removes known positives before ranking; not truth measurement"
+  data_leakage:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Test info reaching training; duplicate/inverse/path/entity/temporal/source"
+  temporal_leakage:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Future in train, past in test; temporal split not a panacea"
+  source_leakage:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Same source in train+test overestimates cross-source generalization"
+  transductive_learning:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Known entities at training; standard KGE is transductive"
+  inductive_graph_learning:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Generalizing to unseen entities/subgraphs (GraIL framing)"
+  oov_entity:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Unseen entity without trained embedding"
+  message_passing:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Generic MESSAGE/AGGREGATE/UPDATE framework, not one algorithm"
+  gnn:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Neural models computing along graph structure"
+  rgcn:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Relation-specific transformations; encoder+decoder for link prediction"
+  oversmoothing:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Deep GNN layers: representations converge (Laplacian smoothing)"
+  subgraph_representation:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Pooling/readout of node representations; node rep != subgraph rep"
+  structural_similarity:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Multi-dimensional evidence; similarity != identity"
+  cosine_similarity:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "cos(a,b) = (a.b)/(||a||.||b||); directional agreement only"
+  mechanism_hypothesis:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "CandidateMechanismHypothesis: BOOK-DEFINED candidate claim about common abstract mechanism"
+  invariant_structure:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Structure hypothesis retains across applications vs incidental domain detail"
+  rule_induction:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "AMIE+ path rules under OWA; learned rule is hypothesis"
+  rule_mining_confidence:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "PCA confidence = frequency assumption; terminology collision with Ch6 epistemic confidence"
+  hybrid_pipeline:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "BOOK-DEFINED: ML candidates -> symbolic filter -> epistemic -> governance"
+  cross_domain_generalization:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Mechanism recognition in new domain despite different vocabulary"
+  spurious_correlation:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Shortcut learning; benchmark score can coexist with wrong mechanism understanding"
+  hard_negative:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Negative near decision boundary forces meaningful boundary"
+  clustering:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: intuition
+    incidental_gloss: false
+    notes: "Exploratory grouping; cluster != ontology class"
+  classification:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Supervised labeling; output is candidate claim not type assertion"
+  calibration:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Predicted probabilities vs observed correctness; modern nets overconfident"
+  model_assessment:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "BOOK-DEFINED object wrapping score semantics/model/dataset; no anonymous numbers"
+  training_provenance:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "wasGeneratedBy TrainingOrInferenceActivity; provenance != evidence"
+  self_reinforcing_feedback:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Predictions re-entering training data; distinguishes source vs model-generated candidates"
+  model_collapse:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: intuition
+    incidental_gloss: false
+    notes: "Recursively generated data: distribution tails disappear (Shumailov)"
+  candidate_axiom:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Model-proposed axiom pending semantics/consistency/governance; blast radius"
+  blast_radius:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Set of conclusions affected if axiom wrong; mandatory evaluation for candidate axioms"
+  ontology_evolution:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Candidate ontology refinement from inductive evidence; governance decision"
+  training_data_as_evidence:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Training lineage is provenance, not direct evidence; echo/duplicate sources"

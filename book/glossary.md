@@ -3,6 +3,9 @@
 Các thuật ngữ được sắp theo bảng chữ cái của tên tiếng Anh. Mỗi mục gồm tên tiếng Anh,
 tên/giải thích tiếng Việt, và định nghĩa ngắn dùng trong cuốn sách.
 
+
+**Abduction (Giả định — lựa chọn giải thích tốt nhất).** Suy luận chọn giả thuyết giải thích tốt nhất cho một quan sát. Khác với quy nạp (tổng quát hóa từ nhiều ví dụ) và suy diễn (hệ quả tất yếu). Chương 8 dạy để tránh nhầm lẫn với quy nạp.
+
 **Alias (Bí danh).** Một tên khác cùng biểu thị một thực thể. Khác với định danh chính
 tắc, alias không được hệ thống chọn làm tên quy chiếu duy nhất.
 
@@ -17,6 +20,12 @@ Khác với chú thích (annotation): tiên đề tạo ra suy diễn, chú thí
 không được đặt tên bằng IRI. Nhãn của blank node chỉ có phạm vi cục bộ trong một tài liệu;
 ngữ nghĩa trực giác là "tồn tại một tài nguyên nào đó…".
 
+**Calibration (Hiệu chuẩn).** Mức độ khớp giữa xác suất dự đoán và tần suất đúng thực tế. Mạng nơ-ron hiện đại thường tự tin quá mức (overconfident); temperature scaling cải thiện calibration.
+
+**CandidateAxiom (Tiên đề ứng viên).** Tiên đề do mô hình học quy nạp đề xuất, chưa được đưa vào ontology. Phải qua đánh giá blast radius, kiểm tra nhất quán, và quản trị trước khi chấp nhận.
+
+**CandidateMechanismHypothesis (Giả thuyết cơ chế ứng viên).** Giả thuyết cho rằng nhiều ứng dụng có thể cùng một cơ chế trừu tượng. Mang bằng chứng cấu trúc, hỗ trợ nguồn, bất định, giả thuyết cạnh tranh, và provenance. Là tri thức ứng viên, chưa được chấp nhận.
+
 **Canonical identifier (Định danh chính tắc).** Định danh duy nhất được một hệ thống chọn
 làm tên quy chiếu của một thực thể; các tên khác được giữ như alias.
 
@@ -28,13 +37,29 @@ Mỗi biểu thức có ngữ nghĩa tập hợp chính xác trong diễn giải
 quy tắc có head khớp, tạo subgoal từ body, đệ quy cho đến khi đạt assertion. Ngược hướng với
 forward chaining (data-driven). Phù hợp khi ít truy vấn trên đồ thị lớn.
 
+**Classification (Phân lớp).** Bài toán gán nhãn ứng viên cho một thực thể/ứng dụng dựa trên mô hình học. Đầu ra là xác suất ứng viên, không phải khẳng định kiểu; phải qua quản trị trước khi ghi vào đồ thị.
+
+**Clustering (Phân cụm).** Gom nhóm khám phá dựa trên biểu diễn/đặc trưng, không có nhãn. Cụm không phải lớp ontology. Phân cụm chỉ gợi ý giả thuyết cơ chế, không phải khẳng định.
+
 **Completeness (Tính đầy đủ).** Tính chất của thủ tục suy diễn: mọi hệ quả logic thực sự đều
 được sinh ra ($E \subseteq A$). Không có âm tính giả. Phải ghi rõ ngôn ngữ/hồ sơ + chế độ suy
 diễn + tác vụ suy luận. OWL RL forward chaining không complete cho OWL 2 DL đầy đủ trên đồ
 thị RDF tùy ý; complete dưới các điều kiện syntactic cụ thể (Theorem PR1).
 
+**ComplEx (Nhúng phức).** Mô hình KGE dùng số phức và tích Hermitian: f(h,r,t) = Re(⟨h, r, t̄⟩). Cho phép mô hình hóa cả quan hệ đối xứng và bất đối xứng.
+
 **Conformance (Sự phù hợp).** Dữ liệu thỏa mãn các shapes SHACL đã định nghĩa. Phù hợp không
 có nghĩa dữ liệu đúng với thực tế; vi phạm không có nghĩa dữ liệu sai.
+
+**Cosine similarity (Độ tương tự cosine).** cos(a,b) = (a·b)/(‖a‖·‖b‖), giá trị trong [−1,1]. Đo góc giữa hai vector. Cosine cao là bằng chứng gợi ý, không phải đồng nhất ngữ nghĩa.
+
+**Cross-domain generalization (Tổng quát hóa chéo miền).** Khả năng mô hình nhận ra cơ chế trong một miền mới dù từ vựng bề mặt khác hẳn. Được kiểm tra bằng thử nghiệm: huấn luyện trên miền A, kiểm tra trên miền B.
+
+**Data leakage (Rò rỉ dữ liệu).** Thông tin từ tập kiểm lọt vào quá trình huấn luyện, làm điểm đánh giá lạc quan giả tạo. Các kiểu: trùng lặp, quan hệ nghịch đảo, đường đi, thực thể, thời gian, nguồn.
+
+**Deduction (Suy diễn).** Quy tắc chung + tiền đề → hệ quả tất yếu. Bảo toàn chân lý. Không sinh tri thức mới mà chỉ làm tường minh những gì đã ngầm chứa. Khác quy nạp (giả thuyết có thể sai).
+
+**DistMult (Mô hình song tuyến tính).** Mô hình KGE với hàm chấm điểm f(h,r,t) = ⟨h, r, t⟩ (nhân từng phần tử). Đối xứng: không thể phân biệt (h,r,t) và (t,r,h).
 
 **Effective Validation Graph (Đồ thị xác nhận hiệu lực).** Đồ thị thực sự được SHACL validator
 xem xét. Có thể là asserted graph, expanded graph (sau materialization), hoặc hybrid. Là
@@ -44,6 +69,10 @@ quyết định kiến trúc, phải được document rõ trong hệ thống pr
 logic. Cùng đồ thị, regime khác nhau cho kết quả khác nhau (Simple, RDFS, OWL RL, OWL
 Direct, OWL RDF-Based). Mọi khẳng định về soundness/completeness phải ghi rõ regime. Trong
 SPARQL, regime được chỉ định qua Service Description, không phải FROM clause.
+
+**False negative (Âm tính giả).** Bộ ba thực sự đúng nhưng bị dùng làm mẫu âm trong huấn luyện vì đồ thị chưa đầy đủ (OWA). Làm méo ranh giới học được.
+
+**Filtered evaluation (Đánh giá đã lọc).** Trước khi xếp hạng, loại bỏ các bộ ba đúng đã biết khỏi danh sách ứng viên. Cải tiến kỹ thuật, không phải đo lường chân lý tuyệt đối.
 
 **Fixpoint (Điểm bất động).** Trạng thái $G_{n+1} = G_n$ trong forward chaining: vòng lặp
 không sinh triple mới, bao đóng đã ổn định. Là điều kiện dừng của thuật toán.
@@ -56,24 +85,72 @@ $G_{i+1} = G_i \cup \{ \theta(\text{head}(r)) \mid r \in R, \; \theta(\text{body
 dừng khi đạt điểm bất động (fixpoint) $G_{n+1} = G_n$. Đảm bảo dừng khi thỏa mãn các điều
 kiện: đồ thị hữu hạn, quy tắc hữu hạn, function-free, safe variables.
 
+**GNN (Graph Neural Network / Mạng nơ-ron đồ thị).** Họ mô hình tính theo cấu trúc đồ thị: biểu diễn nút được tính từ lân cận qua truyền thông điệp. Một khung khái niệm, không phải một thuật toán duy nhất.
+
 **Graph Repair (Sửa chữa đồ thị).** Quá trình biến đổi đồ thị để đạt SHACL conformance. Là
 bài toán quyết định (decision problem), không phải vá lỗi cú pháp: nhiều candidate repairs
 có thể tồn tại, chỉ domain knowledge/governance mới chọn được repair đúng về mặt tri thức.
 Passes validation ≠ becomes true.
+
+**Hard negative (Âm tính khó).** Mẫu âm nằm gần ranh giới lớp, buộc mô hình học biên phân biệt có ý nghĩa (ví dụ: FiniteDifference gần RateOfChange). Khác với âm tính dễ ở xa ranh giới.
+
+**Hits@K.** Tỉ lệ các câu trả lời đúng nằm trong top K ứng viên. Không phân biệt giữa hạng 1 và hạng K.
+
+**Induction / Quy nạp (induction).** Tổng quát hóa mẫu từ các quan sát, sinh ra giả thuyết có thể sai. Không phải suy diễn (bảo toàn chân lý). Tri thức quy nạp bao gồm cả mô hình mã hóa mẫu lẫn dự đoán của mô hình.
+
+**Inductive bias (Thiên kiến quy nạp).** Tập giả định cấu trúc của một họ mô hình về mẫu nào đáng học. Ví dụ: TransE (h+r≈t), DistMult (đối xứng), ComplEx (Hermitian).
+
+**Inductive KG learning (Học quy nạp trên đồ thị).** Mô hình tổng quát hóa tới các thực thể/subgraph chưa từng thấy trong huấn luyện. Khác học chuyển dẫn (chỉ dự đoán giữa thực thể đã biết).
+
+**Invariant structure (Cấu trúc bất biến).** Phần cấu trúc được giữ lại khi trừu tượng hóa một cơ chế từ nhiều ứng dụng. Phần chi tiết miền bị bỏ đi gọi là cấu trúc ngẫu nhiên (incidental).
+
+**Knowledge Graph Embedding (KGE / Nhúng đồ thị tri thức).** Học vector thực thể và quan hệ + hàm chấm điểm f(h,r,t). Điểm cao = hợp lý hơn, không phải đúng. Gồm các mô hình: TransE, DistMult, ComplEx.
+
+**Link prediction (Dự đoán liên kết).** Với đồ thị quan sát được một phần, xếp hạng các bộ ba ứng viên còn thiếu. Đầu ra là danh sách có thứ tự, không phải sự thật được khẳng định.
 
 **Materialization (Vật chất hóa).** Chiến lược triển khai suy diễn bằng cách tính toán trước
 bao đóng và lưu trữ kết quả. Khác với bản thân quan hệ entailment (là khái niệm ngữ nghĩa,
 không phải thao tác tính toán). Có thể không khả thi với ontology quá biểu cảm. So sánh với
 query-time reasoning (§5.4).
 
+**Message passing (Truyền thông điệp).** Cơ chế tính toán của GNN: message → aggregate → update. Mỗi nút gửi thông điệp đến lân cận, tập hợp chúng, và cập nhật biểu diễn. Là một khung, không phải một thuật toán.
+
+**Model Assessment (Đánh giá mô hình).** Đối tượng bọc điểm số với ngữ nghĩa: target, model, task, score, score semantics, assessed-at, training dataset, evaluation context. Ngăn chặn 'con số vô danh'.
+
+**Model collapse (Sụp đổ mô hình).** Hiện tượng mô hình huấn luyện trên dữ liệu do chính mô hình sinh ra làm mất dần đa dạng tri thức, tích lũy khiếm khuyết không thể đảo ngược.
+
 **Monotonicity (Tính đơn điệu).** Tính chất của chế độ suy diễn: nếu $G \subseteq G'$ thì
 $\text{Consequences}(G) \subseteq \text{Consequences}(G')$. Thêm thông tin vào đồ thị không
 bao giờ làm mất kết luận cũ. Khác với termination, completeness, và consistency.
 
+**MRR (Mean Reciprocal Rank).** Trung bình của 1/hạng của câu trả lời đúng. MRR = 1.0 nếu luôn đứng hạng 1. Bị ảnh hưởng nhiều bởi các hạng cao.
+
+**Negative sampling (Lấy mẫu âm).** Thủ thuật huấn luyện: tạo bộ ba nhiễu bằng cách thay thế đầu/cuối của bộ ba đúng. Là giả định kỹ thuật, không phải khẳng định bộ ba đó sai. Thiếu ≠ sai (OWA).
+
+**OOV entity (Out-of-vocabulary entity / Thực thể ngoài từ vựng).** Thực thể không có vector học sẵn vì chưa xuất hiện trong huấn luyện. Cần biểu diễn từ lân cận/thuộc tính hoặc mô hình quy nạp (GNN).
+
+**Oversmoothing (Làm mịn quá mức).** Khi xếp nhiều lớp GNN, biểu diễn các nút hội tụ về nhau, mất thông tin phân biệt. Số lớp tối ưu thường nhỏ (1–3).
+
+**Path-based explanation (Giải thích theo đường đi).** Giải thích dự đoán bằng cách chỉ ra đường đi trong đồ thị dẫn tới kết luận. Tự nhiên với học quy tắc, khó với KGE/GNN.
+
+**Prediction (Dự đoán).** Đầu ra của mô hình học: gán điểm số cho một cấu trúc khả dĩ. Không phải suy dẫn (entailment). Điểm cao ≠ chân lý.
+
+**R-GCN (Relational Graph Convolutional Network).** GNN cho đồ thị đa quan hệ: mỗi loại quan hệ có ma trận biến đổi riêng. Thường dùng encoder (R-GCN) + decoder (DistMult) cho link prediction.
+
+**Representation learning (Học biểu diễn).** Học vector từ dữ liệu thay vì thiết kế đặc trưng thủ công. Vector học được không phải thực thể và không mang ngữ nghĩa hình thức.
+
 **Rule (Quy tắc).** Mệnh đề dạng Horn: head ← body₁ ∧ ... ∧ bodyₙ. Trong KG, head và body
+**Rule induction (Học quy tắc).** Học quy tắc tượng trưng từ đồ thị. AMIE+ sinh quy tắc đường đi r1(x,y) ∧ r2(y,z) → r3(x,z) dưới giả định PCA. Quy tắc học được là giả thuyết, không phải định luật logic.
+
 là mẫu triple chứa biến. Phép thế $\theta$ gán biến với giá trị cụ thể để kết nối quy tắc
 trừu tượng với dữ liệu đồ thị. Quy tắc Horn đơn điệu, đảm bảo dừng trên đồ thị hữu hạn với
 các điều kiện an toàn. Không biểu diễn được phủ định hay disjunction trong head.
+
+**Rule-mining confidence (Độ tin cậy khai phá quy tắc).** Tần suất quy tắc dưới giả định PCA (Partial Completeness Assumption). Khác với độ tin cậy tri thức luận (epistemic confidence) của Chương 6 — hai khái niệm khác nhau, cùng tên 'confidence'.
+
+**Scoring function (Hàm chấm điểm).** Hàm số f(h,r,t) gán giá trị thực cho mỗi bộ ba, đo mức độ hợp lý. Mỗi họ mô hình KGE có một hàm chấm điểm khác nhau.
+
+**Self-reinforcing feedback (Vòng phản hồi tự củng cố).** Khi dự đoán của mô hình quay lại làm dữ liệu huấn luyện, vòng phản hồi hình thành. Phân biệt tri thức do nguồn sinh ra và do mô hình sinh ra (model-generated candidate).
 
 **SHACL Instance.** Trong SHACL: quan hệ thành viên lớp bao gồm chuỗi `rdfs:subClassOf*`.
 Một nút typed CapitalCity là SHACL instance của City nếu CapitalCity rdfs:subClassOf City.
@@ -92,6 +169,12 @@ thông tin.
 quả logic thực sự. Không có dương tính giả. Phải ghi rõ ngôn ngữ/hồ sơ + chế độ suy diễn +
 tác vụ suy luận.
 
+**Source leakage (Rò rỉ nguồn).** Cùng một nguồn (ví dụ sách) xuất hiện ở cả train và test, làm quá lạc quan về khả năng tổng quát hóa. Biện pháp: chia tách theo nguồn.
+
+**Spurious correlation (Tương quan giả).** Quan hệ học được giữa dấu hiệu bề mặt và nhãn, xuất hiện trong dữ liệu huấn luyện nhưng không phải cấu trúc cơ chế. Dẫn đến học lối tắt (shortcut learning).
+
+**Structural similarity (Tương tự cấu trúc).** Đánh giá đa chiều hai cấu trúc chia sẻ mẫu vai trò, thao tác, kiểu đối số. Tương tự ≠ đồng nhất, ≠ owl:sameAs.
+
 **Substitution (Phép thế).** Ánh xạ $\theta$ gán mỗi biến trong quy tắc với một giá trị cụ thể
 (IRI, literal, blank node). Cầu nối giữa quy tắc trừu tượng và dữ liệu đồ thị: $\theta(\text{body})$
 là phần thân đã ground, $\theta(\text{head})$ là kết luận đã ground.
@@ -99,6 +182,16 @@ là phần thân đã ground, $\theta(\text{head})$ là kết luận đã ground
 **SWRL (Semantic Web Rule Language).** Mở rộng OWL bằng quy tắc Horn-clause. W3C Member
 Submission (2004), KHÔNG phải Recommendation. Kết hợp OWL DL + SWRL nói chung không quyết
 định được (undecidable).
+
+**Temporal leakage (Rò rỉ thời gian).** Dữ liệu tương lai ở train, dữ liệu quá khứ ở test — mô hình 'dự đoán' quá khứ dựa trên tương lai. Biện pháp: chia tách theo thời gian.
+
+**Train/validation/test split (Chia tách dữ liệu huấn luyện/xác nhận/kiểm tra).** Phân hoạch tập dữ liệu thành ba phần: train (học tham số), validation (chọn siêu tham số), test (đánh giá cuối). Trên đồ thị, cần tránh rò rỉ.
+
+**Training provenance (Provenance huấn luyện).** Hoạt động huấn luyện sinh ra dự đoán, ghi: phiên bản dữ liệu, phiên bản mô hình, lược đồ đặc trưng, cấu hình. Provenance ≠ bằng chứng.
+
+**Transductive learning (Học chuyển dẫn).** Mô hình học vector cho thực thể đã biết, chỉ dự đoán giữa chúng. Không tổng quát tới thực thể mới. KGE chuẩn là chuyển dẫn.
+
+**TransE.** Mô hình KGE: h + r ≈ t, mỗi quan hệ là phép tịnh tiến. Hàm chấm điểm f(h,r,t) = −‖h + r − t‖. Yếu với quan hệ 1–N, N–1, đối xứng.
 
 **Validation Report (Báo cáo xác nhận).** Kết quả SHACL validation: sh:conforms (true/false)
 và danh sách sh:ValidationResult. Mỗi result gồm focusNode, resultPath, sourceShape,
