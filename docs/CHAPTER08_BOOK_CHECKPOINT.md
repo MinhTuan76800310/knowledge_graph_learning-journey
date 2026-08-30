@@ -1,7 +1,7 @@
 # Chapter 8 Book Checkpoint
 
 **Chapter:** 8 — Inductive Knowledge and Learning from Graphs / Tri thức Quy nạp và Học từ Đồ thị
-**Status:** DRAFTED (semantic + depth review PASS; PDF + PR + merge pending)
+**Status:** ACCEPTED (2026-08-30) — merged via PR #14, commit f136ba1
 **Date:** 2026-08-30
 
 ## Acceptance criteria met
@@ -27,8 +27,8 @@
 | Tests pass | ✅ | 84 passed (11 new Ch8 integrity tests) |
 | ruff check | ✅ | 0 errors |
 | ruff format --check | ✅ | clean |
-| PDF build | 🔲 | pending in task #12 |
-| PR / merge | 🔲 | pending in task #12 |
+| PDF build | ✅ | 258 print pages (A4); Ch8 = pp. 209–247; 0 LaTeX errors; 0 undefined citations |
+| PR / merge | ✅ | PR #14 merged to main (squash), commit f136ba1 |
 
 ## Key design decisions
 
@@ -106,13 +106,8 @@ A representative sample (all callouts use ⚠️ in the manuscript):
 - All external claims traceable to docs/source_index.json / references.bib
 - BOOK-DEFINED terms labeled explicitly
 - Use GitHub MCP for commits so author shows as "MinhTuan76800310"
-- Chapter 8 is DRAFTED (2026-08-30) — PDF build, validation, PR, and merge pending in task #12
+- Chapter 8 ACCEPTED (2026-08-30) — PDF built and verified, PR #14 merged, commit f136ba1
 
 ## Remaining work
 
-1. Run `scripts/build_book.sh` to produce PDF
-2. Verify page count, undefined citations, LaTeX errors
-3. Run `uv run pytest`, `uv run ruff check .`, `uv run ruff format --check .`
-4. Commit checkpoint and depth review
-5. Push branch, open PR #13, validate, merge
-6. Update BOOK_STATUS.md to ACCEPTED after merge
+None — Chapter 8 is complete. Next is Chapter 9 only when a new GitHub task authorizes it.

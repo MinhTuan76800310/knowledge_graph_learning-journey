@@ -4,7 +4,7 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-08-30 (Chapter 8 drafted)
+Last updated: 2026-08-30 (Chapter 8 accepted)
 
 ## Front matter
 
@@ -26,7 +26,7 @@ Last updated: 2026-08-30 (Chapter 8 drafted)
 | 5 — Deduction, Rules, and Validation | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 6 — Claims, Evidence, Provenance, Time, Contradiction | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 7 — Knowledge Acquisition and Integration | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
-| 8 — Inductive Knowledge and Learning from Graphs | ✅ | ✅ | ✅ | 🔲 | ✅ | DRAFTED |
+| 8 — Inductive Knowledge and Learning from Graphs | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 9 — Retrieval, Question Answering, and GraphRAG | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 | 10 — Building a Living Knowledge System | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 
@@ -55,10 +55,10 @@ Last updated: 2026-08-30 (Chapter 8 drafted)
   and `docs/CHAPTER07_DEPTH_REVIEW.md`. Semantic review 45/45 PASS; depth review PASS;
   capability test Q1–Q38 ALL = YES; PDF verified (214 print pages, Ch7 = physical
   pages 170–206).
-- Chapter 8 is DRAFTED (2026-08-30): research notes + source registration + semantic
-  contracts + manuscript `book/chapter08.md` + 8 TikZ figures complete; semantic review,
-  editorial review, PDF verification, and acceptance pending in the Chapter 8 checkpoint
-  workflow.
+- Chapter 8 (ACCEPTED, 2026-08-30) is recorded in `docs/CHAPTER08_BOOK_CHECKPOINT.md`
+  and `docs/CHAPTER08_DEPTH_REVIEW.md`. Semantic review 60/60 PASS; depth review PASS;
+  capability test Q1–Q40 ALL = YES; PDF verified (258 print pages, Ch8 = pp. 209–247);
+  merged via PR #14 (commit f136ba1).
 - Chapters 5–10 are written sequentially after the Ch4 checkpoint, following the
   book-first workflow in `docs/BOOK_V0_1_MILESTONE.md`.
 - Deferred lab work is tracked in `docs/LAB_BACKLOG.md` and does not block acceptance.
