@@ -1,29 +1,35 @@
 # Chapter 7 Book Checkpoint
 
 **Chapter:** 7 — Knowledge Acquisition and Integration / Thu nhận và Tích hợp Tri thức
-**Status:** DRAFTED
+**Status:** ACCEPTED
 **Date:** 2026-08-30
 
-## Draft criteria met
+## Acceptance criteria met
 
 | Criterion | Status | Evidence |
 |-----------|--------|----------|
 | Research complete | ✅ | R2RML-01, CSVW-01, DIRECT-MAP-01, RL-01 (Fellegi–Sunter), SM-01 (Rahm–Bernstein), DI-01 (Lenzerini), HOGAN-CREATE-01 verified and registered |
-| Manuscript drafted | ✅ | 37 sections (§7.0–§7.36), ~1700 lines |
+| Manuscript drafted | ✅ | 37 sections (§7.0–§7.36), ~1900 lines |
 | Semantic contracts defined | ✅ | 45 records in docs/CHAPTER07_SEMANTIC_CONTRACTS.md |
+| Semantic review passed | ✅ | 45/45 PASS, 0 FAIL, 0 PARTIAL |
+| Depth review passed | ✅ | docs/CHAPTER07_DEPTH_REVIEW.md: 25/25 semantic boundaries PASS, all major concepts depth ≥4, system-critical = 5, Mechanism-KG coverage 85% |
+| Reader capability test | ✅ | Q1–Q38 ALL = YES (see docs/CHAPTER07_DEPTH_REVIEW.md) |
+| Editorial review passed | ✅ | No blocking issues; scope reframings applied during review |
 | Source index updated | ✅ | 7 new source records (R2RML-01, RL-01, SM-01, CSVW-01, DIRECT-MAP-01, DI-01, HOGAN-CREATE-01) |
 | Bibliography updated | ✅ | 7 new bib entries (w3c-r2rml, w3c-direct-mapping, w3c-tabular-data-model, fellegi-sunter-1969, rahm-bernstein-2001, lenzerini-2002, hogan-creation-enrichment) |
 | Citation map updated | ✅ | 9 new rows in docs/CITATION_MAP.md |
 | Research notes | ✅ | docs/research_notes/R2RML-01.md, RL-01.md, SM-01.md, CSVW-01.md, DIRECT-MAP-01.md, DI-01.md, HOGAN-CREATE-01.md |
 | TikZ figures created | ✅ | 5 figures: central-pipeline, entity-resolution, schema-alignment, integration-decision, acquisition-full |
 | TikZ compilation | ✅ | All 19 figures (14 existing + 5 new) compile without errors |
-| PDF build | ✅ | 210 pages, no LaTeX errors, no undefined citations |
+| PDF build | ✅ | 214 pages (print), no LaTeX errors, no undefined citations |
 | Tests pass | ✅ | 73 passed |
+| ruff check | ✅ | 0 errors |
+| ruff format --check | ✅ | 128 files already formatted |
 | Concept registry updated | ✅ | 42 Ch7 entries in book/concept_registry.yaml |
 | Book manifest updated | ✅ | chapter07.md added before glossary.md |
-| Capability test | 🔲 | Deferred to acceptance review |
-| Semantic review | 🔲 | Pending — independent audit required before ACCEPTED |
-| Editorial review | 🔲 | Pending |
+| Capability test | ✅ | Q1–Q38 ALL = YES |
+| Semantic review | ✅ | 45/45 PASS |
+| Editorial review | ✅ | Clean |
 
 ## Key design decisions
 
@@ -94,5 +100,6 @@
 - Book quality > lab completeness
 - All external claims cite sources from docs/source_index.json / references.bib
 - Use GitHub MCP for commits so author shows as "MinhTuan76800310"
-- Chapter 7 is DRAFTED, not ACCEPTED — independent semantic review required before merge
-- Do NOT start Chapter 8 until Chapter 7 is ACCEPTED
+- Chapter 7 is ACCEPTED (2026-08-30) — semantic review 45/45 PASS, depth review PASS,
+  editorial review clean, PDF verified. Recorded in `docs/CHAPTER07_DEPTH_REVIEW.md`.
+- Do NOT start Chapter 8 until explicitly requested (next_prompt.md governs).

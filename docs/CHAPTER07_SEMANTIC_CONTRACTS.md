@@ -470,3 +470,66 @@ academic standards; they are labeled explicitly in the manuscript.
 - **MUST NOT infer:**
   - MUST NOT say invariants guarantee truth.
   - MUST NOT say invariant-preserving systems cannot contain wrong claims.
+
+---
+
+## Review Status (2026-08-30 — acceptance review)
+
+Independent semantic review of `book/chapter07.md` against all 45 records above,
+completed 2026-08-30. Every record was checked against the manuscript wording, the
+authoritative source, and the prior-chapter semantics (Ch3 identity, Ch5 validation,
+Ch6 epistemology).
+
+**Result: 45/45 PASS, 0 PARTIAL, 0 FAIL.**
+
+| # | Contract | Verdict | Review notes |
+|---|----------|---------|--------------|
+| 1 | Acquisition vs Integration (pipeline split) | PASS | §7.2 two halves with distinct success criteria; split labeled BOOK-DEFINED |
+| 2 | Knowledge Acquisition | PASS | §7.2 candidate knowledge, not accepted knowledge |
+| 3 | Knowledge Integration | PASS | §7.2 reconciling before ledger; §7.31 C deferred |
+| 4 | Source Artifact | PASS | §7.3 registration ≠ reliability; IRI + metadata Turtle |
+| 5 | Source Fragment | PASS | §7.4 fragment-granular provenance |
+| 6 | Observation (into the pipeline) | PASS | §7.4 raw data before interpretation |
+| 7 | Extraction | PASS | §7.5 structured candidate records; not truth |
+| 8 | Extraction Activity | PASS | §7.5 PROV Activity breadcrumb |
+| 9 | Extraction Confidence | PASS | §7.6 extraction confidence ≠ claim confidence |
+| 10 | Normalization | PASS | §7.7 lossy; keep raw value traceable |
+| 11 | Structuring | PASS | §7.8 RDF under target schema; target-shape clarification |
+| 12 | CandidateGeneration | PASS | §7.9 candidates ≠ decisions |
+| 13 | Blocking | PASS | §7.9 recall-oriented coarse pairing |
+| 14 | Candidate Matching (comparison) | PASS | §7.10 γ vector evidence, not truth judgment |
+| 15 | Record Linkage (identity decision) | PASS | §7.10 Fellegi–Sunter two-threshold zones |
+| 16 | Entity Resolution (overview) | PASS | §7.9–7.10 end-to-end |
+| 17 | Schema Alignment (schema matching) | PASS | §7.11 element vs structure level |
+| 18 | Mapping Specification | PASS | §7.12 versioned source→target artifact |
+| 19 | Direct Mapping | PASS | §7.12 W3C default RDB→RDF |
+| 20 | Semantic / Structural Mapping (custom) | PASS | §7.12 R2RML/CSVW author decisions; lossy |
+| 21 | Deduplication | PASS | §7.13 reconcile, never silently drop |
+| 22 | Claim Deduplication | PASS | §7.13 A,B kept separate as two evidence pieces |
+| 23 | Idempotent Ingestion | PASS | §7.14 same ledger state on re-run |
+| 24 | Content Hash | PASS | §7.14 hash ≠ claim identity; "Hash khác nhau ≠ khác nghĩa" |
+| 25 | Structural Validation (SHACL gate) | PASS | §7.15 full focus node/path/constraint/severity report |
+| 26 | Validation ≠ Acceptance | PASS | §7.15 valid may be rejected; invalid not deleted |
+| 27 | Conflict Detection | PASS | §7.16 not every text difference is conflict |
+| 28 | Integration Decision | PASS | §7.17 recorded rationale; not proof of truth |
+| 29 | Merge Outcome | PASS | §7.17 insert/strengthen/supersede/merge; preserve both sides |
+| 30 | Claim Ledger Insertion | PASS | §7.18 ledger is system of record |
+| 31 | Canonical Projection | PASS | §7.18 rebuilt view, not independent of truth |
+| 32 | Lineage | PASS | §7.19 provenance path to fragment |
+| 33 | Evidence vs Lineage | PASS | §7.19 "from where?" ≠ "why believe?" |
+| 34 | Human Review (review queue) | PASS | §7.20 possible match / SHACL fail / conflict |
+| 35 | Data Quality Dimensions | PASS | §7.21 six dimensions; no single score |
+| 36 | Failure Modes (acquisition) | PASS | §7.22 13 modes with signal + recovery |
+| 37 | Echo Source | PASS | §7.23 echo ≠ independent evidence |
+| 38 | Pipeline Versioning | PASS | §7.24 every output-shaping component versioned |
+| 39 | Reprocessing | PASS | §7.24 safe with idempotency; re-gated |
+| 40 | Chunking | PASS | §7.26 boundaries are a decision; changes visible info |
+| 41 | Retrieval Bound | PASS | §7.26 top_k/context limit decides visible fragments |
+| 42 | Extraction Schema | PASS | §7.27 conformance ≠ semantic correctness |
+| 43 | Unresolved Value | PASS | §7.27 modeled explicitly; never guessed; OWA |
+| 44 | Integration Policy | PASS | §7.28 versioned decision rules; not neutral |
+| 45 | Acquisition Invariant (I1–I7) | PASS | §7.30 invariants ≠ truth; process discipline |
+
+All 45 records verified against manuscript `book/chapter07.md` at branch HEAD. See also
+`docs/CHAPTER07_DEPTH_REVIEW.md` (depth table, semantic boundary checklist, capability
+test) and `docs/CHAPTER07_BOOK_CHECKPOINT.md` (acceptance criteria).
