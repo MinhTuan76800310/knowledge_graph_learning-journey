@@ -971,9 +971,9 @@ kết hợp các chuẩn có thật, không phải một chuẩn được công 
                     │
                     ▼
         Sổ cái (Claim Ledger) → Chiếu hình (Canonical View)
+```
 
 ![Kiến trúc lai: ML sinh giả thuyết → tượng trưng lọc ràng buộc → tri thức luận gắn bằng chứng → quản trị quyết định. Kiến trúc do sách xây dựng (BOOK-DEFINED).](figures/generated/ch08-hybrid-pipeline.pdf)
-```
 
 **Vai trò của từng tầng:**
 
