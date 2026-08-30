@@ -411,7 +411,7 @@ thức, có nhiều loại đơn vị, mỗi loại mang một khả năng và m
 | Claim | `#C471: "Current = RATE_OF_CHANGE(DerivativeOperation, ...)"` | tri thức luận (trạng thái, đánh giá) | bằng chứng gốc |
 | Bằng chứng (Evidence) | bản ghi Ch6 gắn claim với đoạn nguồn | vết nguồn | nội dung tự thân |
 | Đoạn nguồn (source passage) | đoạn trong sách vật lý | nội dung thật, trích dẫn được | cấu trúc |
-| Đường đi (path) | `Velocity →produces→ DerivativeApplication →operation→ DerivativeOperation` | giải thích cấu trúc | chứng minh |
+| Đường đi (path) | `Velocity ->produces-> DerivativeApplication ->operation-> DerivativeOperation` | giải thích cấu trúc | chứng minh |
 | Đồ thị con (subgraph) | ba ứng dụng + cơ chế chung | ngữ cảnh gắn kết | kích thước |
 | Tóm tắt cộng đồng (summary) | "ba ứng dụng chia sẻ vai trò..." | gọn | nén mất bằng chứng |
 | Đối tượng câu trả lời chuẩn (canonical answer) | bản ghi câu trả lời có quản trị | tái sử dụng | lỗi thời |
@@ -524,7 +524,7 @@ thức luận:
 > khái niệm theo cách đó — nó không chứng minh các quan hệ trên đường đi là đúng với thế
 > giới, cũng không chứng minh không còn đường đi khác (đặc biệt đường đi *bác bỏ*).
 
-Ví dụ: đường đi `Velocity →produces→ VelocityDerivativeApplication →instanceOf→
+Ví dụ: đường đi `Velocity ->produces-> VelocityDerivativeApplication ->instanceOf->
 RATE_OF_CHANGE` là một sự kiện cấu trúc. Nhưng nếu Sổ cái có claim phản đối rằng đạo hàm
 chỉ là *một mô hình*, không phải bản chất của vận tốc, thì đường đi trên chỉ là một
 phía. Truy xuất đa chặng trung thực phải ghi nhận cả hai phía — đây là cầu nối đến truy
@@ -1785,7 +1785,7 @@ KG/chính → retrieval → answer → (nếu phát hiện tri thức ứng viê
   → (nếu Accepted) → mới vào Sổ cái
 ```
 
-Cấm có vòng tắt `answer → insert into KG` không qua quản trị. Nguyên nhân: câu trả lời
+Cấm có vòng tắt `answer -> insert into KG` không qua quản trị. Nguyên nhân: câu trả lời
 là sản phẩm của đường ống có lỗi (retrieval miss, nguồn sai, LLM bịa); đưa thẳng vào KG
 là *đóng băng lỗi thành tri thức* và mở vòng tự củng cố (nhắc lại model collapse — Ch8
 §8.34 tương tự ở cấp hệ thống).
