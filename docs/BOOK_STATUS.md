@@ -4,7 +4,7 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-08-29 (Chapter 6 accepted)
+Last updated: 2026-08-30 (Chapter 7 drafted)
 
 ## Front matter
 
@@ -25,7 +25,7 @@ Last updated: 2026-08-29 (Chapter 6 accepted)
 | 4 — Ontologies and Formal Meaning | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 5 — Deduction, Rules, and Validation | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 6 — Claims, Evidence, Provenance, Time, Contradiction | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
-| 7 — Knowledge Acquisition and Integration | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
+| 7 — Knowledge Acquisition and Integration | ✅ | ✅ | 🔲 | 🔲 | ✅ | DRAFTED |
 | 8 — Inductive Knowledge and Learning from Graphs | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 | 9 — Retrieval, Question Answering, and GraphRAG | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 | 10 — Building a Living Knowledge System | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
@@ -51,6 +51,8 @@ Last updated: 2026-08-29 (Chapter 6 accepted)
 - Chapter 4 acceptance is recorded in `docs/CHAPTER04_BOOK_CHECKPOINT.md`.
 - Chapter 5 acceptance is recorded in `docs/CHAPTER05_BOOK_CHECKPOINT.md`.
 - Chapter 6 acceptance is recorded in `docs/CHAPTER06_BOOK_CHECKPOINT.md`.
+- Chapter 7 (DRAFTED, not yet reviewed) is recorded in `docs/CHAPTER07_BOOK_CHECKPOINT.md`.
+  Semantic and editorial reviews are pending before ACCEPTED.
 - Chapters 5–10 are written sequentially after the Ch4 checkpoint, following the
   book-first workflow in `docs/BOOK_V0_1_MILESTONE.md`.
 - Deferred lab work is tracked in `docs/LAB_BACKLOG.md` and does not block acceptance.
