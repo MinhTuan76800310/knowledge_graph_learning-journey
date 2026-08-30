@@ -1018,6 +1018,230 @@
       ],
       "research_note_path": "docs/research_notes/GRLBOOK-01.md",
       "key_finding": "Authoritative treatment of node embeddings (encoder-decoder), knowledge graph embeddings, GNN message passing, and graph-level pooling/readout; supports node vs subgraph representation distinction."
+    },
+    {
+      "id": "RAG-01",
+      "canonical_url": "https://arxiv.org/abs/2005.11401",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2005.11401",
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (Lewis et al., NeurIPS 2020)",
+      "document_status": "Peer-reviewed paper (NeurIPS 2020)",
+      "publication_date": "2020",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/RAG-01.md",
+      "key_finding": "RAG = parametric seq2seq memory + non-parametric dense vector index; retrieval-augmented generation; query encoder + document encoder (DPR); top-k retrieved passages concatenated into prompt; RAG-Sequence vs RAG-Token."
+    },
+    {
+      "id": "DPR-01",
+      "canonical_url": "https://arxiv.org/abs/2004.04906",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2004.04906",
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering (Karpukhin et al., EMNLP 2020)",
+      "document_status": "Peer-reviewed paper (EMNLP 2020)",
+      "publication_date": "2020",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/DPR-01.md",
+      "key_finding": "Dense passage retrieval = dual-encoder: query encoder E_Q and passage encoder E_P; similarity = dot product; trained on in-batch negatives + BM25 hard negatives; dense retrieval outperforms BM25 for open-domain QA when trained well."
+    },
+    {
+      "id": "GRAPHRAG-01",
+      "canonical_url": "https://arxiv.org/abs/2404.16130",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2404.16130",
+      "title": "From Local to Global: A Graph RAG Approach to Query-Focused Summarization (Edge et al., 2024)",
+      "document_status": "Research paper (arXiv 2024), Microsoft GraphRAG primary source",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/GRAPHRAG-01.md",
+      "key_finding": "GraphRAG = LLM-built entity/relation/claim graph index from text units; Leiden community detection; bottom-up community summaries; Global Search (community summaries) vs Local Search (entity fan-out); one implementation family, not universal GraphRAG semantics."
+    },
+    {
+      "id": "BM25-01",
+      "canonical_url": "https://doi.org/10.1561/1500000019",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://www.nowpublishers.com/article/Details/INR-004",
+      "title": "The Probabilistic Relevance Framework: BM25 and Beyond (Robertson & Zaragoza, Foundations and Trends in IR)",
+      "document_status": "Authoritative survey (Foundations and Trends in Information Retrieval 3(4), 2009)",
+      "publication_date": "2009",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/BM25-01.md",
+      "key_finding": "BM25 derived from the probabilistic relevance framework (PRF); term frequency saturation (k1), document length normalization (b), inverse document frequency (idf); BM25 is a lexical/term-based ranking function, not a probability of relevance."
+    },
+    {
+      "id": "IRBOOK-01",
+      "canonical_url": "https://nlp.stanford.edu/IR-book/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://nlp.stanford.edu/IR-book/",
+      "title": "Introduction to Information Retrieval (Manning, Raghavan & Schutze, Cambridge University Press 2008)",
+      "document_status": "Standard IR textbook (open online edition)",
+      "publication_date": "2008",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/IRBOOK-01.md",
+      "key_finding": "Classical IR: tokenization, inverted index, tf-idf weighting, vector space model, BM25 ranking; evaluation with precision/recall, ranked retrieval metrics; information need vs query vs document distinction."
+    },
+    {
+      "id": "NDCG-01",
+      "canonical_url": "https://doi.org/10.1145/582415.582418",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://dl.acm.org/doi/10.1145/582415.582418",
+      "title": "Cumulated gain-based evaluation of IR techniques (Jarvelin & Kekalainen, ACM TOIS 2002)",
+      "document_status": "Peer-reviewed paper (ACM TOIS 20(4), 2002)",
+      "publication_date": "2002",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/NDCG-01.md",
+      "key_finding": "nDCG = graded relevance, position discount (log), normalized by ideal ordering; measures ranking quality with graded relevance, not binary; sensitive to graded relevance judgments."
+    },
+    {
+      "id": "RRF-01",
+      "canonical_url": "https://doi.org/10.1145/1571941.1572114",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://dl.acm.org/doi/10.1145/1571941.1572114",
+      "title": "Reciprocal rank fusion outperforms condorcet and individual rank learning methods (Cormack, Clarke & Buettcher, SIGIR 2009)",
+      "document_status": "Peer-reviewed paper (SIGIR 2009)",
+      "publication_date": "2009",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/RRF-01.md",
+      "key_finding": "RRF = score(d) = sum over systems 1/(k + rank_i(d)); fuses multiple ranked lists without using raw scores; rank-based fusion; produces a fused ranking for retrieval utility, not an epistemic score."
+    },
+    {
+      "id": "RRANK-01",
+      "canonical_url": "https://arxiv.org/abs/1901.04085",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1901.04085",
+      "title": "Passage Re-ranking with BERT (Nogueira & Cho, arXiv 2019)",
+      "document_status": "Research paper (arXiv 2019)",
+      "publication_date": "2019",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/RRANK-01.md",
+      "key_finding": "Two-stage retrieval: first-stage lexical retrieval (BM25) for candidate passages, then cross-encoder BERT re-ranker scoring query-passage pairs jointly; re-ranking improves MRR@10 on MS MARCO; cross-encoder compares query and passage jointly."
+    },
+    {
+      "id": "LOSTMID-01",
+      "canonical_url": "https://arxiv.org/abs/2307.03172",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2307.03172",
+      "title": "Lost in the Middle: How Language Models Use Long Contexts (Liu et al., TACL 2023)",
+      "document_status": "Peer-reviewed paper (TACL 2023)",
+      "publication_date": "2023",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/LOSTMID-01.md",
+      "key_finding": "LLMs use information at the beginning and end of long contexts more reliably than information in the middle; performance drops when relevant info is in the middle; context placement/ordering affects model performance."
+    },
+    {
+      "id": "AIS-01",
+      "canonical_url": "https://arxiv.org/abs/2112.12870",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2112.12870",
+      "title": "Measuring Attribution in Natural Language Generation Models (Rashkin et al., arXiv 2021/2022)",
+      "document_status": "Research paper (arXiv 2021, revised 2022)",
+      "publication_date": "2021",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/AIS-01.md",
+      "key_finding": "AIS criterion: generated text about the external world is attributable to identified sources if the source(s) support the claim; two-stage annotation (support detection + boundary detection); attribution to sources, distinct from factual correctness."
+    },
+    {
+      "id": "CITE-01",
+      "canonical_url": "https://arxiv.org/abs/2305.14627",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2305.14627",
+      "title": "Enabling Large Language Models to Generate Text with Citations (Gao, Yen, Yu & Chen, EMNLP 2023)",
+      "document_status": "Peer-reviewed paper (EMNLP 2023), ALCE benchmark",
+      "publication_date": "2023",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/CITE-01.md",
+      "key_finding": "ALCE benchmark: citation quality (citation recall/precision), fluency, correctness; even strong models struggle with complete citation support; citation should link answer sentences to supporting passages."
+    },
+    {
+      "id": "KGQA-01",
+      "canonical_url": "https://arxiv.org/abs/1907.09361",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1907.09361",
+      "title": "Introduction to Neural Network based Approaches for Question Answering over Knowledge Graphs (Chakraborty et al., 2019)",
+      "document_status": "Survey paper (arXiv 2019)",
+      "publication_date": "2019",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/KGQA-01.md",
+      "key_finding": "KGQA = question understanding + query generation + answer over KG; paradigms include semantic parsing (symbolic) vs information retrieval vs embedding-based; entity linking and relation linking are core subproblems; query over KG vs text retrieval are different mechanisms."
+    },
+    {
+      "id": "LLMKG-01",
+      "canonical_url": "https://arxiv.org/abs/2306.08302",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2306.08302",
+      "title": "Unifying Large Language Models and Knowledge Graphs: A Roadmap (Zhu et al., 2023)",
+      "document_status": "Survey paper (arXiv 2023, IEEE TKDE)",
+      "publication_date": "2023",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/LLMKG-01.md",
+      "key_finding": "Roadmap of LLM+KG: KG-enhanced LLMs (retrieval-augmented), LLM-augmented KGs (construction), synergized architectures; RAG over KG = retrieve relevant KG knowledge to ground LLM answers."
+    },
+    {
+      "id": "MAGRAPH-01",
+      "canonical_url": "https://microsoft.github.io/graphrag/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T16:20:00Z",
+      "http_status": 200,
+      "final_url": "https://microsoft.github.io/graphrag/",
+      "title": "Microsoft GraphRAG official documentation",
+      "document_status": "Official documentation (open-source project)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "9"
+      ],
+      "research_note_path": "docs/research_notes/MAGRAPH-01.md",
+      "key_finding": "Implementation: TextUnits -> entity/relation/claim extraction -> Leiden communities -> bottom-up summaries -> Global/Local/DRIFT/Basic search; one concrete implementation family, not a universal GraphRAG standard."
     }
   ]
 }

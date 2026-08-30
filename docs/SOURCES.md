@@ -36,6 +36,18 @@ Last verified: 2026-08-25
 | Knowledge Graphs (Springer, 2021) | Aidan Hogan et al. | ACADEMIC | https://kgbook.org | Copyrighted Springer book. Research reference only; no copied prose or figures | All chapters |
 | Stanford CS224W — Machine Learning with Graphs | Stanford University / Jure Leskovec | ACADEMIC | https://snap.stanford.edu/class/cs224w/ | Course materials; KG embeddings and reasoning sections only | 8 |
 | Ontology Development 101 | Natalya F. Noy & Deborah L. McGuinness, Stanford / Protégé team | TUTORIAL | https://protege.stanford.edu/publications/ontology_development/ontology101.pdf | Foundational ontology engineering methodology | 4 |
+| Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | Lewis et al., 2020 | RESEARCH_PAPER | https://arxiv.org/abs/2005.11401 | NeurIPS 2020 paper; RAG origin | 9 |
+| Dense Passage Retrieval for Open-Domain Question Answering | Karpukhin et al., 2020 | RESEARCH_PAPER | https://arxiv.org/abs/2004.04906 | EMNLP 2020 paper; dual-encoder dense retrieval | 9 |
+| From Local to Global: A Graph RAG Approach to Query-Focused Summarization | Edge et al., 2024 | RESEARCH_PAPER | https://arxiv.org/abs/2404.16130 | Microsoft GraphRAG primary paper; one implementation family | 9 |
+| The Probabilistic Relevance Framework: BM25 and Beyond | Robertson & Zaragoza, 2009 | RESEARCH_PAPER | https://doi.org/10.1561/1500000019 | Foundations and Trends in IR 3(4); BM25 primary survey | 9 |
+| Introduction to Information Retrieval | Manning, Raghavan & Schütze, 2008 | ACADEMIC | https://nlp.stanford.edu/IR-book/ | Standard IR textbook (open online edition) | 9 |
+| Cumulated gain-based evaluation of IR techniques | Järvelin & Kekäläinen, 2002 | RESEARCH_PAPER | https://doi.org/10.1145/582415.582418 | ACM TOIS 20(4); nDCG primary source | 9 |
+| Reciprocal rank fusion outperforms condorcet and individual rank learning methods | Cormack, Clarke & Buettcher, 2009 | RESEARCH_PAPER | https://doi.org/10.1145/1571941.1572114 | SIGIR 2009; RRF primary source | 9 |
+| Passage Re-ranking with BERT | Nogueira & Cho, 2019 | RESEARCH_PAPER | https://arxiv.org/abs/1901.04085 | Two-stage retrieval; cross-encoder re-ranking | 9 |
+| Lost in the Middle: How Language Models Use Long Contexts | Liu et al., 2023 | RESEARCH_PAPER | https://arxiv.org/abs/2307.03172 | TACL 2023; context-position effects | 9 |
+| Measuring Attribution in Natural Language Generation Models | Rashkin et al., 2021 | RESEARCH_PAPER | https://arxiv.org/abs/2112.12870 | AIS criterion; attribution vs truth | 9 |
+| Enabling Large Language Models to Generate Text with Citations | Gao, Yen, Yu & Chen, 2023 | RESEARCH_PAPER | https://arxiv.org/abs/2305.14627 | EMNLP 2023; ALCE citation benchmark | 9 |
+| Introduction to Neural Network based Approaches for Question Answering over Knowledge Graphs | Chakraborty et al., 2019 | RESEARCH_PAPER | https://arxiv.org/abs/1907.09361 | KGQA survey; paradigms and subproblems | 9 |
 | Unifying Large Language Models and Knowledge Graphs: A Roadmap | Zhu et al., 2023 | RESEARCH_PAPER | https://arxiv.org/abs/2306.08302 | Survey paper; DOI 10.1109/TKDE.2024.3352100; used in Chapter 9 only | 9 |
 
 ## Official Documentation & Case Studies
