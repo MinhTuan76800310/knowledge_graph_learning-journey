@@ -86,7 +86,7 @@ chúng là cùng một khái niệm — và kết nối kết quả với quản
 
 > 🖊 **Tự kiểm tra:** Trước khi đọc tiếp, hãy tự trả lời: theo bạn, "tốc độ thay đổi" ở
 > nguồn A, B, C có nên trỏ về cùng một nút hay không? Ghi lại lý do của bạn. Cuối chương
-> (§7.32) bạn sẽ đối chiếu với cách hệ thống quyết định.
+> (§7.31, §7.36) bạn sẽ đối chiếu với cách hệ thống quyết định.
 
 ## 7.1 Đường ống trung tâm: Từ nguồn đến sổ cái
 
@@ -501,6 +501,10 @@ không. Nó chỉ đưa ba luồng về *cùng một hình dạng biểu diễn*
 thể so sánh được. Việc đưa `ex:current_1` về dạng RDF giống `ex:velocity_1` về hình thức
 không có nghĩa là chúng đồng nhất — sự đồng nhất là một *quyết định* ở §7.9–7.10.
 
+Lưu ý: `ex:mechC_1` ở trên là **hình dạng mục tiêu** khi trích xuất đầy đủ. Trong ca thực
+tế của chương, trích xuất nguồn C chưa bắt được biến tham chiếu, nên bản ghi đi vào cổng
+SHACL là `ex:appC_1` khuyết `withRespectTo` (§7.15) — không phải `ex:mechC_1` hoàn chỉnh.
+
 ### Ứng dụng
 
 Cấu trúc hóa là nơi **lược đồ đích** phát huy vai trò: nó là ontology mà mọi nguồn phải
@@ -600,10 +604,13 @@ Với cặp (B, C): γ = (khớp, không, khớp, không). Nếu hệ thống ư
 (đầu vào/output khác nhau nhiều khả năng là khác thực thể), cặp rơi xuống vùng "không
 trùng" — hệ thống kết luận `ex:velocity_1` ≠ `ex:current_1`, đúng như kỳ vọng vật lý.
 
-Với cặp (A, B) — nếu khóa chặn cho phép so sánh: cả hai cùng output "rate of change",
-cùng operation đạo hàm. γ = (khớp, khớp, khớp). m/u cao → trùng? Ở đây cần thận trọng:
-§7.11 gióng lược đồ sẽ kiểm tra "output của A" và "output của B" có cùng thuộc tính không
-— chưa nói chúng cùng *giá trị*.
+Với cặp (A, B) — nếu khóa chặn cho phép so sánh: cả hai cùng operation (đạo hàm) và cùng
+khuôn quan hệ "measures rate of change", nhưng output khác nhau (`rateOfChange_1` so với
+`velocity_1`) và input khác nhau (A không ràng input, B có position + time). Véc-tơ
+γ = (khớp operation, không output, không input) là một véc-tơ *pha trộn* — rơi vào vùng
+"có thể trùng" (possible match), đưa người xem xét. Ở đây cần thận trọng: §7.11 gióng lược
+đồ sẽ kiểm tra "output của A" và "output của B" có cùng *thuộc tính* không — chưa nói
+chúng cùng *giá trị*.
 
 ### Ứng dụng
 
@@ -821,7 +828,14 @@ Ba cảnh báo:
 2. **Hash ≠ provenance.** Biết "bản ghi này có hash X" không cho biết "bản ghi này từ
    đâu đến". Hash chỉ phục vụ khử trùng và lũy đẳng.
 
-3. **Lũy đẳng ≠ đúng.** Chạy lại cho kết quả giống nhau không có nghĩa kết quả đúng —
+3. **Hash khác nhau ≠ khác nghĩa.** Hai cách diễn đạt khác nhau của cùng một mệnh đề
+   ("velocity is the derivative of position" và "vận tốc là đạo hàm của vị trí") ra hai
+   hash khác nhau trên dạng thô — nhưng có thể là cùng nội dung ngữ nghĩa sau chuẩn hóa
+   và gióng lược đồ (§7.11). Ngược lại, hash *bằng nhau* chỉ nghĩa là trùng nội dung
+   chuẩn hóa, không nghĩa là hai claim là một (điểm 1). Hash báo *trùng dạng*, mọi kết
+   luận về *nghĩa* đều phải đi qua các bước tích hợp.
+
+4. **Lũy đẳng ≠ đúng.** Chạy lại cho kết quả giống nhau không có nghĩa kết quả đúng —
    chỉ có nghĩa *ổn định*. Một pipeline lũy đẳng vẫn có thể nhất quán tạo ra phát biểu
    sai, nếu quy tắc của nó sai.
 
@@ -843,7 +857,7 @@ có đủ thuộc tính bắt buộc không, kiểu dữ liệu có đúng khôn
 **Cổng SHACL (SHACL gate)** kiểm tra các bộ ba ứng viên chống lại các hình dạng đã khai
 báo — yêu cầu về lớp, thuộc tính, kiểu, bội số — và sinh ra báo cáo hợp lệ [@w3c-shacl].
 
-Ví dụ hình dạng cho một Mechanism:
+Hai mức hình dạng trong đường ống:
 
 ```turtle
 ex:MechanismShape  a            sh:NodeShape ;
@@ -858,10 +872,74 @@ ex:MechanismShape  a            sh:NodeShape ;
                        sh:minCount 1 ;
                        sh:nodeKind sh:IRI
                    ] .
+
+ex:DerivativeApplicationShape  a          sh:NodeShape ;
+                   sh:targetClass ex:DerivativeApplication ;
+                   sh:property [
+                       sh:path ex:hasOperation ;
+                       sh:minCount 1 ;
+                       sh:nodeKind sh:IRI
+                   ] ;
+                   sh:property [
+                       sh:path ex:differentiand ;
+                       sh:minCount 1 ;
+                       sh:nodeKind sh:IRI
+                   ] ;
+                   sh:property [
+                       sh:path ex:withRespectTo ;
+                       sh:minCount 1 ;
+                       sh:nodeKind sh:IRI
+                   ] ;
+                   sh:property [
+                       sh:path ex:hasOutput ;
+                       sh:minCount 1 ;
+                       sh:nodeKind sh:IRI
+                   ] .
 ```
 
-Nếu `ex:mechC_1` thiếu `ex:hasOperation` (trích xuất nguồn C không bắt được operation),
-cổng báo lỗi: bộ ba không hợp lệ. Nhưng — điểm mấu chốt — **hợp lệ ≠ được chấp nhận**:
+`ex:DerivativeApplicationShape` là hình dạng dành cho ứng viên ở dạng **n-ary** (Chương 3):
+một `DerivativeApplication` phải ràng đủ operation, differentiand (đại lượng bị đạo hàm),
+`withRespectTo` (biến tham chiếu), và output. Giả sử trích xuất nguồn C sinh ra ứng viên
+sau — thiếu `withRespectTo` (công cụ trích xuất không bắt được "theo thời gian"):
+
+```turtle
+ex:appC_1  a                ex:DerivativeApplication ;
+           ex:hasOperation  ex:derivativeOperation_1 ;
+           ex:differentiand ex:voltage_1 ;
+           ex:hasOutput     ex:current_1 .
+           # thiếu ex:withRespectTo
+```
+
+Cổng SHACL chạy hình dạng trên `ex:appC_1` và sinh báo cáo vi phạm:
+
+```turtle
+[]  a                sh:ValidationReport ;
+    sh:conforms       false ;
+    sh:result  [ a    sh:ValidationResult ;
+                 sh:focusNode ex:appC_1 ;
+                 sh:resultPath ex:withRespectTo ;
+                 sh:sourceConstraintComponent sh:MinCountConstraintComponent ;
+                 sh:resultSeverity sh:Violation ;
+                 sh:resultMessage "ex:withRespectTo is required but missing." ] .
+```
+
+Báo cáo chỉ rõ: nút trọng tâm (`focusNode` = `ex:appC_1`), đường (`resultPath` =
+`ex:withRespectTo`), ràng buộc (`MinCountConstraintComponent`), mức nghiêm trọng
+(`Violation`). Với báo cáo này, các phản hồi chính sách có thể có:
+
+- **Trích xuất lại (retry extraction):** chạy lại công cụ với pattern sửa lỗi để bắt
+  "theo thời gian".
+- **Xem xét (review):** đưa ứng viên vào hàng đợi (§7.20) để người xác định.
+- **Hoãn (defer):** giữ ứng viên, không vào sổ cái.
+- **Từ chối (reject):** bỏ ứng viên, ghi lý do.
+- **Sửa có bằng chứng (evidence-supported repair):** bổ sung `withRespectTo ex:time_1`
+  *chỉ khi* một mẩu nguồn khác trong cùng fragment chứng minh được biến tham chiếu.
+
+Tuyệt đối **không được bịa `ex:time_1`** chỉ để làm cho báo cáo `conforms true` — chính
+sách đó biến cổng SHACL thành cái máy hợp lý hóa lỗi, ngược với mục đích của nó (xem
+§7.27 về giá trị chưa xác định).
+
+Điểm mấu chốt — **hợp lệ ≠ được chấp nhận**:
 
 - Một bộ ba *hợp lệ* về hình dạng vẫn có thể bị *từ chối* ở bước quản trị (mâu thuẫn với
   bằng chứng mạnh hơn, §7.16).
@@ -875,8 +953,8 @@ Chương 5, đặt vào giữa đường ống.
 ### Ứng dụng
 
 Trong pipeline: tất cả các bộ ba đã cấu trúc hóa (A, B, C) phải qua cổng. Bộ ba của A
-và B hợp lệ; bộ ba của C thiếu `hasOperation` → không hợp lệ → rơi vào hàng đợi xem
-xét, *không được* đưa thẳng vào sổ cái.
+và B hợp lệ; ứng viên của C là `ex:appC_1` thiếu `withRespectTo` → không hợp lệ → rơi
+vào hàng đợi xem xét, *không được* đưa thẳng vào sổ cái.
 
 > ⚠️ **Ngộ nhận phổ biến:** "Báo cáo SHACL nói conforms → phát biểu đúng." Sai. `conforms
 > true` chỉ nghĩa là *hình dạng khớp*. Một bộ ba hợp lệ về hình dạng có thể vô nghĩa về
@@ -902,7 +980,7 @@ cùng một ngữ cảnh. Dùng phân loại năm loại của §6.6:
 | Logical (logic) | `ex:current_1` vừa là `ex:Velocity` vừa là `ex:Current` nếu hai lớp rời nhau |
 | Value (giá trị) | hai claim cùng nói `ex:velocity_1 ex:value` nhưng khác số |
 | Temporal (thời gian) | "vận tốc = ds/dt" valid từ 1687, "vận tốc cộng tính" valid từ 1905 — khác valid time, không xung đột |
-| Scope (phạm vi) | nguồn A nói "đạo hàm theo không gian", nguồn B nói "theo thời gian" — khác phạm vi |
+| Scope (phạm vi) | đạo hàm tức thời so với sai phân hữu hạn Δx/Δt trên một khoảng — khác phạm vi, *không* tự động mâu thuẫn; nguồn A nói "đạo hàm theo không gian", nguồn B nói "theo thời gian" — khác phạm vi |
 | Source (nguồn) | hai nguồn nói khác nhau nhưng cùng khẳng định một sự kiện — xung đột nguồn |
 
 Chú ý: **không phải mọi khác biệt văn bản là xung đột.** Nguồn A nói "đạo hàm đo tốc độ
@@ -914,12 +992,14 @@ nhau.
 
 ### Ứng dụng
 
-Cặp (A, B) sau khi gióng lược đồ: "derivative of f" ↔ `ex:derivativeOperation_1`, cùng
-mệnh đề "rate of change" → **không xung đột**, thực ra là trùng nội dung → khử trùng
-(§7.13). Cặp (B, C): `ex:velocity_1` so với `ex:current_1` — gióng lược đồ đã bác tương
-ứng (đầu vào/output khác) → không phải xung đột, mà là hai khái niệm khác nhau. Xung đột
-thật chỉ xuất hiện khi *cùng ngữ cảnh* mà giá trị khác nhau — ví dụ hai nguồn cùng khẳng
-định giá trị vận tốc của cùng một vật tại cùng thời điểm nhưng khác số.
+Cặp (A, B) sau khi gióng lược đồ: "derivative of f" ↔ `ex:derivativeOperation_1`, "velocity"
+↔ `ex:velocity_1` — hai phát biểu khác nhau nhưng cùng quy về cơ chế `rateOfChange_1`.
+Chúng **không xung đột**, và cũng **không phải trùng nội dung** (output khác nhau: 
+`rateOfChange_1` so với `velocity_1`) — chúng là hai phát biểu riêng bổ sung cho nhau
+(§7.31, giai đoạn 8). Cặp (B, C): `ex:velocity_1` so với `ex:current_1` — gióng lược đồ
+đã bác tương ứng (đầu vào/output khác) → không phải xung đột, mà là hai khái niệm khác
+nhau. Xung đột thật chỉ xuất hiện khi *cùng ngữ cảnh* mà giá trị khác nhau — ví dụ hai
+nguồn cùng khẳng định giá trị vận tốc của cùng một vật tại cùng thời điểm nhưng khác số.
 
 > ⚠️ **Ngộ nhận phổ biến:** "Hai nguồn nói khác nhau → hệ thống bất nhất → phải sửa."
 > Sai. Khác biệt có thể là khác ngữ cảnh (thời gian, phạm vi) — không phải xung đột. Tuyên
@@ -1044,7 +1124,7 @@ hoặc quy tắc sai. Lineage dài chỉ cho biết "mọi bước đã được
 
 ### Ứng dụng
 
-Mọi claim trong sổ cái đều phải có lineage tối thiểu (đây là bất biến I1, §7.31). Khi
+Mọi claim trong sổ cái đều phải có lineage tối thiểu (đây là bất biến I1, §7.30). Khi
 kiểm toán, người kiểm tra đi ngược lineage để tái dựng *cách* claim hình thành — rồi
 *riêng biệt* đánh giá bằng chứng hỗ trợ claim đó.
 
@@ -1063,7 +1143,7 @@ và xung đột không hòa giải được, đi vào **hàng đợi xem xét** 
 
 ### Cơ chế
 
-**Hàng đợi xem quét (Review Queue)** là làn dành cho các ca mà đường ống tự động không
+**Hàng đợi xem xét (Review Queue)** là làn dành cho các ca mà đường ống tự động không
 quyết định được với độ tin cậy theo chính sách. Con người xem xét với *bộ bằng chứng đầy
 đủ* — không phải một dòng tóm tắt — và quyết định, quyết định được ghi lại trong sổ cái
 như mọi quyết định khác.
@@ -1073,7 +1153,7 @@ Ba loại ca vào hàng đợi:
 | Loại ca | Ví dụ |
 |---------|-------|
 | Possible match (Fellegi–Sunter) | cặp (A, B): khớp 3/4 thuộc tính, cần mắt người xác nhận "cùng mệnh đề?" |
-| SHACL fail | `ex:mechC_1` thiếu hasOperation — cần xem lại trích xuất |
+| SHACL fail | `ex:appC_1` thiếu `withRespectTo` — cần xem lại trích xuất |
 | Xung đột không hòa giải | hai claim cùng ngữ cảnh, cùng giá trị khác nhau, không hòa giải được |
 
 Nguyên tắc cân bằng: gửi *mọi* ca cho người → không có pipeline (mọi thứ dừng ở con
@@ -1226,10 +1306,10 @@ bị bác. Sổ cái không bao giờ bị "ghi đè bằng bản chạy lại".
 
 ### Ứng dụng
 
-Khi sửa extraction pattern của nguồn C (FM9: trước đây bỏ sót operation), hệ thống chạy
-lại pipeline phiên bản mới trên nguồn C. Các bản ghi mới ra có `pipelineVersion` mới;
-claim cũ thiếu operation không bị xóa — nó được thay thế bởi claim mới đầy đủ, với dấu
-vết chuyển đổi.
+Khi sửa extraction pattern của nguồn C (FM9: trước đây trích xuất bỏ sót biến tham chiếu
+`withRespectTo` — xem §7.15), hệ thống chạy lại pipeline phiên bản mới trên nguồn C. Các
+bản ghi mới ra có `pipelineVersion` mới; claim cũ thiếu `withRespectTo` không bị xóa — nó
+được thay thế bởi claim mới đầy đủ, với dấu vết chuyển đổi.
 
 > 🖊 **Tự kiểm tra:** Vì sao "chạy lại pipeline" và "lũy đẳng" đi kèm với nhau? Nếu
 > pipeline không lũy đẳng, lần chạy lại tạo ra điều gì — và vì sao điều đó làm hỏng sổ
@@ -1283,14 +1363,35 @@ hệ, bảng CSV, tài liệu PDF dài. Mỗi loại có con đường trích xu
 
 **Chunking** (chia mẩu) áp dụng cho tài liệu dài: tài liệu được chia thành các fragment
 có ranh giới và địa chỉ (theo đề mục, đoạn, hoặc kích thước cố định) để trích xuất làm
-việc trên đơn vị mạch lạc và provenance mịn. Ranh giới chunk là **một quyết định**: cắt
-giữa định nghĩa (FM11) làm hỏng mẩu và hỏng trích xuất.
+việc trên đơn vị mạch lạc và provenance mịn. Ranh giới chunk là **một quyết định tri
+thức luận**, không phải đường ống trung tính: nó quyết định *thông tin nào sẵn có cho
+bước trích xuất*. Ví dụ cơ chế:
+
+> Câu 1: "The derivative measures instantaneous change."
+> Câu 2: "For position with respect to time, this quantity is velocity."
+
+Một ranh giới chunk tồi cắt giữa hai câu này: câu 1 vào chunk thứ nhất, câu 2 vào chunk
+thứ hai. Bước trích xuất trên chunk 1 chỉ thấy "đạo hàm đo thay đổi tức thời" — nó
+*không thể* biết "đại lượng này" ở câu 2 chính là vận tốc, vì chất liệu nối kết (đại từ
+"this quantity") đã bị hút sang chunk khác. Cùng một tài liệu, hai cách chia chunk cho
+hai khả năng trích xuất khác nhau — cắt giữa định nghĩa (FM11) làm hỏng mẩu và hỏng
+trích xuất. Chunking vì vậy thay đổi *thông tin trích xuất được phép nhìn thấy*, và là
+một thiết kế có hậu quả ngữ nghĩa.
 
 **Ràng buộc truy hồi (Retrieval Bound):** trích xuất từ một fragment chỉ được khẳng định
 những gì *chính fragment đó* chứa đựng, trong ngữ cảnh của nó — không dùng kiến thức từ
 các chương sau, bảng bên cạnh, hoặc "kiến thức thế giới" để lấp đầy khoảng trống. Nguồn
 A định nghĩa đạo hàm ở §3.2; hệ thống không được gán cho fragment A câu "vận tốc là đạo
 hàm của vị trí" chỉ vì nguồn B nói vậy.
+
+Điều này cũng áp dụng khi pipeline có bước **truy hồi context** (retrieval) chọn tài liệu
+đưa vào trích xuất: tham số `top_k`/giới hạn ngữ cảnh quyết định fragment nào *được nhìn
+thấy* trong lần trích xuất này. Nếu định nghĩa RATE_OF_CHANGE nằm ngoài ngữ cảnh được
+truy hồi, công cụ trích xuất không thể dùng nó — và một phát biểu có thể bị phân loại
+sai chỉ vì bằng chứng quyết định không nằm trong cửa sổ. Bài học: *bằng chứng không
+được nhìn thấy không thể ảnh hưởng lần trích xuất này* — không phải vì bằng chứng không
+tồn tại, mà vì ràng buộc truy hồi đã chặn nó. Truy hồi và chunking là những quyết định
+épistemic, không phải chi tiết triển khai vô hại.
 
 Lưu ý: fragment im lặng ≠ phủ định. Fragment A không nhắc "dòng điện" không có nghĩa
 fragment A phủ nhận khái niệm dòng điện (vẫn là Open World Assumption, §5–6). Ràng buộc
@@ -1469,27 +1570,34 @@ Extraction Activity, độ tin cậy trích xuất ghi cho từng bản (§7.6).
 
 **Giai đoạn 4 — Chuẩn hóa (§7.7):** đơn vị, ký hiệu về dạng chính tắc.
 
-**Giai đoạn 5 — Cấu trúc hóa (§7.8):** `ex:mechA_1`, `ex:mechB_1`, `ex:mechC_1` dưới
-lược đồ cơ chế.
+**Giai đoạn 5 — Cấu trúc hóa (§7.8):** `ex:mechA_1`, `ex:mechB_1` dưới lược đồ cơ chế.
+Với C, bản ghi chuẩn hóa còn thiếu biến tham chiếu (trích xuất chưa bắt được "theo thời
+gian"), nên cấu trúc hóa tạo ra `ex:appC_1` — một `DerivativeApplication` khuyết
+`withRespectTo` (§7.15).
 
 **Giai đoạn 6 — Định danh (§7.9–7.10):** khóa chặn gom cặp so sánh; Fellegi–Sunter cho
-ra: (A, B) → "có thể trùng", đưa người xem; (B, C) → "không trùng" (đầu vào/output khác);
-(A, C) không nằm cùng khối chặn.
+ra: (A, B) → "có thể trùng" (cùng operation, khác output), đưa người xem; (B, C) →
+"không trùng" (đầu vào/output khác); (A, C) không nằm cùng khối chặn.
 
 **Giai đoạn 7 — Gióng lược đồ (§7.11):** A: "derivative of f" ↔ `ex:derivativeOperation_1`;
 B: "velocity"/"position" ↔ `ex:velocity_1`/`ex:position_1`; C: "current"/"voltage" →
 không tương ứng, gợi ý tạo khái niệm mới.
 
-**Giai đoạn 8 — Khử trùng (§7.13):** hai bản ghi A và B sau xác nhận — cùng mệnh đề
-"rate of change theo thời gian" — được nhận diện trùng nội dung.
+**Giai đoạn 8 — Khử trùng (§7.13):** A và B **không phải trùng nội dung** — output khác
+nhau (`rateOfChange_1` so với `velocity_1`), content hash khác nhau → giữ hai bản ghi
+riêng, mỗi bản một provenance. Khử trùng không tìm thấy cặp trùng nào trong ba luồng;
+ca trùng nội dung thật (B với nguồn D) được xử lý như ví dụ §7.13.
 
-**Giai đoạn 9 — Cổng SHACL (§7.15):** `ex:mechC_1` thiếu `hasOperation` → không hợp lệ →
-hàng đợi xem xét. A, B hợp lệ.
+**Giai đoạn 9 — Cổng SHACL (§7.15):** `ex:appC_1` thiếu `withRespectTo` → báo cáo vi phạm
+(`resultPath ex:withRespectTo`) → không hợp lệ → hàng đợi xem xét. A, B hợp lệ.
 
-**Giai đoạn 10 — Xung đột + quyết định (§7.16–7.17):** không xung đột giữa A và B (cùng
-mệnh đề sau gióng lược đồ). Quyết định: chấp nhận cụm (A, B) → **strengthen** claim đã có
-`ex:claim_vroc` trong sổ cái (đã Accepted từ Chương 6, nay có thêm bằng chứng A); quyết
-định của C là *defer* (chờ xem xét).
+**Giai đoạn 10 — Xung đột + quyết định (§7.16–7.17):** (A, B) không xung đột — hai phát
+biểu khác nhau cùng quy về cơ chế `rateOfChange_1`: A xác lập ngữ nghĩa operation
+(đạo hàm đo tốc độ thay đổi), B xác lập ứng dụng cụ thể (vận tốc = rate of change của
+vị trí). Quyết định: chấp nhận cả hai → **strengthen** claim đã có `ex:claim_vroc` trong
+sổ cái (đã Accepted từ Chương 6) bằng **hai mẩu bằng chứng độc lập** — `recB_1` trực
+tiếp, `recA_1` hỗ trợ qua ngữ nghĩa operation. Hai bản ghi không bị gộp làm một claim
+(§7.13). Quyết định của C là *defer* (chờ xem xét).
 
 **Giai đoạn 11 — Ghi sổ (§7.18):** claim `ex:claim_vroc` được củng cố, ghi quyết định +
 rationale + pipelineVersion trong một giao dịch (§7.29). Chiếu hình cập nhật.
@@ -1515,7 +1623,7 @@ SELECT ?claim ?status WHERE {
 
 Trả về: `ex:claim_vroc | Accepted` (củng cố). Còn `ex:current_1` — khái niệm mới từ C —
 *vẫn là ứng viên*: chưa Accepted, chưa vào chiếu hình, đang chờ người xem xét xác nhận
-ánh xạ và operation.
+ánh xạ và `withRespectTo`.
 
 ## 7.32 Diễn tập hỏng hóc: Một ca đi sai toàn bộ
 
@@ -1560,6 +1668,44 @@ vào tích hợp mà không có báo cáo validation kèm theo — vi phạm I4.
 các bản ghi lỗi nhưng tất cả đều có dấu vết, phiên bản, và lý do; hệ thống sửa từng kiểu
 hỏng (chunk, khóa chặn, hash, cổng), chạy lại, và lần chạy lại đúng quy trình. Bài học:
 **hỏng hóc là bình thường; phản ứng có kỷ luật mới là điều phân biệt hệ thống tốt.**
+
+### Ca phụ: Hợp lệ về hình dạng, sai về ngữ nghĩa
+
+Có một ca hỏng nguy hiểm hơn — **cấu trúc hoàn toàn hợp lệ nhưng diễn giải sai**. Nguồn
+F — một tài liệu thực nghiệm — ghi: "tốc độ trung bình trong khoảng thời gian Δt là
+Δx/Δt = 5 m/s". Đây là **sai phân hữu hạn** (average/finite rate), không phải đạo hàm
+tức thời. Trích xuất dựng ứng viên:
+
+```turtle
+ex:appF_1  a                ex:DerivativeApplication ;
+           ex:hasOperation  ex:derivativeOperation_1 ;
+           ex:differentiand ex:position_1 ;
+           ex:withRespectTo ex:time_1 ;
+           ex:hasOutput     ex:velocity_1 ;
+           ex:value         5.0 .
+```
+
+Ứng viên này **vượt cổng SHACL**: đúng lớp, đủ operation/differentiand/withRespectTo/
+output, đúng kiểu. Báo cáo `conforms true`. Nhưng diễn giải sai: Δx/Δt là tốc độ *trên một
+khoảng*, còn `ex:derivativeOperation_1` là đạo hàm *tức thời* — phạm vi (scope) lệch nhau
+(§7.16). Ba tầng phải tách bạch:
+
+1. **Structurally valid** — hình dạng SHACL khớp (tầng này đạt).
+2. **Semantically correct** — phát biểu khớp đúng ngữ nghĩa nguồn trong đúng phạm vi
+   (tầng này chưa đạt: "tức thời" ≠ "trung bình").
+3. **Epistemically accepted** — qua quản trị, có bằng chứng và quyết định có lý do
+   (chưa đạt cho tới khi tầng 2 được xác lập).
+
+Hệ thống phải phản ứng: giữ `ex:appF_1` làm ứng viên, đưa vào hàng đợi vì **xung đột
+phạm vi giữa claim nguồn (trung bình trên khoảng) và cấu trúc ứng viên (operation tức
+thời)**; không tự động Accepted dù `conforms true`. Người xem có thể: (a) ánh xạ lại
+operation thành "sai phân hữu hạn" (một operation khác), (b) bác bỏ ứng viên, hoặc (c)
+ghi rõ scope là khoảng Δt. Đây chính là lý do cổng SHACL **không bao giờ là cổng chân
+lý** — nó chỉ loại ca vỡ hình dạng, không loại ca sai nghĩa.
+
+> ⚠️ **Ngộ nhận phổ biến:** "SHACL conforms true → claim được chấp nhận." Sai. Ca phụ này
+> là phản ví dụ: ứng viên qua được mọi hình dạng mà vẫn sai về ngữ nghĩa. `conforms true`
+> chỉ nói *hình dạng đúng*, không nói *nghĩa đúng*, càng không nói *được chấp nhận*.
 
 > 🖊 **Tự kiểm tra:** Trong ca diễn tập, nếu hệ thống *không có* I3, kiểu hỏng nào sẽ
 > âm thầm đi qua? I6 bảo vệ chống ca gì sau khi sửa hash?
@@ -1656,9 +1802,9 @@ mô hình hóa tường minh (§7.27); integration policy phiên bản hóa — 
 **Nối tiếp Chương 6:** sổ cái phát biểu của Ch6 giờ đây có một *con đường vào*: đường
 ống này là nơi các claim mới được sinh ra, đánh giá, và ghi sổ — với đầy đủ provenance,
 bằng chứng, và quản trị. RATE_OF_CHANGE vẫn là sợi chỉ xuyên suốt: `ex:claim_vroc`
-Accepted trong sổ cái (Ch6) được củng cố bởi bằng chứng mới từ nguồn A qua pipeline
-(§7.31) — còn `ex:current_1` của nguồn C nằm lại ở hàng đợi, chờ xác nhận, không vội
-đồng nhất với vận tốc.
+Accepted trong sổ cái (Ch6) được củng cố bởi bằng chứng từ hai nguồn độc lập A và B qua
+pipeline (§7.31) — còn `ex:current_1` của nguồn C nằm lại ở hàng đợi, chờ xác nhận,
+không vội đồng nhất với vận tốc.
 
 ## 7.36 Mechanism Knowledge System — Năng lực đạt được
 
@@ -1685,13 +1831,20 @@ mới đến từ đâu?", "hai nguồn nói cùng một thứ nhưng khác lư�
   (§7.21–7.30).
 
 **VÍ DỤ RATE_OF_CHANGE CỤ THỂ** — ba nguồn (Giải tích A, Cơ học B, Điện tử C) cùng nói
-"tốc độ thay đổi theo thời gian". Sau pipeline: nguồn A và B được xác nhận cùng mệnh đề
-`ex:prop_velocity_rate_of_change` sau gióng lược đồ, khử trùng thành một claim được củng
-cố trong sổ cái (§7.31). Nguồn C (`current = C·dV/dt`) **không** bị đồng nhất với vận tốc:
-định danh cho "không trùng", gióng lược đồ không tìm thấy tương ứng, cổng SHACL bắt
-thiếu operation → `ex:current_1` nằm ở hàng đợi xem xét. Câu trả lời của §7.0: "ba nguồn
-nói cùng một khái niệm?" — hóa ra là *không hẳn*: A và B là một, C thì không. Không có
-pipeline, hệ thống đã vội gộp cả ba và làm hỏng ontology cơ chế.
+"tốc độ thay đổi theo thời gian". Sau pipeline: nguồn A (đạo hàm đo tốc độ thay đổi) và
+nguồn B (vận tốc = rate of change của vị trí) là **hai phát biểu khác nhau** — khác nội
+dung, khác hash, khác provenance — nhưng cùng quy về cơ chế `rateOfChange_1` sau gióng
+lược đồ. Cả hai được giữ riêng và cùng củng cố `ex:claim_vroc` trong sổ cái (§7.31) —
+không bị gộp thành một claim (§7.13). Nguồn C (`current = C·dV/dt`) **không** bị đồng
+nhất với vận tốc: định danh cho "không trùng", gióng lược đồ không tìm thấy tương ứng,
+cổng SHACL bắt thiếu `withRespectTo` → `ex:current_1` nằm ở hàng đợi xem xét. Câu trả lời
+của §7.0: "ba nguồn nói cùng một khái niệm?" — hóa ra là *không hẳn*: A và B cùng một
+cơ chế nhưng vẫn là hai phát biểu riêng; C thì không thuộc về cơ chế đó. Sự giống nhau về
+cấu trúc giữa hai ứng dụng (vận tốc và dòng qua tụ) là một **gợi ý** — nó có thể dẫn tới
+một giả thuyết ứng viên (CandidateMechanismHypothesis) về một cơ chế trừu tượng chung,
+nhưng việc xác lập sự đồng nhất trừu tượng đó thuộc về học quy nạp (Chương 8), không phải
+kết luận của chương này. Không có pipeline, hệ thống đã vội gộp cả ba và làm hỏng ontology
+cơ chế.
 
 **VẪN CHƯA GIẢI QUYẾT** — đường ống giả định *nguồn đã có sẵn, nội dung đã đầy đủ*.
 Ba bài toán còn mở: (1) **học quy nạp** — suy ra tri thức mới không có ở nguồn (không

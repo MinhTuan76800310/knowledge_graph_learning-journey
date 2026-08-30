@@ -76,10 +76,7 @@ def test_required_use_after_explanation(registry):
             violations.append(
                 f"  '{name}': required in Ch{required} but not explained until Ch{explained}"
             )
-    assert not violations, (
-        "Concepts required before they are explained:\n"
-        + "\n".join(violations)
-    )
+    assert not violations, "Concepts required before they are explained:\n" + "\n".join(violations)
 
 
 def test_early_mentions_are_incidental(registry):
@@ -99,8 +96,7 @@ def test_early_mentions_are_incidental(registry):
                 f"(not marked incidental_gloss)"
             )
     assert not violations, (
-        "Concepts mentioned before explanation without incidental gloss:\n"
-        + "\n".join(violations)
+        "Concepts mentioned before explanation without incidental gloss:\n" + "\n".join(violations)
     )
 
 
@@ -117,19 +113,18 @@ def test_mentioned_before_or_when_required(registry):
             violations.append(
                 f"  '{name}': required in Ch{required} but not mentioned until Ch{mentioned}"
             )
-    assert not violations, (
-        "Concepts required before they are mentioned:\n"
-        + "\n".join(violations)
-    )
+    assert not violations, "Concepts required before they are mentioned:\n" + "\n".join(violations)
 
 
 def test_chapter_numbers_are_positive_integers(registry):
     for name, entry in registry.items():
-        for field in ("first_mentioned_chapter", "first_required_use_chapter", "first_explained_chapter"):
+        for field in (
+            "first_mentioned_chapter",
+            "first_required_use_chapter",
+            "first_explained_chapter",
+        ):
             val = entry[field]
-            assert isinstance(val, int) and val >= 1, (
-                f"Concept '{name}' has invalid {field}: {val}"
-            )
+            assert isinstance(val, int) and val >= 1, f"Concept '{name}' has invalid {field}: {val}"
 
 
 def test_incidental_concepts_have_notes(registry):
@@ -138,9 +133,7 @@ def test_incidental_concepts_have_notes(registry):
     for name, entry in registry.items():
         if entry.get("incidental_gloss", False) and not entry.get("notes"):
             violations.append(f"  '{name}': marked incidental but has no notes")
-    assert not violations, (
-        "Incidental concepts without notes:\n" + "\n".join(violations)
-    )
+    assert not violations, "Incidental concepts without notes:\n" + "\n".join(violations)
 
 
 def test_no_duplicate_concept_names(registry):
