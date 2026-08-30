@@ -33,9 +33,15 @@ Last verified: 2026-08-25
 | Property graph modeling | Neo4j Graph Data Modeling Fundamentals | Neo4j Cypher Fundamentals | OFFICIAL_DOCUMENTATION | Stable | Industry-standard property graph database | 2, 10 |
 | Building KGs with LLMs | Neo4j Building KGs with LLMs | Microsoft GraphRAG docs | OFFICIAL_DOCUMENTATION | Stable | Practical LLM-to-graph extraction patterns | 7, 9 |
 | GraphRAG architecture | Microsoft GraphRAG indexing architecture | "Unifying LLMs and KGs: A Roadmap" | OFFICIAL_DOCUMENTATION / RESEARCH_PAPER | Stable | Community retrieval augmentation via graph structure | 9 |
-| Knowledge acquisition pipeline | Hogan et al. Ch.8 Creation & Enrichment | Stanford CS520 Creating KGs from text | ACADEMIC | Stable | Extraction → resolution → validation pipeline | 7 |
-| Knowledge quality assessment | Hogan et al. Ch.9 Quality Assessment | Stanford CS520 KG Evolution | ACADEMIC | Stable | Completeness, consistency, accuracy metrics | 5, 7, 10 |
+| Knowledge acquisition pipeline | Hogan et al. Ch.6 Creation & Enrichment | Stanford CS520 Creating KGs from text | ACADEMIC | Stable | Extraction → resolution → validation pipeline | 7 |
+| Knowledge quality assessment | Hogan et al. Ch.7 Quality Assessment | Stanford CS520 KG Evolution | ACADEMIC | Stable | Completeness, consistency, accuracy metrics | 5, 7, 10 |
 | Mechanism abstraction (capstone) | Original synthesis | Hogan et al. Ch.4 Deductive Knowledge | ORIGINAL / ACADEMIC | N/A | Cross-domain mechanism recognition as research problem | 4, 10 |
+| RDB→RDF mapping (custom) | W3C R2RML (REC 2012) | — | STANDARD | Stable | Triples Map / Subject Map / Predicate-Object Map for custom RDB-to-RDF mapping | 7 |
+| RDB→RDF mapping (default) | W3C Direct Mapping (REC 2012) | — | STANDARD | Stable | Automatic table→class, row→resource, column→predicate; shape follows DB schema | 7 |
+| Tabular→RDF (CSV/TSV) | W3C Model for Tabular Data + csv2rdf (REC 2015) | — | STANDARD | Stable | Table/row/column/cell model + annotations for generating RDF from tabular data | 7 |
+| Record linkage / entity resolution | Fellegi & Sunter (JASA 1969) | Hogan et al. Ch.6 Creation & Enrichment | RESEARCH_PAPER / ACADEMIC | Stable | Comparison vector γ, m/u probabilities, two-threshold decision rule | 7 |
+| Schema matching | Rahm & Bernstein (VLDB J 2001) | — | RESEARCH_PAPER | Stable | Element vs structure level; schema/instance/hybrid matchers | 7 |
+| Data integration theory | Lenzerini (PODS 2002) | — | RESEARCH_PAPER | Stable | Data integration system (G, S, M); GAV/LAV; sound/complete/exact mappings | 7 |
 
 ## Source type legend
 

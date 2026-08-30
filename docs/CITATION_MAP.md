@@ -45,6 +45,13 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | SP12-01 | `w3c-sparql12-query` | SPARQL 1.2 Query (emerging) |
 | RDF-MT-01 | `w3c-rdf11-mt` | RDF 1.1 Semantics |
 | SP11-ENT | `w3c-sparql11-entailment` | SPARQL 1.1 Entailment Regimes |
+| R2RML-01 | `w3c-r2rml` | R2RML: RDB to RDF Mapping Language |
+| DIRECT-MAP-01 | `w3c-direct-mapping` | A Direct Mapping of Relational Data to RDF |
+| CSVW-01 | `w3c-tabular-data-model` | Model for Tabular Data and Metadata on the Web |
+| RL-01 | `fellegi-sunter-1969` | A Theory for Record Linkage |
+| SM-01 | `rahm-bernstein-2001` | A Survey of Approaches to Automatic Schema Matching |
+| DI-01 | `lenzerini-2002` | Data Integration: A Theoretical Perspective |
+| HOGAN-CREATE-01 | `hogan-creation-enrichment` | Knowledge Graphs (Hogan et al.), Creation and Enrichment |
 
 ## Rules
 
