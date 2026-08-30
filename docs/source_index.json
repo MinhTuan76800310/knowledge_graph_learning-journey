@@ -562,7 +562,9 @@
       "title": "RDF 1.1 Semantics",
       "document_status": "W3C Recommendation",
       "publication_date": "2014-02-25",
-      "used_in_chapters": ["5"],
+      "used_in_chapters": [
+        "5"
+      ],
       "research_note_path": "docs/research_notes/RDF-MT-01.md",
       "key_finding": "Normative model-theoretic semantics for RDF/RDFS. Section 9 defines RDFS interpretations and entailment patterns (rdfs2-domain, rdfs3-range, rdfs9-subClassOf, etc.). Appendix A shows rule-based operationalization is correct but not complete on standard RDF; completeness requires generalized RDF syntax."
     },
@@ -576,7 +578,9 @@
       "title": "SPARQL 1.1 Entailment Regimes",
       "document_status": "W3C Recommendation",
       "publication_date": "2013-03-21",
-      "used_in_chapters": ["5"],
+      "used_in_chapters": [
+        "5"
+      ],
       "research_note_path": "docs/research_notes/SP11-ENT.md",
       "key_finding": "Entailment regimes are specified via SPARQL Service Description (sd:defaultEntailmentRegime, sd:entailmentRegime), NOT via FROM clause. Standard regime IRIs defined for RDF, RDFS, D, OWL-Direct, OWL-RDF-Based. FROM selects graphs, not regimes."
     },
@@ -590,7 +594,9 @@
       "title": "SWRL: A Semantic Web Rule Language Combining OWL and RuleML",
       "document_status": "W3C Member Submission",
       "publication_date": "2004-05-21",
-      "used_in_chapters": ["5"],
+      "used_in_chapters": [
+        "5"
+      ],
       "research_note_path": "docs/research_notes/SWRL-01.md",
       "stability": "NOT_RECOMMENDATION",
       "key_finding": "Horn-clause rules extending OWL DL; undecidable in general when combined with OWL DL. Safety condition requires head variables appear in body. NOT a W3C Recommendation."
@@ -605,7 +611,9 @@
       "title": "RIF Core Dialect",
       "document_status": "W3C Recommendation",
       "publication_date": "2013-02-05",
-      "used_in_chapters": ["5"],
+      "used_in_chapters": [
+        "5"
+      ],
       "research_note_path": "docs/research_notes/RIF-01.md",
       "key_finding": "Definite Horn rules without function symbols (= Datalog). Safeness conditions guarantee forward-chaining termination. First-order semantics. Stable normative reference for rule interchange."
     },
@@ -619,7 +627,9 @@
       "title": "Knowledge Graphs (Hogan et al.), Rules and Reasoning sections",
       "document_status": "Academic textbook",
       "publication_date": "2021",
-      "used_in_chapters": ["5"],
+      "used_in_chapters": [
+        "5"
+      ],
       "research_note_path": "docs/research_notes/HOGAN-CH5.md",
       "key_finding": "Formal rule definition R := (B,H); materialization as R*(G) = union of R^k(G); fixpoint reached when R^{k'}(G) = R^{k'+1}(G); soundness vs completeness definitions; RDFS rules correct but incomplete; OWL RL rules incomplete for negation/existentials/counting."
     },
@@ -633,7 +643,9 @@
       "title": "OWL 2 Web Ontology Language Profiles — OWL 2 RL section",
       "document_status": "W3C Recommendation",
       "publication_date": "2012-12-11",
-      "used_in_chapters": ["5"],
+      "used_in_chapters": [
+        "5"
+      ],
       "research_note_path": "docs/research_notes/OWL-RL-SPEC.md",
       "key_finding": "Six rule tables (Tables 4-9) covering equality, properties, classes, class axioms, datatypes, schema vocabulary. prp-dom/prp-rng demonstrate domain/range as inference rules. Theorem PR1 gives conditional completeness. Sound but not complete on arbitrary RDF."
     },
@@ -647,7 +659,9 @@
       "title": "PROV Data Model (PROV-DM)",
       "document_status": "W3C Recommendation",
       "publication_date": "2013-04-30",
-      "used_in_chapters": ["6"],
+      "used_in_chapters": [
+        "6"
+      ],
       "research_note_path": "docs/research_notes/PROV-DM-01.md",
       "key_finding": "Conceptual provenance model underlying PROV-O. Core: Entity, Activity, Agent with relationships (wasGeneratedBy, wasDerivedFrom, etc.). Provenance forms directed graphs rooted at the entity. Generation precedes usage. Influence underlies all relations."
     },
@@ -663,7 +677,9 @@
       "publication_date": "2017-10-19",
       "editors": "Simon Cox, Chris Little",
       "current_revision_status": "Candidate Recommendation Draft 2022-11-15 (revision in progress; not a Second Edition)",
-      "used_in_chapters": ["6"],
+      "used_in_chapters": [
+        "6"
+      ],
       "research_note_path": "docs/research_notes/OWL-TIME-01.md",
       "key_finding": "Core classes: TemporalEntity, Instant, Interval. Allen's interval algebra relations. hasTime links any resource to a TemporalEntity. Valid time vs assertion time modeled as separate temporal facts."
     },
@@ -677,7 +693,9 @@
       "title": "R2RML: RDB to RDF Mapping Language",
       "document_status": "W3C Recommendation",
       "publication_date": "2012-09-27",
-      "used_in_chapters": ["7"],
+      "used_in_chapters": [
+        "7"
+      ],
       "research_note_path": "docs/research_notes/R2RML-01.md",
       "key_finding": "Triples Map translates each row of a logical table into zero or more RDF triples via Subject Map + Predicate-Object Map. Custom mapping; distinct from Direct Mapping default. Stable baseline for RDB→RDF."
     },
@@ -691,7 +709,9 @@
       "title": "A Theory for Record Linkage (Fellegi & Sunter)",
       "document_status": "Academic paper (Journal of the American Statistical Association 64(328):1183–1210)",
       "publication_date": "1969",
-      "used_in_chapters": ["7"],
+      "used_in_chapters": [
+        "7"
+      ],
       "research_note_path": "docs/research_notes/RL-01.md",
       "key_finding": "Comparison vector gamma; m(gamma) and u(gamma) probabilities; two-threshold decision rule (match / possible / non-match with clerical review). Foundational model for record linkage / entity resolution."
     },
@@ -705,7 +725,9 @@
       "title": "A Survey of Approaches to Automatic Schema Matching (Rahm & Bernstein)",
       "document_status": "Academic paper (The VLDB Journal 10(4):334–350)",
       "publication_date": "2001",
-      "used_in_chapters": ["7"],
+      "used_in_chapters": [
+        "7"
+      ],
       "research_note_path": "docs/research_notes/SM-01.md",
       "key_finding": "Schema matching = identifying semantic correspondences between schema elements. Element-level vs structure-level; schema-level vs instance-level vs hybrid matchers."
     },
@@ -719,7 +741,9 @@
       "title": "Model for Tabular Data and Metadata on the Web",
       "document_status": "W3C Recommendation",
       "publication_date": "2015-12-17",
-      "used_in_chapters": ["7"],
+      "used_in_chapters": [
+        "7"
+      ],
       "research_note_path": "docs/research_notes/CSVW-01.md",
       "key_finding": "Tabular data carries implicit structure (table/row/column/cell + annotations) that must be made explicit before RDF generation. Companion spec: csv2rdf (Generating RDF from Tabular Data, 2015-12-17)."
     },
@@ -733,7 +757,9 @@
       "title": "A Direct Mapping of Relational Data to RDF",
       "document_status": "W3C Recommendation",
       "publication_date": "2012-09-27",
-      "used_in_chapters": ["7"],
+      "used_in_chapters": [
+        "7"
+      ],
       "research_note_path": "docs/research_notes/DIRECT-MAP-01.md",
       "key_finding": "Default, automatic RDB→RDF mapping: table→class, row→resource (IRI from table + primary key), column→predicate. Shape follows the DB schema, not a target ontology. Contrast with R2RML custom mapping."
     },
@@ -747,7 +773,9 @@
       "title": "Data Integration: A Theoretical Perspective (Lenzerini)",
       "document_status": "Academic paper (PODS 2002, pp. 233–246)",
       "publication_date": "2002",
-      "used_in_chapters": ["7"],
+      "used_in_chapters": [
+        "7"
+      ],
       "research_note_path": "docs/research_notes/DI-01.md",
       "key_finding": "Data integration system I = (G, S, M): global schema, source schemas, mapping. GAV/LAV mapping styles; sound / complete / exact mapping semantics. Queries posed over global schema, answered from sources."
     },
@@ -761,9 +789,235 @@
       "title": "Knowledge Graphs (Hogan et al.), Chapter 6: Creation and Enrichment",
       "document_status": "Academic textbook",
       "publication_date": "2021",
-      "used_in_chapters": ["7"],
+      "used_in_chapters": [
+        "7"
+      ],
       "research_note_path": "docs/research_notes/HOGAN-CREATE-01.md",
       "key_finding": "Book Ch6 (verified via kgbook.org TOC): Creation and Enrichment — constructing KGs from data/text, entity resolution. Ch7: Quality Assessment. Academic framing; W3C standards carry formal weight."
+    },
+    {
+      "id": "HOGAN-IND-01",
+      "canonical_url": "https://kgbook.org/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://raw.githubusercontent.com/Knowledge-Graphs-Book/HTML-Book/main/chapters/05-inductive.php",
+      "title": "Knowledge Graphs (Hogan et al.), Chapter 5: Inductive Knowledge",
+      "document_status": "Academic textbook (Springer 2021), open full text",
+      "publication_date": "2021",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/HOGAN-IND-01.md",
+      "key_finding": "Inductive knowledge = models encoding patterns + their predictions; generalizes from observations, fallible. Distinguishes numeric latent (KGE), numeric supervised (GNN), symbolic self-supervised (rule mining). Plausibility scoring; higher score = more plausible; training maximizes positives, minimizes negatives. High confidence != truth (capital-city 187/195 with Vaduz counterexample)."
+    },
+    {
+      "id": "TRANSE-01",
+      "canonical_url": "https://proceedings.neurips.cc/paper/2013/hash/1cecc7a77928ca8133fa24680a88d2f9-Abstract.html",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://proceedings.neurips.cc/paper/2013/hash/1cecc7a77928ca8133fa24680a88d2f9-Abstract.html",
+      "title": "Translating Embeddings for Modeling Multi-relational Data (Bordes et al., NIPS 2013)",
+      "document_status": "Academic paper (NeurIPS 2013)",
+      "publication_date": "2013",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/TRANSE-01.md",
+      "key_finding": "TransE: relations as translations h + r ~= t; score ||h + r - t||; corrupted triples (replace head/tail) as training negatives; margin ranking loss; evaluation mean rank + hits@10 in raw AND filtered settings; known 1-to-N/N-to-1/symmetric limitations."
+    },
+    {
+      "id": "DISTMULT-01",
+      "canonical_url": "https://arxiv.org/abs/1412.6575",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1412.6575",
+      "title": "Embedding Entities and Relations for Learning and Inference in Knowledge Bases (Yang et al.)",
+      "document_status": "Academic paper (ICLR 2015)",
+      "publication_date": "2014",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/DISTMULT-01.md",
+      "key_finding": "Bilinear framework: entities as vectors, relations as bilinear/linear maps; top-10 accuracy 73.2% vs 54.7% TransE on Freebase; relation composition = matrix multiplication; DistMult symmetric scoring limitation."
+    },
+    {
+      "id": "COMPLEX-01",
+      "canonical_url": "https://arxiv.org/abs/1606.06357",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1606.06357",
+      "title": "Complex Embeddings for Simple Link Prediction (Trouillon et al.)",
+      "document_status": "Academic paper (ICML 2016)",
+      "publication_date": "2016",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/COMPLEX-01.md",
+      "key_finding": "ComplEx: complex-valued embeddings, Hermitian dot product models symmetric AND antisymmetric relations; linear space/time; direct improvement over DistMult's symmetric limitation."
+    },
+    {
+      "id": "RGCN-01",
+      "canonical_url": "https://arxiv.org/abs/1703.06103",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1703.06103",
+      "title": "Modeling Relational Data with Graph Convolutional Networks (Schlichtkrull et al.)",
+      "document_status": "Academic paper (ESWC 2018)",
+      "publication_date": "2017",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/RGCN-01.md",
+      "key_finding": "R-GCN: relational message passing with relation-specific transformations; encoder (R-GCN) + decoder (DistMult) for link prediction; basis/block-diagonal regularization; +29.8% on FB15k-237 over decoder-only; relation types must not be collapsed."
+    },
+    {
+      "id": "AMIE-01",
+      "canonical_url": "https://doi.org/10.1007/S00778-015-0394-1",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://dblp.org/search/publ/api?q=Fast+Rule+Mining+in+Ontological+Knowledge+Bases+with+AMIE",
+      "title": "Fast Rule Mining in Ontological Knowledge Bases with AMIE+ (Galarraga et al.)",
+      "document_status": "Academic paper (The VLDB Journal 24(5):707-730)",
+      "publication_date": "2015",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/AMIE-01.md",
+      "key_finding": "Rule mining under OWA; path rules r1(x,y) ^ r2(y,z) -> r3(x,z); standard confidence penalized by incompleteness; PCA (Partial Completeness Assumption) confidence and Mostly Confident measure; KG-scale mining. Rule-mining confidence != epistemic confidence."
+    },
+    {
+      "id": "GRAIL-01",
+      "canonical_url": "https://arxiv.org/abs/1911.06962",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1911.06962",
+      "title": "Inductive Relation Prediction by Subgraph Reasoning (Teru, Denis, Hamilton)",
+      "document_status": "Academic paper (NeurIPS 2020)",
+      "publication_date": "2019",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/GRAIL-01.md",
+      "key_finding": "GraIL: subgraph-based GNN for inductive relation prediction - generalizes to unseen entities without entity-specific embeddings; captures portions of first-order logic; beats rule-learning baselines on inductive benchmarks."
+    },
+    {
+      "id": "NICKEL-01",
+      "canonical_url": "https://arxiv.org/abs/1503.00759",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1503.00759",
+      "title": "A Review of Relational Machine Learning for Knowledge Graphs (Nickel et al.)",
+      "document_status": "Academic survey (Proceedings of the IEEE 104(1):11-33)",
+      "publication_date": "2015",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/NICKEL-01.md",
+      "key_finding": "Relational ML on KGs predicts new edges; two families: latent feature models (embeddings) and observable pattern mining; combining both improves power; Knowledge Vault example links statistical models with text extraction."
+    },
+    {
+      "id": "NEGSAMP-01",
+      "canonical_url": "https://arxiv.org/abs/1310.4546",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1310.4546",
+      "title": "Distributed Representations of Words and Phrases and their Compositionality (Mikolov et al.)",
+      "document_status": "Academic paper (NIPS 2013)",
+      "publication_date": "2013",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/NEGSAMP-01.md",
+      "key_finding": "Origin of negative sampling: training objective distinguishing observed pairs from randomly drawn negatives. A training device that assumes negatives; under OWA absence != falsity."
+    },
+    {
+      "id": "OVERSMOOTH-01",
+      "canonical_url": "https://arxiv.org/abs/1801.07606",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1801.07606",
+      "title": "Deeper Insights into Graph Convolutional Networks for Semi-Supervised Learning (Li, Han, Wu)",
+      "document_status": "Academic paper (AAAI 2018)",
+      "publication_date": "2018",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/OVERSMOOTH-01.md",
+      "key_finding": "Graph convolution = Laplacian smoothing; stacking layers causes oversmoothing - node representations converge, performance degrades. More layers != more understanding."
+    },
+    {
+      "id": "SHORTCUT-01",
+      "canonical_url": "https://arxiv.org/abs/2004.07780",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2004.07780",
+      "title": "Shortcut Learning in Deep Neural Networks (Geirhos et al.)",
+      "document_status": "Academic paper (Nature Machine Intelligence 2:665-673)",
+      "publication_date": "2020",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/SHORTCUT-01.md",
+      "key_finding": "Shortcut learning: models succeed on benchmarks using superficial/incidental cues, break under harder conditions. High benchmark accuracy can coexist with wrong mechanism understanding."
+    },
+    {
+      "id": "CALIB-01",
+      "canonical_url": "https://arxiv.org/abs/1706.04599",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1706.04599",
+      "title": "On Calibration of Modern Neural Networks (Guo et al.)",
+      "document_status": "Academic paper (ICML 2017)",
+      "publication_date": "2017",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/CALIB-01.md",
+      "key_finding": "Modern neural networks poorly calibrated / overconfident; confidence != probability of correctness; ECE; temperature scaling fixes calibration without changing accuracy."
+    },
+    {
+      "id": "COLLAPSE-01",
+      "canonical_url": "https://arxiv.org/abs/2305.17493",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2305.17493",
+      "title": "AI models collapse when trained on recursively generated data (Shumailov et al.)",
+      "document_status": "Academic paper (Nature 631:755-759, 2024; preprint arXiv:2305.17493)",
+      "publication_date": "2023",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/COLLAPSE-01.md",
+      "key_finding": "Model collapse: training on recursively generated data causes irreversible defects - tails of the original distribution disappear; demonstrated on VAEs, GMMs, LLMs. Supports self-reinforcement caution."
+    },
+    {
+      "id": "GRLBOOK-01",
+      "canonical_url": "https://www.cs.mcgill.ca/~wlh/grl_book/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-30T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.cs.mcgill.ca/~wlh/grl_book/",
+      "title": "Graph Representation Learning (Hamilton)",
+      "document_status": "Academic textbook (Morgan & Claypool, 2020), open draft",
+      "publication_date": "2020",
+      "used_in_chapters": [
+        "8"
+      ],
+      "research_note_path": "docs/research_notes/GRLBOOK-01.md",
+      "key_finding": "Authoritative treatment of node embeddings (encoder-decoder), knowledge graph embeddings, GNN message passing, and graph-level pooling/readout; supports node vs subgraph representation distinction."
     }
   ]
 }
