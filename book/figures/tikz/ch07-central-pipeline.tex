@@ -1,0 +1,59 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{shapes.geometric,shapes.misc,positioning,fit,backgrounds,arrows.meta,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+    node distance=1.0cm and 0.7cm,
+    stage/.style={rounded rectangle, draw, minimum width=2.5cm, minimum height=0.85cm, align=center, font=\scriptsize},
+    arrow/.style={-{Stealth[length=2.5mm]}, thick},
+    label/.style={font=\scriptsize\itshape, text=gray!60!black},
+    phase/.style={font=\footnotesize\bfseries},
+]
+
+% ================== Acquisition phase ==================
+\node[phase] (acqTitle) at (0, 4.4) {THU NHẬN (Acquisition)};
+\node[stage, fill=blue!8] (s1) at (0, 3.2) {Đăng ký nguồn\\[-1pt]\scriptsize(Source Artifact)};
+\node[stage, fill=blue!8, right=of s1] (s2) {Quan sát\\[-1pt]\scriptsize(Source Fragment)};
+\node[stage, fill=blue!8, right=of s2] (s3) {Trích xuất\\[-1pt]\scriptsize(Extraction)};
+\node[stage, fill=blue!8, right=of s3] (s4) {Chuẩn hóa\\[-1pt]\scriptsize(Normalization)};
+\node[stage, fill=blue!8, right=of s4] (s5) {Cấu trúc hóa\\[-1pt]\scriptsize(Structuring)};
+
+\draw[arrow] (s1) -- (s2);
+\draw[arrow] (s2) -- (s3);
+\draw[arrow] (s3) -- (s4);
+\draw[arrow] (s4) -- (s5);
+
+\node[label, below=0.15cm of s3] {bản ghi ứng viên};
+\node[label, below=0.15cm of s5] {tri thức ứng viên};
+
+% ================== Integration phase ==================
+\node[phase] (intTitle) at (0, 0.9) {TÍCH HỢP (Integration)};
+\node[stage, fill=green!8] (i1) at (0, -0.3) {Nghị quyết định danh\\[-1pt]\scriptsize(Entity Resolution)};
+\node[stage, fill=green!8, right=of i1] (i2) {Gióng lược đồ\\[-1pt]\scriptsize(Schema Alignment)};
+\node[stage, fill=green!8, right=of i2] (i3) {Khử trùng \& lũy đẳng\\[-1pt]\scriptsize(Dedup \& Idempotency)};
+\node[stage, fill=orange!8, right=of i3] (i4) {Cổng SHACL\\[-1pt]\scriptsize(Structural Validation)};
+\node[stage, fill=orange!8, right=of i4] (i5) {Xung đột \& quyết định\\[-1pt]\scriptsize(Conflict \& Decision)};
+
+\draw[arrow] (i1) -- (i2);
+\draw[arrow] (i2) -- (i3);
+\draw[arrow] (i3) -- (i4);
+\draw[arrow] (i4) -- (i5);
+
+% ================== Ledger ==================
+\node[stage, fill=red!8, minimum width=4.2cm, below=1.1cm of $(i1)!0.5!(i5)$] (ledger) {Ghi sổ phát biểu\\[-1pt]\scriptsize(Claim Ledger)};
+\draw[arrow] (i5) -- (ledger);
+\node[label, left=0.2cm of ledger, align=right, text width=2.6cm] {quyết định +\\provenance + bằng chứng};
+
+% Bridge between phases
+\draw[arrow, dashed] (s5) -- node[label, right, pos=0.3] {các luồng ứng viên} (i1);
+
+% ================== Projection ==================
+\node[stage, fill=gray!12, minimum width=3.6cm, right=2.2cm of ledger] (proj) {Chiếu hình\\[-1pt]\scriptsize(Canonical View)};
+\draw[arrow, dashed] (ledger) -- node[label, above] {truy vấn} (proj);
+
+\end{tikzpicture}
+\end{document}
