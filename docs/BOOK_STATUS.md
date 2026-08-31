@@ -4,7 +4,7 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-08-31 (Chapter 9 accepted, PDF built; Book Preview v0.6 = front matter + Ch1–9 + Glossary + Bibliography)
+Last updated: 2026-08-31 (Chapter 10 drafted on branch chapter10-living-knowledge-system; Book Preview v0.7 = front matter + Ch1–10 + Glossary + Bibliography, 356 print pages)
 
 ## Front matter
 
@@ -28,7 +28,7 @@ Last updated: 2026-08-31 (Chapter 9 accepted, PDF built; Book Preview v0.6 = fro
 | 7 — Knowledge Acquisition and Integration | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 8 — Inductive Knowledge and Learning from Graphs | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 9 — Retrieval, Question Answering, and GraphRAG | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
-| 10 — Building a Living Knowledge System | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
+| 10 — Building a Living Knowledge System | ✅ | ✅ | 🔲 | 🔲 | 🔲 | DRAFTED |
 
 ## Back matter
 
