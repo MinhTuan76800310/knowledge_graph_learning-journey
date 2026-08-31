@@ -64,7 +64,7 @@
 >
 > **Bản đồ khái niệm:**
 >
-> Diễn giải câu hỏi → Intent (8 loại) → Liên kết thực thể → Phân rã → Kế hoạch truy xuất
+> Diễn giải câu hỏi → Intent (9 loại) → Liên kết thực thể → Phân rã → Kế hoạch truy xuất
 > → Đơn vị truy xuất → Index ≠ KG → Đồ thị (SPARQL, đa chặng, k-chặng, subgraph) → Văn
 > bản (BM25, dense, lai, RRF) → Tri thức luận (Canonical vs Ledger, governance, thời
 > gian, provenance, mâu thuẫn) → top_k bound → Đo lường → Tái xếp hạng → Lắp ráp ngữ
@@ -200,7 +200,7 @@ chuyển thẳng sang truy xuất mà không kiểm tra lại; hoặc nhầm l�
 - Không được trình bày sản phẩm của diễn giải (intent, danh sách thực thể) như tri thức
   đã được chấp nhận — nó là phân tích, không phải khẳng định.
 
-## 9.4 Phân loại intent: tám loại câu hỏi
+## 9.4 Phân loại intent: chín loại câu hỏi
 
 Để chọn đúng kế hoạch truy xuất, hệ thống phân loại câu hỏi theo **loại intent**. Mỗi
 loại có yêu cầu bằng chứng và nguồn truy xuất riêng. Bảng 9.1 là bảng phân loại của
@@ -1888,7 +1888,7 @@ gold là đo *khớp với chú thích*, không phải đo *chân lý*.
 
 Ngoài benchmark chuẩn, hệ thống cần các **test đối kháng** — cố tình gài bẫy để kiểm tra
 ranh giới tri thức luận (BOOK-DEFINED, nối tiếp khái niệm âm tính khó của Ch8
-[@edge-graphrag-2024]):
+[@karpukhin-dpr-2020]):
 
 1. **Distractor test:** chèn các đoạn giống bề mặt nhưng không liên quan/sai hướng vào
    kho — hệ thống có bị lừa chọn không? (đo precision/độ bền tổng hợp);
@@ -2283,9 +2283,9 @@ cập" đến "phân tích và tổng hợp trong nhiều ngữ cảnh"):
 | GraphRAG Limits | §9.69 | 4 | When NOT to use RAG | §9.70 | 4 |
 | Query Execution Router | §9.71 | 5 | | | |
 
-## 9.76 Bài kiểm tra năng lực người đọc (Reader Capability Test Q01–Q50)
+## 9.76 Bài kiểm tra năng lực người đọc (Reader Capability Test Q01–Q56)
 
-Yêu cầu: **Q01–Q50 đều = YES**. Nếu có câu trả lời NO, hãy đọc lại mục được trỏ trước
+Yêu cầu: **Q01–Q56 đều = YES**. Nếu có câu trả lời NO, hãy đọc lại mục được trỏ trước
 khi tiếp tục.
 
 | # | Tôi có thể... | Mục |
@@ -2340,6 +2340,12 @@ khi tiếp tục.
 | Q48 | ...giải thích GraphRAG là họ kiến trúc, không phải chuẩn | §9.52 |
 | Q49 | ...dùng bảng quyết định KGQA/RAG/GraphRAG cho một câu hỏi cụ thể | §9.53 |
 | Q50 | ...giải thích đường đi là giải thích, bùng nổ đường đi, và các giới hạn của GraphRAG | §9.54–9.55, §9.69 |
+| Q51 | ...liệt kê các trường của Answer artifact (answer provenance) và ý nghĩa của từng trường | §9.58 |
+| Q52 | ...giải thích vì sao câu trả lời QA không tự động thành tri thức KG | §9.59 |
+| Q53 | ...phân biệt trạng thái tri thức luận asserted / derived / predicted | §9.60 |
+| Q54 | ...giải thích vai trò của suy luận tượng trưng chính xác trong QA | §9.68 |
+| Q55 | ...trình bày toàn bộ luồng QA RATE_OF_CHANGE từ câu hỏi đến câu trả lời | §9.64 |
+| Q56 | ...nêu những bài toán còn mở mà Chương 10 phải giải | §9.79 |
 
 ## 9.77 Bậc năng lực cuối chương
 

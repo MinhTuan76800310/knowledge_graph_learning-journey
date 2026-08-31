@@ -4,7 +4,7 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-08-31 (Chapter 9 drafted, PDF built)
+Last updated: 2026-08-31 (Chapter 9 accepted, PDF built; Book Preview v0.6 = front matter + Ch1–9 + Glossary + Bibliography)
 
 ## Front matter
 
@@ -27,7 +27,7 @@ Last updated: 2026-08-31 (Chapter 9 drafted, PDF built)
 | 6 — Claims, Evidence, Provenance, Time, Contradiction | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 7 — Knowledge Acquisition and Integration | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 8 — Inductive Knowledge and Learning from Graphs | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
-| 9 — Retrieval, Question Answering, and GraphRAG | ✅ | ✅ | ✅ | 🔲 | ✅ | DRAFTED |
+| 9 — Retrieval, Question Answering, and GraphRAG | ✅ | ✅ | ✅ | ✅ | ✅ | ACCEPTED |
 | 10 — Building a Living Knowledge System | 🔲 | 🔲 | 🔲 | 🔲 | 🔲 | NOT_STARTED |
 
 ## Back matter
@@ -59,10 +59,10 @@ Last updated: 2026-08-31 (Chapter 9 drafted, PDF built)
   and `docs/CHAPTER08_DEPTH_REVIEW.md`. Semantic review 60/60 PASS; depth review PASS;
   capability test Q1–Q40 ALL = YES; PDF verified (258 print pages, Ch8 = pp. 209–247);
   merged via PR #14 (commit f136ba1).
-- Chapter 9 (DRAFTED, 2026-08-31) is recorded in `docs/CHAPTER09_BOOK_CHECKPOINT.md`
+- Chapter 9 (ACCEPTED, 2026-08-31) is recorded in `docs/CHAPTER09_BOOK_CHECKPOINT.md`
   and `docs/CHAPTER09_DEPTH_REVIEW.md`. Semantic review 75/75 PASS; depth review PASS;
-  capability test Q01–Q50 ALL = YES; PDF verified (322 print pages, Ch9 = pp. 251–322);
-  branch `chapter09-retrieval-qa-graphrag` pending PR.
+  capability test Q01–Q56 ALL = YES; PDF verified (322 print pages, Ch9 = pp. 251–322);
+  merged via PR #18 (commit 0a1fca4).
 - Chapters 5–10 are written sequentially after the Ch4 checkpoint, following the
   book-first workflow in `docs/BOOK_V0_1_MILESTONE.md`.
 - Deferred lab work is tracked in `docs/LAB_BACKLOG.md` and does not block acceptance.

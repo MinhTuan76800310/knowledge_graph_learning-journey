@@ -1154,9 +1154,9 @@
       "fetched_at": "2026-08-30T16:20:00Z",
       "http_status": 200,
       "final_url": "https://arxiv.org/abs/2307.03172",
-      "title": "Lost in the Middle: How Language Models Use Long Contexts (Liu et al., TACL 2023)",
-      "document_status": "Peer-reviewed paper (TACL 2023)",
-      "publication_date": "2023",
+      "title": "Lost in the Middle: How Language Models Use Long Contexts (Liu et al., TACL 2024)",
+      "document_status": "Peer-reviewed paper (TACL 12, 157-173, 2024)",
+      "publication_date": "2024",
       "used_in_chapters": [
         "9"
       ],
