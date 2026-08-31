@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T08:00:00Z",
+  "generated_at": "2026-08-31T05:41:02Z",
   "purpose": "Machine-readable evidence of source fetches (Phase 0.5 audit + Chapter 2 research + Chapter 3 research)",
   "sources": [
     {
@@ -998,10 +998,11 @@
       "document_status": "Academic paper (Nature 631:755-759, 2024; preprint arXiv:2305.17493)",
       "publication_date": "2023",
       "used_in_chapters": [
-        "8"
+        "8",
+        "10"
       ],
       "research_note_path": "docs/research_notes/COLLAPSE-01.md",
-      "key_finding": "Model collapse: training on recursively generated data causes irreversible defects - tails of the original distribution disappear; demonstrated on VAEs, GMMs, LLMs. Supports self-reinforcement caution."
+      "key_finding": "Model collapse: training on recursively generated data causes irreversible defects - tails of the original distribution disappear; demonstrated on VAEs, GMMs, LLMs. Supports self-reinforcement caution. Reused by Ch10 for model collapse vs staleness."
     },
     {
       "id": "GRLBOOK-01",
@@ -1242,6 +1243,230 @@
       ],
       "research_note_path": "docs/research_notes/MAGRAPH-01.md",
       "key_finding": "Implementation: TextUnits -> entity/relation/claim extraction -> Leiden communities -> bottom-up summaries -> Global/Local/DRIFT/Basic search; one concrete implementation family, not a universal GraphRAG standard."
+    },
+    {
+      "id": "KGQ-01",
+      "canonical_url": "https://www.semantic-web-journal.net/content/quality-assessment-linked-data-survey",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://www.semantic-web-journal.net/content/quality-assessment-linked-data-survey",
+      "title": "Quality Assessment for Linked Data: A Survey (Zaveri et al., Semantic Web 2016)",
+      "document_status": "Peer-reviewed survey (Semantic Web, IOS Press, 7(1), 63-93)",
+      "publication_date": "2016",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/KGQ-01.md",
+      "key_finding": "Survey of LD/KG quality assessment: dimensions (accuracy, completeness, consistency, timeliness, trustworthiness...) with metrics and methods; supports the book quality-dimensions section."
+    },
+    {
+      "id": "REFINE-01",
+      "canonical_url": "https://www.semantic-web-journal.net/content/knowledge-graph-refinement-survey-approaches-and-evaluation-methods",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://www.semantic-web-journal.net/content/knowledge-graph-refinement-survey-approaches-and-evaluation-methods",
+      "title": "Knowledge Graph Refinement: A Survey of Approaches and Evaluation Methods (Paulheim, Semantic Web 2017)",
+      "document_status": "Peer-reviewed survey (Semantic Web, IOS Press, 8(3), 489-508)",
+      "publication_date": "2017",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/REFINE-01.md",
+      "key_finding": "Splits KG quality into completeness (link prediction) and correctness (error detection/repair); refinement = key maintenance operation for re-validation."
+    },
+    {
+      "id": "ONTEVOL-01",
+      "canonical_url": "https://link.springer.com/article/10.1007/s10115-003-0137-2",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://link.springer.com/article/10.1007/s10115-003-0137-2",
+      "title": "Ontology Evolution: Not the Same as Schema Evolution (Noy & Klein, KAIS 2004)",
+      "document_status": "Peer-reviewed paper (Knowledge and Information Systems, 6(4), 428-440)",
+      "publication_date": "2004",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/ONTEVOL-01.md",
+      "key_finding": "Ontology evolution differs from DB schema evolution (instance data, shared mappings, changing domain understanding); underpins schema/ontology lifecycle sections."
+    },
+    {
+      "id": "ONTVR-01",
+      "canonical_url": "https://dblp.org/rec/conf/semweb/KleinF01.html",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://dblp.org/rec/conf/semweb/KleinF01.html",
+      "title": "Ontology Versioning on the Semantic Web (Klein & Fensel, SWWS 2001)",
+      "document_status": "Peer-reviewed conference paper (SWWS 2001, pp. 75-91)",
+      "publication_date": "2001",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/ONTVR-01.md",
+      "key_finding": "Defines ontology versioning: version graphs, compatibility, difference representation; supports supersession/versioning discipline at system scale."
+    },
+    {
+      "id": "KVLT-01",
+      "canonical_url": "https://dl.acm.org/doi/10.1145/2623330.2623623",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://dl.acm.org/doi/10.1145/2623330.2623623",
+      "title": "Knowledge Vault: A Web-Scale Approach to Probabilistic Knowledge Fusion (Dong et al., KDD 2014)",
+      "document_status": "Peer-reviewed conference paper (KDD 2014)",
+      "publication_date": "2014",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/KVLT-01.md",
+      "key_finding": "Web-scale KB construction fusing extrinsic extractions with prior-KB predictions; operational example of maintenance-level knowledge evaluation."
+    },
+    {
+      "id": "NELL-01",
+      "canonical_url": "https://dl.acm.org/doi/10.1145/3191513",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://dl.acm.org/doi/10.1145/3191513",
+      "title": "Never-Ending Learning (Mitchell et al., CACM 2018)",
+      "document_status": "Peer-reviewed magazine article (Communications of the ACM, 61(5), 103-115)",
+      "publication_date": "2018",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/NELL-01.md",
+      "key_finding": "NELL runs continuously: extraction + candidate validation + self-monitoring; the closest deployed instance of a self-updating living knowledge system."
+    },
+    {
+      "id": "DRIFT-01",
+      "canonical_url": "https://dl.acm.org/doi/10.1145/2523813",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://dl.acm.org/doi/10.1145/2523813",
+      "title": "A Survey on Concept Drift Adaptation (Gama et al., ACM Computing Surveys 2014)",
+      "document_status": "Peer-reviewed survey (ACM Computing Surveys, 46(4)), DOI verified via Crossref",
+      "publication_date": "2014",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/DRIFT-01.md",
+      "key_finding": "Defines concept drift types (sudden/gradual/recurring) and detection; analogical basis for knowledge staleness and degradation over time."
+    },
+    {
+      "id": "DRIFT-02",
+      "canonical_url": "https://link.springer.com/article/10.1007/BF00116900",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://link.springer.com/article/10.1007/BF00116900",
+      "title": "Learning in the Presence of Concept Drift and Hidden Contexts (Widmer & Kubat, Machine Learning 1996)",
+      "document_status": "Peer-reviewed paper (Machine Learning, 23, 69-101), DOI verified via Crossref",
+      "publication_date": "1996",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/DRIFT-02.md",
+      "key_finding": "Foundational concept-drift paper; hidden context = unobservable cause of drift, motivating system self-observation."
+    },
+    {
+      "id": "HIDDENTECH-01",
+      "canonical_url": "https://proceedings.neurips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://proceedings.neurips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html",
+      "title": "Hidden Technical Debt in Machine Learning Systems (Sculley et al., NIPS 2015)",
+      "document_status": "Peer-reviewed conference paper (NIPS 2015)",
+      "publication_date": "2015",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/HIDDENTECH-01.md",
+      "key_finding": "ML system maintenance: feedback loops, data dependencies, debt perspective; frames the book knowledge-debt concept (adapted to epistemic domain)."
+    },
+    {
+      "id": "BENCH-01",
+      "canonical_url": "https://proceedings.mlr.press/v97/recht19a.html",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://proceedings.mlr.press/v97/recht19a.html",
+      "title": "Do ImageNet Classifiers Generalize to ImageNet? (Recht et al., ICML 2019)",
+      "document_status": "Peer-reviewed conference paper (ICML 2019, PMLR 97)",
+      "publication_date": "2019",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/BENCH-01.md",
+      "key_finding": "Newly-built test sets drop accuracy 11-14% (ImageNet): re-used benchmarks decay; benchmark score != real system quality."
+    },
+    {
+      "id": "CASCADE-01",
+      "canonical_url": "https://dl.acm.org/doi/10.1145/3411764.3445518",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://dl.acm.org/doi/10.1145/3411764.3445518",
+      "title": "Data Cascades in High-Stakes AI (Sambasivan et al., CHI 2021)",
+      "document_status": "Peer-reviewed conference paper (CHI 2021), DOI 10.1145/3411764.3445518 verified",
+      "publication_date": "2021",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/CASCADE-01.md",
+      "key_finding": "Data cascades: compounding data-quality failures discovered post-deployment; supports knowledge-debt/contradiction-debt and structural maintenance framing."
+    },
+    {
+      "id": "DQSTD-01",
+      "canonical_url": "https://www.iso.org/standard/35736.html",
+      "fetch_status": "FETCHED_METADATA_ONLY",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 403,
+      "final_url": "https://www.iso.org/standard/35736.html",
+      "title": "ISO/IEC 25012:2008 Data Quality Model (ISO SQuaRE series)",
+      "document_status": "International Standard (ISO/IEC JTC 1)",
+      "publication_date": "2008-12-15",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/DQSTD-01.md",
+      "key_finding": "Data quality model with characteristics (accuracy, completeness, consistency, timeliness, traceability...); self-identifying standard number; ISO page 403 for automated fetch."
+    },
+    {
+      "id": "GOVDATA-01",
+      "canonical_url": "https://www.iso.org/standard/65661.html",
+      "fetch_status": "FETCHED_METADATA_ONLY",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 403,
+      "final_url": "https://www.iso.org/standard/65661.html",
+      "title": "ISO 8000-1:2022 Data Quality - Part 1: Overview",
+      "document_status": "International Standard (ISO/TC 184/SC 4)",
+      "publication_date": "2022-07",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/GOVDATA-01.md",
+      "key_finding": "ISO 8000 series: data quality and data governance standards; data quality is a governed property; ISO page 403 for automated fetch (metadata via Wikipedia ISO 8000)."
+    },
+    {
+      "id": "TKG-01",
+      "canonical_url": "https://arxiv.org/abs/2201.08236",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-08-31T05:41:02Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2201.08236",
+      "title": "Temporal Knowledge Graph Completion: A Survey (Cai et al., IJCAI 2023)",
+      "document_status": "Peer-reviewed conference paper (IJCAI 2023, pp. 6545-6553), abstract verified on arXiv",
+      "publication_date": "2023",
+      "used_in_chapters": [
+        "10"
+      ],
+      "research_note_path": "docs/research_notes/TKG-01.md",
+      "key_finding": "KGs are not static: TKGC adds timestamps to capture fact change over time; supports temporal dimension of staleness/freshness."
     }
   ]
 }
