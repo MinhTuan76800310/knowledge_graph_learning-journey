@@ -4,7 +4,7 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-08-31 (Chapter 10 ACCEPTED and merged via PR #21; Afterword drafted on branch afterword-closing; full book = front matter + Ch1–10 + Afterword + Glossary + Bibliography)
+Last updated: 2026-08-31 (**v0.1.0 RELEASED**: tag v0.1.0 @ aa91115, `knowledge-graph-book-v0.1.0.pdf`, 358 print pages; full book = front matter + Ch1–10 + Afterword + Glossary + Bibliography)
 
 ## Front matter
 
@@ -34,7 +34,7 @@ Last updated: 2026-08-31 (Chapter 10 ACCEPTED and merged via PR #21; Afterword d
 
 | Section | Draft | Editorial | PDF | Status |
 |---------|-------|-----------|-----|--------|
-| Afterword | ✅ | 🔲 | 🔲 | DRAFTED |
+| Afterword | ✅ | ✅ | ✅ | ACCEPTED |
 | Glossary | ✅ | ✅ | ✅ | ACCEPTED |
 | Bibliography | ✅ | ✅ | ✅ | ACCEPTED |
 
