@@ -4,7 +4,7 @@
 
 Các chương được thiết kế để xây dựng lẫn nhau. Mỗi chương kết thúc bằng phần "Chúng ta
 chưa làm được gì" và một cầu nối đến chương tiếp theo. Ở lần đọc đầu tiên, bạn nên đọc theo
-thứ tự từ Chương 1 đến Chương 10.
+thứ tự từ Chương 1 đến Chương 10, rồi kết thúc bằng Lời bạt (Afterword).
 
 ## Mỗi chương có cấu trúc nhất quán
 

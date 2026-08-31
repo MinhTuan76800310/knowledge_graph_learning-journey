@@ -1156,9 +1156,8 @@ Kết thúc bằng biên giới mở:
 
 Đây KHÔNG phải những bài toán được giải trong sách — đây là biên giới người đọc bước vào.
 
-Bàn giao cho:
-
-# Afterword
+Phần *Afterword* ở cuối cuốn sách đóng lại những câu hỏi mở này. Trước khi rời Chapter 10, ba
+ca làm việc dưới đây cho thấy vòng giám sát vận hành thế nào ở mức cơ chế.
 
 ## 10.52 Ca làm việc 1: Báo cáo sức khỏe hệ thống (System Health Report)
 
