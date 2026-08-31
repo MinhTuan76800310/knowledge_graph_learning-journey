@@ -22,7 +22,8 @@ sources:
   - chapter08.md
   - chapter09.md
   - chapter10.md
+  - afterword.md
   - glossary.md
 
 # Chapters not yet in the book (added as they reach DRAFTED):
-# - afterword.md
+# - (none for v0.1)
