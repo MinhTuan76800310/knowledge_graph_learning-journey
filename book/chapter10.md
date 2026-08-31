@@ -1002,7 +1002,7 @@ kiểm toán ≠ chỉ ghi log
 Vết kiểm toán phải hỗ trợ **tái dựng**: cho một câu trả lời, bạn có thể phát lại vì sao
 hệ thống tin nó?
 
-![Tái dựng niềm tin qua vết kiểm toán: câu trả lời trích dẫn C471 → AuditRecord (Accepted @T bởi X) → chuỗi bằng chứng E88 → quyết định quản trị + authorization → nguồn đã đăng ký (Ch7).](figures/generated/ch10-audit-replay.pdf)
+![Tái dựng niềm tin qua vết kiểm toán: câu trả lời trích dẫn C471 → AuditRecord (chấp nhận lúc T bởi X) → chuỗi bằng chứng E88 → quyết định quản trị + authorization → nguồn đã đăng ký (Ch7).](figures/generated/ch10-audit-replay.pdf)
 
 **Ví dụ RATE_OF_CHANGE:**
 - Một câu trả lời trích dẫn C471
