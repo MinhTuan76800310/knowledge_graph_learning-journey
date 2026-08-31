@@ -80,6 +80,26 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | LLMKG-01 | `zhu-llmkg-2023` | Unifying Large Language Models and Knowledge Graphs: A Roadmap |
 | MAGRAPH-01 | `microsoft-graphrag-docs` | Microsoft GraphRAG Documentation |
 | GRLBOOK-01 | `hamilton-grl-2020` | Graph Representation Learning (Hamilton) |
+| KGQ-01 | `zaveri-kgquality-2016` | Quality Assessment for Linked Data: A Survey |
+| REFINE-01 | `paulheim-refinement-2017` | Knowledge graph refinement: A survey of approaches and evaluation methods |
+| ONTEVOL-01 | `noy-ontology-evolution-2004` | Ontology Evolution: Not the Same as Schema Evolution |
+| ONTVR-01 | `klein-ontology-versioning-2001` | Ontology Versioning on the Semantic Web |
+| KVLT-01 | `dong-knowledge-vault-2014` | Knowledge Vault: A Web-Scale Approach to Probabilistic Knowledge Fusion |
+| NELL-01 | `mitchell-neverending-2018` | Never-Ending Learning (NELL) |
+| DRIFT-01 | `gama-drift-2014` | A Survey on Concept Drift Adaptation |
+| DRIFT-02 | `widmer-drift-1996` | Learning in the Presence of Concept Drift and Hidden Contexts |
+| HIDDENTECH-01 | `sculley-debt-2015` | Hidden Technical Debt in Machine Learning Systems |
+| BENCH-01 | `recht-imagenet-2019` | Do ImageNet Classifiers Generalize to ImageNet? |
+| CASCADE-01 | `sambasivan-cascades-2021` | Everyone wants to do the model work, not the data work (Data Cascades) |
+| DQSTD-01 | `iso-25012-2008` | ISO/IEC 25012:2008 Data Quality Model |
+| GOVDATA-01 | `iso-8000-2022` | ISO 8000-1:2022 Data Quality — Overview |
+| TKG-01 | `cai-tkgc-2023` | Temporal Knowledge Graph Completion: A Survey |
+
+## Notes — Chapter 10
+
+- COLLAPSE-01 (`shumailov-collapse-2024`) is reused by Chapter 10 for the
+  model-collapse-vs-staleness boundary; its source index record is now tagged
+  `used_in_chapters: ["8", "10"]`.
 
 ## Rules
 

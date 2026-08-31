@@ -1,0 +1,30 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{shapes.geometric,positioning,fit,backgrounds,arrows.meta,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  box/.style={rectangle, draw, rounded corners, align=center, font=\scriptsize, inner sep=3pt},
+  arrow/.style={-{Stealth[length=2.2mm]}, thick},
+  label/.style={font=\tiny\itshape, text=gray!60!black},
+]
+
+% === CONTRADICTION DEBT OVER TIME ===
+\draw[->, thick] (-0.2, 0) -- (7.6, 0) node[below, font=\scriptsize] {thời gian};
+\draw[->, thick] (0, -0.2) -- (0, 4.4) node[left, font=\scriptsize] {số cặp mâu thuẫn mở};
+
+\draw[thick, green!50!black] (0.2, 0.6) -- (2.6, 0.8) -- (4.2, 1.0) -- (5.2, 1.1) node[right, font=\scriptsize] {cập nhật định kỳ (nợ ổn định)};
+\draw[thick, red!70!black] (0.2, 1.0) -- (2.6, 1.9) -- (4.2, 3.0) -- (5.2, 3.9) node[right, font=\scriptsize] {không phân xử (nợ leo)};
+
+\draw[dashed, gray] (0.2, 3.3) -- (5.4, 3.3) node[above, font=\scriptsize] {ngưỡng leo thang (policy)};
+
+\node[box, fill=green!12, minimum width=1.9cm, minimum height=0.8cm] (actbox) at (7.05, 3.9) {tái đánh\\giá};
+\draw[arrow] (5.7, 3.9) -- (actbox);
+
+\node[label, align=center, text width=11cm] at (3.7, -1.1)
+  {Nợ mâu thuẫn tăng khi các cặp mâu thuẫn mở không được phân xử;\\ná ngưỡng quyết định khi nào leo thang (chính sách, không phải chân lý).};
+\end{tikzpicture}
+\end{document}
