@@ -6,7 +6,7 @@
 
 ## Verdict
 
-**ACCEPTED** — All semantic review gates pass. All 77 major concepts at depth ≥4 (20 at depth 5). 16 critical semantic boundaries covered. Reader capability test Q01–Q50 ALL = YES. No explanation theater. All sources registered. PDF build verified (322 pages, 0 LaTeX errors, 0 undefined citations).
+**ACCEPTED** — All semantic review gates pass. All 77 major concepts at depth ≥4 (20 at depth 5). 16 critical semantic boundaries covered. Reader capability test Q01–Q56 ALL = YES. No explanation theater. All sources registered. PDF build verified (322 pages, 0 LaTeX errors, 0 undefined citations).
 
 ---
 
@@ -132,9 +132,9 @@ Zero instances of token-transfer phrasing. Every mechanism claim is tied to a sp
 
 ---
 
-## 4. Reader Capability Test Q01–Q50
+## 4. Reader Capability Test Q01–Q56
 
-All 50 questions below are verified **YES** through independent review of the manuscript.
+All 56 questions below are verified **YES** through independent review of the manuscript.
 
 | # | Capability | Section | Evidence |
 |---|---|---|---|
@@ -188,8 +188,14 @@ All 50 questions below are verified **YES** through independent review of the ma
 | Q48 | Explain GraphRAG as a family of architectures, not a standard | §9.52 | GraphRAG family definition |
 | Q49 | Use KGQA/RAG/GraphRAG decision table for a concrete question | §9.53 | decision table with RATE_OF_CHANGE example |
 | Q50 | Explain path as explanation, path explosion, and GraphRAG limits | §9.54–9.55, §9.69 | 3 countermeasures, 6 limits |
+| Q51 | Explain answer provenance (Answer artifact fields) | §9.58 | generatedFor/usedEvidence/generatedBy/status |
+| Q52 | Explain why a QA answer does not automatically become KG knowledge | §9.59 | Ch7 governance pipeline required |
+| Q53 | Distinguish asserted / derived / predicted epistemic statuses | §9.60 | 3 statuses in Evidence Packet |
+| Q54 | Explain how exact symbolic reasoning fits into QA | §9.68 | graph vs LLM reasoning |
+| Q55 | Walk the full RATE_OF_CHANGE QA pipeline end to end | §9.64 | 15-step case |
+| Q56 | State the open problems Chapter 10 must solve | §9.79 | bridge: system governance and operations |
 
-**ALL 50: YES. 0 PARTIAL. 0 NO.**
+**ALL 56: YES. 0 PARTIAL. 0 NO.**
 
 ---
 
@@ -235,7 +241,7 @@ All 75 semantic contracts (docs/CHAPTER09_SEMANTIC_CONTRACTS.md) plus the 13-row
 | Major concepts depth ≥4 | 77/77 |
 | Mechanism-level depth = 5 | 20/77 |
 | Explanation theater | 0 |
-| Reader capability | 50/50 YES |
+| Reader capability | 56/56 YES |
 | Critical semantic boundaries | 16/16 PASS |
 | Glossary entries added | 59 Ch9 terms in book/glossary.md (172 total) |
 | Misconceptions addressed | 34 ⚠️ callouts in chapter |

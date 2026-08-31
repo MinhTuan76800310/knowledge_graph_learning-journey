@@ -1,7 +1,7 @@
 # Chapter 9 Book Checkpoint
 
 **Chapter:** 9 — Retrieval, Question Answering, and GraphRAG / Truy xuất, Hỏi đáp và GraphRAG
-**Status:** DRAFT COMPLETE — pending PR review (branch `chapter09-retrieval-qa-graphrag`)
+**Status:** ACCEPTED (PR #18 merged, commit 0a1fca4)
 **Date:** 2026-08-31
 
 ## Acceptance criteria met
@@ -12,8 +12,8 @@
 | Manuscript drafted | ✅ | 79 sections (§9.1–§9.79), ~2470 lines |
 | Semantic contracts defined | ✅ | 75 concept records + 13 collision rows in docs/CHAPTER09_SEMANTIC_CONTRACTS.md |
 | Semantic review passed | ✅ | 75/75 PASS, 0 FAIL, 0 PARTIAL |
-| Depth review passed | ✅ | docs/CHAPTER09_DEPTH_REVIEW.md: 77/77 major concepts depth ≥4 (20 at depth 5), 16/16 critical boundaries PASS, 50/50 reader capabilities = YES |
-| Reader capability test | ✅ | Q01–Q50 ALL = YES (see docs/CHAPTER09_DEPTH_REVIEW.md) |
+| Depth review passed | ✅ | docs/CHAPTER09_DEPTH_REVIEW.md: 77/77 major concepts depth ≥4 (20 at depth 5), 16/16 critical boundaries PASS, 56/56 reader capabilities = YES |
+| Reader capability test | ✅ | Q01–Q56 ALL = YES (see docs/CHAPTER09_DEPTH_REVIEW.md) |
 | Editorial review passed | ✅ | No blocking issues |
 | Source index updated | ✅ | 14 new Ch9 source records (RAG-01, DPR-01, GRAPHRAG-01, BM25-01, IRBOOK-01, NDCG-01, RRF-01, RRANK-01, LOSTMID-01, AIS-01, CITE-01, KGQA-01, LLMKG-01, MAGRAPH-01) |
 | Bibliography updated | ✅ | 18 Ch9 bib keys cited and resolved in references.bib |
