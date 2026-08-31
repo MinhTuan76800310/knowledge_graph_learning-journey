@@ -2005,3 +2005,384 @@ concepts:
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Exact query suffices, authoritative facts, unacceptable hallucination risk, out-of-scope"
+
+  # === Chapter 10 concepts ===
+  living_knowledge_system:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "System as a living process, not a static artifact (§10.1)"
+  system_state:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Traceable snapshot of the system at time T: claim states, index/ontology versions, queues (§10.1)"
+  six_flows_of_change:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Six change flows that drive a knowledge system away from reality (§10.2)"
+  data_drift:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Input/context distribution changes over time reducing fit of existing knowledge (§10.2)"
+  staleness:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: true
+    notes: "Claim present but no longer supported by current evidence; stale ≠ wrong (§10.3)"
+  freshness:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: true
+    notes: "Metric of recency of verification, not a truth judgment (§10.4)"
+  freshness_vs_correctness:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Independent axes: fresh ≠ correct (§10.5)"
+  valid_clock:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Time an event holds in the world (valid time), distinct from system clock (§10.6)"
+  system_clock:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Time an event is recorded in the system (transaction time) (§10.6)"
+  assessment_clock:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Time the system performs assessment, periodic or event-driven (§10.6)"
+  self_observation:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "System observes itself: logs, ledger diffs, index state, queues (§10.7)"
+  monitoring_loop:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "CENTRAL MECHANISM: COLLECT → AGGREGATE → COMPARE → ALERT → ASSESS → ACT → RE-MEASURE; decides attention and maintenance, not truth (§10.9)"
+  aggregation_window:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Time span over which raw observations are aggregated into a metric (§10.10)"
+  threshold_as_policy:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Threshold is a governance decision about accepted risk, not truth (§10.11)"
+  threshold_vs_truth:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Crossing a threshold triggers attention, not a truth verdict (§10.12)"
+  alert:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Verifiable notification with reference to observation and threshold used (§10.13)"
+  assessment_stage:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Epistemic stage of the monitoring loop: what the signal means and which governed action follows (§10.14)"
+  monitored_vs_governed:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Self-monitoring does not imply self-governance (§10.15)"
+  feedback_loop:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: true
+    notes: "System output re-enters as input; safe only with governance gates (§10.16)"
+  answer_feedback_gate:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "QA answers re-enter the ledger only through the Ch7 governance gate, as candidates (§10.17)"
+  user_correction:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "User edits are feedback with user provenance, processed as candidates (§10.18)"
+  feedback_vs_evidence:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Feedback is signal, not evidence about world truth (§10.19)"
+  feedback_loop_safety:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Properties keeping feedback from corrupting the system: gates, provenance separation, contamination metrics, audit (§10.20)"
+  contradiction_accumulation:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Competing claims piling up unresolved; measured, capped, escalated by policy (§10.21)"
+  knowledge_debt:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Accumulated cost of unpaid knowledge obligations (§10.22)"
+  contradiction_debt:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Knowledge debt from unresolved contradiction pairs (§10.22)"
+  escalation_policy:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Rules deciding when a signal moves to a higher governance level (§10.23)"
+  quality_dimension:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "One of five dimensions: correctness, completeness, freshness, consistency, trustworthiness — each with definition, measure, window, and what it does NOT measure (§10.24)"
+  correctness_over_time:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Correctness changes as evidence/context change; was-correct ≠ is-correct (§10.25)"
+  completeness_over_time:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Completeness relative to a declared scope, tracked over time (§10.26)"
+  freshness_over_time:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Freshness of claims and index measured in windows; index lag is first-class (§10.27)"
+  consistency_over_time:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Consistency tracked over time; no contradiction is not consistency (quiescence ≠ consistency) (§10.28)"
+  trustworthiness_over_time:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Trustworthiness = provenance + governance behavior measured over time; not truth (§10.29)"
+  level_vs_trend:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Level is current state; trend is derivative over windows; trend carries more maintenance information (§10.30)"
+  quality_vs_truth:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Quality scores describe knowledge-management behavior, not world truth (§10.31)"
+  degradation:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Sustained decline of a quality dimension, detected by level + trend (§10.32)"
+  benchmark_decay:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Old test sets no longer reflect current distribution; high old-benchmark scores prove nothing current (§10.33)"
+  feedback_collapse:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "QA answers recycled as training input without governance, degenerating content (§10.34)"
+  collapse_vs_staleness:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Collapse is content recycling and degradation; staleness is aging — different phenomena (§10.36)"
+  maintenance_operations:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Governed operations: re-validate, re-assess, retire, supersede, reindex (§10.37)"
+  re_validation:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Rechecking an accepted claim against latest evidence: still-correct? (§10.38)"
+  re_assessment:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Reassessing a claim on new signals; can move Accepted → Contested (§10.39)"
+  retirement:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Removing knowledge from active flow with a governed record; retire ≠ delete (§10.40)"
+  supersession_at_scale:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Replacing old claims at scale with recorded supersession chains (§10.41)"
+  batch_governance:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Applying governance decisions to many claims at once with policy, logging, rollback (§10.42)"
+  audit_replay:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Reconstructing why the system believed an answer at any time point (§10.43)"
+  controlled_trust:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Trust granted, measured, and revocable based on evidence and governance (§10.44)"
+  trust_vs_blind_trust:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Trust based on evidence/audit vs acceptance without conditions (§10.45)"
+  living_architecture:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "BOOK ENGINEERING MODEL: system as a set of feedback loops, not a linear pipeline (§10.46)"
+  orchestration:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Coordinating multiple loops: resource conflicts, priorities, queues, cross-loop audit (§10.47)"
+  automation_gradient:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Scale allocating decisions between human and machine by epistemic risk (§10.48)"
+  auto_repair_vs_auto_truth:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Auto-repair produces candidates; governance decides truth (§10.49)"
+  never_done:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Living knowledge systems never finish; done is a static-system illusion (§10.50)"
+  system_health_report:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Periodic report of level + trend vs thresholds (§10.52)"
+
