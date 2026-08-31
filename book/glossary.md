@@ -85,6 +85,8 @@ Mỗi biểu thức có ngữ nghĩa tập hợp chính xác trong diễn giải
 diễn + tác vụ suy luận. OWL RL forward chaining không complete cho OWL 2 DL đầy đủ trên đồ
 thị RDF tùy ý; complete dưới các điều kiện syntactic cụ thể (Theorem PR1).
 
+**Completeness over Time (Độ đủ theo thời gian).** Độ đủ đo so với phạm vi khai báo; khi phạm vi đổi (ứng dụng mới, câu hỏi mới), độ đủ giảm dù không claim nào đổi. Tương đối, không bao giờ tuyệt đối (Chương 10).
+
 **ComplEx (Nhúng phức).** Mô hình KGE dùng số phức và tích Hermitian: f(h,r,t) = Re(⟨h, r, t̄⟩). Cho phép mô hình hóa cả quan hệ đối xứng và bất đối xứng.
 
 **Conformance (Sự phù hợp).** Dữ liệu thỏa mãn các shapes SHACL đã định nghĩa. Phù hợp không
@@ -93,6 +95,8 @@ có nghĩa dữ liệu đúng với thực tế; vi phạm không có nghĩa d�
 **Consistency (Tính nhất quán).** Ontology nhất quán khi tồn tại ít nhất một mô hình. Khác với
 satisfiability (một lớp có thể có thành viên) và entailment (một phát biểu đúng trong mọi mô
 hình).
+
+**Consistency over Time (Tính nhất quán theo thời gian).** Không tồn tại xung đột cùng phạm vi tại một thời điểm; mâu thuẫn được quản trị với phạm vi rõ không phải vi phạm nhất quán. Không mâu thuẫn ≠ nhất quán (yên lặng ≠ nhất quán). Đo point-in-time (Chương 10).
 
 **Context (Ngữ cảnh).** Lớp thông tin về nguồn gốc, thời gian, phạm vi và độ tin cậy của một
 tuyên bố. Trong mô hình kỹ thuật của sách: KG = Data Graph + Semantics + Context.
@@ -527,6 +531,8 @@ các tiên đề ngữ nghĩa bổ sung. Taxonomy có thể tồn tại độc l
 object).
 
 **Trust ≠ Blind Trust (Tin cậy ≠ Đức tin).** Tin cậy dựa trên bằng chứng và kiểm toán; đức tin là chấp nhận không điều kiện. Hệ thống tự tin không miễn kiểm tra (Chương 10).
+
+**Trustworthiness (Độ đáng tin).** Độ tin cậy của provenance và governance khiến claim truy ra nguồn đăng ký, chuỗi bằng chứng lành, và quá trình đánh giá có kiểm toán. Đáng tin ≠ đúng (Chương 10).
 
 **Turtle.** Một cú pháp văn bản phổ biến để viết RDF. Turtle là cú pháp, không phải bản thân
 mô hình RDF.

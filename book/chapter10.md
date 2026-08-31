@@ -257,6 +257,8 @@ Mỗi số liệu trả lời một câu hỏi khác nhau:
 Mỗi số liệu phải định nghĩa: đếm cái gì, trên cửa sổ nào, ở đồng hồ nào, thay đổi thế
 nào là đáng chú ý.
 
+**Tự quan sát có thể thất bại:** log bị rơi, cửa sổ sai, hoặc thiết bị đo tắt khiến hệ thống mất tín hiệu về chính nó — mù quan sát là chế độ thất bại cần được đo như chính các số liệu khác.
+
 ## 10.9 Vòng giám sát (Monitoring Loop) — CƠ CHẾ TRUNG TÂM
 
 Đây là cơ chế trung tâm của chương, được đánh dấu **BOOK-DEFINED** và **MECHANISM
@@ -574,7 +576,7 @@ Leo thang là chính sách (ngưỡng + ưu tiên), không phải phán quyết 
 **Ví dụ RATE_OF_CHANGE:**
 - C471/C210 mở 30 ngày → medium
 - E88 bị thay thế VÀ C471 phụ thuộc nó → high
-- Hàng đợi mâu thuẫn > 20 cặp → medium cho toàn bộ
+- Hàng đợi mâu thuẫn > 10 cặp → medium cho toàn bộ
 
 ## 10.24 Năm chiều chất lượng tri thức (Quality Dimensions)
 

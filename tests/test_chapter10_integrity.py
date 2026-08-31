@@ -56,6 +56,8 @@ GLOSSARY_TERMS = [
     "Batch Governance",
     "Benchmark Decay",
     "Candidate Claim",
+    "Completeness over Time",
+    "Consistency over Time",
     "Contradiction Accumulation",
     "Contradiction Debt",
     "Contradiction Queue",
@@ -87,6 +89,7 @@ GLOSSARY_TERMS = [
     "System Health Report",
     "System State",
     "Threshold as Policy",
+    "Trustworthiness",
     "User Correction",
     "Valid Clock",
 ]
