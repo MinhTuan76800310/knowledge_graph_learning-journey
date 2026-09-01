@@ -105,6 +105,21 @@ New / updated in `docs/source_index.json`:
   the §2.2.2 identity discussion.
 - **SP12-01** — publication_date corrected 2026-08-20 → 2026-08-27 (re-fetched).
 
+## Re-audit addendum (2026-09-01)
+
+A second targeted review was requested to check whether any logic errors remained in
+Chapters 1–2 of both editions. It confirmed A1/A2 in the Vietnamese original and found
+one additional citation issue in the English fix from PR #32.
+
+- **A1′ — MAJOR — EN §2.1.7:** PR #32 re-cited the RDF 1.1 reification vocabulary to
+  `@w3c-rdf11-concepts`, but the vocabulary (`rdf:Statement`, `rdf:subject`,
+  `rdf:predicate`, `rdf:object`) is actually defined in **RDF 1.1 Schema** (§5.3),
+  not in RDF 1.1 Concepts. Fixed by citing `@w3c-rdf-schema` (Issue #35 / PR #37).
+- **A1 + A2 in VI:** the Vietnamese original still carries both errors. They are
+  corrected in PR #36 (Issue #33).
+- **No new logic errors** were found in Chapter 1 (either language) or in the core
+  SPARQL/LPG/model explanations of Chapter 2.
+
 ## Follow-ups
 
 - **VI original carries A1 + A2** (`book/chapter02.md` §2.1.7 and §2.7) — the released
