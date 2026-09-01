@@ -45,7 +45,7 @@ sources.
 ```turtle
 @prefix ex: <http://example.org/> .
 
-ex:Hanoi  ex:name        "Hanoi" ;
+ex:Hanoi  ex:name        "Hà Nội" ;
           ex:capitalOf   ex:Vietnam ;
           ex:population  8418883 .
 ```
@@ -218,8 +218,8 @@ There is a common misconception: to build a knowledge graph you must design the 
 schema before loading any data. This is not true. The CS520 material states plainly that
 you *can* start without a schema, and that both schema and data are accreted during
 building; designing upfront is useful **to the extent that it is practical**
-[@stanford-cs520-create-kg]. Hogan et al. distinguish three kinds of schema
-[@hogan-knowledge-graphs]:
+[@stanford-cs520-create-kg]. Considered by *when* the schema is defined relative to loading
+data, there are three strategies (this division is the book's own):
 
 1. **Upfront schema**: define classes, relations, and constraints before loading data.
    Reasonable when the domain is stable and the business requirements are clear.
@@ -228,6 +228,13 @@ building; designing upfront is useful **to the extent that it is practical**
 3. **Emergent / bottom-up schema**: structure is *reverse-extracted* from existing data —
    for example by grouping nodes with the same connection shape — rather than being designed
    from the start.
+
+Note that this is the *timing* axis. Hogan et al. classify schema along a different axis —
+*purpose*: a **semantic schema** (defines vocabulary to support reasoning, studied in
+Chapter 4), a **validating schema** (states constraints to check data, Chapter 5), and an
+**emergent schema** (structure automatically extracted from the data itself)
+[@hogan-knowledge-graphs]. The two axes are independent: an emergent schema can still serve
+as a semantic one.
 
 These three strategies do not exclude one another. The criterion for choosing depends on
 the stability of the domain and the degree of initial understanding:
@@ -304,8 +311,9 @@ Let us separate three concepts that are usually conflated:
 - **Denotation**: the relation "this identifier *refers to* that entity".
 
 The relation among them is not an equation: **an identifier is not an entity**. The same
-entity can carry many identifiers (Hanoi is also called `Hanoi`, `wd:Q1858`, or — in older
-texts — Thăng Long, Đông Kinh). And a string does not automatically carry along the entity
+entity can carry many identifiers (the city of Hanoi may be written `Hà Nội`, `Hanoi`,
+`wd:Q1858`, or — in older texts — Thăng Long, Đông Kinh). And a string does not
+automatically carry along the entity
 it denotes — that meaning is assigned to it by people and convention
 [@hogan-knowledge-graphs].
 
@@ -396,6 +404,11 @@ dangerous:
   different, and all of their information mixes — causing cascading inference errors.
 
 > 🖊 **Self-check:** Suppose the graph contains `ex:Hanoi owl:sameAs wd:Q1858` and `wd:Q1858 ex:population 8000000`. No triple directly states the population of `ex:Hanoi`. What will an OWL reasoner answer when asked "what is the population of ex:Hanoi"? Why? If the `owl:sameAs` line is wrong (the two IRIs are actually two different cities), what is the consequence?
+>
+> *Answer hint:* the reasoner answers 8000000 — `owl:sameAs` lets it infer that every property
+> of `wd:Q1858` also holds for `ex:Hanoi`. If the assertion is wrong, the data of two cities
+> that were in fact different is merged into one across the whole graph, and the error spreads
+> to every query that touches either IRI.
 
 That is why `owl:sameAs` is not a place to record "two things look alike". Relations like
 "nearly the same", "partially match", "related" need different predicates with weaker
@@ -441,13 +454,13 @@ The conceptual process has three layers:
 graph TB
     subgraph SRC["Two independent sources"]
         direction LR
-        A["Source A<br/>ex:Hanoi<br/>name: Hanoi<br/>capitalOf: ex:Vietnam"]
+        A["Source A<br/>ex:Hanoi<br/>name: Hà Nội<br/>capitalOf: ex:Vietnam"]
         B["Source B<br/>wd:Q1858<br/>label: Hanoi<br/>P36: wd:Q881"]
     end
     A -. "identity candidate<br/>(candidate match)" .- B
     A --> EV
     B --> EV
-    EV["Evidence:<br/>shared relation (both capital of Vietnam),<br/>compatible labels (Hanoi / Hanoi),<br/>consistent properties (population same order of magnitude)"]
+    EV["Evidence:<br/>shared relation (both capital of Vietnam),<br/>compatible labels (Hà Nội / Hanoi),<br/>consistent properties (population same order of magnitude)"]
     EV --> RV["Review by rule / by human"]
     RV --> AS["Accepted assertion:<br/>ex:Hanoi owl:sameAs wd:Q1858<br/>or merge onto one canonical identifier"]
 ```
@@ -459,7 +472,7 @@ becomes an assertion only after there is evidence and it is accepted by rule.
    signals — similar labels, the same relations to known entities, matching properties.
 2. **Evidence and review**: the signals are weighed according to the organization's rules —
    automatically, or with human confirmation. In our example: both nodes are "capital of
-   Vietnam", the labels `Hanoi`/`Hanoi` are compatible, the populations are the same order of
+   Vietnam", the labels `Hà Nội`/`Hanoi` are compatible, the populations are the same order of
    magnitude. That is strong evidence — but still evidence, not a conclusion.
 3. **Accepted identity assertion**: the organization decides to record the identity, in one of
    two forms:
@@ -476,7 +489,7 @@ The last two concepts must be named correctly:
 
 Wikidata is a valuable real-world example: the identifier `Q1858` is opaque, carrying no
 linguistic meaning, which makes it stable across renames and neutral between languages;
-meanwhile "Hanoi" and "Hanoi" are labels and aliases attached to the entity, not the
+meanwhile "Hà Nội" and "Hanoi" are labels and aliases attached to the entity, not the
 identifier itself [@hogan-knowledge-graphs] [@wikidata-statements]. Separating the *name*
 from the *identifier* is a deliberate design decision.
 
@@ -539,7 +552,7 @@ The remaining identifiers become **aliases**: still valid for lookup, linked bac
 canonical identifier by `owl:sameAs`. The lifecycle of a canonical identifier closes like
 this: candidate → evidence → acceptance → recorded as an alias.
 
-### The 6-step pipeline over two mechanism sources
+### 3.2.6 The 6-step pipeline over two mechanism sources
 
 Summarizing the integration of `ta:velocityDef` and `tb:speedDef` into a 6-step pipeline:
 
@@ -814,8 +827,9 @@ value. This is how context lets you evaluate two competing statements without de
 
 ### 3.3.7 Context does not create truth
 
-The four mechanisms just examined — named graph, n-ary entity, relation property, triple term
-— are all **representation** mechanisms. Attaching `source: A`, `validFrom: 1976`, or placing
+The five mechanisms just examined — named graph, n-ary entity, relation property, triple term,
+and qualifier — are all **representation** mechanisms. Attaching `source: A`, `validFrom: 1976`,
+or placing
 a triple inside a named graph named after source A does not make a statement more true; it
 only tells you *within what scope the statement is being understood*.
 
@@ -890,7 +904,7 @@ mixed in as well. The alignment process must *know how to refuse*, not only how 
 is at the schema layer.
 
 **Step 2 — Identity resolution.** With the schema aligned, the evidence becomes sharp: both
-nodes are "capital of Vietnam" (same aligned relation), the labels `Hanoi`/`Hanoi` are
+nodes are "capital of Vietnam" (same aligned relation), the labels `Hà Nội`/`Hanoi` are
 compatible, the populations are the same order of magnitude. After review, the accepted
 assertion [@w3c-owl2-primer]:
 
