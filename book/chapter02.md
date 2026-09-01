@@ -613,10 +613,11 @@ sánh với Cypher trong §2.3 khi gặp `OPTIONAL MATCH`.
 
 ### 2.1.7 Phát triển hiện tại: RDF 1.2 và SPARQL 1.2
 
-> ⚑ **RDF 1.2** (W3C Candidate Recommendation Snapshot, 2026-04-07) giới thiệu cơ chế tái hiện dựa trên
-> triple-term (`rdf:reifies`) như cách hiện đại được ưu tiên để tham chiếu một mệnh đề;
-> từ vựng tái hiện kiểu cũ của RDF 1.1 vẫn được giữ lại như từ vựng kế thừa cho tương
-> thích [@w3c-rdf12-concepts].
+> ⚑ **RDF 1.2** (W3C Candidate Recommendation Snapshot, 2026-04-07) giới thiệu cơ chế tái
+> hiện dựa trên triple-term (`rdf:reifies`) như cách hiện đại được ưu tiên để tham chiếu
+> một mệnh đề [@w3c-rdf12-concepts]. Từ vựng tái hiện của RDF 1.1 (`rdf:Statement`,
+> `rdf:subject`, `rdf:predicate`, `rdf:object`) được định nghĩa bởi RDF 1.1 Schema, vẫn
+> là Recommendation [@w3c-rdf-schema]; tài liệu RDF 1.2 không đề cập cũng không hủy bỏ nó.
 >
 > ⚑ **SPARQL 1.2** (W3C Working Draft) đang phát triển để hỗ trợ các tính năng RDF 1.2
 > [@w3c-sparql12-query].
@@ -1021,7 +1022,7 @@ thị cơ chế (tập tin `rate_of_change.ttl`) đã có thể trả lời các
 - "Đại lượng nào đang vượt ngưỡng?" — `FILTER (?v > 10)` trên `hasValue`.
 - "Cơ chế nào có điều kiện áp dụng?" — `OPTIONAL { ?m ex:hasCondition ?condition }`.
 - "Cơ chế nào phụ thuộc vào cơ chế nào?" — `?m ex:requires ?dependency` (trên đồ thị
-  hiện tại chỉ có `newtonCooling_1 requires rateOfChange_1`).
+  hiện tại `newtonCooling_1` requires cả `rateOfChange_1` và `heatTransferRate_2`).
 - Đồng thời, câu hỏi "cơ chế nào là RateOfChangeMechanism" — và câu hỏi "cơ chế nào là
   Mechanism (nói chung)" — cho thấy sự khác nhau giữa khớp đồ thị và suy luận phân lớp.
   Câu trước trả lời được ngay, câu sau cần RDFS/OWL (Chương 5).
