@@ -623,8 +623,9 @@ vanish. This is the point of comparison with Cypher in §2.3 when we meet `OPTIO
 
 > ⚑ **RDF 1.2** (W3C Candidate Recommendation Snapshot, 2026-04-07) introduces a reification
 > mechanism based on the triple term (`rdf:reifies`) as the preferred modern way to refer to
-> a proposition; the older RDF 1.1 reification vocabulary is retained as legacy vocabulary for
-> compatibility [@w3c-rdf12-concepts].
+> a proposition [@w3c-rdf12-concepts]. The RDF 1.1 reification vocabulary (`rdf:Statement`,
+> `rdf:subject`, `rdf:predicate`, `rdf:object`) remains defined by RDF 1.1 Concepts, which is
+> still a Recommendation [@w3c-rdf11-concepts]; the RDF 1.2 document does not deprecate it.
 >
 > ⚑ **SPARQL 1.2** (W3C Working Draft) is under development to support RDF 1.2 features
 > [@w3c-sparql12-query].
@@ -1041,7 +1042,7 @@ mechanism graph (the file `rate_of_change.ttl`) can already answer the following
 - "Which quantity is above threshold?" — `FILTER (?v > 10)` on `hasValue`.
 - "Which mechanism has an application condition?" — `OPTIONAL { ?m ex:hasCondition ?condition }`.
 - "Which mechanism depends on which?" — `?m ex:requires ?dependency` (in the current graph,
-  only `newtonCooling_1 requires rateOfChange_1`).
+  `newtonCooling_1` requires both `rateOfChange_1` and `heatTransferRate_2`).
 - At the same time, the question "which mechanism is a RateOfChangeMechanism" — and the
   question "which mechanism is a Mechanism (in general)" — show the difference between graph
   matching and subclass inference. The first is answered immediately; the second needs
