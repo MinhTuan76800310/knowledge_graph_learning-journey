@@ -30,6 +30,7 @@ if [ "$LANG" = "en" ]; then
   EXPECTED_TITLES=(
     "From Graph to Knowledge"
     "Data Models and Query Languages"
+    "Schema, Identity, and Context"
   )
   TOC_PAT='Contents'
   BIB_TITLE='References'
