@@ -122,6 +122,25 @@ graph [@hogan-knowledge-graphs]:
 In short: the data graph answers *"what is there?"*; the schema answers *"what is allowed to
 be there, and how should those names be understood?"*.
 
+An analogy to open the way: a data graph without a schema is a **box of parts with no
+assembly manual** — every piece fits every other piece, so you cannot tell a correctly
+assembled product from one that merely *looks* right.
+
+And the schema exists because the cost of "looks right" is invisible. Suppose a data-loading
+script mistypes a relation name:
+
+```turtle
+ex:Hanoi  ex:captialOf  ex:Vietnam .    # missing one letter "a": captialOf
+```
+
+The graph **raises no error** — it treats `ex:captialOf` as a perfectly valid predicate. The
+damage surfaces at the query layer: `ex:Hanoi` no longer has any `ex:capitalOf` edge, so the
+question "which country is Hanoi the capital of?" returns empty, even though the data "is
+still there", just misnamed. Without a schema, `captialOf` is just *one more predicate* and
+nothing is *wrong* at all — it is the expected vocabulary (§3.1.2) that creates the reference
+point from which we can say "this predicate does not belong to the graph". Actually *catching*
+that error at load time is the job of the validation layer (Chapter 5).
+
 ### 3.1.2 The data graph and the schema graph
 
 Two layers must be distinguished:
@@ -143,6 +162,19 @@ ex:capitalOf  rdfs:domain ex:City ;
               rdfs:range  ex:Country .
 ```
 
+Read those four lines closely: the data triple `ex:Hanoi ex:capitalOf ex:Vietnam` (from §3.0)
+is *one edge*; the two `rdfs:domain`/`rdfs:range` lines are the **scaffolding** that edge
+plugs into — the subject slot must be a `City`, the object slot must be a `Country`. The same
+thinking carries to the mechanism domain:
+
+```turtle
+ex:hasInput  rdfs:domain ex:Mechanism ;
+             rdfs:range  ex:Quantity .
+```
+
+which builds the scaffolding for the data edge `ex:rateOfChange_1 ex:hasInput ex:position_1`.
+These two layers — scaffolding and edge — always travel together like this, in every domain.
+
 On the property-graph side, a schema is not a separate graph but an **application
 convention** plus the constraints the DBMS supports [@neo4j-data-modeling]:
 
@@ -155,6 +187,10 @@ Labels (`City`), relationship types (`CAPITAL_OF`), property keys (`name`, `popu
 and constraints (uniqueness, existence, data type) together form the "schema" in the
 practical sense — but there is no common formal semantic standard on this side
 [@neo4j-modeling-fundamentals].
+
+The two sides differ not just in syntax but in **behavior**: a Cypher constraint *rejects*
+data at write time, while the RDFS quartet above *infers* knowledge at read time. The
+"reject-on-write" versus "infer-on-read" contrast is the subject of the next section.
 
 ### 3.1.3 The RDF-side schema: RDFS
 
@@ -169,10 +205,38 @@ RDFS (RDF Schema) provides four main tools for talking about expected structure
 | `rdfs:range` | Which class the object of a relation belongs to | `ex:capitalOf rdfs:range ex:Country` |
 
 A subtle point met in Chapter 2 and worth repeating: `rdfs:domain` and `rdfs:range` are
-**inference rules**, not validation constraints. From `ex:Hanoi ex:capitalOf X` and
-`ex:capitalOf rdfs:domain ex:City`, a reasoner *infers* `ex:Hanoi rdf:type ex:City` — it
-adds knowledge rather than rejecting data. Checking and rejecting bad data is the job of
-the validation layer (Chapter 5).
+**inference rules**, not validation constraints. Let's actually *run* the rule rather than
+describe it. Start from a graph containing just the §3.0 edge, plus the §3.1.2 scaffolding:
+
+```turtle
+ex:Hanoi  ex:capitalOf  ex:Vietnam .
+```
+
+The reasoner does three things:
+
+1. Matches the pattern `?s ex:capitalOf ?o` against the edge, binding `?s = ex:Hanoi`,
+   `?o = ex:Vietnam`.
+2. Consults `ex:capitalOf rdfs:domain ex:City` → adds `ex:Hanoi rdf:type ex:City`.
+3. Consults `ex:capitalOf rdfs:range ex:Country` → adds `ex:Vietnam rdf:type ex:Country`.
+
+The second round produces no new triples, so the inference **closes at exactly two new
+triples**. Nobody ever wrote `ex:Hanoi rdf:type ex:City` — it *sprang out* of the edge. That
+is what "adds knowledge rather than rejecting data" means.
+
+The price of "not rejecting" is that an error can be **promoted** into knowledge. Suppose
+someone mistakenly declares `ex:DaNang rdf:type ex:Country` and then loads `ex:DaNang
+ex:capitalOf ex:Laos`. RDFS faithfully infers `ex:DaNang rdf:type ex:City` (from the domain).
+Now Da Nang is *both a City and a Country*, no tool complains, and the original mistake has
+been turned into a *typed* assertion that every downstream query will trust. RDFS has no
+notion of "two classes exclude each other" — that is the job of ontology (Chapter 4).
+
+This mechanism runs identically on the mechanism domain. From the edge `ex:rateOfChange_1
+ex:hasInput ex:position_1` and the scaffolding `ex:hasInput rdfs:domain ex:Mechanism ;
+rdfs:range ex:Quantity`, the reasoner adds `ex:rateOfChange_1 rdf:type ex:Mechanism` and
+`ex:position_1 rdf:type ex:Quantity`. The mechanism graph *takes a node's type from its own
+edges*, rather than requiring a type to be written by hand for every node.
+
+Checking and rejecting bad data is the job of a different layer — validation, Chapter 5.
 
 ### 3.1.4 The property-graph-side schema
 
@@ -207,6 +271,25 @@ while giving **no** full formal semantics at all: does this class *exclude* that
 two classes *equivalent*, is a relation *transitive*, what condition is *sufficient* for an
 entity to belong to a class. Those questions belong to ontology and will be answered with
 formal tools in Chapter 4 [@hogan-knowledge-graphs].
+
+Let's *see* one of those four gaps rather than just read its name. Load the following into
+the §3.1.2 graph:
+
+```turtle
+ex:Hanoi  rdf:type  ex:City .
+ex:Hanoi  rdf:type  ex:Country .
+```
+
+The schema accepts both lines. The RDFS reasoner concludes nothing contradictory — Hanoi is
+now *both a city and a country*, and no tool cries out. The sentence "no entity is both a
+City and a Country" is an assertion RDFS **cannot express**. The only line that writes it is
+`ex:City owl:disjointWith ex:Country .` — but that is already an OWL axiom, and with it the
+graph above becomes *inconsistent*. This is ontology; it waits for Chapter 4.
+
+> ⚑ **Misconception to avoid:** declaring classes and `domain`/`range` is *not yet* an
+> ontology — it is only a vocabulary set. RDFS propagates types along edges, but it
+> **cannot exclude** anything. "What may be connected to what" (schema) differs from "what
+> is logically true/false" (ontology).
 
 Put another way: a schema gives you the **skeleton of vocabulary and structure**; an
 ontology gives that skeleton **inference-capable meaning**. This chapter needs only the
@@ -284,16 +367,29 @@ ex:hasValue      rdfs:domain ex:Quantity ;
                  rdfs:range  rdfs:Literal .
 ```
 
-This is a pure RDFS schema: it declares classes, relations, and domain/range — but says
-nothing about inference semantics (exclusion, equivalence, necessary-and-sufficient
-conditions). It tells you `ex:rateOfChange_1` is a `RateOfChangeMechanism`, and that
-`ex:hasOperation` connects from Mechanism to Operation. It does not tell you that every
-Mechanism must have at least one Operation, or that `RateOfChangeMechanism` and
-`HeatTransferMechanism` exclude each other. Those semantics belong to ontology (Chapter 4).
+This is a pure RDFS schema: it declares classes, relations, and domain/range — but it
+**names no individual at all**. Not one line above says what `ex:rateOfChange_1` is; and in
+fact a schema *cannot* say that — naming an individual is the job of the data graph, not of
+the scaffolding.
 
-Compared with the city schema in §3.1.3: the RDFS structure is identical — only the class
-names, relation names, and domain differ. The schema tool is one; the application domain
-changes.
+What this schema *can* do is **infer** types for individuals once they appear. Load the data
+edge:
+
+```turtle
+ex:rateOfChange_1  ex:hasOperation  ex:derivativeOperation_1 .
+```
+
+The reasoner matches `ex:hasOperation rdfs:domain ex:Mechanism ; rdfs:range ex:Operation`
+and adds `ex:rateOfChange_1 rdf:type ex:Mechanism` together with `ex:derivativeOperation_1
+rdf:type ex:Operation`. The chain `ex:DerivativeOperation rdfs:subClassOf ex:Operation`
+guarantees that any query asking for an `ex:Operation` also finds `derivativeOperation_1`
+whenever it is declared a `DerivativeOperation`. The mechanism graph takes a node's type from
+its edges — exactly as the city graph did in §3.1.3.
+
+The limitation that survives into Chapter 4: nothing in this schema forces a `Mechanism` to
+have at least one `Operation`, and nothing stops an individual from being typed both
+`ex:Mechanism` and `ex:Quantity`. The RDFS structure of the two domains is one; only the
+class names, relation names, and application domain differ.
 
 ## 3.2 Identity — naming is not understanding
 
@@ -302,7 +398,10 @@ talking about", identity answers "*which* thing are we talking about".
 
 ### 3.2.1 An identifier is not an entity
 
-Let us separate three concepts that are usually conflated:
+An analogy to open the way: the number "305" written on a door does not carry its own
+building. The same label denotes room 305 of building A *and* room 305 of building B, and
+nothing *inside those four characters* decides which building it is. Identity in a graph works
+the same way. Let us separate three concepts that are usually conflated:
 
 - **Entity**: an object in the real world or in the problem domain — the physical city of
   Hanoi, its people, its history.
@@ -320,7 +419,17 @@ it denotes — that meaning is assigned to it by people and convention
 First consequence: **the same identifier does not prove semantic agreement**. We met this in
 Chapter 2: a shared IRI does not guarantee that both sides use it with the same intent. Two
 systems can both use the name `Hanoi` for two different modeling choices, or even for two
-different entities that happen to share a name.
+different entities that happen to share a name. Right on our own dataset, imagine two
+declarations that reuse one IRI:
+
+```turtle
+ex:Hanoi  rdf:type  ex:City .     # the city of Hanoi
+ex:Hanoi  rdf:type  ex:Street .   # a street named "Hà Nội" in District 1, Ho Chi Minh City
+```
+
+The query `?x ex:capitalOf ?c` run over this graph returns nonsense: one IRI is pointing at
+two entities. This is the mirror image of the second consequence below (two IRIs, one entity)
+— and neither can be adjudicated by looking at the character string.
 
 Second consequence: **two different identifiers do not prove two different entities**.
 `ex:Hanoi` and `wd:Q1858` differ character by character, yet very plausibly denote the same
@@ -352,10 +461,22 @@ by its own convention:
 - A third partner might use `geo:HanoiCapitalRegion` in their own namespace
   [@hogan-knowledge-graphs].
 
-If you merely join the sources by graph union, you get **three disjoint nodes** for the same
-city: one source's data does not connect to another's, and every query "find everything
-about Hanoi" comes up short. Cross-source identity is something that must be *designed and
-established*, not something already present [@stanford-cs520-kg-from-data].
+If you merely join the sources by graph union, you get exactly **three disjoint nodes** for
+the same city. Look at that union graph:
+
+```turtle
+ex:Hanoi                ex:name "Hà Nội" ; ex:capitalOf ex:Vietnam ; ex:population 8418883 .
+wd:Q1858                wdt:P31 wd:Q515 ;  wdt:P36 wd:Q881 ;         wdt:P1082 8053663 .
+geo:HanoiCapitalRegion  geo:isCapitalOf     ex:Vietnam .
+```
+
+Countable: three nodes, seven triples, and **not one edge** connecting any pair among the
+three nodes. The consequence is measured, not felt: the query "which entity is the capital of
+Vietnam" returns two rows (`ex:Hanoi`, `geo:HanoiCapitalRegion`) and **omits** `wd:Q1858`; the
+"population" query returns two numbers, 8418883 and 8053663, never joined to each other.
+"Comes up short" here literally means a dropped row. Cross-source identity is something that
+must be *designed and established*, not something already present
+[@stanford-cs520-kg-from-data].
 
 ### 3.2.3 OWL has no unique name assumption
 
@@ -374,6 +495,16 @@ In other words, in OWL:
 - `ex:Hanoi` and `wd:Q1858` being different does **not imply** two different cities.
 - To assert they are *different*, you must say so explicitly with `owl:differentFrom`.
 - To assert they are *one*, you must say so explicitly with `owl:sameAs`.
+
+Run the same data through the two worlds to see the difference. *Relational:* a table
+`cities(id, name, population)` with two rows `(1, "Hà Nội", 8418883)` and `(7, "Hanoi",
+8053663)`. Under UNA, the two primary keys are *forced* to be two cities — so the question
+"population of the capital of Vietnam" has no correct answer, and the 4.6% gap must be read
+as "two genuinely different places". *Graph:* exactly those two nodes, with neither
+`owl:sameAs` nor `owl:differentFrom`, leaving the reasoner holding **both models as
+consistent** — either one city, or two. Only an explicit assertion settles it; that is precisely
+why §3.2.4 exists. On the mechanism graph, `ta:velocityDef` and `tb:speedDef` sit in exactly
+that undecided state until the evidence step of §3.2.5 runs.
 
 Both "same" and "different" are **assertions that require evidence**, not system defaults.
 This is a deep point worth pausing on: the graph's silence ("nothing says otherwise") is not
@@ -395,6 +526,23 @@ equivalent". The OWL 2 Primer states the direct consequence: a reasoner may infe
 [@w3c-owl2-primer]. Information **propagates** through `owl:sameAs`: population, relations,
 labels — everything attached to this node becomes information attached to that node.
 
+Propagation does not stop at one hop. `owl:sameAs` is a *symmetric* and *transitive*
+relation, so sameAs assertions close up into **equivalence classes**. Take a two-step chain:
+
+```turtle
+ex:Hanoi    owl:sameAs wd:Q1858 .
+wd:Q1858    wdt:P36    wd:Q881 .
+wd:Q881     owl:sameAs ex:Vietnam .
+ex:Vietnam  ex:name    "Việt Nam" .
+```
+
+The reasoner must add `ex:Hanoi wdt:P36 wd:Q881`, `ex:Hanoi wdt:P36 ex:Vietnam`,
+`wd:Q1858 wdt:P36 ex:Vietnam`, and `wd:Q881 ex:name "Việt Nam"`. The two sameAs edges have
+partitioned the graph into two classes {`ex:Hanoi`, `wd:Q1858`} and {`ex:Vietnam`, `wd:Q881`},
+and all information flows freely within each class. This is where the "dangerous" property
+becomes *non-obvious*: one wrong sameAs edge does not merge two nodes, it merges **two
+equivalence classes** — everything belonging to one side is assigned to the other.
+
 It is exactly this propagation consequence that makes `owl:sameAs` both powerful and
 dangerous:
 
@@ -403,9 +551,9 @@ dangerous:
 - **Dangerous**: a single **wrong** assertion merges two entities that were in fact
   different, and all of their information mixes — causing cascading inference errors.
 
-> 🖊 **Self-check:** Suppose the graph contains `ex:Hanoi owl:sameAs wd:Q1858` and `wd:Q1858 ex:population 8000000`. No triple directly states the population of `ex:Hanoi`. What will an OWL reasoner answer when asked "what is the population of ex:Hanoi"? Why? If the `owl:sameAs` line is wrong (the two IRIs are actually two different cities), what is the consequence?
+> 🖊 **Self-check:** Suppose the graph contains `ex:Hanoi owl:sameAs wd:Q1858` and `wd:Q1858 wdt:P1082 8053663` (the exact Source-B figure from §3.0). No triple directly states the population of `ex:Hanoi`. What will an OWL reasoner answer when asked "what is the population of ex:Hanoi"? Why? If the `owl:sameAs` line is wrong (the two IRIs are actually two different cities), what is the consequence?
 >
-> *Answer hint:* the reasoner answers 8000000 — `owl:sameAs` lets it infer that every property
+> *Answer hint:* the reasoner answers 8053663 — `owl:sameAs` lets it infer that every property
 > of `wd:Q1858` also holds for `ex:Hanoi`. If the assertion is wrong, the data of two cities
 > that were in fact different is merged into one across the whole graph, and the error spreads
 > to every query that touches either IRI.
@@ -548,6 +696,17 @@ criteria (applied to `ex:rateOfChange_1`, versus `ta:velocityDef` and `tb:speedD
 - **Domain-owned:** controlled by the system (or the domain community), not preempted by a
   third party.
 
+There is an edge case every long-lived graph meets: if you choose `wd:Q1858` *as* the
+canonical identifier, then when Wikidata merges `Q1858` into a different Q-number (this
+really happens), your system is left holding a dangling identifier it must keep serving —
+exactly the deprecated-IRI problem, and the §3.2.4 propagation hazard now applies to the
+redirect edge too. The three criteria above therefore imply an unstated rule: **canonical =
+an IRI *your system* controls**, alias = every other IRI. That is why `ex:rateOfChange_1`
+beats `ta:velocityDef` (you keep it stable), even though `wd:Q1858` beats the string "Hà Nội"
+(opaque, language-neutral). And let's name a common misconception precisely: "Hà Nội" is a
+**label string** (`rdfs:label`/`skos:altLabel`), not an **alias IRI** — confusing the two is
+confusing "a name to display" with "a name to reference by".
+
 The remaining identifiers become **aliases**: still valid for lookup, linked back to the
 canonical identifier by `owl:sameAs`. The lifecycle of a canonical identifier closes like
 this: candidate → evidence → acceptance → recorded as an alias.
@@ -570,6 +729,15 @@ a vocabulary mapping, identity (steps 3–5) adds an identity assertion, canonic
 (step 6) chooses a stable name. No step adds wrong graph data — the pipeline only rejects or
 integrates, it never destroys.
 
+The result after step 6, written out:
+
+```turtle
+ex:rateOfChange_1  owl:sameAs  ta:velocityDef , tb:speedDef .
+```
+
+One canonical node, two alias edges. From here `?m ex:hasInput ex:position_1` returns
+`ex:rateOfChange_1` **once**, instead of three near-duplicate rows for three IRIs.
+
 > ⚑ **Scope:** this chapter teaches the *problem* and the *conceptual process* of identity
 > resolution. Industrial algorithms — blocking, matching, machine learning — belong to
 > Chapter 7.
@@ -591,10 +759,31 @@ Hogan et al. define context as the **scope of truth**: the setting within which 
 knowledge is considered true — over time, over geography/scope, over origin, or a combination
 of several dimensions [@hogan-knowledge-graphs].
 
+Let's turn that intuition into something checkable. Attach an observation time to each number
+(these are *model scope labels*, not assertions about reality):
+
+```turtle
+ex:popA  a ex:PopulationStat ; ex:city ex:Hanoi  ; ex:value 8418883 ; ex:observedAt "2023" .
+ex:popB  a ex:PopulationStat ; ex:city wd:Q1858 ; ex:value 8053663 ; ex:observedAt "2019" .
+```
+
+Two statements with the same subject (once `ex:Hanoi owl:sameAs wd:Q1858`), the same
+predicate, two different objects — and **no contradiction**, because the two scopes are
+disjoint (2019 ≠ 2023). Now push the lighter: change `ex:popB` to `ex:observedAt "2023"`. The
+same pair of statements, differing only in one timestamp, now **is** a contradiction — two
+values for the same moment. The whole notion of "scope of truth" lives in exactly that flip:
+context does not change the *content* of a statement, it changes *whether two statements
+collide*.
+
 Note the boundary: this chapter teaches the **representation mechanisms** for context. A full
 model of claim – evidence – provenance – time – contradiction is the work of Chapter 6.
 
 ### 3.3.2 Named graphs and RDF datasets: grouping and naming
+
+Before looking at the mechanism, ask why we need to *group* at all, rather than the obvious
+alternative of stamping `ex:source ex:sourceA` onto every triple. Because one provenance
+statement covers a hundred triples at once, and a group can be replaced or removed as *a
+single unit* — stamp each edge and there is no "whole group" to operate on.
 
 The first mechanism on the RDF side is the **RDF dataset**: a set of RDF graphs, comprising
 exactly one **default graph** and zero or more **named graphs**; each named graph is a pair
@@ -633,11 +822,20 @@ ex:experimentData {
 ```
 
 `ex:textbookA` holds the conceptual definition, `ex:experimentData` holds measured
-experimental data. This separation lets you query each source separately (SPARQL `GRAPH`,
-Chapter 2) and attach provenance to the whole group — for example asking "which value sets
-come from the experiment?" without mixing in the textbook definition. Note the boundary
-below: the meaning "the source asserted this" is an application convention, not intrinsic RDF
-semantics.
+experimental data. This separation lets you ask *each source separately*. In SPARQL, a
+`GRAPH ?g { … }` block iterates over each graph name in the dataset; replacing `?g` with a
+specific name narrows the question to exactly that source:
+
+```sparql
+PREFIX ex: <http://example.org/kgbook/mks#>
+SELECT ?q ?v WHERE { GRAPH ex:experimentData { ?q ex:hasValue ?v } }
+```
+
+returns `position_1 → 12.5`, `velocity_1 → 3.2`; change the graph name to `ex:textbookA` and
+it returns empty, because the definition is not in the experimental source. This is the
+manipulable benefit of grouping — and also where you attach provenance to the whole group.
+Note the boundary below: the meaning "the source asserted this" is an application convention,
+not intrinsic RDF semantics.
 
 A named graph lets you **group** statements and attach the whole group to a name — very
 convenient for partitioning data by source, by version, by viewpoint.
@@ -654,6 +852,16 @@ convention** — a good and common convention, but one that becomes real semanti
 the application describes it explicitly (for example with a provenance vocabulary like
 **PROV** — PROV-O is a W3C standard providing classes and properties to describe origin,
 agents, and activities that produced data; studied in detail in Chapter 6).
+
+> 🖊 **Self-check:** You just wrote `ex:sourceA { ex:Hanoi ex:population 8418883 }`. Which
+> sentence follows? (1) "Source A asserted that Hanoi's population is 8,418,883." (2) "There
+> exists a resource with IRI `ex:sourceA`, and that resource has population 8,418,883."
+>
+> *Answer hint:* **Neither.** (1) needs an assertion the graph never recorded — `ex:sourceA`
+> here is a *label on the box*, not the subject of a statement. (2) is even more wrong:
+> `ex:sourceA` sits in the *graph-name position*, where RDF does not require it to denote
+> anything at all. To make (1) true you must *say more* — an assertion placed outside the box
+> — and that is exactly the claim layer Chapter 6 handles.
 
 ### 3.3.3 Full-fledged relation entities: the n-ary pattern
 
@@ -746,12 +954,40 @@ ex:rateOfChange_1  ex:hasOperation  ex:derivativeOperation_1 ;
 ```
 
 These three edges correctly describe three roles — but nothing *binds* them to the same
-application. When the mechanism is applied a second time (the derivative of `velocity_1` with
-respect to `time_1`), the three new edges spawn three parallel relations; to know whether
-`hasInput position_1` goes with `hasOperation derivativeOperation_1` or some other operation,
-no connection answers. The intermediate node solves exactly this: it is the common anchor all
-roles point back to, and the only place to attach properties (evidence, time) about *that
-application itself*.
+application, and now we can *measure* that cost. Load a second application (the derivative of
+`velocity_1` with respect to `time_1`) into the same flat representation:
+
+```turtle
+ex:rateOfChange_1  ex:hasOperation  ex:derivativeOperation_1 , ex:derivativeOperation_2 ;
+                   ex:hasInput      ex:position_1 , ex:velocity_1 ;
+                   ex:hasReferenceVariable  ex:time_1 .
+```
+
+Ask "which operation was applied to `position_1`?" with a shared-variable join (the §2.1.6
+style):
+
+```sparql
+SELECT ?op WHERE { ex:rateOfChange_1 ex:hasOperation ?op .
+                  ex:rateOfChange_1 ex:hasInput ex:position_1 }
+```
+
+SPARQL matches the two patterns *independently* then joins on the shared variable, so it
+returns **2 rows** (`derivativeOperation_1` and `derivativeOperation_2`) — but only
+`derivativeOperation_1` actually takes `position_1` as input. The flat representation cannot
+keep which pairing belongs to which application, so it forces you to accept both the right
+answer and the wrong one. The same question in n-ary form:
+
+```sparql
+SELECT ?op WHERE { ?app ex:hasOperation ?op ; ex:differentiand ex:position_1 }
+```
+
+returns **exactly 1** row. 2 versus 1 — that is the mechanism, not a claim. The intermediate
+node is the anchor that binds the operation tightly to the exact quantity being differentiated,
+and the only place to attach properties (evidence, time) about *that application itself*.
+
+(And the `ex:textbookA` block in §3.3.2? It *deliberately* uses the flat form, so you can see
+what grouping buys — partitioning by source — and what it does not — role binding. The two
+sections do not conflict: §3.3.2 is about *packaging*, §3.3.3 is about *argument binding*.)
 
 > 🖊 **Self-check:** Suppose you need to represent "Alice worked at company X from 2020 to 2023, as a software engineer". Sketch the n-ary structure for this statement: what does the intermediate entity represent? How many edges connect from it? If Alice later returns to company X in a different role, can your structure handle it?
 >
@@ -776,6 +1012,17 @@ This is the natural choice when the context is simple (one point in time, one so
 trust value) and queries mostly traverse edges. When the context balloons — many time
 intervals, many sources at once, or a need to query the context dimensions themselves — the
 intermediate-entity pattern returns, even in a property graph [@stanford-cs520-create-kg].
+
+Ask one question of all three encodings and see where the second one *dies*. The question:
+"since when is Hanoi the capital, and who confirms it?" The edge-with-properties form above
+answers cleanly: `{since: 1976}` sits right on the edge. Now add a second source — both
+`ex:sourceA` (Textbook A) and `ex:sourceB` (Wikidata) confirm *the same* 1976 capital status.
+The edge must now hold **two** sources: `{source: "A"}` overwrites B, `{source: ["A","B"]}`
+stops being a property a query language can join on, and you **cannot** attach a *different*
+confirmation date to each source. The n-ary form handles it by adding `ex:capitalStatus_2`
+with its own `ex:source`, and the two statements coexist. The countable rule: one context
+dimension per edge → an edge property; two values of the same dimension, or any need to
+reference the relation itself → an intermediate entity.
 
 ### 3.3.5 Current development — RDF 1.2: triple term and reifier
 
@@ -825,6 +1072,22 @@ recorded with a point in time and a method; the reader queries by context to pic
 value. This is how context lets you evaluate two competing statements without deleting either
 — the foundation for contradiction management and claims in Chapter 6.
 
+Run that table through the very criteria just stated, into an *explicit* decision. The
+statement `ex:position_1 ex:hasValue "12.5"` needs *as of 14:00* and *method GPS* added. Ask
+three questions: is the context dimension single — yes; is there a need to reference the
+statement itself (attach the experiment that produced it, or deprecate just this measurement)
+— no; does the core value remain readable on its own — yes. All three → **the qualifier
+wins**, and building a `PositionMeasurement` node here would be pure waste. Now flip one
+criterion: the measurement must now carry "confirmed by experiment exp_7, then refuted by
+exp_9". You now need to *talk about the statement itself* → criterion 2 fails → the n-ary node
+returns.
+
+And the trap the chapter's semantic contract warns about: writing `ex:position_1 ex:asOf
+"14:00" .` is **wrong** — it attaches the timestamp to the *entity*, but position_1 is not
+"as of 14:00"; the *statement* is as of 14:00. Once the qualifier is pushed onto the entity,
+the second measurement at 14:05 has nowhere to go, and the two values crash into each other as
+a contradiction instead of two scoped observations.
+
 ### 3.3.7 Context does not create truth
 
 The five mechanisms just examined — named graph, n-ary entity, relation property, triple term,
@@ -835,6 +1098,17 @@ only tells you *within what scope the statement is being understood*.
 
 > ⚑ **The sentence to remember from this chapter:**
 > **"Context enables evaluation; context does not create truth."**
+
+Give it a test. Load a wrong number — `ex:sourceC { ex:Hanoi ex:population 84188830 }` (off by
+one digit from careless collection) — then *perfectly contextualize* it: attach source
+`ex:sourceC`, attach `ex:observedAt "2023"`. The question "which city is Vietnam's most
+populous?" now returns Hanoi at 84,188,830, **beating** every other city — and every mechanism
+this chapter teaches is satisfied: the statement is grouped, sourced, and timestamped. Nothing
+at the representation layer can reject it. Contrast with the population pair in §3.3.1: there
+the two scopes were *disjoint*, so both were true and context *reconciled* them; here the scope
+is *complete* and the statement is still false. That difference is exactly the slogan above —
+and once you have seen the bad number win the query, "context enables evaluation; context does
+not create truth" is a conclusion you re-derive yourself, not a line you memorized.
 
 A false statement with full provenance is still a false statement — the only difference is
 that you now know *who said it, and when*, and that is precisely the condition for evaluation.
@@ -877,28 +1151,33 @@ not something obvious. The alignment process has three iterative steps:
    review.
 
 **A mechanism-domain example — a rejected mapping.** Two textbooks describe the same mechanism
-with two different relations:
+with two different relations. *The identifiers here are new (textbooks D, E), so they do not
+collide with the §3.2.5 IRIs:*
 
 ```turtle
 @prefix ex: <http://example.org/kgbook/mks#> .
-@prefix ta: <http://example.org/kgbook/textbookA#> .
-@prefix tc: <http://example.org/kgbook/textbookC#> .
+@prefix td: <http://example.org/kgbook/textbookD#> .
+@prefix te: <http://example.org/kgbook/textbookE#> .
 
-# Textbook A
-ta:velocityDef  ex:hasOperation  ex:derivativeOperation_1 ;
-                ex:hasOutput     ex:velocity_1 .
-# Textbook C
-tc:speedDef      ex:involves      ex:derivativeOperation_1 ;
-                 ex:involves      ex:velocity_1 .
+ex:hasOperation  rdfs:range  ex:Operation .   # narrow range
+
+# Textbook D
+td:kineticsDef    ex:hasOperation  ex:derivativeOperation_1 ;   # an Operation
+                  ex:hasOutput     ex:velocity_1 .
+# Textbook E — ex:involves points at BOTH the operation and the quantity
+te:processSketch  ex:involves  ex:derivativeOperation_1 ;        # an Operation
+                  ex:involves  ex:velocity_1 .                   # a Quantity
 ```
 
-`ex:involves` looks like `ex:hasOperation` (both link to `derivativeOperation_1`), but the
-structural evidence rejects the mapping: `ex:involves` also links to `velocity_1`, an output
-quantity — it has a wider range (`Operation` *or* `Quantity`), whereas `ex:hasOperation` has a
-narrow range (`Operation` only). Despite sharing one instance, the two relations have
-different structural signatures → **no mapping**. If you force a mapping because they "look
-alike", every later query "which mechanism uses which operation" will return output figures
-mixed in as well. The alignment process must *know how to refuse*, not only how to connect.
+Run the three alignment stages above: *candidate* — both relations point at
+`ex:derivativeOperation_1`, they look alike. *Evidence* — look at the two lines: `ex:involves`
+has an object set that includes `ex:velocity_1` (a `Quantity`), whereas `ex:hasOperation` is
+declared to accept only an `ex:Operation`; the object sets differ at exactly `velocity_1`.
+*Validate* — **reject**: mapping `involves → hasOperation` would place a `Quantity` in a slot
+the target schema only permits an `Operation`. Despite sharing one instance, the two relations
+have different structural signatures → no mapping. If you force it because they "look alike",
+every later query "which mechanism uses which operation" will return output figures mixed in as
+well. The alignment process must *know how to refuse*, not only how to connect.
 
 *Information added:* the vocabulary correspondences. The data graph has not changed; the change
 is at the schema layer.
@@ -928,11 +1207,38 @@ ex:capitalStatus_1  a           ex:CapitalStatus ;
                     ex:source   ex:sourceA .
 ```
 
+And the two population numbers — the conflict the whole chapter has carried since §3.0 — now
+have a place to stand:
+
+```turtle
+ex:popStat_1  a ex:PopulationStat ; ex:city ex:Hanoi ;
+              ex:value 8418883 ; ex:source ex:sourceA ; ex:observedAt "2023" .
+ex:popStat_2  a ex:PopulationStat ; ex:city ex:Hanoi ;
+              ex:value 8053663 ; ex:source ex:sourceB ; ex:observedAt "2019" .
+```
+
+After `ex:Hanoi owl:sameAs wd:Q1858` in Step 2, asking "Hanoi's population" returns **two
+rows** each carrying `(source, time)` — instead of letting the reasoner silently pick one. This
+is *representing* the disagreement, not yet *adjudicating* it (Chapter 6's job).
+
 *Information added:* the source, time, and scope of each statement.
 
 **Result — the integrated representation.** A single graph in which: structure follows a common
 schema, each entity has a canonical identifier with cross-source aliases, and each statement
-carries context for evaluation.
+carries context for evaluation. Written out, and countable:
+
+```turtle
+ex:Hanoi    owl:sameAs  wd:Q1858 ;
+            rdfs:label  "Hà Nội"@vi , "Hanoi"@en ;
+            ex:capitalOf ex:Vietnam .
+ex:Vietnam  owl:sameAs  wd:Q881 .
+ex:popStat_1  ex:city ex:Hanoi ; ex:value 8418883 ; ex:source ex:sourceA ; ex:observedAt "2023" .
+ex:popStat_2  ex:city ex:Hanoi ; ex:value 8053663 ; ex:source ex:sourceB ; ex:observedAt "2019" .
+```
+
+Count: **one** Hanoi entity (two IRIs `ex:Hanoi`/`wd:Q1858` joined by `owl:sameAs`), **two**
+contextualized population statements — neither overwritten. This is the final state all three
+axes produce together, and you can check it against each of Steps 0/2/3 above.
 
 ```mermaid
 %%{init: {"theme": "neutral"} }%%
@@ -968,28 +1274,38 @@ conceptual structure.
    stable beyond the transaction scope, and is meaningless outside that system
    [@neo4j-cypher-manual]. A domain identifier must be created and managed by the application.
 2. **Treating a matching string as a matching entity.** `"Hanoi"` appearing in two datasets is
-   two identical *labels*, not one entity. A label is data for finding identity candidates, not
+   two identical *labels*, not one entity. The string "Hà Nội" is also stuck on a ward in Hà
+   Giang province; merging by string folds that ward into the capital, and every `capitalOf`
+   query inherits the ward's area. A label is data for *finding* identity candidates, not
    evidence of identity.
 3. **Using `owl:sameAs` for approximate similarity.** `owl:sameAs` is identity with
    graph-wide propagation consequences. "Nearly the same" needs a different predicate; writing
-   one wrong sameAs edge merges two entities everywhere they appear.
+   one wrong sameAs edge merges two entities everywhere they appear (§3.2.4 shows a wrong
+   `rateOfChange_1 sameAs heatTransferRate_2` edge making `heatTransferRate_2` "the derivative
+   of position_1").
 4. **Treating a named graph as automatically meaning source/provenance.** A graph name is only
    syntactically paired with the graph; the meaning "the source asserted this" is an
-   application convention that must be described explicitly [@w3c-rdf11-concepts].
+   application convention that must be described explicitly [@w3c-rdf11-concepts]. Two groups
+   both name their graph `ex:sourceA` — one a census file, one a scraped web page — and a single
+   `GRAPH` join silently merges two unrelated things.
 5. **Treating a schema as an ontology.** Naming classes and relations does not create inference
-   semantics: there is no exclusion, equivalence, or necessary-and-sufficient condition yet.
-   Waiting for inference from a schema that only has naming conventions is waiting in the wrong
-   place (Chapter 4).
-6. **Encoding every property as a node.** Turning every value into a node bloats the graph,
-   muddles queries, and forces everything to carry an identifier when many values (numbers,
-   dates, strings) are just data.
-7. **Encoding everything as a property.** The opposite direction is also wrong: an event that
-   needs context (time, source) or needs to be referenced loses its anchor if it is compressed
-   into a property on a node; an event that changes over time cannot be represented by a single
-   property value [@stanford-cs520-create-kg].
+   semantics. `City rdfs:subClassOf Place` and `Country rdfs:subClassOf Place` entail **nothing**
+   that excludes `ex:Hanoi a ex:Country` — RDFS has no notion of disjointness (§3.1.5). Waiting
+   for inference from a schema that only has naming conventions is waiting in the wrong place
+   (Chapter 4).
+6. **Encoding every property as a node.** Turning every value into a node bloats the graph and
+   forces everything to carry an identifier, when `8418883` or `"1976"` are just data. The
+   measured consequence: each added context dimension multiplies the edges, and values that only
+   ever existed to be displayed now occupy IRIs.
+7. **Encoding everything as a property.** The opposite direction is also wrong. `ex:Hanoi
+   ex:capitalOfSince "1976"` cannot hold *both* the since-1976 period *and* an earlier one —
+   exactly why `ex:CapitalStatus` exists (§3.3.3). An event that changes over time or needs to be
+   referenced loses its anchor if it is compressed into a single property value
+   [@stanford-cs520-create-kg].
 8. **Treating the presence of context/provenance as making a statement trustworthy.**
    Provenance tells you *who said it, when*; it does not confirm *that what was said is true*.
-   Assessing trustworthiness is a separate step on top of context (Chapter 6).
+   `ex:sourceA` proves *sourceA said* 8418883, not that 8418883 *is true* (see the off-by-one
+   number in §3.3.7). Assessing trustworthiness is a separate step on top of context (Chapter 6).
 
 ## 3.6 Reflection questions
 
@@ -1086,6 +1402,22 @@ position with respect to time"* is now placed within an integration framework co
   (§3.3.3).
 - The experimental values of position and velocity partitioned into the named graph
   `ex:experimentData`, kept separate from the textbook definition in `ex:textbookA` (§3.3.2).
+
+That capability is checkable with one query run twice. *"Are textbooks A and B talking about
+the same mechanism?"* — **BEFORE** this chapter, the two clusters `ta:velocityDef` and
+`tb:speedDef` share no edge, so a query joining them on `owl:sameAs` returns empty:
+
+```sparql
+PREFIX ta: <http://example.org/kgbook/textbookA#>
+PREFIX tb: <http://example.org/kgbook/textbookB#>
+SELECT ?a ?b WHERE { ?a owl:sameAs ?b .
+                     FILTER(?a = ta:velocityDef && ?b = tb:speedDef) }
+```
+
+**AFTER** this chapter, the same query returns **one row** `ta:velocityDef | tb:speedDef`,
+because §3.2.5 built the sameAs edge from definitional evidence. A query flipping from empty to
+non-empty — that, concretely, is what the three axes just added to the system, not a
+self-introduction.
 
 **STILL UNRESOLVED** — the RDFS schema has no inference semantics (class exclusion, property
 equivalence, necessary-and-sufficient conditions); `owl:sameAs` is only an identity assertion
