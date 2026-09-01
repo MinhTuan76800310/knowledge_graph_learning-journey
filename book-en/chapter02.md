@@ -624,8 +624,9 @@ vanish. This is the point of comparison with Cypher in §2.3 when we meet `OPTIO
 > ⚑ **RDF 1.2** (W3C Candidate Recommendation Snapshot, 2026-04-07) introduces a reification
 > mechanism based on the triple term (`rdf:reifies`) as the preferred modern way to refer to
 > a proposition [@w3c-rdf12-concepts]. The RDF 1.1 reification vocabulary (`rdf:Statement`,
-> `rdf:subject`, `rdf:predicate`, `rdf:object`) remains defined by RDF 1.1 Concepts, which is
-> still a Recommendation [@w3c-rdf11-concepts]; the RDF 1.2 document does not deprecate it.
+> `rdf:subject`, `rdf:predicate`, `rdf:object`) is defined by RDF 1.1 Schema, which is
+> still a Recommendation [@w3c-rdf-schema]; the RDF 1.2 document does not mention or
+> deprecate it.
 >
 > ⚑ **SPARQL 1.2** (W3C Working Draft) is under development to support RDF 1.2 features
 > [@w3c-sparql12-query].
