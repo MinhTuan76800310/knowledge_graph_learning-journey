@@ -29,6 +29,7 @@ if [ "$LANG" = "en" ]; then
   # fixed-string check on the full heading would not match.
   EXPECTED_TITLES=(
     "From Graph to Knowledge"
+    "Data Models and Query Languages"
   )
   TOC_PAT='Contents'
   BIB_TITLE='References'
