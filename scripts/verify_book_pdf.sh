@@ -19,8 +19,38 @@ set -uo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST="$ROOT/dist"
-PRINT="$DIST/knowledge-graph-book-print.pdf"
-SCREEN="$DIST/knowledge-graph-book-screen.pdf"
+
+# Language switch: vi (default) verifies the Vietnamese book; en verifies the
+# English edition (book-en/, knowledge-graph-book-en-*.pdf).
+LANG="${LANG:-vi}"
+if [ "$LANG" = "en" ]; then
+  OUT_PREFIX="knowledge-graph-book-en"
+  # Match dash-free substrings: pdftotext renders the em-dash as "--", so a
+  # fixed-string check on the full heading would not match.
+  EXPECTED_TITLES=(
+    "From Graph to Knowledge"
+  )
+  TOC_PAT='Contents'
+  BIB_TITLE='References'
+  CAPTION_LEAK='^Figure:'
+else
+  OUT_PREFIX="knowledge-graph-book"
+  EXPECTED_TITLES=(
+    "Lời nói đầu"
+    "Cách sử dụng cuốn sách này"
+    "Giới thiệu"
+    "Chương 1 — Từ Đồ thị đến Tri thức"
+    "Chương 2 — Mô hình Dữ liệu và Ngôn ngữ Truy vấn"
+    "Chương 3 — Lược đồ, Định danh và Ngữ cảnh"
+    "Thuật ngữ"
+  )
+  TOC_PAT='ục lục'
+  BIB_TITLE='Tài liệu tham khảo'
+  CAPTION_LEAK='^Hình:'
+fi
+
+PRINT="$DIST/$OUT_PREFIX-print.pdf"
+SCREEN="$DIST/$OUT_PREFIX-screen.pdf"
 PREVIEW="$DIST/preview"
 WORK="$DIST/.verify"
 mkdir -p "$PREVIEW" "$WORK"
@@ -51,15 +81,6 @@ pdftotext "$PRINT" "$WORK/book.txt" 2>/dev/null \
   || { fail "pdftotext extraction failed"; echo "verify_book_pdf: GATE FAILED"; exit 1; }
 
 # --- 2. Expected titles ------------------------------------------------------
-EXPECTED_TITLES=(
-  "Lời nói đầu"
-  "Cách sử dụng cuốn sách này"
-  "Giới thiệu"
-  "Chương 1 — Từ Đồ thị đến Tri thức"
-  "Chương 2 — Mô hình Dữ liệu và Ngôn ngữ Truy vấn"
-  "Chương 3 — Lược đồ, Định danh và Ngữ cảnh"
-  "Thuật ngữ"
-)
 for title in "${EXPECTED_TITLES[@]}"; do
   if grep -qF "$title" "$WORK/book.txt"; then
     pass "title present: $title"
@@ -71,17 +92,17 @@ done
 # --- 3. Table of contents ----------------------------------------------------
 # pdftotext may emit combining diacritics, so match a normalization-tolerant
 # substring rather than the exact precomposed heading.
-if grep -q 'ục lục' "$WORK/book.txt"; then
+if grep -q "$TOC_PAT" "$WORK/book.txt"; then
   pass "table of contents present"
 else
   fail "no TOC heading found (Mục lục / Contents)"
 fi
 
 # --- 4. Bibliography ----------------------------------------------------------
-if grep -qF "Tài liệu tham khảo" "$WORK/book.txt"; then
+if grep -qF "$BIB_TITLE" "$WORK/book.txt"; then
   pass "bibliography section present"
 else
-  fail "bibliography section 'Tài liệu tham khảo' missing"
+  fail "bibliography section '$BIB_TITLE' missing"
 fi
 # Numeric IEEE-style entries, e.g. "[1]  W3C, ..."
 if grep -qE '^\[[0-9]+\]' "$WORK/book.txt"; then
@@ -103,10 +124,10 @@ if grep -nE '```mermaid|^graph LR|^graph TD' "$WORK/book.txt"; then
 else
   pass "no leftover Mermaid blocks"
 fi
-if grep -n '^Hình:' "$WORK/book.txt"; then
-  fail "raw 'Hình:' caption lines leaked into PDF text"
+if grep -nE "$CAPTION_LEAK" "$WORK/book.txt"; then
+  fail "raw '$CAPTION_LEAK' caption lines leaked into PDF text"
 else
-  pass "no raw 'Hình:' caption lines"
+  pass "no raw caption lines"
 fi
 
 # --- 7. Replacement characters ---------------------------------------------------

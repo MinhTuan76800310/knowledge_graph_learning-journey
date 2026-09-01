@@ -1,0 +1,2 @@
+# Reserved for English-edition generated figure PDFs (TikZ/Mermaid output).
+# Populated by scripts/render_tikz.sh when LANG=en.

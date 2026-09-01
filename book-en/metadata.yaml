@@ -1,0 +1,27 @@
+# Metadata for the Knowledge Graph book PDF build (Pandoc) — English edition.
+# Consumed by scripts/build_book.sh when LANG=en.
+
+title: "Knowledge Graph: From Graph to Knowledge System"
+subtitle: "An Open-Source Textbook"
+author: "The Knowledge Graph Book Authors"
+date: "2026"
+lang: en
+
+# Bibliography / citations (Pandoc citeproc)
+bibliography: references.bib
+csl: ieee.csl
+link-citations: true
+reference-section-title: "References"
+
+# Table of contents
+toc: true
+toc-depth: 2
+
+# Document class: book gives real \chapter breaks (each chapter starts on a
+# new page). openany avoids forced blank verso pages in the preview build.
+documentclass: book
+classoption:
+  - openany
+
+# PDF engine (lualatex handles Unicode via fontspec).
+pdf-engine: lualatex

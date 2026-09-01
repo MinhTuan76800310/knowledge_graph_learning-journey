@@ -9,8 +9,15 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SRCDIR="$ROOT/book/figures/tikz"
-OUTDIR="$ROOT/book/figures/generated"
+# Language switch: vi (default) uses book/figures; en uses book-en/figures.
+LANG="${LANG:-vi}"
+if [ "$LANG" = "en" ]; then
+  BOOK_DIR="$ROOT/book-en"
+else
+  BOOK_DIR="$ROOT/book"
+fi
+SRCDIR="$BOOK_DIR/figures/tikz"
+OUTDIR="$BOOK_DIR/figures/generated"
 TMPDIR="$ROOT/build/tikz-tmp"
 mkdir -p "$OUTDIR" "$TMPDIR"
 
