@@ -126,6 +126,24 @@ liệu [@hogan-knowledge-graphs]:
 Nói ngắn gọn: đồ thị dữ liệu trả lời *"có gì?"*, lược đồ trả lời *"được phép có gì,
 và nên hiểu các tên gọi kia thế nào?"*.
 
+Một phép loại suy mở đường: đồ thị dữ liệu không có lược đồ là một **hộp linh kiện không
+kèm bản vẽ lắp ráp** — mọi chi tiết cắm được vào mọi chi tiết khác, nên bạn không phân
+biệt nổi một sản phẩm lắp *đúng* với một sản phẩm lắp *trông có vẻ* đúng.
+
+Và lược đồ tồn tại vì cái giá của "trông có vẻ đúng" là vô hình. Giả sử một script nạp dữ
+liệu gõ nhầm tên quan hệ:
+
+```turtle
+ex:Hanoi  ex:captialOf  ex:Vietnam .    # thiếu một chữ "a": captialOf
+```
+
+Đồ thị **không báo lỗi** — nó coi `ex:captialOf` là một vị từ hoàn toàn hợp lệ. Hậu quả
+lộ ra ở tầng truy vấn: `ex:Hanoi` không còn cạnh `ex:capitalOf` nào, nên câu hỏi "Hà Nội
+là thủ đô của nước nào" trả về rỗng, dù dữ liệu "vẫn nằm ở đó" chỉ sai tên. Nếu không có
+lược đồ, `captialOf` chỉ là *một vị từ nữa* và không có gì là *sai* cả — chính tập từ
+vựng được kỳ vọng (§3.1.2) mới tạo ra điểm chuẩn để nói "vị từ này không thuộc về đồ
+thị". Còn việc *bắt* lỗi đó lúc nạp dữ liệu là việc của tầng kiểm định (Chương 5).
+
 ### 3.1.2 Đồ thị dữ liệu và đồ thị lược đồ
 
 Cần phân biệt hai tầng:
@@ -148,6 +166,18 @@ ex:capitalOf  rdfs:domain ex:City ;
               rdfs:range  ex:Country .
 ```
 
+Đọc kỹ bốn dòng trên: bộ ba dữ liệu `ex:Hanoi ex:capitalOf ex:Vietnam` (từ §3.0) là *một
+cạnh*; hai dòng `rdfs:domain`/`rdfs:range` là **giàn giáo** mà cạnh đó lắp vào — chỗ chủ
+thể phải là một `City`, chỗ đối tượng phải là một `Country`. Cùng tư duy trên miền cơ chế:
+
+```turtle
+ex:hasInput  rdfs:domain ex:Mechanism ;
+             rdfs:range  ex:Quantity .
+```
+
+dựng giàn giáo cho cạnh dữ liệu `ex:rateOfChange_1 ex:hasInput ex:position_1`. Hai tầng
+này — giàn giáo và cạnh — luôn đi cặp như vậy, ở mọi miền.
+
 Phía đồ thị thuộc tính, lược đồ không phải là một đồ thị riêng mà là **quy ước của
 ứng dụng** cộng với các ràng buộc mà hệ quản trị hỗ trợ [@neo4j-data-modeling]:
 
@@ -160,6 +190,10 @@ Nhãn (`City`), kiểu quan hệ (`CAPITAL_OF`), khóa thuộc tính (`name`, `p
 các ràng buộc (duy nhất, tồn tại, kiểu dữ liệu) hợp thành "lược đồ" theo nghĩa thực
 hành — nhưng không có một chuẩn ngữ nghĩa hình thức chung cho phía này
 [@neo4j-modeling-fundamentals].
+
+Hai bên không chỉ khác cú pháp mà khác cả **hành vi**: ràng buộc Cypher *từ chối* dữ liệu
+ngay lúc ghi, còn bộ bốn RDFS ở trên *suy ra* tri thức lúc đọc. Đối lập "từ chối khi ghi"
+so với "suy ra khi đọc" là chủ đề của mục tiếp theo.
 
 ### 3.1.3 Lược đồ phía RDF: RDFS
 
@@ -174,10 +208,37 @@ RDFS (RDF Schema) cung cấp bốn công cụ chính để nói về cấu trúc
 | `rdfs:range` | Đối tượng của quan hệ thuộc lớp nào | `ex:capitalOf rdfs:range ex:Country` |
 
 Một điểm tinh tế đã gặp ở Chương 2 và cần nhắc lại: `rdfs:domain` và `rdfs:range` là
-**quy tắc suy diễn**, không phải ràng buộc kiểm tra. Từ `ex:Hanoi ex:capitalOf X` và
-`ex:capitalOf rdfs:domain ex:City`, bộ suy luận *suy ra* `ex:Hanoi rdf:type ex:City`
-— nó thêm tri thức chứ không từ chối dữ liệu. Kiểm tra và từ chối dữ liệu sai là việc
-của tầng validation (Chương 5).
+**quy tắc suy diễn**, không phải ràng buộc kiểm tra. Hãy chạy thật quy tắc đó, không mô
+tả nó. Bắt đầu từ một đồ thị chỉ chứa đúng cạnh của §3.0, cộng giàn giáo của §3.1.2:
+
+```turtle
+ex:Hanoi  ex:capitalOf  ex:Vietnam .
+```
+
+Bộ suy luận làm ba việc:
+
+1. Khớp mẫu `?s ex:capitalOf ?o` với cạnh trên, được `?s = ex:Hanoi`, `?o = ex:Vietnam`.
+2. Đối chiếu `ex:capitalOf rdfs:domain ex:City` → thêm `ex:Hanoi rdf:type ex:City`.
+3. Đối chiếu `ex:capitalOf rdfs:range ex:Country` → thêm `ex:Vietnam rdf:type ex:Country`.
+
+Vòng lặp thứ hai không sinh bộ ba mới nào, nên phép suy **đóng ở đúng hai bộ ba mới**.
+Không ai từng viết `ex:Hanoi rdf:type ex:City` — nó *nảy ra* từ cạnh. Đó là nghĩa của
+"thêm tri thức chứ không từ chối dữ liệu".
+
+Cái giá của "không từ chối" là một lỗi có thể bị **thăng cấp** thành tri thức. Giả sử ai
+đó nhầm lẫn khai báo `ex:DaNang rdf:type ex:Country` rồi nạp `ex:DaNang ex:capitalOf
+ex:Laos`. RDFS trung thành suy ra `ex:DaNang rdf:type ex:City` (theo domain). Giờ Đà Nẵng
+*vừa là City vừa là Country*, không công cụ nào phàn nàn, và cái sai ban đầu đã được biến
+thành một khẳng định *có kiểu* mà mọi truy vấn phía dưới sẽ tin dùng. RDFS không có khái
+niệm "hai lớp loại trừ nhau" — đó là việc của ontology (Chương 4).
+
+Cơ chế này chạy y hệt trên miền cơ chế. Từ cạnh `ex:rateOfChange_1 ex:hasInput
+ex:position_1` và giàn giáo `ex:hasInput rdfs:domain ex:Mechanism ; rdfs:range ex:Quantity`,
+bộ suy luận thêm `ex:rateOfChange_1 rdf:type ex:Mechanism` và `ex:position_1 rdf:type
+ex:Quantity`. Đồ thị cơ chế *lấy kiểu của nút từ chính các cạnh của nó*, thay vì phải ghi
+kiểu thủ công cho từng nút.
+
+Kiểm tra và từ chối dữ liệu sai là việc của một tầng khác — validation, Chương 5.
 
 ### 3.1.4 Lược đồ phía đồ thị thuộc tính
 
@@ -213,6 +274,26 @@ không, hai lớp có *tương đương* không, một quan hệ có *bắc cầ
 là *đủ* để một thực thể thuộc một lớp. Những câu hỏi đó thuộc về ontology và sẽ được
 trả lời bằng công cụ hình thức ở Chương 4 [@hogan-knowledge-graphs].
 
+Hãy *thấy* đúng một trong bốn khoảng trống ấy, thay vì chỉ đọc tên nó. Nạp tiếp vào đồ
+thị của §3.1.2:
+
+```turtle
+ex:Hanoi  rdf:type  ex:City .
+ex:Hanoi  rdf:type  ex:Country .
+```
+
+Lược đồ chấp nhận cả hai dòng. Bộ suy luận RDFS không kết luận ra điều gì mâu thuẫn — Hà
+Nội giờ *vừa là một thành phố vừa là một quốc gia*, và không công cụ nào kêu lên. Câu
+"không thực thể nào vừa là City vừa là Country" là khẳng định mà RDFS **không diễn đạt
+nổi**. Dòng duy nhất viết được nó là `ex:City owl:disjointWith ex:Country .` — nhưng đó
+đã là tiên đề OWL, và với nó chính đồ thị trên trở nên *không nhất quán*. Đây là ontology,
+nó chờ đến Chương 4.
+
+> ⚑ **Ngộ nhận cần tránh:** khai báo lớp và `domain`/`range` *chưa phải* ontology — đó mới
+> là một bộ từ vựng. RDFS lan truyền kiểu dọc theo cạnh, nhưng nó **không loại trừ** được
+> điều gì. "Cái gì được phép nối với cái gì" (lược đồ) khác với "điều gì đúng/sai về mặt
+> logic" (ontology).
+
 Nói cách khác: lược đồ cho bạn **bộ khung từ vựng và cấu trúc**; ontology cho bộ khung
 đó **ý nghĩa suy luận được**. Chương này chỉ cần bộ khung.
 
@@ -222,7 +303,8 @@ Có một ngộ nhận phổ biến: muốn xây knowledge graph thì phải thi
 đồ trước khi nạp dữ liệu. Điều này không đúng. Tài liệu CS520 nói thẳng: bạn *có thể*
 bắt đầu mà chưa có lược đồ, và lược đồ lẫn dữ liệu cùng được bồi đắp trong quá trình
 xây dựng; thiết kế trước hữu ích **trong chừng mực nó thực tế** [@stanford-cs520-create-kg].
-Hogan et al. phân biệt ba dạng lược đồ [@hogan-knowledge-graphs]:
+Xét theo *thời điểm* định nghĩa lược đồ so với lúc nạp dữ liệu, có ba chiến lược (cách
+phân chia này là của cuốn sách):
 
 1. **Lược đồ thiết kế trước** (upfront): định nghĩa lớp, quan hệ, ràng buộc trước khi
    nạp dữ liệu. Hợp lý khi miền ổn định và yêu cầu nghiệp vụ rõ ràng.
@@ -231,6 +313,13 @@ Hogan et al. phân biệt ba dạng lược đồ [@hogan-knowledge-graphs]:
 3. **Lược đồ nổi lên** (emergent / bottom-up): cấu trúc được *trích xuất ngược* từ dữ
    liệu đã có — ví dụ gom nhóm các nút có cùng hình dạng kết nối — thay vì được thiết
    kế từ đầu.
+
+Lưu ý rằng đây là trục *thời điểm*. Hogan et al. phân loại lược đồ theo một trục khác —
+*mục đích*: **lược đồ ngữ nghĩa** (semantic schema — định nghĩa từ vựng để phục vụ suy
+luận, sẽ học ở Chương 4), **lược đồ kiểm định** (validating schema — đặt ràng buộc để
+kiểm tra dữ liệu, Chương 5), và **lược đồ nổi lên** (emergent schema — cấu trúc trích
+xuất tự động từ chính dữ liệu) [@hogan-knowledge-graphs]. Hai trục độc lập: một lược đồ
+nổi lên vẫn có thể được dùng làm lược đồ ngữ nghĩa.
 
 Ba chiến lược này không loại trừ nhau. Tiêu chí chọn chiến lược phụ thuộc vào độ
 ổn định của miền và mức độ hiểu biết ban đầu:
@@ -281,15 +370,29 @@ ex:hasValue      rdfs:domain ex:Quantity ;
                  rdfs:range  rdfs:Literal .
 ```
 
-Đây là một lược đồ RDFS thuần túy: nó khai báo lớp, quan hệ, và miền/giá trị —
-nhưng không nói gì về ngữ nghĩa suy luận (loại trừ, tương đương, điều kiện cần–đủ).
-Nó cho biết `ex:rateOfChange_1` là một `RateOfChangeMechanism`, và `ex:hasOperation`
-nối từ Mechanism đến Operation. Nó không cho biết mỗi Mechanism phải có ít nhất một
-Operation, hay `RateOfChangeMechanism` và `HeatTransferMechanism` loại trừ nhau.
-Những ngữ nghĩa đó thuộc về ontology (Chương 4).
+Đây là một lược đồ RDFS thuần túy: nó khai báo lớp, quan hệ, và miền/giá trị — nhưng
+**không nhắc đến một cá thể nào**. Không có dòng nào ở trên nói `ex:rateOfChange_1` là
+gì; và đúng ra một lược đồ *không thể* nói điều đó — đặt tên cho cá thể là việc của đồ
+thị dữ liệu, không phải của giàn giáo.
 
-So sánh với lược đồ thành phố ở §3.1.3: cấu trúc RDFS giống hệt nhau — chỉ khác tên
-lớp, tên quan hệ, và miền. Công cụ lược đồ là một; miền áp dụng thay đổi.
+Cái lược đồ này làm được là *suy ra* kiểu cho các cá thể khi chúng xuất hiện. Nạp cạnh
+dữ liệu:
+
+```turtle
+ex:rateOfChange_1  ex:hasOperation  ex:derivativeOperation_1 .
+```
+
+Bộ suy luận khớp `ex:hasOperation rdfs:domain ex:Mechanism ; rdfs:range ex:Operation` và
+thêm vào `ex:rateOfChange_1 rdf:type ex:Mechanism` cùng `ex:derivativeOperation_1
+rdf:type ex:Operation`. Chuỗi `ex:DerivativeOperation rdfs:subClassOf ex:Operation` bảo
+đảm rằng mọi truy vấn hỏi `ex:Operation` cũng thấy `derivativeOperation_1` nếu nó được
+khai báo là `DerivativeOperation`. Đồ thị cơ chế lấy kiểu của nút từ cạnh của nó — giống
+hệt cách đồ thị thành phố ở §3.1.3 làm.
+
+Giới hạn sống sót sang Chương 4: không gì trong lược đồ này buộc một `Mechanism` phải có
+ít nhất một `Operation`, và không gì ngăn một cá thể bị gán cả `ex:Mechanism` lẫn
+`ex:Quantity`. Cấu trúc RDFS của hai miền là một; chỉ tên lớp, tên quan hệ và miền áp
+dụng là khác.
 
 ## 3.2 Định danh — đặt tên không phải là hiểu
 
@@ -298,7 +401,10 @@ thứ gì", thì định danh trả lời "chúng ta đang nói về *thứ nào
 
 ### 3.2.1 Định danh khác thực thể
 
-Hãy tách ba khái niệm thường bị trộn vào nhau:
+Một phép loại suy mở đường: con số "305" viết trên cánh cửa không tự mang theo tòa nhà.
+Cùng ký hiệu ấy chỉ phòng 305 của tòa A *và* phòng 305 của tòa B, và không có gì *bên
+trong bốn ký tự* quyết định nó là tòa nào. Định danh trong đồ thị cũng vậy. Hãy tách ba
+khái niệm thường bị trộn vào nhau:
 
 - **Thực thể** (entity): đối tượng trong thế giới thực hoặc trong miền vấn đề — thành
   phố Hà Nội bằng gạch đá, con người, lịch sử của nó.
@@ -315,7 +421,17 @@ gán cho nó [@hogan-knowledge-graphs].
 Hệ quả thứ nhất: **cùng một định danh không chứng minh sự thống nhất ngữ nghĩa**.
 Chương 2 đã gặp: cùng một IRI không đảm bảo hai bên dùng nó với cùng một ý định. Hai
 hệ thống có thể cùng dùng tên `Hanoi` cho hai cách mô hình hóa khác nhau, thậm chí hai
-thực thể khác nhau trùng tên.
+thực thể khác nhau trùng tên. Ngay trên bộ dữ liệu của ta, hãy tưởng tượng hai khai báo
+cùng dùng một IRI:
+
+```turtle
+ex:Hanoi  rdf:type  ex:City .     # thành phố Hà Nội
+ex:Hanoi  rdf:type  ex:Street .   # một con phố tên "Hà Nội" ở Quận 1, TP.HCM
+```
+
+Truy vấn `?x ex:capitalOf ?c` chạy trên đồ thị này trả về kết quả vô nghĩa: một IRI đang
+chỉ hai thực thể. Đây là ảnh gương của hệ quả thứ hai dưới đây (hai IRI, một thực thể) —
+và cả hai đều không thể phân xử bằng cách nhìn vào chuỗi ký tự.
 
 Hệ quả thứ hai: **hai định danh khác nhau không chứng minh hai thực thể khác nhau**.
 `ex:Hanoi` và `wd:Q1858` khác nhau từng ký tự, nhưng rất có thể cùng biểu thị một
@@ -346,10 +462,21 @@ Vì knowledge graph hiếm khi được sinh ra từ một bàn tay duy nhất. 
 - Một đối tác thứ ba có thể dùng `geo:HanoiCapitalRegion` trong không gian tên của họ
   [@hogan-knowledge-graphs].
 
-Nếu chỉ ghép các nguồn lại bằng phép hợp đồ thị, bạn nhận được **ba nút rời rạc** cho
-cùng một thành phố: dữ liệu của nguồn này không nối với dữ liệu của nguồn kia, và mọi
-truy vấn "tìm mọi thông tin về Hà Nội" đều thiếu sót. Định danh xuyên nguồn là thứ
-phải được *thiết kế và xác lập*, không phải thứ có sẵn [@stanford-cs520-kg-from-data].
+Nếu chỉ ghép các nguồn lại bằng phép hợp đồ thị, bạn nhận đúng **ba nút rời rạc** cho
+cùng một thành phố. Hãy nhìn vào hợp đồ thị đó:
+
+```turtle
+ex:Hanoi                ex:name "Hà Nội" ; ex:capitalOf ex:Vietnam ; ex:population 8418883 .
+wd:Q1858                wdt:P31 wd:Q515 ;  wdt:P36 wd:Q881 ;         wdt:P1082 8053663 .
+geo:HanoiCapitalRegion  geo:isCapitalOf     ex:Vietnam .
+```
+
+Đếm được: ba nút, bảy bộ ba, và **không một cạnh nào** nối giữa bất kỳ cặp nào trong ba
+nút ấy. Hệ quả đo được, không phải cảm tính: truy vấn "thực thể nào là thủ đô của Việt
+Nam" trả về hai hàng (`ex:Hanoi`, `geo:HanoiCapitalRegion`) và **bỏ sót** `wd:Q1858`;
+truy vấn "dân số" trả về hai con số 8418883 và 8053663 không hề được nối với nhau.
+"Thiếu sót" ở đây nghĩa đen là một hàng bị rơi. Định danh xuyên nguồn là thứ phải được
+*thiết kế và xác lập*, không phải thứ có sẵn [@stanford-cs520-kg-from-data].
 
 ### 3.2.3 OWL không có giả định tên duy nhất
 
@@ -367,6 +494,16 @@ Nói cách khác, trong OWL:
 - `ex:Hanoi` và `wd:Q1858` khác nhau **không ngụ ý** hai thành phố khác nhau.
 - Muốn khẳng định chúng *khác* nhau, phải nói rõ ràng bằng `owl:differentFrom`.
 - Muốn khẳng định chúng *là một*, phải nói rõ ràng bằng `owl:sameAs`.
+
+Chạy cùng một dữ liệu qua hai thế giới để thấy khác biệt. *Quan hệ:* bảng
+`cities(id, name, population)` với hai hàng `(1, "Hà Nội", 8418883)` và
+`(7, "Hanoi", 8053663)`. Dưới UNA, hai khóa chính *bắt buộc* là hai thành phố — nên câu
+hỏi "dân số của thủ đô Việt Nam" không có đáp án đúng, và khoảng chênh 4,6% buộc phải
+được đọc thành "hai nơi khác nhau thật". *Đồ thị:* đúng hai nút ấy, không kèm
+`owl:sameAs` cũng không kèm `owl:differentFrom`, để bộ suy luận **hai mô hình đều đúng**
+— hoặc một thành phố, hoặc hai. Chỉ một khẳng định tường minh mới chốt được; đó chính là
+lý do §3.2.4 tồn tại. Trên đồ thị cơ chế, `ta:velocityDef` và `tb:speedDef` nằm trong
+đúng trạng thái chưa-quyết ấy cho tới khi bước bằng chứng của §3.2.5 chạy.
 
 Cả "giống" lẫn "khác" đều là **khẳng định cần bằng chứng**, không phải mặc định của
 hệ thống. Đây là điểm sâu, đáng để dừng lại: sự im lặng của đồ thị ("không thấy nói
@@ -388,6 +525,23 @@ thông tin nào đã biết về `ex:Hanoi` cũng đúng với `wd:Q1858`*, và 
 [@w3c-owl2-primer]. Thông tin **lan truyền** qua `owl:sameAs`: dân số, quan hệ, nhãn,
 mọi thứ gắn với nút này trở thành thông tin gắn với nút kia.
 
+Lan truyền không dừng ở một bước. `owl:sameAs` là quan hệ *đối xứng* và *bắc cầu*, nên
+các khẳng định sameAs khép lại thành **lớp tương đương**. Cho một chuỗi hai bước:
+
+```turtle
+ex:Hanoi    owl:sameAs wd:Q1858 .
+wd:Q1858    wdt:P36    wd:Q881 .
+wd:Q881     owl:sameAs ex:Vietnam .
+ex:Vietnam  ex:name    "Việt Nam" .
+```
+
+Bộ suy luận phải thêm `ex:Hanoi wdt:P36 wd:Q881`, `ex:Hanoi wdt:P36 ex:Vietnam`,
+`wd:Q1858 wdt:P36 ex:Vietnam`, và `wd:Q881 ex:name "Việt Nam"`. Hai cạnh sameAs đã phân
+hoạch đồ thị thành hai lớp {`ex:Hanoi`, `wd:Q1858`} và {`ex:Vietnam`, `wd:Q881`}, và mọi
+thông tin chảy tràn trong từng lớp. Đây là chỗ tính "nguy hiểm" trở nên *không còn hiển
+nhiên*: một cạnh sameAs sai không trộn hai nút, nó trộn **hai lớp tương đương** — toàn bộ
+những gì thuộc một bên được gán cho bên kia.
+
 Chính hệ quả lan truyền này làm `owl:sameAs` vừa mạnh vừa nguy hiểm:
 
 - **Mạnh**: một khẳng định đúng duy nhất có thể hợp nhất dữ liệu của nhiều nguồn mà
@@ -395,8 +549,12 @@ Chính hệ quả lan truyền này làm `owl:sameAs` vừa mạnh vừa nguy hi
 - **Nguy hiểm**: một khẳng định **sai** duy nhất hợp nhất hai thực thể vốn khác nhau,
   và toàn bộ thông tin của chúng trộn lẫn — gây ra lỗi suy diễn dây chuyền.
 
-> 🖊 **Tự kiểm tra:** Giả sử đồ thị có `ex:Hanoi owl:sameAs wd:Q1858` và `wd:Q1858 ex:population 8000000`. Không có triple nào nói về dân số của `ex:Hanoi` một cách trực tiếp. Một bộ suy luận OWL sẽ trả lời gì khi được hỏi "dân số của ex:Hanoi là bao nhiêu"? Tại sao? Nếu dòng `owl:sameAs` bị sai (hai IRI thực ra chỉ hai thành phố khác nhau), hậu quả là gì?
-  và mọi thuộc tính của thực thể này bị gán cho thực thể kia trên toàn đồ thị.
+> 🖊 **Tự kiểm tra:** Giả sử đồ thị có `ex:Hanoi owl:sameAs wd:Q1858` và `wd:Q1858 wdt:P1082 8053663` (đúng con số của Nguồn B ở §3.0). Không có triple nào nói về dân số của `ex:Hanoi` một cách trực tiếp. Một bộ suy luận OWL sẽ trả lời gì khi được hỏi "dân số của ex:Hanoi là bao nhiêu"? Tại sao? Nếu dòng `owl:sameAs` bị sai (hai IRI thực ra chỉ hai thành phố khác nhau), hậu quả là gì?
+>
+> *Chỉ dẫn trả lời:* bộ suy luận trả lời 8053663 — vì `owl:sameAs` cho phép nó suy ra mọi
+> thuộc tính của `wd:Q1858` cũng đúng với `ex:Hanoi`. Nếu khẳng định sai, dữ liệu của hai
+> thành phố vốn khác nhau bị trộn làm một trên toàn đồ thị, và lỗi lan ra mọi truy vấn chạm
+> đến một trong hai IRI.
 
 Vì vậy, `owl:sameAs` không phải là nơi để ghi nhận "hai thứ trông giống nhau". Các
 quan hệ "gần giống", "khớp một phần", "liên quan" cần những vị từ khác với ngữ nghĩa
@@ -539,11 +697,22 @@ về. Tiêu chí chọn (được áp dụng cho `ex:rateOfChange_1`, so với
 - **Thuộc sở hữu miền:** do hệ thống (hoặc cộng đồng miền) kiểm soát, không do bên
   thứ ba đặt tiền lệ.
 
+Có một ca biên mà mọi đồ thị sống lâu đều gặp: nếu chọn `wd:Q1858` *làm* định danh chính
+tắc, thì khi Wikidata nhập `Q1858` vào một Q-number khác (việc này xảy ra thật), hệ thống
+còn lại một định danh treo và phải tiếp tục phục vụ cái cũ — chính là bài toán IRI bị loại
+bỏ, và nguy cơ lan truyền của §3.2.4 áp lên cả cạnh chuyển hướng. Ba tiêu chí trên vì vậy
+ngụ ý một quy tắc chưa nói thành lời: **chính tắc = IRI mà *hệ thống của bạn* kiểm soát**,
+bí danh = mọi IRI khác. Đó là lý do `ex:rateOfChange_1` thắng `ta:velocityDef` (bạn giữ nó
+ổn định), dù `wd:Q1858` thắng chuỗi "Hà Nội" (opaque, trung lập ngôn ngữ). Và gọi tên cho
+rõ một ngộ nhận hay gặp: "Hà Nội" là một **chuỗi nhãn** (`rdfs:label`/`skos:altLabel`),
+không phải một **IRI bí danh** — nhầm hai thứ này là nhầm giữa "tên để hiển thị" và "tên để
+tham chiếu".
+
 Các định danh còn lại trở thành **bí danh** (alias): vẫn hợp lệ để tra cứu, được nối
 về định danh chính tắc bằng `owl:sameAs`. Vòng đời của định danh chính tắc khép kín
 như vậy: ứng viên → bằng chứng → chấp nhận → ghi nhận như bí danh.
 
-### Pipeline 6 bước trên hai nguồn cơ chế
+### 3.2.6 Pipeline 6 bước trên hai nguồn cơ chế
 
 Tổng kết quy trình tích hợp `ta:velocityDef` và `tb:speedDef` thành một pipeline 6 bước:
 
@@ -559,6 +728,15 @@ Tổng kết quy trình tích hợp `ta:velocityDef` và `tb:speedDef` thành m�
 Pipeline này cho thấy mỗi bước thêm đúng một loại thông tin: lược đồ (B2) thêm ánh xạ từ
 vựng, định danh (B3–B5) thêm khẳng định đồng nhất, chính tắc hóa (B6) chọn tên ổn định.
 Không bước nào thêm dữ liệu đồ thị sai — pipeline chỉ từ chối hoặc tích hợp, không phá hủy.
+
+Kết quả sau bước 6, viết ra được:
+
+```turtle
+ex:rateOfChange_1  owl:sameAs  ta:velocityDef , tb:speedDef .
+```
+
+Một nút chính tắc, hai cạnh bí danh. Từ đây `?m ex:hasInput ex:position_1` trả về
+`ex:rateOfChange_1` **một lần**, thay vì ba hàng gần trùng nhau của ba IRI.
 
 > ⚑ **Phạm vi:** chương này dạy *bài toán* và *quy trình khái niệm* của giải quyết
 > định danh. Các thuật toán công nghiệp — chặn (blocking), khớp (matching), học máy —
@@ -581,10 +759,30 @@ Hogan et al. định nghĩa ngữ cảnh là **phạm vi của sự đúng** (sc
 mà trong đó một đơn vị tri thức được coi là đúng — theo thời gian, theo địa lý/phạm
 vi, theo nguồn gốc, hoặc kết hợp nhiều chiều [@hogan-knowledge-graphs].
 
+Hãy biến trực giác đó thành thứ kiểm tra được. Gán cho mỗi con số một thời điểm quan sát
+(đây là *nhãn phạm vi của mô hình*, không phải một khẳng định về thực tế):
+
+```turtle
+ex:popA  a ex:PopulationStat ; ex:city ex:Hanoi  ; ex:value 8418883 ; ex:observedAt "2023" .
+ex:popB  a ex:PopulationStat ; ex:city wd:Q1858 ; ex:value 8053663 ; ex:observedAt "2019" .
+```
+
+Hai phát biểu cùng chủ ngữ (một khi `ex:Hanoi owl:sameAs wd:Q1858`), cùng vị ngữ, hai
+tân ngữ khác nhau — và **không mâu thuẫn**, vì hai phạm vi rời nhau (2019 ≠ 2023). Bây
+giờ đẩy cái bật lửa: đổi `ex:popB` thành `ex:observedAt "2023"`. Cùng cặp phát biểu, chỉ
+khác một mốc thời gian, giờ **là** một mâu thuẫn — hai giá trị cho cùng một thời điểm.
+Toàn bộ khái niệm "phạm vi của sự đúng" nằm ở đúng chỗ lật đó: ngữ cảnh không đổi *nội
+dung* phát biểu, nó đổi *liệu hai phát biểu có xung đột hay không*.
+
 Lưu ý ranh giới: chương này dạy các **cơ chế biểu diễn** ngữ cảnh. Mô hình đầy đủ về
 claim – bằng chứng – provenance – thời gian – mâu thuẫn là công việc của Chương 6.
 
 ### 3.3.2 Named graph và RDF dataset: gom nhóm và đặt tên
+
+Trước khi xem cơ chế, hãy hỏi vì sao cần *gom nhóm* thay vì cách hiển nhiên là đóng dấu
+`ex:source ex:sourceA` lên từng bộ ba. Vì một phát biểu nguồn gốc phủ được cả trăm bộ ba
+cùng lúc, và một nhóm có thể được thay thế hoặc loại bỏ như *một đơn vị* — đóng dấu lên
+từng cạnh thì không có "cả nhóm" để thao tác.
 
 Cơ chế đầu tiên của phía RDF là **RDF dataset**: một tập hợp các đồ thị RDF, gồm đúng
 một **đồ thị mặc định** (default graph) và không hoặc nhiều **đồ thị có tên** (named
@@ -624,10 +822,20 @@ ex:experimentData {
 ```
 
 `ex:textbookA` chứa định nghĩa khái niệm, `ex:experimentData` chứa dữ liệu thực
-nghiệm đo được. Tách biệt này cho phép truy vấn riêng từng nguồn (SPARQL `GRAPH`,
-Chương 2) và gắn provenance cho cả nhóm — ví dụ hỏi "bộ giá trị nào đến từ thực
-nghiệm?" mà không lẫn với định nghĩa sách giáo khoa. Lưu ý ranh giới bên dưới: ý
-nghĩa "nguồn đã khẳng định" là quy ước ứng dụng, không phải ngữ nghĩa RDF nội tại.
+nghiệm đo được. Tách biệt này cho phép hỏi *riêng từng nguồn*. Trong SPARQL, khối
+`GRAPH ?g { … }` lặp qua từng tên đồ thị của dataset; thay `?g` bằng một tên cụ thể là
+thu hẹp câu hỏi vào đúng nguồn đó:
+
+```sparql
+PREFIX ex: <http://example.org/kgbook/mks#>
+SELECT ?q ?v WHERE { GRAPH ex:experimentData { ?q ex:hasValue ?v } }
+```
+
+trả về `position_1 → 12.5`, `velocity_1 → 3.2`; đổi tên đồ thị sang `ex:textbookA` thì
+trả về rỗng, vì định nghĩa không nằm trong nguồn thực nghiệm. Đây là lợi ích thao tác
+được của việc gom nhóm — và cũng là lúc gắn provenance cho cả nhóm. Lưu ý ranh giới bên
+dưới: ý nghĩa "nguồn đã khẳng định" là quy ước ứng dụng, không phải ngữ nghĩa RDF nội
+tại.
 
 Named graph cho phép **gom nhóm** các phát biểu và gắn cả nhóm với một tên — rất tiện
 để phân vùng dữ liệu theo nguồn, theo phiên bản, theo góc nhìn.
@@ -643,6 +851,16 @@ này"**. Nó là cơ chế gom nhóm; ý nghĩa provenance là **quy ước củ
 minh (ví dụ bằng một từ vựng provenance như **PROV** — PROV-O là chuẩn W3C cung cấp các
 lớp và thuộc tính để mô tả nguồn gốc, tác nhân, hoạt động tạo ra dữ liệu; sẽ học chi tiết
 ở Chương 6).
+
+> 🖊 **Tự kiểm tra:** Bạn vừa viết `ex:sourceA { ex:Hanoi ex:population 8418883 }`. Câu
+> nào suy ra được? (1) "Nguồn A đã khẳng định dân số Hà Nội là 8.418.883." (2) "Tồn tại
+> một tài nguyên có IRI `ex:sourceA` và tài nguyên đó có dân số 8.418.883."
+>
+> *Chỉ dẫn:* **Không câu nào.** (1) cần một khẳng định mà đồ thị chưa từng ghi —
+> `ex:sourceA` ở đây là *nhãn trên cái hộp*, không phải chủ thể của một phát biểu. (2) còn
+> sai hơn: `ex:sourceA` đứng ở *vị trí tên đồ thị*, nơi RDF không bắt buộc nó biểu thị bất
+> cứ điều gì. Muốn (1) thành thật, bạn phải *nói thêm* một khẳng định nằm ngoài hộp — và
+> đó chính là tầng claim mà Chương 6 lo.
 
 ### 3.3.3 Thực thể quan hệ đủ tư cách: mẫu n-ary
 
@@ -734,12 +952,39 @@ ex:rateOfChange_1  ex:hasOperation  ex:derivativeOperation_1 ;
 ```
 
 Ba cạnh này mô tả đúng ba vai diễn — nhưng không có gì *ràng buộc* chúng thuộc về cùng
-một ứng dụng. Khi cơ chế được áp dụng lần thứ hai (đạo hàm của `velocity_1` theo
-`time_1`), ba cạnh mới sinh thêm ba quan hệ song song; để biết `hasInput position_1`
-đi với `hasOperation derivativeOperation_1` hay một phép toán khác, không có mối nối
-nào trả lời. Nút trung gian giải quyết đúng điểm này: nó là điểm neo chung mà mọi vai
-diễn cùng trỏ về, và là nơi duy nhất để gắn thuộc tính (bằng chứng, thời gian) về
-*chính sự ứng dụng đó*.
+một ứng dụng, và giờ ta có thể *đo* cái giá đó. Nạp thêm lần áp dụng thứ hai (đạo hàm của
+`velocity_1` theo `time_1`) vào cùng biểu diễn phẳng:
+
+```turtle
+ex:rateOfChange_1  ex:hasOperation  ex:derivativeOperation_1 , ex:derivativeOperation_2 ;
+                   ex:hasInput      ex:position_1 , ex:velocity_1 ;
+                   ex:hasReferenceVariable  ex:time_1 .
+```
+
+Hỏi "phép toán nào được áp dụng cho `position_1`?" bằng một nối biến chung (kiểu §2.1.6):
+
+```sparql
+SELECT ?op WHERE { ex:rateOfChange_1 ex:hasOperation ?op .
+                  ex:rateOfChange_1 ex:hasInput ex:position_1 }
+```
+
+SPARQL khớp hai mẫu *độc lập* rồi nối trên biến chung, nên trả về **2 hàng**
+(`derivativeOperation_1` và `derivativeOperation_2`) — nhưng chỉ `derivativeOperation_1`
+mới thực sự lấy `position_1` làm đầu vào. Biểu diễn phẳng không giữ được ghép cặp nào
+thuộc về ứng dụng nào, nên nó buộc bạn nhận cả câu đúng lẫn câu sai. Cùng câu hỏi trên
+dạng n-ary:
+
+```sparql
+SELECT ?op WHERE { ?app ex:hasOperation ?op ; ex:differentiand ex:position_1 }
+```
+
+trả về **đúng 1** hàng. 2 so với 1 — đó là cơ chế, không phải lời khẳng định. Nút trung
+gian là điểm neo ràng buộc chặt phép toán với đúng đại lượng bị đạo hàm, và là nơi duy
+nhất để gắn thuộc tính (bằng chứng, thời gian) về *chính sự ứng dụng đó*.
+
+(Còn khối `ex:textbookA` ở §3.3.2? Nó *cố ý* dùng dạng phẳng, để bạn thấy gom nhóm mua
+được gì — phân vùng theo nguồn — và không mua được gì — ràng buộc vai diễn. Hai mục không
+mâu thuẫn: §3.3.2 nói về *đóng gói*, §3.3.3 nói về *liên kết tham gia*.)
 
 > 🖊 **Tự kiểm tra:** Giả sử bạn cần biểu diễn "Alice làm việc tại công ty X từ 2020 đến 2023, với vai trò kỹ sư phần mềm". Hãy phác thảo cấu trúc n-ary cho phát biểu này: thực thể trung gian đại diện cho điều gì? Có bao nhiêu cạnh nối từ nó? Nếu sau này Alice quay lại công ty X với vai trò khác, cấu trúc của bạn xử lý được không?
 >
@@ -764,6 +1009,17 @@ thuộc tính (Chương 2):
 cậy) và truy vấn chủ yếu duyệt qua cạnh. Khi ngữ cảnh phình to — nhiều khoảng thời
 gian, nhiều nguồn cùng lúc, hoặc cần truy vấn chính các chiều ngữ cảnh — mẫu thực thể
 trung gian quay lại, kể cả trong đồ thị thuộc tính [@stanford-cs520-create-kg].
+
+Hãy hỏi một câu của cả ba cách biểu diễn và xem cách thứ hai *chết* ở đâu. Câu hỏi: "Hà
+Nội là thủ đô từ bao giờ, và ai xác nhận?" Dạng cạnh-có-thuộc-tính ở trên trả lời gọn:
+`{since: 1976}` nằm ngay trên cạnh. Bây giờ thêm nguồn thứ hai — cả `ex:sourceA` (Giáo
+trình A) và `ex:sourceB` (Wikidata) cùng xác nhận *cùng một* ngôi thủ đô 1976. Cạnh giờ
+phải chứa **hai** nguồn: `{source: "A"}` thì ghi đè mất B, `{source: ["A","B"]}` thì ngừng
+là một thuộc tính mà ngôn ngữ truy vấn nối được, và bạn **không** gắn nổi một ngày xác nhận
+*khác nhau* cho từng nguồn. Dạng n-ary xử lý bằng cách thêm `ex:capitalStatus_2` với
+`ex:source` riêng, và hai phát biểu cùng tồn tại. Quy tắc đếm được: một chiều ngữ cảnh trên
+mỗi cạnh → thuộc tính cạnh; hai giá trị của cùng một chiều, hoặc bất kỳ nhu cầu nào tham
+chiếu tới chính quan hệ → thực thể trung gian.
 
 ### 3.3.5 Phát triển hiện tại — RDF 1.2: triple term và reifier
 
@@ -813,16 +1069,42 @@ ghi kèm thời điểm và phương pháp; người đọc truy vấn theo ng�
 đúng. Đây là cách ngữ cảnh giúp đánh giá hai phát biểu cạnh tranh mà không cần xóa
 phát biểu nào — nền tảng cho quản lý mâu thuẫn và claim ở Chương 6.
 
+Chạy bảng đó qua chính tiêu chí vừa nêu, thành một quyết định *công khai*. Phát biểu
+`ex:position_1 ex:hasValue "12.5"` cần thêm *as of 14:00* và *method GPS*. Hỏi ba câu:
+chiều ngữ cảnh có đơn lẻ không — có; có cần tham chiếu tới chính phát biểu (gắn thí nghiệm
+sinh ra nó, hay deprecate riêng phép đo này) không — không; giá trị cốt lõi còn đọc được
+một mình không — còn. Cả ba → **qualifier thắng**, và dựng một nút `PositionMeasurement` ở
+đây là phí phạm thuần túy. Giờ lật một tiêu chí: phép đo ấy nay phải mang "được xác nhận
+bởi thí nghiệm exp_7, rồi bị bác bởi exp_9". Bạn giờ cần *nói về chính phát biểu* → tiêu
+chí 2 trượt → nút n-ary quay lại.
+
+Và cái bẫy mà semantic contract của chương cảnh báo: viết `ex:position_1 ex:asOf "14:00" .`
+là **sai** — nó gắn mốc thời gian vào *thực thể*, nhưng position_1 không "tính tại 14:00";
+*phát biểu* mới tính tại 14:00. Một khi định ngữ bị đẩy lên thực thể, phép đo thứ hai lúc
+14:05 không còn chỗ nào để đặt, và hai giá trị đâm sầm vào nhau thành mâu thuẫn thay vì hai
+quan sát có phạm vi.
+
 ### 3.3.7 Ngữ cảnh không tạo ra sự thật
 
-Bốn cơ chế vừa xét — named graph, thực thể n-ary, thuộc tính quan hệ, triple term —
-đều là cơ chế **biểu diễn**. Gắn `source: A`, `validFrom: 1976`, hay đặt bộ ba vào một
+Năm cơ chế vừa xét — named graph, thực thể n-ary, thuộc tính quan hệ, triple term, và
+qualifier — đều là cơ chế **biểu diễn**. Gắn `source: A`, `validFrom: 1976`, hay đặt bộ ba vào một
 named graph mang tên nguồn A, không làm phát biểu đúng hơn; nó chỉ cho biết phát biểu
 đó *đang được hiểu theo phạm vi nào*.
 
 > ⚑ **Câu cần nhớ của chương:**
 > **"Ngữ cảnh cho phép đánh giá; ngữ cảnh không tạo ra sự thật."**
 > *(Context enables evaluation; context does not create truth.)*
+
+Cho nó một phép thử. Nạp một con số sai — `ex:sourceC { ex:Hanoi ex:population 84188830 }`
+(lệch một chữ số do thu thập ẩu) — rồi *ngữ cảnh hóa hoàn hảo* nó: gắn nguồn `ex:sourceC`,
+gắn `ex:observedAt "2023"`. Câu hỏi "thành phố nào đông nhất Việt Nam?" giờ trả về Hà Nội
+với 84.188.830, **vượt** mọi thành phố khác — và mọi cơ chế chương này dạy đều đã thỏa:
+phát biểu được gom nhóm, được gắn nguồn, được gắn thời điểm. Không gì ở tầng biểu diễn từ
+chối nó được. Tương phản với cặp dân số ở §3.3.1: ở đó hai phạm vi *rời nhau* nên cả hai
+cùng đúng và ngữ cảnh *hòa giải* được; ở đây phạm vi *đầy đủ* mà phát biểu vẫn sai. Khác
+biệt ấy chính là khẩu hiệu trên — và một khi bạn đã thấy con số xấu thắng truy vấn, "ngữ
+cảnh cho phép đánh giá; ngữ cảnh không tạo ra sự thật" là kết luận bạn tự tái lập, không
+phải câu bạn học thuộc.
 
 Một phát biểu sai được gắn provenance đầy đủ vẫn là một phát biểu sai — chỉ khác là bây
 giờ bạn biết *ai nói nó, khi nào*, và đó chính là điều kiện để đánh giá. Chương 6 sẽ
@@ -865,29 +1147,33 @@ Từ vựng không tự khớp; các ánh xạ trên là **kết quả của m�
    chờ xem xét của con người.
 
 **Ví dụ miền cơ chế — ánh xạ bị bác bỏ.** Hai giáo trình mô tả cùng một cơ chế bằng
-hai quan hệ khác nhau:
+hai quan hệ khác nhau. *Định danh ở đây là mới (giáo trình D, E), để không đụng các IRI
+của §3.2.5:*
 
 ```turtle
 @prefix ex: <http://example.org/kgbook/mks#> .
-@prefix ta: <http://example.org/kgbook/textbookA#> .
-@prefix tc: <http://example.org/kgbook/textbookC#> .
+@prefix td: <http://example.org/kgbook/textbookD#> .
+@prefix te: <http://example.org/kgbook/textbookE#> .
 
-# Giáo trình A
-ta:velocityDef  ex:hasOperation  ex:derivativeOperation_1 ;
-                ex:hasOutput     ex:velocity_1 .
-# Giáo trình C
-tc:speedDef      ex:involves      ex:derivativeOperation_1 ;
-                 ex:involves      ex:velocity_1 .
+ex:hasOperation  rdfs:range  ex:Operation .   # phạm vi hẹp
+
+# Giáo trình D
+td:kineticsDef    ex:hasOperation  ex:derivativeOperation_1 ;   # một Operation
+                  ex:hasOutput     ex:velocity_1 .
+# Giáo trình E — ex:involves trỏ tới CẢ operation lẫn quantity
+te:processSketch  ex:involves  ex:derivativeOperation_1 ;        # một Operation
+                  ex:involves  ex:velocity_1 .                   # một Quantity
 ```
 
-`ex:involves` trông giống `ex:hasOperation` (cùng liên kết tới `derivativeOperation_1`),
-nhưng bằng chứng cấu trúc bác bỏ ánh xạ: `ex:involves` còn liên kết tới `velocity_1`
-một đại lượng đầu ra — nó có phạm vi rộng hơn (`Operation` *hoặc* `Quantity`), trong
-khi `ex:hasOperation` có phạm vi hẹp (chỉ `Operation`). Dù trùng một instance, hai
-quan hệ có chữ ký cấu trúc (signature) khác nhau → **không ánh xạ**. Nếu gượng ép
-ánh xạ vì "trông giống", mọi truy vấn "cơ chế nào dùng phép toán gì" sau này sẽ trả
-về cả số liệu đầu ra lẫn lộn. Quy trình gióng hàng phải *biết từ chối*, không chỉ
-biết nối.
+Chạy ba bước gióng hàng ở trên: *ứng viên* — cả hai quan hệ cùng trỏ tới
+`ex:derivativeOperation_1`, trông giống nhau. *Bằng chứng* — nhìn vào hai dòng trên:
+`ex:involves` có đối tượng gồm cả `ex:velocity_1` (một `Quantity`), trong khi
+`ex:hasOperation` được khai báo chỉ nhận `ex:Operation`; tập đối tượng khác nhau tại đúng
+`velocity_1`. *Xác nhận* — **bác bỏ**: ánh xạ `involves → hasOperation` sẽ đặt một
+`Quantity` vào chỗ mà lược đồ đích chỉ cho phép `Operation`. Dù trùng một instance, hai
+quan hệ có chữ ký cấu trúc (signature) khác nhau → không ánh xạ. Nếu gượng ép vì "trông
+giống", mọi truy vấn "cơ chế nào dùng phép toán gì" sau này sẽ trả về cả số liệu đầu ra lẫn
+lộn. Quy trình gióng hàng phải *biết từ chối*, không chỉ biết nối.
 
 *Thông tin được thêm:* các tương ứng từ vựng (vocabulary mappings). Đồ thị dữ liệu chưa
 thay đổi; thay đổi nằm ở tầng lược đồ.
@@ -917,11 +1203,37 @@ ex:capitalStatus_1  a           ex:CapitalStatus ;
                     ex:source   ex:sourceA .
 ```
 
+Và hai con số dân số — cái xung đột mà cả chương treo từ §3.0 — giờ có chỗ đứng:
+
+```turtle
+ex:popStat_1  a ex:PopulationStat ; ex:city ex:Hanoi ;
+              ex:value 8418883 ; ex:source ex:sourceA ; ex:observedAt "2023" .
+ex:popStat_2  a ex:PopulationStat ; ex:city ex:Hanoi ;
+              ex:value 8053663 ; ex:source ex:sourceB ; ex:observedAt "2019" .
+```
+
+Sau `ex:Hanoi owl:sameAs wd:Q1858` ở Bước 2, hỏi "dân số Hà Nội" trả về **hai hàng** kèm
+`(nguồn, thời điểm)` — thay vì để bộ suy luận âm thầm chọn một. Đây là *biểu diễn* bất
+đồng, chưa phải *phân xử* nó (việc của Chương 6).
+
 *Thông tin được thêm:* nguồn, thời gian, phạm vi của từng phát biểu.
 
 **Kết quả — biểu diễn tích hợp.** Một đồ thị duy nhất trong đó: cấu trúc tuân theo lược
 đồ chung, mỗi thực thể có định danh chính tắc kèm bí danh xuyên nguồn, và mỗi phát
-biểu mang ngữ cảnh để đánh giá.
+biểu mang ngữ cảnh để đánh giá. Viết ra được, và đếm được:
+
+```turtle
+ex:Hanoi    owl:sameAs  wd:Q1858 ;
+            rdfs:label  "Hà Nội"@vi , "Hanoi"@en ;
+            ex:capitalOf ex:Vietnam .
+ex:Vietnam  owl:sameAs  wd:Q881 .
+ex:popStat_1  ex:city ex:Hanoi ; ex:value 8418883 ; ex:source ex:sourceA ; ex:observedAt "2023" .
+ex:popStat_2  ex:city ex:Hanoi ; ex:value 8053663 ; ex:source ex:sourceB ; ex:observedAt "2019" .
+```
+
+Đếm: **một** thực thể Hà Nội (hai IRI `ex:Hanoi`/`wd:Q1858` nối bằng `owl:sameAs`), **hai**
+phát biểu dân số có ngữ cảnh — không phát biểu nào bị ghi đè. Đây là trạng thái cuối mà cả
+ba trục cùng sản ra, và bạn có thể đối chiếu nó với từng Bước 0/2/3 phía trên.
 
 ```mermaid
 %%{init: {"theme": "neutral"} }%%
@@ -956,28 +1268,38 @@ trúc khái niệm.
    element ID của Neo4j) là định danh triển khai: có thể được tái sử dụng sau khi xóa,
    không ổn định ngoài phạm vi giao dịch, và vô nghĩa ngoài hệ thống đó
    [@neo4j-cypher-manual]. Định danh miền phải do ứng dụng tạo và quản lý.
-2. **Coi trùng chuỗi là trùng thực thể.** `"Hà Nội"` xuất hiện trong hai dataset là
-   hai *nhãn* giống nhau, không phải một thực thể. Nhãn là dữ liệu để tìm ứng viên
-   đồng nhất, không phải bằng chứng đồng nhất.
+2. **Coi trùng chuỗi là trùng thực thể.** `"Hà Nội"` xuất hiện trong hai dataset là hai
+   *nhãn* giống nhau, không phải một thực thể. Chuỗi "Hà Nội" cũng dán cho một phường ở
+   tỉnh Hà Giang; hợp nhất theo chuỗi sẽ nhập phường đó vào thủ đô và mọi truy vấn
+   `capitalOf` thừa hưởng diện tích của phường. Nhãn là dữ liệu để *tìm* ứng viên, không
+   phải bằng chứng đồng nhất.
 3. **Dùng `owl:sameAs` cho sự tương tự gần đúng.** `owl:sameAs` là đồng nhất với hệ
    quả lan truyền toàn đồ thị. "Gần giống" cần vị từ khác; ghi nhầm một cạnh sameAs
-   sai là trộn hai thực thể làm một ở mọi nơi chúng xuất hiện.
+   sai là trộn hai thực thể làm một ở mọi nơi chúng xuất hiện (§3.2.4 cho thấy một cạnh
+   `rateOfChange_1 sameAs heatTransferRate_2` sai khiến `heatTransferRate_2` "đạo hàm của
+   position_1").
 4. **Coi named graph tự động nghĩa là nguồn/provenance.** Tên đồ thị chỉ được ghép cặp
    cú pháp với đồ thị; ý nghĩa "nguồn đã khẳng định" là quy ước ứng dụng, phải được mô
-   tả tường minh [@w3c-rdf11-concepts].
-5. **Coi lược đồ là bản thể học.** Đặt tên lớp và quan hệ chưa tạo ra ngữ nghĩa suy
-   luận: chưa có loại trừ, tương đương, hay điều kiện cần–đủ. Chờ đợi suy luận từ một
-   lược đồ chỉ có quy ước đặt tên là chờ đợi sai chỗ (Chương 4).
-6. **Mã hóa mọi thuộc tính thành nút.** Biến mọi giá trị thành nút phình đồ thị, làm
-   nhiễu truy vấn, và bắt mọi thứ phải mang định danh trong khi nhiều giá trị (số,
-   ngày, chuỗi) chỉ là dữ liệu.
-7. **Mã hóa mọi thứ thành thuộc tính.** Hướng ngược lại cũng sai: sự kiện cần ngữ cảnh
-   (thời gian, nguồn) hoặc cần được tham chiếu sẽ mất chỗ bám nếu bị nén thành thuộc
-   tính trên nút; sự kiện thay đổi theo thời gian không biểu diễn nổi bằng một giá trị
-   thuộc tính duy nhất [@stanford-cs520-create-kg].
-8. **Coi có ngữ cảnh/provenance là phát biểu đáng tin.** Provenance cho biết *ai nói,
-   khi nào*; nó không xác nhận *điều được nói là đúng*. Đánh giá độ tin cậy là bước
-   riêng trên ngữ cảnh (Chương 6).
+   tả tường minh [@w3c-rdf11-concepts]. Hai nhóm cùng đặt tên đồ thị là `ex:sourceA` — một
+   bên là tệp tổng điều tra, một bên là trang web thu thập — và một phép nối `GRAPH` sẽ âm
+   thầm trộn hai thứ không liên quan.
+5. **Coi lược đồ là bản thể học.** Đặt tên lớp và quan hệ chưa tạo ra ngữ nghĩa suy luận.
+   `City rdfs:subClassOf Place` và `Country rdfs:subClassOf Place` **không** entail điều gì
+   loại trừ `ex:Hanoi a ex:Country` — RDFS không có khái niệm disjointness (§3.1.5). Chờ
+   suy luận từ một lược đồ chỉ có quy ước đặt tên là chờ sai chỗ (Chương 4).
+6. **Mã hóa mọi thuộc tính thành nút.** Biến mọi giá trị thành nút phình đồ thị và bắt mọi
+   thứ phải mang định danh, trong khi `8418883` hay `"1976"` chỉ là dữ liệu. Hệ quả đo được:
+   mỗi chiều ngữ cảnh thêm vào lại nhân số cạnh, và các giá trị vốn chỉ để hiển thị giờ chiếm
+   IRI.
+7. **Mã hóa mọi thứ thành thuộc tính.** Hướng ngược lại cũng sai. `ex:Hanoi
+   ex:capitalOfSince "1976"` không giữ nổi *cả* giai đoạn từ-1976 *lẫn* một giai đoạn sớm hơn
+   — đúng lý do `ex:CapitalStatus` tồn tại (§3.3.3). Sự kiện thay đổi theo thời gian hoặc cần
+   được tham chiếu sẽ mất chỗ bám nếu bị nén thành một giá trị thuộc tính duy nhất
+   [@stanford-cs520-create-kg].
+8. **Coi có ngữ cảnh/provenance là phát biểu đáng tin.** Provenance cho biết *ai nói, khi
+   nào*; nó không xác nhận *điều được nói là đúng*. `ex:sourceA` chứng minh *sourceA nói*
+   8418883, chứ không chứng minh 8418883 *là đúng* (xem con số lệch ở §3.3.7). Đánh giá độ
+   tin cậy là bước riêng trên ngữ cảnh (Chương 6).
 
 ## 3.6 Câu hỏi suy ngẫm
 
@@ -1076,6 +1398,21 @@ with respect to time"* nay được gắn vào một khung tích hợp gồm:
 - Giá trị thực nghiệm của position và velocity được phân vùng vào named graph
   `ex:experimentData`, tách biệt khỏi định nghĩa sách giáo khoa trong
   `ex:textbookA` (§3.3.2).
+
+Năng lực đó kiểm tra được bằng một câu hỏi chạy hai lần. *"Giáo trình A và B có đang nói
+về cùng một cơ chế không?"* — **TRƯỚC** chương này, hai cụm `ta:velocityDef` và
+`tb:speedDef` không chia sẻ cạnh nào, nên truy vấn nối chúng trên `owl:sameAs` trả về rỗng:
+
+```sparql
+PREFIX ta: <http://example.org/kgbook/textbookA#>
+PREFIX tb: <http://example.org/kgbook/textbookB#>
+SELECT ?a ?b WHERE { ?a owl:sameAs ?b .
+                     FILTER(?a = ta:velocityDef && ?b = tb:speedDef) }
+```
+
+**SAU** chương này, cùng truy vấn trả về **một hàng** `ta:velocityDef | tb:speedDef`, vì
+§3.2.5 đã dựng cạnh sameAs từ bằng chứng định nghĩa. Một truy vấn đổi từ rỗng sang có kết
+quả — đó, cụ thể, là điều ba trục vừa thêm vào hệ thống, không phải một lời tự giới thiệu.
 
 **VẪN CHƯA GIẢI QUYẾT** — lược đồ RDFS chưa có ngữ nghĩa suy luận (loại trừ lớp,
 tương đương thuộc tính, điều kiện cần–đủ); `owl:sameAs` mới là khẳng định đồng nhất
