@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-31T05:41:02Z",
-  "purpose": "Machine-readable evidence of source fetches (Phase 0.5 audit + Chapter 2 research + Chapter 3 research)",
+  "generated_at": "2026-09-01T09:00:00Z",
+  "purpose": "Machine-readable evidence of source fetches (Phase 0.5 audit + Chapter 2 research + Chapter 3 research) + English Ch1-2 audit re-verification (2026-09-01)",
   "sources": [
     {
       "id": "R11-01",
@@ -106,18 +106,19 @@
       "id": "SP12-01",
       "canonical_url": "https://www.w3.org/TR/sparql12-query/",
       "fetch_status": "FETCHED_AND_VERIFIED",
-      "fetched_at": "2026-08-25T02:25:00Z",
+      "fetched_at": "2026-09-01T09:00:00Z",
       "http_status": 200,
       "final_url": "https://www.w3.org/TR/sparql12-query/",
       "title": "SPARQL 1.2 Query Language",
       "document_status": "W3C Working Draft",
-      "publication_date": "2026-08-20",
+      "publication_date": "2026-08-27",
       "used_in_chapters": [
         "2",
         "9"
       ],
       "research_note_path": "docs/research_notes/SP12-01.md",
-      "stability": "EMERGING"
+      "stability": "EMERGING",
+      "reverified_at": "2026-09-01"
     },
     {
       "id": "OWL-01",
@@ -1467,6 +1468,20 @@
       ],
       "research_note_path": "docs/research_notes/TKG-01.md",
       "key_finding": "KGs are not static: TKGC adds timestamps to capture fact change over time; supports temporal dimension of staleness/freshness."
+    },
+    {
+      "id": "N4J-09",
+      "canonical_url": "https://neo4j.com/docs/cypher-manual/current/functions/scalar/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-01T09:00:00Z",
+      "http_status": 200,
+      "final_url": "https://neo4j.com/docs/cypher-manual/current/functions/scalar/",
+      "title": "Neo4j Cypher Manual — Scalar functions (elementId, id)",
+      "document_status": "Official documentation (Cypher 25 / Neo4j 2026)",
+      "used_in_chapters": [
+        "2"
+      ],
+      "key_finding": "elementId() returns STRING; uniqueness guaranteed only within a single transaction across the DBMS; no mapping guarantees outside a transaction; internal IDs are reused after deletion (brittle apps) -> Neo4j recommends application-generated IDs; id() is Deprecated and returns INTEGER."
     }
   ]
 }
