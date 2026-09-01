@@ -13,6 +13,7 @@
 # TOC, PDF bookmarks (hyperref), chapters on new pages (book class).
 #
 # Usage: scripts/build_book.sh
+#   LANG=en scripts/build_book.sh   build the English edition from book-en/
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -20,21 +21,35 @@ BUILD="$ROOT/build"
 DIST="$ROOT/dist"
 mkdir -p "$DIST"
 
+# Language switch: vi (default) builds book/, en builds book-en/.
+# header.tex, references.bib and ieee.csl are language-neutral and shared from book/.
+LANG="${LANG:-vi}"
+if [ "$LANG" = "en" ]; then
+  BOOK_DIR="$ROOT/book-en"
+  OUT_PREFIX="knowledge-graph-book-en"
+else
+  BOOK_DIR="$ROOT/book"
+  OUT_PREFIX="knowledge-graph-book"
+fi
+SHARED_DIR="$ROOT/book"
+
 echo "build_book: pre-rendering Mermaid figures"
-"$ROOT/scripts/render_mermaid.sh"
+LANG="$LANG" "$ROOT/scripts/render_mermaid.sh"
 
 echo "build_book: pre-rendering TikZ figures"
-"$ROOT/scripts/render_tikz.sh"
+LANG="$LANG" "$ROOT/scripts/render_tikz.sh"
 
-# TikZ output lands in book/figures/generated; chapters reference
+# TikZ output lands in <book-dir>/figures/generated; chapters reference
 # figures/generated/... relative to their own directory, so the PDFs must
 # be present under build/figures/generated/ for Pandoc (run from build/) to resolve.
 echo "build_book: copying generated PDF figures into build/"
 mkdir -p "$BUILD/figures/generated"
-cp "$ROOT"/book/figures/generated/*.pdf "$BUILD/figures/generated/"
+if compgen -G "$BOOK_DIR/figures/generated/*.pdf" > /dev/null; then
+  cp "$BOOK_DIR"/figures/generated/*.pdf "$BUILD/figures/generated/"
+fi
 
 # Ordered source list from the manifest.
-mapfile -t SOURCES < <(sed -n '/^sources:/,/^[^ -]/p' "$ROOT/book/book-manifest.yaml" \
+mapfile -t SOURCES < <(sed -n '/^sources:/,/^[^ -]/p' "$BOOK_DIR/book-manifest.yaml" \
   | sed -n 's/^  - \(.*\.md\)$/\1/p')
 
 CHAPTERS=()
@@ -45,12 +60,12 @@ done
 # Common Pandoc arguments (shared by print and screen variants).
 # Run from build/ so relative figure paths resolve.
 COMMON_ARGS=(
-  --metadata-file "$ROOT/book/metadata.yaml"
-  --include-in-header "$ROOT/book/header.tex"
+  --metadata-file "$BOOK_DIR/metadata.yaml"
+  --include-in-header "$SHARED_DIR/header.tex"
   --pdf-engine=lualatex
   --citeproc
-  --bibliography "$ROOT/book/references.bib"
-  --csl "$ROOT/book/ieee.csl"
+  --bibliography "$SHARED_DIR/references.bib"
+  --csl "$SHARED_DIR/ieee.csl"
   --toc
   --resource-path "$BUILD"
   -V fontsize=11pt
@@ -71,13 +86,13 @@ echo "build_book: rendering print PDF (lualatex)"
 (cd "$BUILD" && pandoc "${CHAPTERS[@]}" \
   "${COMMON_ARGS[@]}" \
   --no-highlight \
-  -o "$DIST/knowledge-graph-book-print.pdf")
+  -o "$DIST/$OUT_PREFIX-print.pdf")
 
 echo "build_book: rendering screen PDF (lualatex)"
 (cd "$BUILD" && pandoc "${CHAPTERS[@]}" \
   "${COMMON_ARGS[@]}" \
   -V colorlinks \
-  -o "$DIST/knowledge-graph-book-screen.pdf")
+  -o "$DIST/$OUT_PREFIX-screen.pdf")
 
 echo "build_book: OK"
-pdfinfo "$DIST/knowledge-graph-book-print.pdf" | sed -n 's/^/  /p'
+pdfinfo "$DIST/$OUT_PREFIX-print.pdf" | sed -n 's/^/  /p'

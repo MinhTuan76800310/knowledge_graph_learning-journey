@@ -23,6 +23,17 @@ FIGDIR="$BUILD/figures"
 SRCDIR="$BUILD/src"
 mkdir -p "$FIGDIR" "$SRCDIR"
 
+# Language switch: vi (default) reads book/ and uses "Hình:" captions;
+# en reads book-en/ and uses "Figure:" captions.
+LANG="${LANG:-vi}"
+if [ "$LANG" = "en" ]; then
+  BOOK_DIR="$ROOT/book-en"
+  CAPTION_PREFIX="Figure:"
+else
+  BOOK_DIR="$ROOT/book"
+  CAPTION_PREFIX="Hình:"
+fi
+
 # mermaid-cli runs headless Chromium; Ubuntu 24.04 AppArmor blocks the
 # sandbox for unprivileged user namespaces, so disable it explicitly.
 PUPPETEER_CFG="$BUILD/puppeteer.json"
@@ -33,16 +44,16 @@ cat > "$PUPPETEER_CFG" <<'EOF'
 EOF
 
 # Parse the manifest: lines "  - name.md" under the sources: key.
-mapfile -t SOURCES < <(sed -n '/^sources:/,/^[^ -]/p' "$ROOT/book/book-manifest.yaml" \
+mapfile -t SOURCES < <(sed -n '/^sources:/,/^[^ -]/p' "$BOOK_DIR/book-manifest.yaml" \
   | sed -n 's/^  - \(.*\.md\)$/\1/p')
 
 if [ "${#SOURCES[@]}" -eq 0 ]; then
-  echo "render_mermaid: no sources found in book/book-manifest.yaml" >&2
+  echo "render_mermaid: no sources found in $BOOK_DIR/book-manifest.yaml" >&2
   exit 1
 fi
 
 for src in "${SOURCES[@]}"; do
-  python - "$ROOT/book/$src" "$FIGDIR" "$SRCDIR" <<'PYEOF'
+  python - "$BOOK_DIR/$src" "$FIGDIR" "$SRCDIR" "$CAPTION_PREFIX" <<'PYEOF'
 import re
 import subprocess
 import sys
@@ -51,6 +62,7 @@ from pathlib import Path
 src_path = Path(sys.argv[1])
 figdir = Path(sys.argv[2])
 srcdir = Path(sys.argv[3])
+caption_prefix = sys.argv[4]
 stem = src_path.stem
 
 lines = src_path.read_text(encoding="utf-8").splitlines()
@@ -72,17 +84,17 @@ while i < len(lines):
         png = figdir / f"{stem}-fig{fig_n}.png"
         mmd.write_text("\n".join(block) + "\n", encoding="utf-8")
 
-        # Skip blank lines, then collect the "Hình:" caption.
+        # Skip blank lines, then collect the caption ("Hình:" / "Figure:").
         while i < len(lines) and lines[i].strip() == "":
             i += 1
         caption_parts = []
-        if i < len(lines) and lines[i].startswith("Hình:"):
-            caption_parts.append(lines[i][len("Hình:"):].strip())
+        if i < len(lines) and lines[i].startswith(caption_prefix):
+            caption_parts.append(lines[i][len(caption_prefix):].strip())
             i += 1
             while i < len(lines) and lines[i].strip() != "":
                 caption_parts.append(lines[i].strip())
                 i += 1
-        caption = " ".join(caption_parts) or f"Hình {fig_n}"
+        caption = " ".join(caption_parts) or f"{caption_prefix.rstrip(':')} {fig_n}"
 
         print(f"render_mermaid: rendering {mmd.name} -> {png.name}")
         subprocess.run(
