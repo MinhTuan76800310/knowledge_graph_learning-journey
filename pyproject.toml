@@ -1,6 +1,6 @@
 [project]
 name = "knowledge-graph-book"
-version = "0.1.0"
+version = "0.2.0"
 description = "An open-source executable textbook: Knowledge Graphs from first principles to production knowledge systems."
 readme = "README.md"
 requires-python = ">=3.12"

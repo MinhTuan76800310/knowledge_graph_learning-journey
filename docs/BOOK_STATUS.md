@@ -4,7 +4,12 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-08-31 (**v0.1.0 RELEASED**: tag v0.1.0 @ aa91115, `knowledge-graph-book-v0.1.0.pdf`, 358 print pages; full book = front matter + Ch1–10 + Afterword + Glossary + Bibliography)
+Last updated: 2026-09-02 (**v0.2.0 RELEASED**: tag `v0.2.0`; Vietnamese complete book
+`knowledge-graph-book-v0.2.0.pdf`, 364 print pages + English edition
+`knowledge-graph-book-en-v0.2.0.pdf`, 70 print pages, Ch1–3. Delta over v0.1.0: English
+edition launched (Ch1–3, PRs #27/#30/#40) + Vietnamese Chapter 3 quality pass (#42).
+Prior: v0.1.0 @ aa91115, 358 print pages, full Vietnamese book = front matter + Ch1–10 +
+Afterword + Glossary + Bibliography)
 
 ## Front matter
 
@@ -37,6 +42,21 @@ Last updated: 2026-08-31 (**v0.1.0 RELEASED**: tag v0.1.0 @ aa91115, `knowledge-
 | Afterword | ✅ | ✅ | ✅ | ACCEPTED |
 | Glossary | ✅ | ✅ | ✅ | ACCEPTED |
 | Bibliography | ✅ | ✅ | ✅ | ACCEPTED |
+
+## English edition (`book-en/`)
+
+The English edition is a parallel translation of the Vietnamese canonical text, produced
+chapter by chapter and kept in parity. It builds with `LANG=en`.
+
+| Chapter | Translated | Accuracy audit | PDF | Status |
+|---------|-----------|----------------|-----|--------|
+| 1 — From Graph to Knowledge | ✅ | ✅ (Issue #31) | ✅ | MERGED (PR #27) |
+| 2 — Data Models and Query Languages | ✅ | ✅ (Issue #31) | ✅ | MERGED (PR #30) |
+| 3 — Schema, Identity, and Context | ✅ | ✅ (parity with VI #42) | ✅ | MERGED (PR #40) |
+| 4–10 | 🔲 |  | 🔲 | PLANNED |
+
+English build verified at v0.2.0: 70 print pages, `verify_book_pdf.sh` (LANG=en) gate
+PASSED.
 
 ## Legend
 

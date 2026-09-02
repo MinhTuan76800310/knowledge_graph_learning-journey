@@ -1,12 +1,12 @@
 # Knowledge Graph: Từ Đồ thị đến Hệ thống Tri thức
 
-> **A Vietnamese-language, open-source, executable textbook.** Knowledge Graphs from first
+> **An open-source, executable, bilingual textbook.** Knowledge Graphs from first
 > principles to production knowledge systems — explained at the mechanism level, with
-> runnable experiments and traceable citations.
+> runnable experiments and traceable citations. Written in **Vietnamese** (canonical,
+> complete) with an **English** edition in progress.
 
-**Latest release:** [`v0.1.0`](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/tag/v0.1.0)
-— complete printable book (front matter + Chapters 1–10 + Afterword + Glossary +
-Bibliography, 358 A4 pages).
+**Latest release:** [`v0.2.0`](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/tag/v0.2.0)
+— complete Vietnamese book (364 pages) + English edition, Chapters 1–3 (70 pages).
 
 **License:** [GPL-3.0-or-later](LICENSE)
 
@@ -15,7 +15,7 @@ Bibliography, 358 A4 pages).
 ## Table of contents
 
 - [What this book is](#what-this-book-is)
-- [The full book (v0.1.0)](#the-full-book-v010)
+- [Editions](#editions)
 - [Two mental models](#two-mental-models)
 - [Chapters](#chapters)
 - [Repository structure](#repository-structure)
@@ -41,30 +41,32 @@ API.
 
 The book is written in **Vietnamese**, with English technical terms preserved on first
 occurrence ("thực thể (entity)", "suy diễn (inference)"). Self-contained chapters
-document the OWL/RDF/SHACL/SPARQL and related primitives on first use.
+document the OWL/RDF/SHACL/SPARQL and related primitives on first use. An **English
+edition** is being produced in parallel, chapter by chapter, from the Vietnamese
+canonical text.
 
-## The full book (v0.1.0)
+## Editions
 
-The **v0.1.0** milestone is a complete, printable book:
+| Edition | Language | Scope | Status |
+|---------|----------|-------|--------|
+| **Vietnamese** (canonical) | `vi` | Front matter + Chapters 1–10 + Afterword + Glossary (226 terms) + Bibliography (92 sources) | ✅ Complete — 364 print pages |
+| **English** | `en` | Chapters 1–3 (Schema, Identity, and Context through Chapter 3) | 🚧 In progress — 70 print pages |
 
-| Component | Status |
-|-----------|--------|
-| Front matter (Preface, How to use, Introduction) | ✅ ACCEPTED |
-| Chapters 1–10 | ✅ ACCEPTED (independent acceptance audit per chapter) |
-| Afterword (Lời bạt) | ✅ ACCEPTED |
-| Glossary (226 terms) & Bibliography (91 registered sources) | ✅ ACCEPTED |
-| PDF build (book class, A4, 358 print pages) | ✅ verified |
+The Vietnamese text is the source of truth; the English edition mirrors it and is kept in
+parity chapter by chapter. Every chapter passed an independent acceptance gate before
+merge: semantic contracts, depth review, reader-capability test, citation/glossary/registry
+integrity, and a clean PDF build. Details per chapter live in
+`docs/CHAPTER*nn*_BOOK_CHECKPOINT.md`.
 
-Download the release PDF:
+Download the release PDFs:
 
-```bash
-# from the GitHub release (v0.1.0)
-https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/download/v0.1.0/knowledge-graph-book-v0.1.0.pdf
+```text
+Vietnamese (complete):
+  https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/download/v0.2.0/knowledge-graph-book-v0.2.0.pdf
+
+English (Chapters 1–3):
+  https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/download/v0.2.0/knowledge-graph-book-en-v0.2.0.pdf
 ```
-
-Every chapter passed an independent acceptance gate before merge: semantic contracts,
-depth review, reader-capability test, citation/glossary/registry integrity, and a clean
-PDF build. Details per chapter live in `docs/CHAPTER*nn*_BOOK_CHECKPOINT.md`.
 
 ## Two mental models
 
@@ -114,11 +116,15 @@ knowledge_graph_learning-journey/
 ├── uv.lock                 # Pinned dependencies
 ├── Makefile                # make book / book-check / book-clean
 ├── docker-compose.yml      # Neo4j for Chapter 2 experiments
-├── book/                   # Main text (Vietnamese)
+├── book/                   # Canonical text (Vietnamese)
 │   ├── preface.md, how-to-use.md, introduction.md
 │   ├── chapter01.md ... chapter10.md, afterword.md
-│   ├── glossary.md, references.bib, book-manifest.yaml
+│   ├── glossary.md, references.bib, book-manifest.yaml, metadata.yaml
 │   └── figures/            # TikZ + Mermaid sources and generated PDFs
+├── book-en/                # English edition (in progress)
+│   ├── chapter01.md ... chapter03.md
+│   ├── book-manifest.yaml, metadata.yaml
+│   └── figures/            # English figure sources
 ├── chapter01/ ... chapter02/   # Per-chapter runnable experiments + tests
 ├── capstone/               # Mechanism Knowledge Graph capstone project
 ├── datasets/               # Toy and capstone datasets
@@ -127,7 +133,7 @@ knowledge_graph_learning-journey/
 │   ├── BOOK_STATUS.md      # Per-section acceptance state
 │   ├── BOOK_PEDAGOGY.md    # Canonical writing policy
 │   ├── BOOK_V0_1_MILESTONE.md
-│   ├── source_index.json   # 91 registered sources (machine-readable)
+│   ├── source_index.json   # 92 registered sources (machine-readable)
 │   ├── research_notes/     # Per-source verification notes
 │   ├── CITATION_MAP.md
 │   └── CHAPTER*nn*_*.md    # Contracts / checkpoints / depth reviews
@@ -176,18 +182,22 @@ TeX packages in `book/header.tex`. Building also pre-renders TikZ figures, so a 
 distribution with the `tikz`/`pgfplots` packages is required.
 
 ```bash
-# Build print + screen PDFs into dist/
+# Vietnamese (canonical) — build print + screen PDFs into dist/
 make book
 
 # Build, then run the automated PDF verification gate
 make book-check
 
+# English edition — same pipeline, switched by LANG=en
+LANG=en bash scripts/build_book.sh
+LANG=en bash scripts/verify_book_pdf.sh
+
 # Clean build artifacts
 make book-clean
 ```
 
-Outputs land in `dist/` (gitignored). For releases, the versioned PDF is attached to a
-GitHub Release — see Contacts/Releases for the current milestone.
+Outputs land in `dist/` (gitignored). For releases, the versioned PDFs are attached to a
+GitHub Release — see the [releases page](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases).
 
 ## Testing and validation
 
@@ -217,10 +227,11 @@ depth review, reader-capability test) before it is marked ACCEPTED.
 
 | Milestone | State |
 |-----------|-------|
-| **v0.1.0** — complete book (Ch1–10 + Afterword) | ✅ **RELEASED** (2026-08-31, tag `v0.1.0`) |
-| Book Previews v0.4–v0.5 (incremental chapter PDFs) | ✅ released as tags (see Git tags) |
-| Chapters 1–10 | ✅ ACCEPTED via independent audits |
-| Afterword | ✅ ACCEPTED |
+| **v0.2.0** — English edition begins (Ch1–3) + Vietnamese Ch3 quality pass | ✅ **RELEASED** (2026-09-02, tag `v0.2.0`) |
+| **v0.1.0** — complete Vietnamese book (Ch1–10 + Afterword) | ✅ RELEASED (2026-08-31, tag `v0.1.0`) |
+| Vietnamese Chapters 1–10 + Afterword | ✅ ACCEPTED via independent audits |
+| English Chapters 1–3 | ✅ merged, in parity with Vietnamese |
+| English Chapters 4–10 | ⏳ planned |
 | Experiments | Chapter 1–2 runnable; Chapter 3–10 labs deferred to `docs/LAB_BACKLOG.md` |
 | CI pipeline | ⏳ planned (local `make book-check` + `uv run pytest` today) |
 
@@ -228,14 +239,15 @@ Current per-section state is tracked in [`docs/BOOK_STATUS.md`](docs/BOOK_STATUS
 
 ## Writing conventions
 
-- **Main text in Vietnamese**; technical terms in English on first occurrence.
+- **Canonical text in Vietnamese**; technical terms in English on first occurrence. The
+  English edition is a faithful parallel translation, kept in parity chapter by chapter.
 - **Mechanism-first tone**: every major abstraction answers — what problem, what
   mechanism, what information, what assumptions, what can/cannot be inferred, what
   breaks, how to verify.
 - **Epistemic discipline**: fact / claim / assertion / assumption / inference /
   prediction / book-defined model are clearly distinguished.
 - **Source-backed**: important factual/formal claims carry reader-facing citations to
-  the 91 registered sources (`docs/source_index.json`); book-defined models are labeled
+  the 92 registered sources (`docs/source_index.json`); book-defined models are labeled
   `BOOK-DEFINED`, never presented as standards.
 - **Example continuity**: one recurring capstone domain (the Mechanism Knowledge Graph)
   rather than many unrelated toy domains.
@@ -244,7 +256,8 @@ Current per-section state is tracked in [`docs/BOOK_STATUS.md`](docs/BOOK_STATUS
 
 This book is an open, public **learning journey** by
 [**MinhTuan76800310**](https://github.com/MinhTuan76800310) — a software engineer
-building it from first principles, chapter by chapter, in Vietnamese.
+building it from first principles, chapter by chapter, in Vietnamese with an English
+edition in parallel.
 
 The project values are explicit in the writing:
 
