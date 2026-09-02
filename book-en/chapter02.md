@@ -1020,6 +1020,72 @@ On the mechanism data:
   history (who measured it, when, with what error)? How does that model break the
   IRI-vs-literal principle of section 2.1.5 — and Chapter 6 will need it to.
 
+### 2.6.1 Suggested answers
+
+**Question 1 (★).** Why does RDF choose to represent classification with a triple (`rdf:type`) rather than a field stored inside the node? What does this gain and what does it cost?
+
+RDF has exactly one structure: the triple. Representing classification with `rdf:type` is a consequence of the principle "everything is a triple", and it trades compactness for a single, uniform mechanism.
+
+Reasoning: When classification is a triple, it flows through the same pipeline as every other fact — it is serialized the same way (Turtle, N-Triples, JSON-LD), matched by SPARQL the same way, and, most importantly, it is the very object that RDFS/OWL inference can act on (§2.4.2, difference three: formal entailment is only defined over triples). §2.1.4 states this is "a design choice with large consequences — all information, including classification, is a triple, so all of it can be queried and inferred by the same mechanism." What it costs: first, verbosity — one triple per fact, whereas an LPG label sits directly on the node and reads more compactly (§2.2.4). Second, the subclassing trap: because `rdf:type` is just a triple present in the graph, SPARQL does not automatically "climb" to a parent class — `?m a ex:Mechanism` returns empty even though `rateOfChange_1` is obviously a mechanism (§2.1.6). What it gains: an entity can carry many "types" without extending the node definition, and those types interoperate across systems thanks to IRIs (§2.1.2).
+
+Evidence: §2.1.4 (rdf:type is a triple, same query/inference mechanism); §2.1.6 (the `rdf:type` subclassing trap); §2.2.4 (label sits directly on the node); §2.4.1 (the "Entity classification" row).
+
+**Question 2 (★).** If you need to store "the sister-city relation between Hanoi and Paris began in 1998", how would you model it in RDF? In a property graph?
+
+This is exactly the "metadata-of-a-relation" problem named in §2.4.2 (difference one), only with the predicate changed from `capitalOf` to `sisterCity`.
+
+Reasoning: In RDF, a predicate takes only IRIs and the triple itself has nowhere to hold extra information (§2.1.1) — you cannot attach `since: 1998` to `(ex:Hanoi, ex:sisterCity, ex:Paris)`. On the RDF 1.1 baseline, §2.4.2 lists three routes: reification, an intermediate node, or the n-ary pattern. The cleanest is an intermediate node with an IRI: `ex:sisterCityTwinning_1 a ex:TwinningAgreement ; ex:cityA ex:Hanoi ; ex:cityB ex:Paris ; ex:since 1998`. The cost is added structure; the gain — per the lesson of §2.1.3 — is that "the twinning agreement" now has a stable identifier to reference again (to attach evidence, context). §2.1.7 notes that RDF 1.2 (a Candidate Recommendation, not the baseline) allows `rdf:reifies` to reference that very triple without hand-building a node. In an LPG it is the reverse: a relationship is a first-class citizen that can carry properties (§2.2.1), so a single line suffices, `(:City {name:"Hanoi"})-[:SISTER_CITY {since: 1998}]->(:City {name:"Paris"})`, with no extra node.
+
+Evidence: §2.1.1 (predicate position takes only IRI/literal); §2.4.2 difference one (reification / intermediate node / n-ary); §2.1.3 (an IRI for whatever gets referenced again); §2.1.7 (RDF 1.2 triple term, labelled draft); §2.2.1 (relationships carry properties).
+
+**Question 3 (★★).** Why do blank nodes make graph comparison need isomorphism rather than triple-set comparison?
+
+Because a blank-node label is not an identifier — it is only a local variable of one serialization.
+
+Reasoning: §2.1.3 states that `_:b0` "has meaning only within that document; it is a product of serialization, not a stable cross-system identifier", and its real semantics is "there exists some resource such that…". Two extractions of the same event will produce two different labels (`_:b0` and `_:x7`), so a raw triple-set comparison wrongly concludes "two different graphs". The correct notion, per §2.1.5, is **graph isomorphism**: two graphs are equivalent if there is a bijection between their nodes that preserves every triple; the bijection `_:b0 → _:x7` turns G₁ into G₂, showing they both say "Hanoi has an address, and that address is in Hanoi". §2.1.5 applies this exact argument to the capstone: H₁ and H₂ with `_:a1`/`_:z9` are the same graph — isomorphism lets us say "two extractions recorded the same application". For a graph with no blank nodes, triple-set comparison "happens to be enough"; with blank nodes it is systematically wrong. This is also Misconception 2 in §2.5: compare the parsed graph's semantics, not the text.
+
+Evidence: §2.1.3 (blank-node labels are local, existential semantics); §2.1.5 (the G₁/G₂ and H₁/H₂ examples, the definition of isomorphism, `rdflib.compare`); §2.5 item 2.
+
+**Question 4 (★★).** A system using a property graph wants to export its data to RDF to integrate with a partner. What identity and semantics difficulties will arise?
+
+The biggest difficulty: an LPG does not supply either of the two things RDF needs — domain identity and shared semantics.
+
+Reasoning on identity: each LPG node/relationship has only an **internal identifier** handed out by the store (`elementId`), which §2.2.2 describes as not stable across systems, not guaranteed durable (it can be reused after deletion), and "not a domain identifier". When exporting to RDF, there is nothing to turn into an IRI except minting one yourself: if the source graph already stores an `iri` property as designed in §2.2.4, use it; otherwise you must define a deterministic IRI-generation convention — and every reload must yield the same IRI. Moreover, two different sources may mint two IRIs for the same entity; §2.1.2 warns that "two different IRIs do not necessarily mean two different entities" — the identity-resolution problem this chapter leaves open for Chapter 3 (§2.8). Reasoning on semantics: LPG labels and relationship types are only application conventions (§2.2.3, §2.4.2 difference three) — the RDF-receiving partner cannot know what `CAPITAL_OF` means beyond its name, and there is no shared entailment for the two sides to check consistency against. Finally, §2.4.1 notes LPG "has no cross-system serialization standard equivalent to Turtle/N-Triples", so even the export step depends on the source implementation's own format.
+
+Evidence: §2.2.2 (internal identifier, Neo4j's warning); §2.2.4 (the `iri` property); §2.1.2 (IRI limits, identity resolution); §2.2.3 and §2.4.2 (semantics as convention); §2.4.1 (the "Interoperability" and "Serialization" rows); §2.8.
+
+**Question 5 (★★★).** For the same question "Which cities are capitals?", compare the corresponding SPARQL and Cypher queries. Which side expresses closer to its own data model?
+
+The two queries in the chapter: SPARQL (§2.1.6): `SELECT ?capital WHERE { ?capital ex:capitalOf ?country . ?country rdf:type ex:Country }`; Cypher (§2.3.2): `MATCH (capital:City)-[:CAPITAL_OF]->(country:Country) RETURN capital.name` (or the minimal `MATCH (capital:City)-[:CAPITAL_OF]->(:Country)`).
+
+Reasoning: Both are graph pattern matching joined on shared variables — §2.4.1 puts them in the same "Query model" row. But the "closeness" shows in how the syntax mirrors the **shape of the data**: Cypher writes exactly what you see on the graph — the label in parentheses beside the node, the relationship type in square brackets on the edge (§2.3.1); the "is a Country" condition is embedded right in the pattern, compact because in an LPG classification is a label on the node to begin with (§2.2.4). SPARQL must split "is a Country" into a separate triple pattern because in RDF classification is just another triple, equal to every other fact (§2.1.4) — the query is longer but reflects the model's uniformity: one mechanism for everything. One important shared reality: both fare the same against real data — Cypher's `:City` filter matches only the declared label, SPARQL's `rdf:type` matches only the present triple; neither infers subclassing on its own (§2.1.6).
+
+Evidence: §2.1.4 (everything is a triple); §2.1.6 (BGP pattern, variable joins); §2.3.1–2.3.2 (ASCII-art, property filters); §2.4.1 (the "Query model" row).
+
+**Question 6 (★).** In the capstone dataset, why does `?m a ex:Mechanism` return empty even though `rateOfChange_1` is a mechanism? What is the minimal fix, and what is the "durable" fix (see Chapter 5)?
+
+Because SPARQL matches only the triples **present** in the graph, and `rateOfChange_1` is declared `a ex:RateOfChangeMechanism` — no triple `rateOfChange_1 a ex:Mechanism` was ever written.
+
+Reasoning: §2.1.6 ("The `rdf:type` subclassing trap") explains: plain RDF does not infer subclassing; the chain `RateOfChangeMechanism rdfs:subClassOf … rdfs:subClassOf ex:Mechanism` exists in the dataset but SPARQL does not climb it. This is not a bug in the query but the boundary between **pattern matching** and **inference** — two different things §2.7 asks the reader to distinguish. The minimal fix: ask for the declared class, `?m a ex:RateOfChangeMechanism`, or UNION the specific subclasses you know about — honest to the data but brittle: add a new subclass and the old query is wrong. The durable fix: bring subclass semantics into inference — use RDFS/OWL entailment so the reasoner materializes the derived `rdf:type` triples, or query through an inference-enabled engine; then `?m a ex:Mechanism` returns correctly because the needed triples are in the closed graph. §2.4.2 (difference three) calls this RDF's "standard semantics stack" advantage, and §2.7 marks the "every mechanism" question as belonging to Chapter 5.
+
+Evidence: §2.1.6 (rdf:type trap, "SPARQL matches only present triples"); §2.4.2 difference three (entailment); §2.7 (the question needing RDFS/OWL, Chapter 5).
+
+**Question 7 (★★).** You are asked to design a sports-team graph: "a player scored a goal in a match". Draw it in RDF (needing a `DerivativeApplication`-style intermediate node) and in LPG (a property on the edge). Under which design is it simpler to ask "how many goals did this player score at home"? This exercise repeats exactly the design decision of §2.2.4.
+
+The RDF version: a goal is an n-ary relation (player, match, minute, venue), and a triple carries no properties (§2.1.1), so you need an intermediate node: `ex:goal_1 a ex:GoalEvent ; ex:scorer ex:player_7 ; ex:inMatch ex:match_5 ; ex:minute 78 ; ex:venue ex:HanoiStadium`. The "how many goals at home" question joins three patterns: `goal → scorer`, `goal → inMatch → venue`, then a FILTER — exactly the three-pattern structure of §2.1.6. The LPG version (option 1 of §2.2.4, roles on the edge): `(:Player)-[:SCORED {minute: 78}]->(:Match)-[:HELD_AT]->(:Stadium)`; the Cypher query: `MATCH (p:Player {name:"…"})-[:SCORED]->(m:Match)-[:HELD_AT]->(s:Stadium {home:true}) RETURN count(m)` — one intuitive traversal, fewer matching steps.
+
+Reasoning: For this purely statistical question, the LPG's property-on-edge design is simpler because the data sits right on the edge, with no intermediate node to pass through (§2.2.1). But §2.2.4 also warns the other side of the decision: if the goal needs to be referenced again (VAR, evidence, a timestamp), option 2 — a `:GoalEvent` node — is correct, and then the LPG "node-ifies the relationship" just like RDF reification: "the n-ary trick belongs to no single model — it is a domain problem."
+
+Evidence: §2.1.1 (a triple carries no properties); §2.2.1 (relationships carry properties); §2.2.4 (the edge-vs-node choice, "node-ifying the relationship"); §2.1.6 (joining many patterns through an intermediate node); §2.3.3 (multi-hop Cypher traversal).
+
+**Question 8 (★★★).** `ex:hasValue` is a literal, so "the value 12.5 of `position_1`" cannot participate in a join (it cannot be a subject). What design lets you treat "the value" as an entity with a history (who measured it, when, with what error)? How does that model break the IRI-vs-literal principle of section 2.1.5 — and Chapter 6 will need it to.
+
+The design: reify the measurement into an n-ary object with an IRI — the same template as `DerivativeApplication` in §2.1.6: `ex:measurement_1 a ex:Measurement ; ex:measures ex:position_1 ; ex:hasValue "12.5"^^xsd:double ; ex:measuredBy ex:sensor_A ; ex:measuredAt "…"^^xsd:dateTime ; ex:uncertainty "0.1"^^xsd:double`.
+
+Reasoning: §2.1.1 forbids a literal as subject, so the number 12.5 is literally a "leaf" of the graph — nothing can hang off it. But once the value needs a history (who measured, when, with what error), it is no longer "just data" in the sense of the §2.1.5 rule ("whatever will be referenced again gets an IRI"). The model above does **not break** the principle; it **moves the boundary of its application**: the IRI is granted to the *measurement event* — the thing that will be referenced again — while the *number* keeps its literal role in the object position. What breaks is the economy of the representation: one compact "fact" (`position_1 hasValue 12.5`) becomes four or five triples, and FILTER-style queries like §2.1.6 must join through the Measurement node. Why Chapter 6 needs this: evidence (the claim "how trustworthy is this measurement") must point at a durable identifier — a blank node cannot do that (§2.1.3), and a literal cannot be the subject of an evidence triple. RDF 1.2's `rdf:reifies` (§2.1.7) is the shorter route to the same problem, but it is not yet the baseline.
+
+Evidence: §2.1.1 (a literal cannot be a subject); §2.1.5 (the IRI-vs-literal rule, "a literal is a leaf"); §2.1.3 (a blank node is not a durable identifier); §2.1.6 (the DerivativeApplication template); §2.1.7 (rdf:reifies, labelled draft).
+
 ## 2.7 What We Know
 
 - An RDF graph is a set of triples with exact position constraints; an IRI is a

@@ -1342,6 +1342,80 @@ conceptual structure.
   describes `ex:involves` with a wider range. Draw the schema-alignment process you would run to
   keep the correct mapping and reject the wrong one (§3.4) — which evidence decides?
 
+### 3.6.1 Suggested answers
+
+**Question 1 (★).** Two datasets both contain `"Hanoi"`. What evidence is needed before merging them into one entity? Which evidence is strong, which is weak, and who is responsible for the decision?
+
+The matching string `"Hanoi"` is only a surface signal to *propose* a merge candidate, not evidence to merge. You need structural and semantic evidence, and the final decision belongs to the organization's rules, possibly with human confirmation.
+
+Reasoning: §3.2.1 separates the three notions entity / identifier / denotation and asserts that "the same identifier does not prove semantic unity" — a string does not carry the entity it denotes. §3.5 (mistake 2) gives the illustrative counter-example: if the same string "Hanoi" were also stamped on a different administrative unit (the chapter takes the example of a phường in Hà Giang), merging by string would wrongly fold that unit into the capital, and every `capitalOf` query would inherit its data. Label collisions of this kind are real: "Hanoi" is also the name of a road (Xa lộ Hà Nội, in Ho Chi Minh City / Dong Nai), not a city. The conclusion of §3.5 itself: a label is data for *finding* candidates, not evidence of identity. So the *weak* evidence is a matching label; the *strong* evidence is what only the same entity can have: the same relations to known entities (both are "the capital of Vietnam"), language-compatible labels (Hà Nội / Hanoi), and attributes of the same order of magnitude (population). §3.2.5 describes exactly the three tiers: candidate → evidence/consideration → accepted assertion.
+
+Evidence: Who decides sits in the "consideration by rules / humans" step of §3.2.5 — signals are weighed under the organization's rules, which may be automatic or require human confirmation; the evidence itself "remains evidence, not a conclusion." The 6-step pipeline in §3.2.6 makes it concrete: step 3 generates candidates, step 4 weighs evidence, step 5 confirms or rejects.
+
+**Question 2 (★).** If `A owl:sameAs B`, what logical consequences must follow? Why can one wrong sameAs edge in a large knowledge graph cause damage far beyond where it was written?
+
+`owl:sameAs` is an *identity* assertion: every known property of A holds of B and vice versa; because it is symmetric and transitive, the assertions close into an *equivalence class* through which information flows freely. A wrong edge therefore merges *two classes*, not just two nodes — the error spreads to every query that touches either IRI.
+
+Reasoning: §3.2.4 cites the OWL 2 Primer: the reasoner "infers that any information known about `ex:Hanoi` also holds for `wd:Q1858`, and vice versa" (per OWL 2 Primer, section 4.7). The two-step sameAs chain in the same section shows propagation does not stop at one hop: two sameAs edges partition the graph into {`ex:Hanoi`, `wd:Q1858`} and {`ex:Vietnam`, `wd:Q881`}, forcing cross triples no one ever wrote.
+
+Evidence: The mechanism-domain example in §3.2.4: a wrong `ex:rateOfChange_1 owl:sameAs ex:heatTransferRate_2` makes the reasoner conclude `heatTransferRate_2` has input `position_1` — a physically wrong inference — and "every query 'which mechanism acts on position' returns `heatTransferRate_2`". §3.5 (mistake 3) repeats it: writing a wrong sameAs edge merges two entities everywhere they appear. That is precisely why §3.2.4 sets the practical rule: use `owl:sameAs` only when you are prepared to accept every consequence of the two names being one.
+
+**Question 3 (★★).** Why can a named graph be used to store a partition by source and still *not* formally mean "this source asserted these triples"? What is missing for that meaning to become explicit?
+
+A named graph is only a *grouping* mechanism — it syntactically pairs a name with a graph; RDF assigns that name no formal meaning, so "this source asserted it" is only an application convention, not something the graph itself states.
+
+Reasoning: §3.3.2 cites the RDF 1.1 spec: "the graph name is not required to denote the graph; it is merely paired syntactically with the graph; RDF places no formal constraint on what resource the name denotes" (per RDF 1.1 Concepts, section RDF Datasets). So the same syntax `ex:sourceA { … }` can mean "partitioned by source", "by version", or "by perspective" — it does not distinguish them itself. §3.5 (mistake 4) gives the consequence: two teams both naming a graph `ex:sourceA` (one a census file, one a scraped web page) and a `GRAPH` join silently merging two unrelated things.
+
+Evidence: What is missing is an assertion *outside the box* linking the graph name to a source resource and an "asserted" predicate. The self-check box in §3.3.2 says it plainly: to make "source A asserted…" true, "you must add an assertion outside the box." The tool to say that is a provenance vocabulary such as PROV-O — a W3C standard with classes describing origin, agent, and the activity that produced the data — which §3.3.2 defers to Chapter 6; and even with provenance, §3.3.7 reminds us it only tells *who said it, when*, not that the statement is more correct.
+
+**Question 4 (★★).** When should `since = 1976` be a property of the edge, and when should it be a node in an intermediate relation entity? Which criterion decides — the number of context dimensions, the need to query, or the possibility of a recurring event?
+
+The deciding criterion is not the *number* of context dimensions — §3.3.4 says clearly an edge still tolerates "a time, a source, a confidence" at once — but a *counting rule*: whether any dimension must take **two or more values** on the same statement (multiple sources confirming, a recurring event), and whether there is a need to **reference or query the relation itself**. A single-valued dimension with no need to talk about the statement itself → an edge property. Otherwise → an intermediate entity.
+
+Reasoning: §3.3.4 gives the "counting rule": one context dimension per edge → an edge property; two values of the same dimension, or any need to reference the relation itself → an intermediate entity. The edge `{since: 1976}` is compact, but when two sources confirm the *same* 1976 capital status, `{source: "A"}` loses B, `{source: ["A","B"]}` stops being a property a query language can join on, and you cannot attach a *different* confirmation date to each source.
+
+Evidence: §3.3.3 builds `ex:capitalStatus_1` (an intermediate node) that allows any number of dimensions and lets you "talk about the event itself". §3.3.3 measures the price of the flat representation: once *two* applications are loaded, the question "which operation applies to `position_1`" run over flat edges returns 2 rows (one right, one wrong), over the n-ary form returns exactly 1 — the intermediate node is the anchor that keeps the pairing. The possibility of a recurring event is also why the §3.3.3 self-check box chooses n-ary for "Alice returns to company X in a different role = a *new* employment event, not an overwrite of the old one".
+
+**Question 5 (★★★).** If you had to explain to an engineer who only knows relational databases, how would you argue that "different primary keys" in the RDF/OWL world is no longer evidence of "two different entities"?
+
+Show them that in SQL, UNA is a *constraint the system enforces* — two different primary keys must be two different rows; whereas OWL has *no such constraint*, so two different IRIs are just two names not yet adjudicated, and both "are one" and "are two" must be asserted explicitly.
+
+Reasoning: §3.2.3 names the intuition "different names means different entities" the unique name assumption and states OWL lacks it: "OWL does not assume that different names are names of different individuals" (per OWL 2 Primer). The comparison in §3.2.3 runs the same data through both worlds: a `cities` table with two rows `(1, "Hà Nội", 8418883)` and `(7, "Hanoi", 8053663)` — under UNA the two keys *must* be two cities; on the graph, those same two nodes with neither `owl:sameAs` nor `owl:differentFrom` leave the reasoner *two models both correct* — either one city or two.
+
+Evidence: The consequence for a DB engineer: to assert *different* you must write `owl:differentFrom`, to assert *one* you must write `owl:sameAs` (§3.2.3, §3.2.4). The foundation is §3.2.1: identifier ≠ entity, "two different identifiers do not prove two different entities". And §3.2.3 closes the deep point: "the graph's silence ('nothing says so') is not evidence of difference" — something a relational key implicitly assumes.
+
+**Question 6 (★).** On the mechanism graph, how do `ex:rateOfChange_1` and `ex:velocity_1` differ in the nature of their identity (a mechanism versus a quantity)? What evidence do you need to be sure `ta:velocityDef` and `tb:speedDef` are the same mechanism, rather than merely "nearly the same"?
+
+They differ in their *role in the schema*: `ex:rateOfChange_1` is a Mechanism (subject of `hasInput`/`hasOutput`), `ex:velocity_1` is a Quantity (object of `hasOutput`) — two kinds of identifier belonging to two different classes, not two names of the same thing. And to be sure `ta:velocityDef` and `tb:speedDef` are the same mechanism, you need *definitional* evidence: same operation, same input, same output.
+
+Reasoning: §3.1.7 declares `ex:hasInput rdfs:domain ex:Mechanism ; rdfs:range ex:Quantity` and `ex:hasOutput rdfs:domain ex:Mechanism ; rdfs:range ex:Quantity`, so each node's type *emerges* from its position on an edge (the inferential semantics of domain/range, §3.1.3). A mechanism and a quantity therefore carry identifiers of two different classes; merging them is a type error, not an identity error.
+
+Evidence: §3.2.5 poses exactly the velocityDef/speedDef problem: the identity evidence is (1) same `ex:derivativeOperation_1`, (2) same input `ex:position_1`, (3) same output `ex:velocity_1` — "*definitional* evidence, not geography". And it raises the distinction: `ex:heatTransferRate_2` also uses `derivativeOperation_1` but differs in input (`thermalEnergy_1`), so it is *ruled out* at the evidence step. The rule drawn: "identity evidence must be enough to distinguish from the nearest look-alike" — precisely what separates "the same mechanism" from "nearly the same", which §3.2.4 warns about when using `owl:sameAs` over the mechanism domain.
+
+**Question 7 (★★).** The statement "velocity is the derivative of position with respect to time", once reified into `ex:derivativeApplication_1`, has four participants. Which context dimensions (source, time, measurement method) would you attach to that application, and why attach them to the intermediate node rather than to one of the four edges?
+
+Attach all three dimensions — source (which textbook/experiment asserts it), time (`validFrom`/`observedAt`), method (measured directly or derived) — to *the application node itself*, because they scope *the whole application event*, not any one component relation.
+
+Reasoning: §3.3.3 builds `ex:derivativeApplication_1` with four slots: `hasOperation`, `differentiand`, `withRespectTo`, and `hasApplication` back to `rateOfChange_1`. The context "confirmed by whom, measured in which experiment, valid since when" is a property of *the application*, so it must anchor to the node representing it. If attached to an edge (say `withRespectTo`), it becomes ambiguous — unclear whether it scopes the "with-respect-to-which-variable" relation or the whole derivative — and we lose the ability to reference the statement itself.
+
+Evidence: §3.3.3 says the intermediate node is "the only place to attach properties (evidence, time) about *that very application*". §3.3.4 gives the rule: when you need to reference the relation itself → an intermediate entity. §3.3.6 illustrates the same logic at the qualifier level: `velocity_1 = 3.2` carries *derived* from a position series, *rank* preferred. And §3.3.7 reminds us that attaching these three dimensions only *enables evaluation*, it does not make the application more correct — which is why they belong to the context-representation layer, not the truth layer.
+
+**Question 8 (★★).** Suppose there is a canonical identifier `ex:heatTransferRate_2` and an alias `tc:coolingRateDef` from a third textbook. If textbook C actually defines a different concept (average cooling rate, not instantaneous), which step in the candidate → evidence → acceptance process failed?
+
+The *evidence/consideration* step (step 2 in §3.2.5, corresponding to steps 4–5 in the §3.2.6 pipeline) failed: it accepted a surface match without checking the defining parameter that separates "average" from "instantaneous".
+
+Reasoning: §3.2.5 states the rule: "identity evidence must be enough to distinguish from the nearest look-alike". `coolingRateDef` and `heatTransferRate_2` may both use `derivativeOperation_1` and both concern heat — so they *look* alike; but if one is an instantaneous rate and the other an average, they differ in exactly the parameter the evidence step must inspect. Skipping that parameter, the system reaches a wrong `owl:sameAs` assertion.
+
+Evidence: This is precisely the "denotation can be contested" case in §3.2.1: two communities can dispute whether an identifier denotes "instantaneous velocity" or "average velocity", and "a unique identifier does not settle the dispute". The consequence falls right on the §3.2.4 warning: a wrong sameAs edge merges two entities that were different, making all of `coolingRateDef`'s information (the average definition) flow into `heatTransferRate_2` (instantaneous) and back. In the §3.2.6 pipeline, step 5 "confirm" should have *rejected* upon finding differing definition signatures — the way §3.2.5 ruled `heatTransferRate_2` out of `velocityDef` for a different input.
+
+**Question 9 (★★★).** You have two mechanism sources: one describes the relation `ex:hasOperation`, the other describes `ex:involves` with a wider range. Draw the schema-alignment process you would run to keep the correct mapping and reject the wrong one (§3.4) — which evidence decides?
+
+Run §3.4's three iterative steps — generate candidates, gather evidence, confirm/reject — and let the *structural signature (domain/range)* be the deciding evidence: `involves` has a range including both Quantity and Operation, while `hasOperation` accepts only Operation, so the mapping `involves → hasOperation` must be *rejected*.
+
+Reasoning: §3.4 warns "vocabularies do not align themselves; the mappings above are the result of a process". Step 1 generates candidates by surface signal (both point to `derivativeOperation_1`, they look alike). Step 2 gathers *structural* evidence: compare the domain/range and the object sets of the two relations. Step 3 confirms only when the evidence is strong enough and no competing candidate exists; otherwise reject or flag for a human.
+
+Evidence: §3.4 gives exactly the textbook D/E counter-example: `ex:hasOperation rdfs:range ex:Operation` (narrow), whereas `te:processSketch ex:involves` points to *both* `derivativeOperation_1` (an Operation) *and* `velocity_1` (a Quantity). The object sets differ at `velocity_1` → reject, because the mapping would place a Quantity where the target schema allows only an Operation. The foundation is §3.1.2/§3.1.3: domain/range is scaffolding that dictates what type the subject/object positions must carry. §3.4 closes: "the alignment process must *know how to refuse*, not only how to connect"; if you force it because things "look alike", every later query "which mechanism uses which operation" will return output figures mixed in.
+
 ## 3.7 What we now know — and what we still cannot do
 
 **What we know.** Three independent axes for turning a data graph into organized knowledge:
