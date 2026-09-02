@@ -623,6 +623,40 @@ chính của chương đứng vững độc lập với chúng. Trong phiên b�
    Context cần chứa những thông tin gì mà lớp Semantics không cung cấp được? Tại sao chỉ
    Semantics là không đủ?
 
+### 1.10.1 Gợi ý trả lời
+
+**Câu 1 (★).** Cho đồ thị `(A)--[R]-->(B)` và `(C)--[R]-->(D)` với cùng nhãn R. Nếu không có ontology, bạn có thể khẳng định R có cùng ý nghĩa trong cả hai trường hợp không? Giải thích.
+
+Không. Không có ontology (hay bất kỳ khai báo semantics nào), ta KHÔNG được phép khẳng định R mang cùng ý nghĩa ở hai chỗ. Nhãn `R` tự nó chỉ là một chuỗi ký tự; việc hai cạnh trùng chuỗi ký tự không đảm bảo chúng cùng một quan hệ. Đây đúng là tình huống "Trường hợp A" trong §1.2: một cạnh `[:KNOWS]` mà không định nghĩa `:KNOWS` nghĩa là gì thì vẫn chỉ là data graph, chưa phải tri thức.
+
+Lý do: §1.3 định nghĩa Semantics là "lớp ý nghĩa của đồ thị" và nêu rõ "Semantics không nằm trong hình dạng của cạnh — hai đồ thị có thể có cấu trúc giống hệt nhau nhưng ngữ nghĩa hoàn toàn khác nhau." Cùng một nhãn có thể được hai nhóm dùng với hai quy ước khác nhau (ví dụ `R` = "quen biết" ở đồ thị này, `R` = "chuyển tiền" ở đồ thị kia), và chỉ có khai báo tường minh về predicate mới phân biệt được. §1.3 cũng cảnh báo nhầm lẫn giữa label (tầng 4) và entity: "xem hai nhãn giống nhau là một thực thể" là nguồn gốc của nhiều lỗi thiết kế.
+
+Bằng chứng: §1.2 (Trường hợp A/B) và §1.3 (định nghĩa Semantics, bốn tầng của Entity) cho thấy ý nghĩa nằm ở lớp semantics chứ không ở nhãn; §1.8 Sai lầm 2 củng cố rằng "tri thức nằm ở semantics và context, không nằm ở kích thước đồ thị." Muốn khẳng định R đồng nhất, cần một ontology khai báo domain/range và định nghĩa của R, hoặc một cơ chế liên kết ontology giữa hai đồ thị.
+
+**Câu 2 (★★).** Hai đồ thị chứa cùng tập triples nhưng dùng IRI khác nhau cho cùng một thực thể thế giới thực. Chúng có biểu diễn cùng tri thức không? Cần thêm giả định gì để khẳng định "có"?
+
+Chưa chắc. "Cùng tập triples" chỉ đúng ở cấp cú pháp nếu ta coi các IRI là ký hiệu vô nghĩa; nhưng nếu mỗi IRI được diễn giải độc lập, hai đồ thị chưa chắc nói về cùng một thực thể. §1.3 nêu chính xác tình huống này: "hai identifier khác nhau có thể cùng trỏ đến một entity — đây chính là vấn đề entity resolution," và hộp "Ngộ nhận phổ biến" nhấn mạnh `ex:Hanoi` chỉ là chuỗi ký tự, "không *là* thành phố Hà Nội." Ví dụ `ex:Hanoi` vs `wd:Q1858` trong §1.3 là minh họa đúng bài toán.
+
+Lý do: theo bốn tầng Entity ở §1.3 (real-world entity / graph node / identifier / label), việc hai identifier khác nhau trỏ về cùng một thực thể là một khẳng định cần được *nói ra*, không tự hiển nhiên. Lớp Identity trong §1.4 chính là lớp giải quyết "cùng một entity có nhiều tên/biểu diễn."
+
+Bằng chứng: để khẳng định "có," cần thêm giả định đồng nhất định danh — một khai báo tường minh rằng hai IRI cùng chỉ một thực thể, ví dụ quan hệ `sameAs` (được nêu tên ở §1.4: "Identity (IRI bền vững, entity resolution, sameAs)"), hoặc một ánh xạ/bản đồ liên kết (alignment) giữa hai không gian IRI, kèm nguồn ngữ cảnh để tin ánh xạ đó. Không có giả định này, máy chỉ thấy hai ký hiệu khác nhau và không có cơ sở để gộp.
+
+**Câu 3 (★★).** Wikidata cho phép bất kỳ ai thêm statement mà không cần ontology approval. Điều này ảnh hưởng thế nào đến khả năng suy diễn tự động? Wikidata bù đắp bằng cơ chế nào?
+
+Mô hình "schema-less" này làm suy diễn tự động kiểu hình thức (RDFS/OWL entailment) bị hạn chế, vì suy diễn cần các tiên đề ontology chặt để rút ra kết luận mới; khi statement được thêm tự do mà không qua phê duyệt ontology, chất lượng không đồng đều và không có bệ phóng tiên đề đáng tin để máy suy ra điều chưa được ghi tường minh. §1.7 ("Schema-less Knowledge Graph") nói đúng điều này: "Nhược điểm: chất lượng không đồng đều, khó suy diễn tự động."
+
+Lý do: không có ontology được duyệt, máy không thể dựa vào domain/range/subclass để entail; thay vào đó Wikidata quản lý tri thức bằng ngữ cảnh trên từng statement. §1.7 ghi: "Wikidata giải quyết bằng qualifiers/references/ranks thay vì OWL axioms."
+
+Bằng chứng: theo tài liệu chính thức của Wikidata (Help: Statements), ba thành phần bổ sung là **qualifiers** ("mô tả thêm hoặc làm rõ giá trị của một property"), **references** ("chỏ tới các nguồn cụ thể ủng hộ dữ liệu"), và **ranks** (quản lý nhiều giá trị/đồng thuận; "nếu có đồng thuận, nó nên được chỉ ra bằng rank *preferred*" — các mức là preferred/normal/deprecated). Đây chính là lớp Context (provenance, scope, confidence) mà §1.3 mô tả, được dùng để đánh giá và xử lý mâu thuẫn thay vì để entailment hình thức gánh. Điều này cũng khớp với §1.8 Sai lầm 4: một statement có mặt chưa phải "accepted knowledge"; ranks/chính sách đồng thuận là cách Wikidata quản trị cấp độ chấp nhận đó.
+
+**Câu 4 (★★★).** Giả sử bạn thiết kế KG cho một hệ thống AI agent cần đưa ra quyết định y khoa. Lớp Context cần chứa những thông tin gì mà lớp Semantics không cung cấp được? Tại sao chỉ Semantics là không đủ?
+
+Với quyết định y khoa, lớp Context phải mang tối thiểu: **provenance** (ai/cơ quan nào khẳng định — hướng dẫn bộ y tế, trial ngẫu nhiên, hay blog), **time** (hiệu lực từ khi nào, bao giờ hết hạn — phác đồ điều trị thay đổi theo năm), **scope** (áp dụng cho quần thể nào, jurisdiction nào, chống chỉ định ra sao), và **confidence** (mức bằng chứng, mức đồng thuận). Bốn mục này đúng là các thành phần Context mà §1.3 và §1.2 liệt kê: "provenance, time, scope, confidence."
+
+Lý do: Semantics cho máy biết *ký hiệu nghĩa là gì* và *suy ra kiểu gì* (schema, ontology, domain/range, identity, constraints — §1.3), nhưng nó không trả lời được "phát biểu này đến từ đâu, còn đúng không, đáng tin đến mức nào, và khi hai nguồn mâu thuẫn thì tin ai." §1.3 nêu hai nguyên tắc then chốt: "Context cho phép đánh giá; context không tạo ra sự thật," và "Context là cơ sở để xử lý mâu thuẫn. Nếu hai nguồn khẳng định hai điều trái ngược... lớp Semantics không biết bên nào đáng tin; lớp Context cung cấp thông tin để đánh giá."
+
+Bằng chứng: §1.2 (Trường hợp B/D) chỉ rõ một triple chỉ thành tri thức khi có thêm timestamp và nguồn trích dẫn; §1.6 Bước 5'/Bước 5 minh họa việc gắn `source`/`validFrom`/`confidence` lên phát biểu. Trong y khoa, thiếu Context thì agent không phân biệt được một hướng dẫn 2015 đã lỗi thời với một khuyến cáo 2025, hay một bằng chứng mức A với một ý kiến chuyên gia — tức là không thể quản trị rủi ro. Vì vậy chỉ Semantics là không đủ: nó đảm bảo *đúng nghĩa và đúng kiểu*, còn *đáng tin và còn hiệu lực* thuộc về Context.
+
 ## 1.11 Chúng ta đã biết gì
 
 - Đồ thị là cấu trúc dữ liệu; Knowledge Graph là cấu trúc tri thức.

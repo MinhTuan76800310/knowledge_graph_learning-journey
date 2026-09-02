@@ -1260,6 +1260,56 @@ Ca làm việc RATE_OF_CHANGE đầy đủ, 10 bước:
 8. **Tại sao "hệ thống không bao giờ xong" là nguyên tắc thiết kế, không phải thất bại?**
    — Nguồn và phạm vi và người dùng đổi; chỉ có giám sát + quản trị giữ sự đáng tin (§10.50)
 
+### 10.56.1 Gợi ý trả lời
+
+**Checkpoint 1.** Tại sao claim tươi không nhất thiết đúng?
+
+Vì độ tươi (freshness) và độ đúng (correctness) nằm trên hai trục độc lập. Độ tươi đo *tính gần đây của lần kiểm chứng* — nó chỉ cho biết một claim vừa được xem xét lại khi nào; độ đúng đo *sự phù hợp của claim với bằng chứng*. Một phép đo về lịch trình thời gian không chứa bất kỳ thông tin nào về việc kết luận của phép kiểm chứng đó có khớp với thực tế hay không. §10.4 định nghĩa freshness là số liệu hạng nhất nhưng khẳng định rõ "Độ tươi là một phép đo về tính thời sự, không phải phán quyết về chân lý", và đặt `Freshness(correct) = possible, freshness(wrong) = possible`. §10.5 triển khai thành ma trận bốn ô: tươi-đúng, tươi-sai (vừa thu nhận từ nguồn mới nhưng nguồn đó sai hoặc bị hiểu sai), không tươi-đúng, không tươi-sai. Ví dụ RATE_OF_CHANGE trong §10.5: một claim mới từ pipeline hôm nay thì tươi nhưng chưa được đánh giá nên chưa biết đúng hay sai; C471 không kiểm chứng 6 tháng nhưng vẫn đúng nếu E88 còn hợp lệ. Chính vì thế cảnh báo của chương là "không bao giờ được nói claim tươi, do đó đúng".
+
+Lý do: một phép kiểm chứng mới chỉ chứng minh rằng *đã có một lần kiểm chứng gần đây*, chứ không bảo đảm lần kiểm chứng ấy đi tới kết luận đúng. Bằng chứng: §10.4 và §10.5.
+
+**Checkpoint 2.** Tại sao vượt ngưỡng giám sát không chứng minh tri thức sai?
+
+Vì ngưỡng là một quyết định chính sách, không phải một hằng số của thế giới. §10.11 nêu ngưỡng "mã hóa mức dung sai của người vận hành", có thể khác nhau theo miền, loại câu hỏi và lớp claim, và việc vượt ngưỡng chỉ "kích hoạt sự chú ý, không phải phán quyết về thế giới". §10.12 vạch ranh giới tri thức luận: một số liệu vượt ngưỡng KHÔNG có nghĩa tri thức sai, hệ thống hỏng, hay một claim cụ thể sai; nó chỉ có nghĩa "tín hiệu này đáng được chú ý có quản trị". Cảnh báo của chương cấm nói "tỷ lệ kiêng trả lời 0.21, do đó phân loại RATE_OF_CHANGE là sai" — cảnh báo là điểm bắt đầu của đánh giá, không phải kết luận của nó (§10.12, §10.14). Thêm một lớp thận trọng: cùng một luồng dữ liệu cho tín hiệu khác nhau dưới các cửa sổ tổng hợp khác nhau (§10.10), nên việc "vượt" hay "không vượt" phụ thuộc một phần vào cửa sổ và ngưỡng được chọn, tức là vào chính sách chứ không vào bản thân tri thức. Cuối cùng §10.31 nhắc rằng các số liệu chất lượng đo hành vi quản lý tri thức, không đo việc thế giới có khớp với tri thức.
+
+Lý do: ngưỡng là một đường kẻ do con người đặt để phân bổ sự chú ý; nó chọn *nơi cần nhìn*, chứ không xác định *điều gì là thật*. Bằng chứng: §10.11, §10.12, §10.14.
+
+**Checkpoint 3.** Tại sao user sửa là phản hồi, không phải bằng chứng?
+
+Vì phát biểu "câu trả lời sai" của người dùng là một tín hiệu về *trải nghiệm của họ*, chưa phải một chứng cứ về *miền tri thức*. §10.19 đặt ranh giới: để một phản hồi trở thành bằng chứng, cần nguồn đăng ký, fragment nguồn, chuỗi bằng chứng (Ch6) và một đánh giá — bốn thành phần mà một lời phàn nàn của user không tự có. §10.18 xếp user sửa vào loại "tín hiệu quý, không phải phán quyết": mỗi sửa đổi là một candidate claim với provenance giá rẻ (user report), phải được kiểm chứng như mọi ứng viên, và có thể chỉ ra một lỗ hổng thật HOẶC một sự hiểu lầm của chính user; do đó `userCorrection ≠ groundTruth`. Ví dụ RATE_OF_CHANGE ở §10.19: 10 user nói câu trả lời về dòng điện sai → tạo 10 CandidateClaims cộng một tín hiệu cần kiểm tra, nhưng không một user nào tự thay đổi C471; chỉ bằng chứng từ nguồn đăng ký mới đổi được trạng thái. Cảnh báo tương ứng: "không bao giờ nói nhiều user phàn nàn, do đó claim sai".
+
+Lý do: số lượng lời phàn nàn đo mức độ đáng nghi, không đo trạng thái tri thức luận; trạng thái đó phải được thiết lập lại qua chuỗi bằng chứng và đánh giá. Bằng chứng: §10.18 và §10.19.
+
+**Checkpoint 4.** Tại sao câu trả lời QA không thể tái vào Sổ cái mà không qua cổng Ch7?
+
+Vì nếu đầu ra của vòng QA được ghi thẳng vào Sổ cái, vòng lặp mất đi điểm kiểm soát duy nhất phân biệt *artifact suy diễn* với *nguồn đã đăng ký*, và một lỗi có thể tự khuếch đại thành sai lệch bền vững. §10.17 nêu QUY TẮC VẬN HÀNH (blocking nếu sai): câu trả lời QA không phải tri thức được chấp nhận; đường thu nhận duy nhất vẫn là QA answer / user correction / feedback → CandidateKnowledge → pipeline thu nhận + tích hợp (Ch7) → đánh giá có quản trị → có thể thành claim Accepted; "vòng QA không được tắt ngang Sổ cái". Hệ quả nếu vi phạm được mô tả ở §10.34 (sụp đổ phản hồi): một câu trả lời đầu sai nhưng trôi chảy được chấp nhận, trở thành câu trả lời "được biết", được truy xuất và lặp lại, còn bằng chứng gốc bị lãng quên. §10.20 liệt kê cổng quản trị (chỉ pipeline Ch7 ghi vào Sổ cái) là một trong năm thuộc tính an toàn của vòng lặp. Ca làm việc 3 (§10.54) minh chứng cơ chế: không có cổng thì các candidate củng cố lỗi; có cổng Ch7 thì chúng vào như candidates và được đánh giá.
+
+Lý do: ghi trực tiếp loại bỏ bước đánh giá có quản trị, biến "câu trả lời đã sinh ra" thành "nguồn", nên lỗi được tái tuần hoàn thay vì bị chặn. Bằng chứng: §10.17, §10.34, §10.20.
+
+**Checkpoint 5.** Tại sao "hệ thống tự giám sát" không phải "hệ thống tự quản trị"?
+
+Vì giám sát và quản trị là hai giai đoạn khác nhau của cùng một vòng. §10.15 vạch ranh giới: giám sát phát hiện vấn đề nhưng không giải quyết vấn đề; giải quyết có quản trị đòi hỏi một quyết định quản trị (Ch6/Ch7), một hành động được ủy quyền, và một bản ghi kiểm toán. Cảnh báo của mục này cấm nói "hệ thống tự giám sát, do đó nó tự quản trị đúng" — "quan sát mà không có quản trị là giám sát, không phải quản lý". Điều này nhất quán với §10.7, nơi tự quan sát được định nghĩa là *ghi thụ động* (recording), còn giải thích và hành động là bước riêng; và với §10.9, nơi vòng giám sát được nói rõ là quyết định *sự chú ý và bảo trì*, không quyết định chân lý. §10.14 bổ sung rằng đánh giá là giai đoạn tri thức luận do người đánh giá (con người hoặc chính sách có quản trị) quyết định, "đánh giá ≠ hành động tự động". Ví dụ RATE_OF_CHANGE ở §10.15: vòng giám sát phát hiện C471 có thể đã cũ (E88 → E90) là giám sát; quyết định tái đánh giá C471 qua pipeline Ch7 mới là quản trị, kèm bản ghi kiểm toán.
+
+Lý do: phát hiện chỉ tạo ra tín hiệu; đổi trạng thái tri thức cần ủy quyền và trách nhiệm giải trình mà việc quan sát đơn thuần không cung cấp. Bằng chứng: §10.15, §10.14, §10.7.
+
+**Checkpoint 6.** Tại sao sụp đổ phản hồi khác đơn thuần cũ?
+
+Vì hai tình trạng hỏng ở hai tầng khác nhau: cũ là vấn đề *thời điểm*, sụp đổ là vấn đề *cấu trúc*. §10.36 định nghĩa rõ: cũ (staleness) là "nội dung cũ nhưng cấu trúc nguyên vẹn"; sụp đổ (collapse) là "nội dung bị tái tuần hoàn và thoái hóa". Một hệ thống cũ có tri thức cũ; một hệ thống sụp đổ có tri thức thoái hóa. Cơ chế bảo trì vì thế khác nhau: cũ → tái xác minh, tái thu nhận; sụp đổ → phá vòng phản hồi, khôi phục nguồn, thu nhận lại/huấn luyện lại. §10.34 nhấn mạnh sụp đổ phản hồi "≠ nhiễu ngẫu nhiên" — nó có hệ thống và tự củng cố, qua chuỗi: đáp án sai trôi chảy → được chấp nhận → thành "được biết" → được truy xuất lặp lại → bằng chứng gốc bị lãng quên. Ở tầng mô hình, §10.35 (Shumailov et al. 2024) cho thấy huấn luyện đệ quy trên đầu ra của chính mình gây sụp đổ không thể đảo ngược, nơi đuôi phân bố gốc biến mất — một thất bại cấu trúc riêng biệt, không phải chỉ là "chưa cập nhật". Ví dụ RATE_OF_CHANGE ở §10.36: C471 cũ (E88 lỗi thời) chỉ cần re-validation; nhưng nếu tóm tắt cộng đồng GraphRAG được dùng lại làm nguồn thì đó là nguy cơ sụp đổ, phải phá vòng lặp.
+
+Lý do: một phép kiểm chứng mới chữa được độ lệch thời gian của claim cũ, nhưng không chữa được sụp đổ, vì chính nền nguồn đã bị thay bằng đầu ra tái tuần hoàn. Bằng chứng: §10.36, §10.34, §10.35.
+
+**Checkpoint 7.** Tại sao vết kiểm toán làm hệ thống đáng tin mà không làm nó bất khả ngộ?
+
+Vì kiểm toán cung cấp khả năng *tái dựng* quyết định, chứ không bảo đảm quyết định đó *đúng*. §10.43 định nghĩa AuditRecord (what, who/what, onWhat, beforeState, afterState, evidence, at, authorization) và nêu "không có vết kiểm toán, tin cậy chỉ là đức tin", đồng thời cảnh báo "kiểm toán ≠ chỉ ghi log" — nó phải cho phép phát lại vì sao hệ thống tin một câu trả lời. Khả năng tái dựng đó chính là nội dung kỹ thuật của tin cậy ở §10.44: tin cậy = hành vi hệ thống kiểm chứng được qua provenance, quản trị, kiểm toán. Nhưng §10.45 chặn bước suy luận quá đà: một hệ thống kiểm chứng được là đáng tin theo nghĩa *bạn CÓ THỂ kiểm tra nó*, không suy ra rằng bạn không cần kiểm tra hay mọi câu trả lời đều đúng (`tin cậy-có-kiểm-chứng ≠ tin-cậy-không-cần-kiểm-tra`). §10.49 củng cố: một thao tác bảo trì tự động sửa được vấn đề quy trình nhưng không chứng nhận tri thức kết quả là đúng (tự sửa ≠ tự đúng). Ví dụ RATE_OF_CHANGE ở §10.43: phát lại cho thấy C471 được Accepted tại assessment time T bởi người đánh giá X dưới bằng chứng E88 — bản ghi này trung thực, nhưng nếu E88 sau đó bị E90 thay thế, chính vết kiểm toán cho thấy cần tái đánh giá.
+
+Lý do: kiểm toán ghi lại quyết định đã được đưa ra dưới bằng chứng *có sẵn lúc đó*; nó làm mỗi niềm tin truy vết và chịu trách nhiệm được, chứ không miễn trừ việc đánh giá lại từng hành động. Bằng chứng: §10.43, §10.44, §10.45.
+
+**Checkpoint 8.** Tại sao "hệ thống không bao giờ xong" là nguyên tắc thiết kế, không phải thất bại?
+
+Vì "xong" giả định một thế giới, một phạm vi và một tập người dùng cố định — điều không bao giờ xảy ra với một hệ tri thức về miền đang đổi. §10.50 nêu quan điểm đóng: một hệ thống tri thức là *một tiến trình, không phải một tạo tác*; nó phải được đo, được bảo trì và được tin cậy dưới kiểm soát; "'xong' là một hư cấu nguy hiểm: nguồn đổi, phạm vi đổi, người dùng đổi". Câu trả lời cho câu hỏi mở đầu chương được phát biểu trực tiếp: hệ thống giữ được sự đáng tin *không phải vì đã hoàn thành, mà vì nó quan sát được, đo được, quản trị được và kiểm toán được trong khi chạy*. Điều này bắt nguồn từ §10.1, nơi Hệ thống Tri thức Sống (BOOK-DEFINED) được định nghĩa là tiến trình có trạng thái, với bản sắc gồm toàn bộ lịch sử vận hành (SystemState = knowledge + index state + governance state + measurement history + audit log), và từ §10.2, nơi sáu luồng thay đổi bảo đảm trạng thái luôn dịch chuyển. Tính mở còn được lượng hóa: §10.25 nói `correct(t) ≠ correct(t+Δ)` một cách tự động, §10.32 nói suy thoái là một xu hướng chứ không phải sự kiện đơn lẻ. §10.51 chủ động bàn giao các vấn đề còn mở (quyền hạn, giám sát con người ở quy mô, chi phí, đa hệ thống, paradigm shift) cho Afterword.
+
+Lý do: vì thế giới và câu hỏi liên tục đổi, sự hoàn tất là bất khả thi; chỉ có vòng giám sát + quản trị đang chạy mới giữ được độ tin cậy — nên "không bao giờ xong" chính là điều kiện của sự đáng tin, không phải khiếm khuyết của nó. Bằng chứng: §10.50, §10.1, §10.2.
+
 ## 10.57 Hồ sơ Thí nghiệm Bị hoãn (Experiment Backlog)
 
 Những thí nghiệm này được HOÃN đến book v0.1 (xem docs/LAB_BACKLOG.md), không chặn chấp

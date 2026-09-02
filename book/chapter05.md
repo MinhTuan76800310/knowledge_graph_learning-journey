@@ -1476,6 +1476,55 @@ luận cũ. Thêm điều kiện vào body làm quy tắc khó khớp hơn, có 
    dựng một ví dụ trong đó: (a) dữ liệu OWL-consistent nhưng SHACL-violating, và (b) dữ
    liệu OWL-inconsistent nhưng SHACL-conformant. Giải thích tại sao mỗi trường hợp xảy ra.
 
+### 5.20.1 Gợi ý trả lời
+
+**Câu 1 (★).** Giải thích sự khác biệt giữa inference và validation bằng một ví dụ cụ thể từ miền city/country.
+
+Xét ontology có `capitalOf rdfs:domain City` và `capitalOf rdfs:range Country`, cùng dữ liệu `Vietnam capitalOf Hanoi`. **Pipeline suy diễn** (forward chaining, §5.2) áp quy tắc RDFS domain/range (§5.3) và *thêm* vào đồ thị: `Vietnam rdf:type City` và `Hanoi rdf:type Country`. Nó không hề báo lỗi, dù kết quả "phi lý" với thực tế — vì RDFS chỉ áp dụng ngữ nghĩa, không kiểm tra kỳ vọng. **Pipeline xác nhận** (SHACL, §5.6) đi ngược hướng: một shape như `sh:class Country` trên path `capitalOf` sẽ *kiểm tra* value node và, nếu `Hanoi` không phải Country theo dữ liệu được cung cấp, sinh ra một violation trong validation report (§5.7) mà không thêm bất kỳ triple nào. Cùng một từ vựng (class, property) nhưng hai chiều tác động trái ngược: inference = thêm thông tin, validation = kiểm tra thông tin (§5.1, §5.10).
+
+Lý do: nhầm hai pipeline là nguồn lỗi thiết kế phổ biến nhất — dùng `rdfs:domain` để "kiểm tra" (nó không kiểm tra) hoặc dùng shape để "suy diễn" (nó không suy diễn). Bằng chứng: §5.1 (bảng hai pipeline), §5.3 (domain/range thêm thông tin, ví dụ Vietnam/Hanoi), §5.6 (SHACL kiểm tra), §5.10 (shapes ≠ axioms).
+
+**Câu 2 (★★).** Cho ontology với `Person ⊑ ∃hasName.xsd:string` và dữ liệu có `(Alice, rdf:type, Person)` nhưng không có triple `hasName` nào cho Alice. (a) OWL 2 DL entailment nói gì? (b) SHACL shape `sh:minCount 1` trên `hasName` nói gì? (c) Hai câu trả lời khác nhau như thế nào và tại sao?
+
+(a) **OWL 2 DL:** ontology *nhất quán* và không sinh thêm ground triple nào đặt tên cho hasName của Alice. Dưới Open World Assumption, tiên đề chỉ đòi hỏi "trong mọi model, Alice có một hasName-successor là string"; model thỏa mãn bằng cách đưa vào một *unnamed witness* không có trong đồ thị RDF (§5.10). Không có violation, không có inconsistency. (b) **SHACL:** shape `sh:targetClass ex:Person` + `sh:path ex:hasName ; sh:minCount 1` chạy chuỗi cơ chế §5.6: focus node = Alice, path = hasName, value nodes = ∅ → `minCount 1` không thỏa → một ValidationResult severity Violation, `sh:conforms false` (§5.7). (c) Khác biệt: OWL nói về *mọi model* và tha thứ cho sự vắng mặt (existential witness vô danh); SHACL nói về *một data graph cụ thể được cung cấp* và coi sự vắng mặt là vi phạm cấu trúc. Cùng yêu cầu "phải có name", ngữ nghĩa hoàn toàn khác (§5.10).
+
+Lý do: đây chính là cặp "OWL existential vs SHACL minCount" mà chương dùng làm ví dụ phân biệt mạnh nhất. Bằng chứng: §5.9 (OWA vs data-check), §5.10 (existential restriction ≠ minCount), §5.6, §5.7.
+
+**Câu 3 (★★).** Thiết kế bộ SHACL shapes cho Mechanism ontology: mỗi Mechanism phải có ít nhất một `ex:Operation`, mỗi `ex:Operation` phải liên kết với đúng một Mechanism (qua `ex:hasOperation`), và mỗi `ex:Condition` phải có description kiểu xsd:string. Viết shapes bằng Turtle. Kiểm tra shapes của bạn trên `ex:candidateRateOfChange_1` ở §5.6 — candidate có pass shape `ex:Operation` không?
+
+```turtle
+ex:MechanismShape a sh:NodeShape ;
+    sh:targetClass ex:Mechanism ;
+    sh:property [ sh:path ex:hasOperation ; sh:minCount 1 ] .
+
+ex:OperationShape a sh:NodeShape ;
+    sh:targetClass ex:Operation ;
+    sh:property [ sh:path [ sh:inversePath ex:hasOperation ] ;
+                  sh:minCount 1 ; sh:maxCount 1 ] .
+
+ex:ConditionShape a sh:NodeShape ;
+    sh:targetClass ex:Condition ;
+    sh:property [ sh:path ex:description ;
+                  sh:datatype xsd:string ; sh:minCount 1 ] .
+```
+Ràng buộc "đúng một Mechanism" cần `sh:inversePath` vì nó đếm số Mechanism trỏ *vào* mỗi Operation, rồi `minCount 1`/`maxCount 1` ép đúng một. **Kiểm tra trên `ex:candidateRateOfChange_1`:** dữ liệu §5.6 có `ex:hasOperation ex:derivativeOperation_1`, nên *nếu* `MechanismShape` áp lên nó thì constraint `hasOperation minCount 1` **pass** (có đúng một value node). Nhưng có hai lưu ý: (i) `MechanismShape` target `ex:Mechanism`, còn candidate là `ex:CandidateMechanism`; theo SHACL instance semantics (§5.6) nó chỉ bị target nếu `CandidateMechanism rdfs:subClassOf Mechanism` có mặt trong data graph — chương không khai báo liên kết này, nên tốt nhất candidate được kiểm bởi `CandidateMechanismShape` (§5.6), vốn vẫn fail vì thiếu `hasOutput`. (ii) `OperationShape` phía inverse: `derivativeOperation_1` được tham chiếu bởi đúng một triple `hasOperation` → pass minCount/maxCount.
+
+Lý do: pass/fail phải đọc theo đúng 6 bước target→result, không đoán. Bằng chứng: §5.6 (cơ chế, CandidateMechanismShape), §5.7 (report), §5.18 (Condition/hasOperation).
+
+**Câu 4 (★★★).** So sánh forward chaining trên RDFS và forward chaining trên OWL RL về: (a) tập quy tắc, (b) khả năng biểu diễn, (c) tính soundness và completeness, (d) chi phí tính toán. Trong trường hợp nào bạn chọn RDFS thay vì OWL RL?
+
+(a) **Tập quy tắc:** RDFS dùng bộ nhỏ — subClassOf (rdfs9), subPropertyOf (rdfs7), domain (rdfs2), range (rdfs3) (§5.3). OWL RL dùng bộ lớn hơn nhiều, phủ các tiên đề OWL tương thích Horn, kể cả quy tắc phát hiện mâu thuẫn như `cax-dw` cho `owl:disjointWith` (§5.13, §5.16). (b) **Khả năng biểu diễn:** RDFS chỉ diễn đạt phân cấp lớp/property và domain/range; OWL RL thêm class expression theo Table 2 của profile, nhưng vẫn cấm `DisjointUnion`, `ReflexiveObjectProperty` và nằm ngoài tầm với phủ định/phép đếm/lượng từ tồn tại phức tạp (§5.13). (c) **Soundness/Completeness:** cả hai *sound*. RDFS naive closure *không complete* trên cú pháp RDF chuẩn (cần generalized RDF, §5.3). OWL RL chỉ complete *có điều kiện* — dưới hạn chế cú pháp của profile (Theorem PR1), không đảm bảo trên đồ thị RDF tùy ý (§5.13). (d) **Chi phí:** OWL RL nhiều quy tắc hơn → closure lớn hơn, tính toán đắt hơn; RDFS rẻ và ổn định hơn để vật chất hóa (§5.4). **Chọn RDFS khi** chỉ cần suy diễn phân cấp loại (classification qua subClassOf/domain/range), dữ liệu lớn, cần vật chất hóa rẻ và dễ kiểm soát, và không đòi hỏi entailment mức OWL.
+
+Lý do: forward chaining là thuật toán, kết quả phụ thuộc tập quy tắc và regime (§5.2, §5.14). Bằng chứng: §5.3, §5.4, §5.13, §5.14, §5.15.
+
+**Câu 5 (★★★).** Một hệ thống dùng OWL RL forward chaining để suy diễn, và SHACL để xác nhận. Xây dựng một ví dụ trong đó: (a) dữ liệu OWL-consistent nhưng SHACL-violating, và (b) dữ liệu OWL-inconsistent nhưng SHACL-conformant. Giải thích tại sao mỗi trường hợp xảy ra.
+
+(a) **OWL-consistent, SHACL-violating.** Ontology không có tiên đề nào buộc `hasOutput`. Dữ liệu: `ex:m1 a ex:Mechanism`. OWL RL forward chaining không suy ra điều gì mâu thuẫn (OWA cho phép m1 *có thể* có output ở model khác, §5.9/§5.10) → consistent. Nhưng `MechanismShape` với `sh:path ex:hasOutput ; sh:minCount 1` (§5.6) thấy value nodes = ∅ trên đồ thị được cung cấp → violation, `sh:conforms false` (§5.7). Xảy ra vì OWL không coi sự vắng mặt là lỗi, còn SHACL kiểm tra chính đồ thị đó.
+
+(b) **OWL-inconsistent, SHACL-conformant.** Ontology: `ex:ChangeMechanism owl:disjointWith ex:AggregationMechanism`. Dữ liệu: `ex:x9 a ex:ChangeMechanism ; a ex:AggregationMechanism ; ex:hasOperation ex:op1 ; rdfs:label "x9"`. OWL RL forward chaining áp quy tắc `cax-dw` (đã kiểm chứng trong OWL 2 RL/RDF rules: hai rdf:type của hai lớp disjoint → `false`) → inconsistent. SHACL chỉ có shape kiểm tra cấu trúc (có `hasOperation`, có label) → mọi constraint thỏa → `sh:conforms true`, vì "SHACL không đọc `owl:disjointWith`" (§5.9).
+
+Lý do: consistency và conformance là hai trục độc lập — biết một không suy ra kia (§5.9, §5.10). Bằng chứng: §5.9 (2×2), §5.10 (shapes ≠ axioms), §5.13 (OWL RL rules), §5.6.
+
 ## 5.21 Chúng ta đã biết gì
 
 Chương này đã thiết lập sự phân biệt cốt lõi giữa hai pipeline và các cơ chế nền tảng:
