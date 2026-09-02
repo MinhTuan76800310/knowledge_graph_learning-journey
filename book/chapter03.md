@@ -1338,6 +1338,80 @@ trúc khái niệm.
   `ex:involves` với phạm vi rộng hơn. Vẽ quy trình gióng hàng lược đồ bạn sẽ chạy để
   giữ ánh xạ đúng và bác bỏ ánh xạ sai (§3.4) — bằng chứng nào quyết định?
 
+### 3.6.1 Gợi ý trả lời
+
+**Câu 1 (★).** Hai dataset đều chứa `"Hà Nội"`. Những bằng chứng nào là cần thiết trước khi hợp nhất chúng thành một thực thể? Bằng chứng nào mạnh, bằng chứng nào yếu, và ai chịu trách nhiệm quyết định?
+
+Chuỗi trùng nhau `"Hà Nội"` chỉ là tín hiệu bề mặt để *đề xuất* một ứng viên đồng nhất, không phải bằng chứng để hợp nhất. Cần bằng chứng cấu trúc và ngữ nghĩa, và quyết định cuối thuộc về quy tắc của tổ chức, có thể kèm xác nhận của con người.
+
+Lý do: §3.2.1 tách ba khái niệm entity / identifier / denotation và khẳng định "cùng một định danh không chứng minh sự thống nhất ngữ nghĩa" — một chuỗi ký tự không tự mang theo thực thể nó biểu thị. §3.5 (lỗi số 2) nêu phản ví dụ minh họa: nếu cùng chuỗi "Hà Nội" còn được dán cho một đơn vị hành chính khác (chương lấy ví dụ một phường ở Hà Giang), hợp nhất theo chuỗi sẽ nhập nhầm đơn vị đó vào thủ đô và mọi truy vấn `capitalOf` thừa hưởng dữ liệu của nó. Va chạm nhãn kiểu này là có thật: "Hà Nội" chẳng hạn cũng là tên một con đường (Xa lộ Hà Nội, TP.HCM/Đồng Nai), không phải một thành phố. Kết luận của chính §3.5: nhãn là dữ liệu để *tìm* ứng viên, không phải bằng chứng đồng nhất. Vậy bằng chứng *yếu* là trùng nhãn; bằng chứng *mạnh* là những gì chỉ cùng một thực thể mới có: cùng quan hệ với các thực thể đã biết (cả hai đều "là thủ đô của Việt Nam"), nhãn tương thích về mặt ngôn ngữ (Hà Nội/Hanoi), và thuộc tính cùng bậc độ lớn (dân số). §3.2.5 mô tả đúng ba tầng: ứng viên → bằng chứng/xem xét → khẳng định được chấp nhận.
+
+Bằng chứng: Ai quyết định nằm ở bước "xem xét theo quy tắc/con người" của §3.2.5 — tín hiệu được cân nhắc theo quy tắc của tổ chức, có thể tự động hoặc cần con người xác nhận; bản thân bằng chứng "vẫn là bằng chứng, không phải kết luận". Pipeline 6 bước ở §3.2.6 cụ thể hóa: bước 3 sinh ứng viên, bước 4 cân bằng chứng, bước 5 xác nhận hoặc bác bỏ.
+
+**Câu 2 (★).** Nếu `A owl:sameAs B`, những hệ quả logic nào phải kéo theo? Vì sao một cạnh sameAs sai trong knowledge graph lớn có thể gây thiệt hại vượt xa vị trí nó được ghi?
+
+`owl:sameAs` là khẳng định *đồng nhất*, kéo theo mọi thuộc tính đã biết của A đúng với B và ngược lại; vì nó đối xứng và bắc cầu, các khẳng định khép lại thành một *lớp tương đương* mà thông tin chảy tràn trong đó. Một cạnh sai vì thế trộn *hai lớp*, không chỉ hai nút — lỗi lan ra mọi truy vấn chạm đến một trong hai IRI.
+
+Lý do: §3.2.4 dẫn OWL 2 Primer: bộ suy luận "suy ra rằng bất kỳ thông tin nào đã biết về `ex:Hanoi` cũng đúng với `wd:Q1858`, và ngược lại" (theo OWL 2 Primer, mục 4.7). Chuỗi hai bước sameAs trong cùng mục minh họa lan truyền không dừng ở một bước: hai cạnh sameAs phân hoạch đồ thị thành {`ex:Hanoi`, `wd:Q1858`} và {`ex:Vietnam`, `wd:Q881`}, buộc thêm các bộ ba chéo mà không ai từng viết.
+
+Bằng chứng: Ví dụ miền cơ chế ở §3.2.4: `ex:rateOfChange_1 owl:sameAs ex:heatTransferRate_2` sai khiến bộ suy luận kết luận `heatTransferRate_2` có đầu vào `position_1` — một suy diễn sai vật lý, và "mọi truy vấn 'cơ chế nào tác động lên position' đều trả về `heatTransferRate_2`". §3.5 (lỗi số 3) nhắc lại: ghi nhầm một cạnh sameAs là trộn hai thực thể ở mọi nơi chúng xuất hiện. Chính vì vậy §3.2.4 đặt quy tắc thực hành: chỉ dùng `owl:sameAs` khi bạn sẵn sàng chịu mọi hệ quả của việc hai tên gọi là một.
+
+**Câu 3 (★★).** Vì sao một named graph có thể dùng để lưu phân vùng theo nguồn mà vẫn *không* có nghĩa hình thức là "nguồn này đã khẳng định những bộ ba này"? Điều gì còn thiếu để ý nghĩa đó trở thành tường minh?
+
+Named graph chỉ là cơ chế *gom nhóm* — ghép cú pháp một tên với một đồ thị; RDF không gán cho tên đó bất kỳ nghĩa hình thức nào, nên "nguồn đã khẳng định" chỉ là quy ước ứng dụng, không phải điều đồ thị tự nói ra.
+
+Lý do: §3.3.2 dẫn đặc tả RDF 1.1: "tên đồ thị không bắt buộc phải biểu thị đồ thị đó; nó chỉ được ghép cặp cú pháp với đồ thị; RDF không đặt ràng buộc hình thức nào về việc tên đó biểu thị tài nguyên gì" (theo RDF 1.1 Concepts, mục RDF Datasets). Vì vậy cùng một cú pháp `ex:sourceA { … }` có thể mang nghĩa "phân vùng theo nguồn", "theo phiên bản", hay "theo góc nhìn" — bản thân nó không phân biệt. §3.5 (lỗi số 4) nêu hệ quả: hai nhóm cùng đặt tên `ex:sourceA` (một bên là tệp tổng điều tra, một bên là trang web thu thập) và một phép nối `GRAPH` âm thầm trộn hai thứ không liên quan.
+
+Bằng chứng: Điều còn thiếu là một khẳng định *nằm ngoài hộp* nối tên đồ thị với một tài nguyên nguồn và một vị từ "đã khẳng định". Hộp tự kiểm tra ở §3.3.2 nói thẳng: muốn câu "nguồn A đã khẳng định…" thành thật, "bạn phải nói thêm một khẳng định nằm ngoài hộp". Công cụ để nói điều đó là một từ vựng provenance như PROV-O — chuẩn W3C với các lớp mô tả nguồn gốc, tác nhân, hoạt động tạo ra dữ liệu — mà §3.3.2 hẹn chi tiết ở Chương 6; và ngay cả khi có provenance, §3.3.7 nhắc rằng nó chỉ cho biết *ai nói, khi nào*, không làm phát biểu đúng hơn.
+
+**Câu 4 (★★).** Khi nào `since = 1976` nên là thuộc tính của cạnh, khi nào nên là một nút trong thực thể quan hệ trung gian? Tiêu chí nào quyết định — số chiều ngữ cảnh, nhu cầu truy vấn, hay khả năng sự kiện lặp lại?
+
+Tiêu chí quyết định không phải *số chiều* ngữ cảnh — §3.3.4 nói rõ cạnh vẫn chịu được "một thời điểm, một nguồn, một độ tin cậy" cùng lúc — mà là *quy tắc đếm được*: liệu có chiều nào phải nhận **hai giá trị trở lên** trên cùng một phát biểu (nhiều nguồn cùng xác nhận, sự kiện lặp lại), và liệu có nhu cầu **tham chiếu hoặc truy vấn tới chính quan hệ**. Một chiều đơn trị, không cần nói về bản thân phát biểu → thuộc tính cạnh. Ngược lại → thực thể trung gian.
+
+Lý do: §3.3.4 đưa "quy tắc đếm được": một chiều ngữ cảnh trên mỗi cạnh → thuộc tính cạnh; hai giá trị của cùng một chiều, hoặc bất kỳ nhu cầu nào tham chiếu tới chính quan hệ → thực thể trung gian. Ví dụ cạnh `{since: 1976}` gọn, nhưng khi hai nguồn cùng xác nhận *cùng một* ngôi thủ đô 1976 thì `{source: "A"}` ghi mất B, `{source: ["A","B"]}` ngừng là một thuộc tính mà ngôn ngữ truy vấn nối được, và bạn không gắn nổi một ngày xác nhận *khác nhau* cho từng nguồn.
+
+Bằng chứng: §3.3.3 dựng `ex:capitalStatus_1` (nút trung gian) cho phép thêm bao nhiêu chiều tùy ý và "nói về chính sự kiện". §3.3.3 đo cái giá của biểu diễn phẳng: khi đã nạp *hai* lần áp dụng, câu hỏi "phép toán nào áp cho `position_1`" chạy trên các cạnh phẳng trả về 2 hàng (một đúng một sai), trên dạng n-ary trả về đúng 1 — nút trung gian là điểm neo giữ ghép cặp. Khả năng sự kiện lặp lại cũng là lý do hộp tự kiểm tra §3.3.3 chọn n-ary cho "Alice quay lại công ty X với vai trò khác = một sự kiện làm việc *mới*, không ghi đè sự kiện cũ".
+
+**Câu 5 (★★★).** Nếu phải giải thích cho một kỹ sư chỉ quen cơ sở dữ liệu quan hệ, bạn lập luận thế nào để họ thấy "khóa chính khác nhau" trong thế giới RDF/OWL không còn là bằng chứng của "hai thực thể khác nhau"?
+
+Hãy chỉ ra rằng trong SQL, UNA là *ràng buộc do hệ thống áp* — hai khóa chính khác nhau bắt buộc là hai hàng khác nhau; còn OWL *không có* ràng buộc đó, nên hai IRI khác nhau chỉ là hai tên chưa được phân xử, và cả "là một" lẫn "là hai" đều phải được khẳng định tường minh.
+
+Lý do: §3.2.3 gọi trực giác "tên khác nhau thì thực thể khác nhau" là unique name assumption và nêu OWL không có nó: "OWL không giả định rằng các tên khác nhau là tên của các cá thể khác nhau" (theo OWL 2 Primer). Phép đối chiếu chạy cùng dữ liệu qua hai thế giới ở §3.2.3: bảng `cities` với hai hàng `(1, "Hà Nội", 8418883)` và `(7, "Hanoi", 8053663)` — dưới UNA hai khóa *bắt buộc* là hai thành phố; trên đồ thị, đúng hai nút ấy không kèm `owl:sameAs` cũng không kèm `owl:differentFrom` để bộ suy luận *hai mô hình đều đúng* — hoặc một, hoặc hai thành phố.
+
+Bằng chứng: Hệ quả với kỹ sư DB: muốn khẳng định *khác* phải viết `owl:differentFrom`, muốn khẳng định *là một* phải viết `owl:sameAs` (§3.2.3, §3.2.4). Nền tảng là §3.2.1: định danh ≠ thực thể, "hai định danh khác nhau không chứng minh hai thực thể khác nhau". Và §3.2.3 chốt điểm sâu: "sự im lặng của đồ thị ('không thấy nói gì') không phải là bằng chứng của khác biệt" — điều mà một khóa trong quan hệ vốn ngầm định.
+
+**Câu 6 (★).** Trên đồ thị cơ chế, `ex:rateOfChange_1` và `ex:velocity_1` khác nhau về bản chất định danh thế nào (một cơ chế so với một đại lượng)? Bằng chứng nào bạn cần để chắc chắn `ta:velocityDef` và `tb:speedDef` là cùng một cơ chế, thay vì "gần giống"?
+
+Chúng khác nhau ở *vai trò trong lược đồ*: `ex:rateOfChange_1` là một Mechanism (chủ thể của `hasInput`/`hasOutput`), `ex:velocity_1` là một Quantity (đối tượng của `hasOutput`) — hai loại định danh thuộc hai lớp khác nhau, không phải hai tên của cùng một thứ. Còn để chắc `ta:velocityDef` và `tb:speedDef` là cùng một cơ chế, cần bằng chứng *định nghĩa*: cùng operation, cùng input, cùng output.
+
+Lý do: §3.1.7 khai báo `ex:hasInput rdfs:domain ex:Mechanism ; rdfs:range ex:Quantity` và `ex:hasOutput rdfs:domain ex:Mechanism ; rdfs:range ex:Quantity`, nên kiểu của mỗi nút *nảy ra* từ vị trí của nó trên cạnh (ngữ nghĩa suy diễn domain/range, §3.1.3). Một cơ chế và một đại lượng do đó mang định danh thuộc hai lớp khác nhau; hợp nhất chúng là lỗi loại, không phải lỗi đồng nhất.
+
+Bằng chứng: §3.2.5 đưa đúng bài toán velocityDef/speedDef: bằng chứng đồng nhất là (1) cùng `ex:derivativeOperation_1`, (2) cùng input `ex:position_1`, (3) cùng output `ex:velocity_1` — "bằng chứng *định nghĩa*, không phải địa lý". Và nó nêu ca phân biệt: `ex:heatTransferRate_2` cũng dùng `derivativeOperation_1` nhưng khác input (`thermalEnergy_1`), nên bị *loại* ở bước bằng chứng. Quy tắc rút ra: "bằng chứng đồng nhất phải đủ để phân biệt với thực thể gần giống nhất" — chính là điều tách "cùng một cơ chế" khỏi "gần giống" mà §3.2.4 cảnh báo khi dùng `owl:sameAs` trên miền cơ chế.
+
+**Câu 7 (★★).** Phát biểu "vận tốc là đạo hàm của vị trí theo thời gian" khi tái hiện thành `ex:derivativeApplication_1` có bốn tham gia. Chiều ngữ cảnh nào (nguồn, thời gian, phương pháp đo) bạn sẽ gắn vào ứng dụng đó, và tại sao lại gắn vào nút trung gian thay vì một trong bốn cạnh?
+
+Gắn cả ba chiều — nguồn (giáo trình/thí nghiệm nào khẳng định), thời gian (`validFrom`/`observedAt`), phương pháp (đo trực tiếp hay suy ra) — lên *chính nút ứng dụng*, vì chúng phạm vi hóa *toàn bộ sự kiện áp dụng*, không phải một quan hệ thành phần nào.
+
+Lý do: §3.3.3 dựng `ex:derivativeApplication_1` với bốn slots: `hasOperation`, `differentiand`, `withRespectTo`, và `hasApplication` ngược về `rateOfChange_1`. Ngữ cảnh "được xác nhận bởi ai, đo trong thí nghiệm nào, đúng từ bao giờ" là thuộc tính của *sự ứng dụng*, nên phải neo vào nút đại diện cho nó. Nếu gắn lên một cạnh (ví dụ `withRespectTo`), nó sẽ hàm hồ — không rõ nó phạm vi hóa quan hệ "theo biến nào" hay cả phép đạo hàm — và ta mất khả năng tham chiếu tới chính phát biểu.
+
+Bằng chứng: §3.3.3 nói nút trung gian "là nơi duy nhất để gắn thuộc tính (bằng chứng, thời gian) về *chính sự ứng dụng đó*". §3.3.4 cho quy tắc: khi cần tham chiếu tới chính quan hệ → thực thể trung gian. §3.3.6 minh họa cùng logic ở mức qualifier: `velocity_1 = 3.2` mang *derived* từ chuỗi vị trí, *rank* preferred. Và §3.3.7 nhắc rằng gắn ba chiều này chỉ *cho phép đánh giá*, không làm ứng dụng đúng hơn — đó là lý do chúng thuộc tầng biểu diễn ngữ cảnh, không phải tầng sự thật.
+
+**Câu 8 (★★).** Giả sử có một định danh chính tắc `ex:heatTransferRate_2` và bí danh `tc:coolingRateDef` từ một giáo trình thứ ba. Nếu giáo trình C thật ra định nghĩa một khái niệm khác (tốc độ làm lạnh trung bình, không phải tức thời), bước nào trong quy trình ứng viên → bằng chứng → chấp nhận đã thất bại?
+
+Bước *bằng chứng/xem xét* (bước 2 trong §3.2.5, tương ứng bước 4–5 trong pipeline §3.2.6) đã thất bại: nó chấp nhận một khớp bề mặt mà không kiểm tra tham số định nghĩa phân biệt "trung bình" với "tức thời".
+
+Lý do: §3.2.5 nêu quy tắc: "bằng chứng đồng nhất phải đủ để phân biệt với thực thể gần giống nhất". `coolingRateDef` và `heatTransferRate_2` có thể cùng dùng `derivativeOperation_1`, cùng liên quan nhiệt lượng — nên chúng *trông* giống; nhưng nếu một bên là tốc độ tức thời, một bên là trung bình, thì chúng khác nhau ở đúng tham số mà bước bằng chứng phải soi. Bỏ qua tham số đó, hệ thống đi tới khẳng định `owl:sameAs` sai.
+
+Bằng chứng: Đây chính là ca "denotation có thể tranh chấp" ở §3.2.1: hai cộng đồng có thể tranh luận một định danh biểu thị "vận tốc tức thời" hay "vận tốc trung bình", và "định danh duy nhất không giải quyết được tranh chấp". Hệ quả rơi đúng cảnh báo §3.2.4: một cạnh sameAs sai hợp nhất hai thực thể vốn khác, khiến mọi thông tin của `coolingRateDef` (định nghĩa trung bình) chảy tràn sang `heatTransferRate_2` (tức thời) và ngược lại. Trong pipeline §3.2.6, bước 5 "xác nhận" lẽ ra phải *bác bỏ* khi phát hiện chữ ký định nghĩa khác nhau — như cách §3.2.5 đã loại `heatTransferRate_2` khỏi `velocityDef` vì khác input.
+
+**Câu 9 (★★★).** Bạn có hai nguồn cơ chế: một mô tả quan hệ `ex:hasOperation`, một mô tả `ex:involves` với phạm vi rộng hơn. Vẽ quy trình gióng hàng lược đồ bạn sẽ chạy để giữ ánh xạ đúng và bác bỏ ánh xạ sai (§3.4) — bằng chứng nào quyết định?
+
+Chạy ba bước lặp của §3.4 — sinh ứng viên, thu bằng chứng, xác nhận/bác bỏ — và để *chữ ký cấu trúc (domain/range)* làm bằng chứng quyết định: `involves` có range gồm cả Quantity lẫn Operation, còn `hasOperation` chỉ nhận Operation, nên ánh xạ `involves → hasOperation` phải bị *bác bỏ*.
+
+Lý do: §3.4 cảnh báo "từ vựng không tự khớp; các ánh xạ trên là kết quả của một quy trình". Bước 1 sinh ứng viên bằng tín hiệu bề mặt (cả hai cùng trỏ tới `derivativeOperation_1`, trông giống nhau). Bước 2 thu bằng chứng *cấu trúc*: so domain/range và tập đối tượng của hai quan hệ. Bước 3 xác nhận chỉ khi bằng chứng đủ mạnh và không có ứng viên thay thế cạnh tranh; ngược lại bác bỏ hoặc gắn cờ chờ con người.
+
+Bằng chứng: §3.4 đưa đúng phản ví dụ giáo trình D/E: `ex:hasOperation rdfs:range ex:Operation` (hẹp), trong khi `te:processSketch ex:involves` trỏ tới *cả* `derivativeOperation_1` (một Operation) *lẫn* `velocity_1` (một Quantity). Tập đối tượng khác nhau tại đúng `velocity_1` → bác bỏ, vì ánh xạ sẽ đặt một Quantity vào chỗ mà lược đồ đích chỉ cho phép Operation. Nền tảng là §3.1.2/§3.1.3: domain/range là giàn giáo quy định chỗ chủ thể/đối tượng phải mang loại gì. §3.4 chốt: "Quy trình gióng hàng phải *biết từ chối*, không chỉ biết nối"; nếu gượng ép vì "trông giống", mọi truy vấn "cơ chế nào dùng phép toán gì" sau này sẽ trả về lẫn cả số liệu đầu ra.
+
 ## 3.7 Chúng ta đã biết gì — và chưa làm được gì
 
 **Đã biết.** Ba trục độc lập để biến đồ thị dữ liệu thành tri thức có tổ chức:

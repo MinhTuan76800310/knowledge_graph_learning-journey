@@ -1771,6 +1771,40 @@ Không yêu cầu toán học mới beyond Ch4.
 > 🖊 Giải thích vì sao hệ thống có thể chứa hai phát biểu mâu thuẫn mà vẫn nhất quán về
 > mặt logic.
 
+#### Gợi ý trả lời
+
+**Câu 1.** Hãy vẽ sơ đồ epistemic model bằng lời của bạn, giải thích mỗi giai đoạn và cho ví dụ cụ thể từ domain mechanism KG.
+
+Mô hình tri thức luận là một chuỗi năm giai đoạn do sách định nghĩa (BOOK-DEFINED, không phải chuẩn W3C — xem hộp ⚠️ ở §6.1): **Quan sát → Khẳng định → Phát biểu → Bằng chứng → Tri thức được chấp nhận**. (1) *Quan sát*: dữ liệu thô từ thế giới, chưa diễn giải thành phát biểu về thực thể. (2) *Khẳng định*: quan sát được biểu diễn thành cấu trúc đồ thị (một bộ ba RDF), chưa mang ngữ cảnh tri thức luận. (3) *Phát biểu (Claim)*: đối tượng hạng nhất gồm nội dung + nguồn + thời gian + bằng chứng + trạng thái. (4) *Bằng chứng*: lý do để tin/không tin, khác với nguồn. (5) *Tri thức được chấp nhận*: claim qua quản trị và được gán trạng thái Accepted — "đáng tin cậy nhất hiện tại", không phải đúng vĩnh viễn.
+
+Ví dụ trên miền cơ chế, đi theo pipeline §6.17: câu "Velocity is the rate of change of position with respect to time" trong textbook A trang 42 là **Quan sát** (`ex:obs_velocity_def_1`); các bộ ba `ex:rateOfChange_1 ex:hasInput ex:position_1 …` là **Khẳng định**; `ex:claim_roc_A` (có `ex:hasSource ex:textbook_A`, `ex:statedAt`, `ex:status`) là **Phát biểu**; `ex:evidence_derivative_calc` và `ex:textbookB_velocity_def` với quan hệ `ex:supports` là **Bằng chứng**; sau khi đủ bằng chứng claim ở trạng thái **Accepted** (§6.12).
+
+Lý do: tri thức luôn đến từ một nguồn cụ thể tại một thời điểm cụ thể, nên khung này chuyển dữ liệu thô thành đối tượng có ngữ cảnh đầy đủ để hệ thống trả lời được "tại sao ta tin điều này?". Bằng chứng: §6.1 định nghĩa năm giai đoạn và nhấn mạnh đây là khung của sách; §6.17 theo dõi đúng một mảnh tri thức xuyên cả năm bước.
+
+**Câu 2.** Cho một phát biểu "X là Y", hãy liệt kê tất cả metadata tri thức luận cần gắn để phát biểu đó trở thành một Claim object đầy đủ.
+
+Một Claim = khẳng định + nguồn + thời gian + bằng chứng + trạng thái (§6.2, §6.15). Với phát biểu "X là Y", bộ metadata cần gắn gồm:
+
+- **Nội dung (`ex:content`)**: liên kết tới mệnh đề/assertion "X là Y", giữ claim tách khỏi nội dung (§6.2, §6.10).
+- **Nguồn (`ex:hasSource`)**: phát biểu đến từ đâu — khác với bằng chứng (§6.3).
+- **Thời gian**: `ex:statedAt`/assertion time (khi vào hệ thống) và valid time (khi đúng trong thế giới, §6.7); event time ≠ claim time (§6.8).
+- **Bằng chứng (`ex:hasEvidence`)**: các mảnh supports/contradicts/isRelevantTo (§6.5).
+- **Xuất xứ PROV-O**: `prov:wasDerivedFrom`, `prov:wasAttributedTo`, `prov:wasGeneratedBy` để truy ngược chuỗi provenance (§6.4).
+- **Trạng thái quản trị (`ex:status`)**: Candidate/Accepted/Rejected/Contested/Superseded (§6.12).
+- **Tùy chọn — confidence/assessment**: nếu có, phải nói rõ đang đánh giá gì và lưu như đối tượng Assessment có cấu trúc (§6.11).
+
+Claim tối thiểu phải có nguồn, thời điểm và trạng thái; thiếu chúng nó chỉ là một Assertion trần.
+
+Lý do: claim identity ≠ content identity — nếu không gắn metadata riêng, hai nguồn nói cùng "X là Y" sẽ bị gộp làm một và ta mất khả năng đánh dấu một bên chưa được chấp nhận (§6.2 Bẫy 2, §6.19). Bằng chứng: §6.10 liệt kê các trường của n-ary pattern và đưa ra phản-ví dụ `ex:claim_malformed_1` (thiếu `hasSource`/`statedAt`/`hasEvidence`/`status` → không thể đánh giá); §6.15 (Claim Ledger) điểm danh đúng tập thành phần trên.
+
+**Câu 3.** Giải thích vì sao hệ thống có thể chứa hai phát biểu mâu thuẫn mà vẫn nhất quán về mặt logic.
+
+Vì mâu thuẫn và bất nhất là hai tính chất ở hai tầng khác nhau (§6.21). *Mâu thuẫn (contradiction)* là tính chất của **nội dung**: hai phát biểu không thể cùng đúng (P và ¬P). *Bất nhất (inconsistency)* là tính chất của **hệ thống**: nó khẳng định cả P và ¬P trong cùng một ngữ cảnh logic, khiến không tồn tại diễn giải nào thỏa mãn cả hai. Khi hai phát biểu mâu thuẫn được *contextualize* thành hai claim object riêng biệt — mỗi claim mang nguồn, thời gian, phạm vi riêng — hệ thống không còn khẳng định P và ¬P, mà khẳng định "claim_A nói P" và "claim_B nói ¬P". Hai phát biểu cấp metadata này hoàn toàn tương thích.
+
+Chẳng hạn `claim_A` nói population(Hanoi)=8093100 (GSO, 2019) và `claim_B` nói population(Hanoi)=8053663 (Wikidata, 2024): một reasoner OWL không tìm thấy inconsistency vì không có axiom nào buộc `population` phải đơn trị trên mọi claim (§6.21). Hệ thống nhất quán ở tầng metadata dù chứa mâu thuẫn ở tầng nội dung (§6.14). Nhiều "mâu thuẫn" còn hòa giải được ngay khi căn chỉnh bốn chiều ngữ cảnh — định danh, vị từ, thời gian, phạm vi (§6.6).
+
+Lý do: reification (biến phát biểu thành nút hạng nhất) nâng khẳng định từ tầng đối tượng lên tầng metadata, nên P và ¬P không còn nằm trong cùng một ngữ cảnh logic. Bằng chứng: §6.21 (phân biệt contradiction/inconsistency + ví dụ dân số), hộp ⚠️ ở §6.14 ("nhất quán ở tầng metadata"), và cảnh báo I31 ở §6.15: chính Canonical Knowledge View — chứ không phải ledger — mới có thể trở nên bất nhất nếu policy chiếu cả hai claim mâu thuẫn vào cùng một tầng nhìn; đó là tín hiệu cần đổi policy, không phải lỗi của sổ cái.
+
 ## 6.23 Mechanism Knowledge System — Năng lực đạt được
 
 **TRƯỚC CHƯƠNG NÀY** — hệ thống có ontology OWL (Ch4), suy diễn và xác nhận (Ch5).

@@ -2214,6 +2214,72 @@ Không có đáp án duy nhất — có câu trả lời có lập luận.
 8. Nếu Q0 trả lời "không có cơ chế nào khác ngoài RATE_OF_CHANGE điều khiển vận tốc" —
    câu này nên được dán nhãn tri thức luận nào (§9.60)? Vì sao?
 
+### 9.73.1 Gợi ý trả lời
+
+**Checkpoint 1.** Câu hỏi "Định nghĩa current 2020?" cần truy xuất miền nào: chiếu hình hay Sổ cái? Vì sao?
+
+Phải truy xuất **Sổ cái (Claim Ledger)**, không phải chiếu hình (Canonical View). "Định nghĩa current 2020?" là một câu hỏi TEMPORAL — nó hỏi trạng thái quá khứ, không hỏi trạng thái hiện hành.
+
+Lý do: chiếu hình chỉ giữ một câu trả lời duy nhất — "điều *hiện* được chấp nhận là gì" — nên nếu truy vấn nó, hệ thống sẽ trả về định nghĩa *hiện tại* của `ElectricCurrent`, tức là đáp sai phạm trù thời gian. §9.23 gọi đây chính xác là "vi phạm kinh điển: trả lời câu hỏi *lịch sử/tranh cãi* bằng chiếu hình hiện tại." Bảng intent ở §9.4 (dòng 6, TEMPORAL) quy định nguồn ưu tiên là "Sổ cái theo valid/publication time", và §9.23 lặp lại: "Hỏi lịch sử/mâu thuẫn phải vào Sổ cái." Thêm một lớp tinh tế: ngay trong Sổ cái phải chọn đúng đồng hồ (§9.25) — "định nghĩa *áp dụng* năm 2020" là valid time, "được *công bố* năm 2020" là publication time, "hệ thống *tin* năm 2020" là system time; ba đồng hồ này độc lập và không được trộn.
+
+Bằng chứng: §9.4 (bảng 9 loại intent, dòng TEMPORAL), §9.23 (hai miền truy xuất và MUST NOT "suy chiếu hình trống ⇒ Sổ cái trống"), §9.25 (nhiều đồng hồ thời gian).
+
+**Checkpoint 2.** Giả sử BM25 xếp đoạn A hạng 1 với điểm 12.3, đoạn B hạng 2 với điểm 12.1. Có thể kết luận "hệ thống chắc A đúng hơn B 0.2 đơn vị" không? Vì sao không?
+
+Không. Không được diễn giải khoảng cách điểm 0.2 như một hiệu độ tin cậy hay độ đúng.
+
+Lý do: điểm BM25 là một *tiện ích xếp hạng* (ranking utility), không phải xác suất đúng, không phải độ tin cậy tuyệt đối. §9.17 nói thẳng: "Điểm số là *tiện ích xếp hạng*, không phải xác suất đúng. Khoảng cách điểm giữa hạng 1 và hạng 2 là một tín hiệu xếp hạng tương đối, không phải độ tin cậy tuyệt đối." Vì vậy "A hơn B 0.2 đơn vị" vô nghĩa: thang BM25 không có đơn vị nội dung, và 0.2 trên thang đó không ánh xạ vào bất kỳ độ chênh lệch "đúngness" nào. Nguyên lý này được tổng quát ở §9.60: "Mọi điểm trong đường ống truy xuất đều là tín hiệu xếp hạng — không tín hiệu nào là xác suất đúng của câu trả lời." Cùng logic áp cho điểm RRF (§9.21) và điểm re-ranker (§9.31). Một hệ quả thực hành: BM25 còn có thể xếp A cao hơn chỉ vì A lặp nhiều từ hiếm của câu hỏi, kể cả khi B mới là đoạn trả lời đúng — điểm cao không loại được đoạn "đúng từ nhưng sai bài bản".
+
+Bằng chứng: §9.17 (ngữ nghĩa điểm BM25), §9.60 (score semantics), §9.21 (RRF không phải độ tin cậy), §9.30 (các độ đo không đo độ đúng).
+
+**Checkpoint 3.** top_k=5, và bằng chứng quyết định cho câu hỏi của bạn nằm ở hạng 6. Câu trả lời sẽ ra sao, và hệ thống "sai" ở tầng nào (theo 7 tầng §9.61)?
+
+Câu trả lời sẽ *trôi chảy và "hợp lý" nhưng thiếu mất một nửa sự thật* — mô hình tổng hợp trên đúng những gì nó thấy (top-5) và không hề biết mảnh hạng 6 tồn tại.
+
+Lý do: §9.29 nêu đúng kịch bản này: "Với câu hỏi giải thích, kết quả thay đổi toàn bộ nếu bằng chứng quyết định nằm ở hạng 6 mà top_k=5," và "top_k quá nhỏ → mất bằng chứng quyết định → câu trả lời 'hợp lý' mà thiếu nửa sự thật." Đây là hệ quả của nguyên lý "cửa sổ ngữ cảnh ≠ tri thức" (§9.1): claim đúng *có* trong Sổ cái/KG nhưng không được đưa vào gói. Theo bảng 7 tầng §9.61, lỗi nằm ở **tầng 2 (Truy xuất)** — "đơn vị liên quan có trong top_k?" — và lập tức lan xuống **tầng 3 (Đủ bằng chứng)** vì gói thiếu claim con quyết định; §9.61 ghi "hệ thống thất bại ở tầng 2 sẽ kéo theo mọi tầng sau." Quan trọng: đây **không** phải lỗi tầng 5 (correctness) hay lỗi tri thức — §9.44 phân biệt rạch ròi "lỗi truy xuất ≠ thiếu tri thức"; chẩn đoán sai sẽ dẫn tới đổ thêm dữ liệu trong khi vấn đề là cấu hình top_k. Tái xếp hạng (§9.31) cũng không cứu được, vì "tái xếp hạng không cứu được recall."
+
+Bằng chứng: §9.29 (top_k là ranh giới tri thức luận), §9.61 (7 tầng, tầng 2→3), §9.44 (retrieval failure ≠ knowledge absence), §9.31 (rerank không cứu recall).
+
+**Checkpoint 4.** Một tóm tắt cộng đồng trong GraphRAG nói "cả ba hiện tượng là một cơ chế". Nó có phải là bằng chứng không? Nó missing gì để thành bằng chứng?
+
+Không, tự thân nó **không phải bằng chứng**. Nó là một *đồ tạo tác dẫn xuất* (derived artifact) — một đầu vào ứng viên, chưa phải tri thức chuẩn.
+
+Lý do: §9.33 định nguyên lý "Tóm tắt là đồ tạo tác dẫn xuất — không phải nguồn," và §9.56 áp riêng cho GraphRAG: "tóm tắt cộng đồng là **đồ tạo tác dẫn xuất có provenance** model/version/nguồn — là *đầu vào ứng viên*, không phải tri thức chuẩn." §9.9 cũng xếp đơn vị "tóm tắt cộng đồng" vào loại "gọn" nhưng "yếu để: nén mất bằng chứng." Để thành bằng chứng, nó thiếu: (1) **chuỗi provenance** ngược về đoạn nguồn thật (§9.26: Claim→Evidence→SourceFragment→SourceArtifact) — tóm tắt này do model/version nào sinh, từ những fragment nào; (2) **các đơn vị bằng chứng nền** mà nó nén lại (đường cấu trúc + claim + đoạn nguồn, §9.9, §9.28); (3) **nhãn trạng thái tri thức luận** asserted/derived/predicted (§9.60, trường `statuses` của Evidence Packet §9.36) — một câu "ba hiện tượng là một cơ chế" nếu chỉ do tóm tắt LLM thì nhiều nhất là *predicted*, không được trình bày như asserted; (4) **quản trị**: nó chưa qua Ch6/Ch7 để thành claim Accepted (§9.59), và chưa kèm các claim cạnh tranh/phản ví dụ (§9.27, §9.50).
+
+Bằng chứng: §9.33 (tóm tắt ≠ nguồn), §9.56 (tóm tắt cộng đồng là ứng viên), §9.9 (đơn vị summary nén mất bằng chứng), §9.26 (chuỗi provenance), §9.60/§9.36 (nhãn trạng thái), §9.59 (QA ≠ tri thức).
+
+**Checkpoint 5.** Phân biệt asserted/derived/predicted cho phát biểu "vận tốc là tốc độ biến thiên": phát biểu đó thuộc nhóm nào nếu (a) từ môt quy tắc? (b) từ Sổ cái? (c) từ mô hình học?
+
+Ba nguồn cho ba trạng thái khác nhau, và chúng không được trộn lẫn (§9.60).
+
+Lý do: §9.60 định nghĩa ba nhãn. (a) **Từ một quy tắc** (suy luận âm thanh theo ngữ nghĩa, Ch5): phát biểu là **DERIVED** — "suy dẫn bằng suy luận âm thanh theo ngữ nghĩa (Ch5), tiền đề là asserted"; nó đúng *trong đồ thị* vì được suy ra hợp lệ từ các tiền đề, nhưng "derived ≠ asserted với thế giới" (§9.60 MUST NOT). (b) **Từ Sổ cái** (một claim có nguồn xác định, trạng thái Accepted): phát biểu là **ASSERTED** — "khẳng định từ nguồn/Sổ cái (có nguồn xác định)"; đây là điều hệ thống được quản trị cho là đúng, kèm provenance (§9.23, §9.26). (c) **Từ mô hình học** (Ch8): phát biểu là **PREDICTED** — "dự đoán bởi mô hình học (Ch8), là ứng viên, có điểm số"; nó chỉ là giả thuyết chưa qua kiểm định, không được viết như sự kiện. Điểm mấu chốt: cùng một câu chữ, ba nguồn khác nhau đòi ba cách trình bày và ba mức tin cậy khác nhau; trường `statuses` của Evidence Packet (§9.36) chính là nơi ghi nhãn này để tầng sinh không trộn lẫn.
+
+Bằng chứng: §9.60 (ba trạng thái asserted/derived/predicted và MUST NOT), §9.36 (trường `statuses` của gói), §9.23/§9.26 (Sổ cái = nguồn asserted).
+
+**Checkpoint 6.** Ô B của bảng 2×2 (trung thành với nguồn sai) — vì sao "quy trình chạy đúng" không biến ô B thành ô C?
+
+Vì "quy trình chạy đúng" chỉ bảo đảm trục **có căn cứ/trung thành**, còn ô B được xác định bởi trục **đúng-với-thế-giới** — hai trục độc lập, nên làm tốt một trục không di chuyển ô sang trục kia.
+
+Lý do: §9.42 định nghĩa ô B là "trung thành với nguồn sai" và nói rõ: "hệ thống 'làm đúng quy trình' — truy xuất, lắp ráp, trích dẫn đầy đủ — mà vẫn sai vì nguồn sai. **Quy trình tốt không chuyển ô B thành ô C**; chỉ đánh giá bên ngoài (người dùng, đối chiếu) làm được." Ô C đòi *đúng với thế giới* **và** *có căn cứ*; quy trình đúng chỉ giao phần "có căn cứ". Điều này nối với hai phân biệt nền: faithfulness là thuộc tính *câu trả lời–ngữ cảnh* (§9.41), groundedness là thuộc tính *câu trả lời–nguồn* chứ không phải *câu trả lời–thế giới* (§9.39). Ca thất bại A ở §9.65 minh họa bằng số: index cũ trả về định nghĩa đã Superseded, LLM trung thực tóm tắt nó, trích dẫn đầy đủ — "mọi bước 'đúng', câu trả lời sai." Đây chính là lời cảnh báo phương pháp luận mở đầu chương: "quy trình chạy xong không có nghĩa là câu trả lời đúng" (§9.1).
+
+Bằng chứng: §9.42 (bảng 2×2, ô B, MUST NOT "dùng quy trình đã đúng để kết luận đúng"), §9.41 (faithfulness ≠ correctness), §9.39 (grounded ≠ true), §9.65 Ca A, §9.1.
+
+**Checkpoint 7.** Agentic retrieval thêm lượt truy xuất thứ 4 và thứ 5, mỗi lượt "thành công". Vì sao câu trả lời có thể vẫn kém — kể ba cơ chế thất bại (§9.46–9.50)?
+
+Vì "thành công" chỉ là thành công *cục bộ của từng lượt*, không phải tiến bộ *toàn cục về phía câu trả lời đúng*. Ba cơ chế:
+
+Lý do: (1) **Trôi câu hỏi (query drift, §9.48)** — mỗi lượt subquery lệch thêm khỏi intent gốc; ví dụ của chương: lượt 1 "cơ chế RATE_OF_CHANGE" → lượt 3 "đạo hàm trong tài chính" → lượt 4 "thành công" truy xuất được đoạn đạo hàm tài chính, "hoàn toàn xa intent gốc, nhưng mọi bước đều hợp lệ cục bộ." (2) **Thiên kiến xác nhận (§9.49)** — các lượt sau chỉ củng cố giả thuyết lượt trước; §9.46 ghi "các lượt sau thường chỉ củng cố lượt trước," nên thêm lượt = thêm tự tin một chiều, không = thêm sự thật ("Bằng chứng ủng hộ ≠ sự thật"). (3) **Không hội tụ / dừng vì hết ngân sách chứ không vì đủ bằng chứng (§9.47)** — "hầu hết các điều kiện dừng chỉ đảm bảo *quy trình ngừng*, không đảm bảo *đã đủ bằng chứng*"; nếu lượt 4–5 chạy đến khi hết token, kết quả là "thiếu do ngân sách," không phải "đầy đủ." Kèm theo là leo thang nhiễu và chi phí (§9.46).
+
+Bằng chứng: §9.46 (bảng rủi ro agentic), §9.47 (điều kiện dừng), §9.48 (trôi câu hỏi), §9.49 (thiên kiến xác nhận).
+
+**Checkpoint 8.** Nếu Q0 trả lời "không có cơ chế nào khác ngoài RATE_OF_CHANGE điều khiển vận tốc" — câu này nên được dán nhãn tri thức luận nào (§9.60)? Vì sao?
+
+Nó **không** được dán asserted (cũng không derived hay predicted như một khẳng định dương). Nhãn trung thực là **UNKNOWN / kiêng trả lời** — một phủ định chưa được kiểm chứng, không phải sự thật.
+
+Lý do: §9.60 chỉ cho ba trạng thái *dương* (asserted/derived/predicted); câu này là một **phủ định hiện sinh** ("không tồn tại cơ chế nào khác") mà không nguồn nào asserted, không quy tắc nào derived, và mô hình học không predicted nó. Nó trùng đúng claim A4 trong §9.38: "Không tồn tại cơ chế nào khác điều khiển vận tốc. — **chưa biết** (chưa tìm hết), không được viết như sự thật." Cơ sở: hệ chỉ tìm trong ranh giới độ sâu và top_k, mà "không có kết quả ngoài độ sâu d" ⇏ "không có kết quả" (§9.13) và "không nằm trong top_k" ⇏ "không tồn tại" (§9.29); theo OWA của Ch4, "không có trong KG" ≠ "sai" (§9.44, trạng thái 3). Chuỗi §9.44 ("KHÔNG TRUY XUẤT ĐƯỢC ≠ ... ≠ CHƯA BIẾT") buộc hệ phải nói mình ở trạng thái "not found/unknown", không phải "known false". Viết câu này như sự thật chính là loại hallucination "chắc chắn giả" (§9.66, loại 4); hành vi đúng là abstention (§9.43).
+
+Bằng chứng: §9.60 (ba trạng thái dương), §9.38 (A4 = chưa biết), §9.44 (năm trạng thái, OWA), §9.13/§9.29 (ranh giới độ sâu/top_k), §9.66 (false certainty), §9.43 (abstention).
+
 ## 9.74 Hồ sơ Thí nghiệm Bị hoãn (Experiment Backlog)
 
 Chín thí nghiệm đề xuất nhưng **HOÃN ĐẾN BOOK V0.1** — nằm ngoài phạm vi lý thuyết của

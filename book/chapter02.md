@@ -1000,6 +1000,72 @@ Trên dữ liệu cơ chế:
   thể có lịch sử (ai đo, đo lúc nào, sai số bao nhiêu)? Mô hình đó phá vỡ nguyên tắc
   IRI-vs-literal ở mục 2.1.5 như thế nào — và Chương 6 sẽ cần điều đó.
 
+### 2.6.1 Gợi ý trả lời
+
+**Câu 1 (★).** Vì sao RDF chọn biểu diễn phân loại bằng một bộ ba (`rdf:type`) thay vì một trường gắn trong nút? Điều này được gì và mất gì?
+
+RDF chỉ có đúng một cấu trúc: bộ ba. Việc biểu diễn phân loại bằng `rdf:type` là hệ quả của nguyên tắc "mọi thông tin đều là bộ ba", và nó đổi sự gọn lấy sự thống nhất cơ chế.
+
+Lý do: Khi phân loại là một bộ ba, nó đi qua cùng một đường ống với mọi dữ liệu khác — cùng được serialize (Turtle, N-Triples, JSON-LD), cùng được SPARQL khớp mẫu, và quan trọng nhất, cùng là đối tượng mà suy luận RDFS/OWL có thể tác động (§2.4.2, khác biệt Ba: entailment hình thức chỉ định nghĩa được trên các bộ ba). §2.1.4 nói rõ đây là "lựa chọn thiết kế có hệ quả lớn — mọi thông tin, kể cả phân loại, đều là bộ ba, nên đều có thể được truy vấn và suy luận bằng cùng một cơ chế". Cái mất: thứ nhất, sự rườm rà — mỗi sự kiện một bộ ba riêng, trong khi nhãn LPG gắn trực tiếp trên nút và đọc gọn hơn (§2.2.4). Thứ hai, cái bẫy phân lớp: vì `rdf:type` chỉ là bộ ba có mặt trong đồ thị, SPARQL không tự "trèo" lên lớp cha — `?m a ex:Mechanism` trả về rỗng dù `rateOfChange_1` hiển nhiên là cơ chế (§2.1.6). Cái được thêm: một thực thể có thể mang nhiều "kiểu" mà không cần mở rộng định nghĩa nút, và kiểu đó liên tác được giữa các hệ thống nhờ IRI (§2.1.2).
+
+Bằng chứng: §2.1.4 (rdf:type là bộ ba, cùng cơ chế truy vấn/suy luận); §2.1.6 (bẫy `rdf:type` với phân lớp); §2.2.4 (nhãn gắn trực tiếp trên nút); §2.4.1 (hàng "Phân loại thực thể").
+
+**Câu 2 (★).** Nếu bạn cần lưu "quan hệ kết nghĩa giữa Hà Nội và Paris bắt đầu từ năm 1998", bạn sẽ mô hình hóa thế nào trong RDF? Trong đồ thị thuộc tính?
+
+Đây chính là bài toán "siêu dữ liệu của quan hệ" mà §2.4.2 (khác biệt Một) đặt tên, chỉ đổi vị từ từ `capitalOf` sang `sisterCity`.
+
+Lý do: Trong RDF, vị từ chỉ nhận IRI và bản thân bộ ba không có chỗ chứa thêm thông tin (§2.1.1) — không thể gắn `since: 1998` vào `(ex:Hanoi, ex:sisterCity, ex:Paris)`. Với baseline RDF 1.1, ba đường đi được §2.4.2 liệt kê: tái hiện (reification), nút trung gian, hoặc mẫu n-ary. Cách gọn nhất là nút trung gian có IRI: `ex:sisterCityTwinning_1 a ex:TwinningAgreement ; ex:cityA ex:Hanoi ; ex:cityB ex:Paris ; ex:since 1998`. Cái giá là thêm cấu trúc, nhưng cái được — theo bài học §2.1.3 — là "thỏa thuận kết nghĩa" giờ có định danh ổn định để tham chiếu lại (gắn bằng chứng, ngữ cảnh). §2.1.7 ghi nhận RDF 1.2 (đang là Candidate Recommendation, không phải baseline) cho phép `rdf:reifies` để tham chiếu chính bộ ba đó mà không phải tự dựng nút. Trong LPG, ngược lại, quan hệ là công dân hạng nhất mang được thuộc tính (§2.2.1): chỉ cần `(:City {name:"Hà Nội"})-[:SISTER_CITY {since: 1998}]->(:City {name:"Paris"})` — một dòng, không thêm nút.
+
+Bằng chứng: §2.1.1 (vị trí chỉ nhận IRI/literal); §2.4.2 khác biệt Một (tái hiện/nút trung gian/n-ary); §2.1.3 (IRI cho thứ được tham chiếu lại); §2.1.7 (triple term RDF 1.2, dán nhãn draft); §2.2.1 (quan hệ mang thuộc tính).
+
+**Câu 3 (★★).** Vì sao blank node làm cho việc so sánh đồ thị cần đến đẳng cấu thay vì so tập bộ ba?
+
+Vì nhãn blank node không phải là định danh — nó chỉ là biến cục bộ của một lần tuần tự hóa.
+
+Lý do: §2.1.3 khẳng định `_:b0` "chỉ có ý nghĩa trong phạm vi tài liệu đó; nó là một sản phẩm của tuần tự hóa, không phải một định danh ổn định xuyên hệ thống", và ngữ nghĩa thật của nó là "tồn tại một tài nguyên nào đó sao cho…". Hai lần trích xuất cùng một sự kiện sẽ sinh hai nhãn khác nhau (`_:b0` và `_:x7`), nên so sánh tập bộ ba thô sẽ kết luận sai là "hai đồ thị khác nhau". Khái niệm đúng, theo §2.1.5, là **đẳng cấu đồ thị**: hai đồ thị tương đương nếu tồn tại một song ánh giữa các nút bảo toàn mọi bộ ba; song ánh `_:b0 → _:x7` biến G₁ thành G₂, chứng tỏ chúng cùng nói "Hà Nội có một địa chỉ, và địa chỉ đó nằm ở Hà Nội". §2.1.5 áp dụng đúng lập luận này cho capstone: H₁ và H₂ với `_:a1`/`_:z9` là cùng một đồ thị — đẳng cấu cho phép nói "hai lần trích xuất ghi nhận cùng một ứng dụng". Với đồ thị không blank node, so tập bộ ba "tình cờ đủ"; với blank node thì sai hệ thống. Đây cũng là Ngộ nhận số 2 ở §2.5: phải so ngữ nghĩa đồ thị đã parse, không so văn bản.
+
+Bằng chứng: §2.1.3 (nhãn blank node là cục bộ, ngữ nghĩa tồn tại); §2.1.5 (ví dụ G₁/G₂, H₁/H₂, định nghĩa đẳng cấu, `rdflib.compare`); §2.5 mục 2.
+
+**Câu 4 (★★).** Một hệ thống dùng đồ thị thuộc tính muốn xuất dữ liệu sang RDF để tích hợp với đối tác. Những khó khăn nào về định danh và ngữ nghĩa sẽ xuất hiện?
+
+Khó khăn lớn nhất: LPG không cấp sẵn cả hai thứ mà RDF cần — định danh miền và ngữ nghĩa chia sẻ.
+
+Lý do về định danh: mỗi nút/quan hệ LPG chỉ có **định danh nội bộ** do hệ quản trị cấp (`elementId`), mà §2.2.2 mô tả là không ổn định xuyên hệ thống, không được bảo đảm bền vững (có thể bị tái sử dụng sau xóa), và "không phải là định danh miền". Khi xuất sang RDF, không có gì để biến thành IRI ngoài việc tự mint định danh: nếu đồ thị nguồn đã lưu thuộc tính `iri` như thiết kế ở §2.2.4 thì dùng nó; nếu không, phải đặt quy ước sinh IRI tất định — và mọi lần nạp lại phải cho cùng một IRI. Thêm nữa, hai nguồn khác nhau có thể mint hai IRI cho cùng một thực thể; §2.1.2 cảnh báo "hai IRI khác nhau không nhất thiết nghĩa là hai thực thể khác nhau" — bài toán đồng nhất định danh mà chương này để ngỏ cho Chương 3 (§2.8). Lý do về ngữ nghĩa: nhãn và kiểu quan hệ LPG chỉ là quy ước ứng dụng (§2.2.3, §2.4.2 khác biệt Ba) — đối tác nhận RDF không thể biết `CAPITAL_OF` nghĩa là gì ngoài cái tên, và không có entailment chung để hai bên kiểm tra nhất quán. Cuối cùng, §2.4.1 ghi LPG "chưa có chuẩn tuần tự hóa liên hệ thống tương đương Turtle/N-Triples", nên cả bước xuất cũng phụ thuộc định dạng riêng của triển khai nguồn.
+
+Bằng chứng: §2.2.2 (định danh nội bộ, cảnh báo của Neo4j); §2.2.4 (thuộc tính `iri`); §2.1.2 (giới hạn IRI, đồng nhất định danh); §2.2.3 và §2.4.2 (ngữ nghĩa là quy ước); §2.4.1 (hàng "Khả năng liên tác", "Tuần tự hóa"); §2.8.
+
+**Câu 5 (★★★).** Cùng một câu hỏi "Những thành phố nào là thủ đô?", hãy so sánh truy vấn SPARQL và Cypher tương ứng. Bên nào diễn đạt sát với mô hình dữ liệu của nó hơn?
+
+Hai truy vấn tương ứng trong chương: SPARQL (§2.1.6): `SELECT ?capital WHERE { ?capital ex:capitalOf ?country . ?country rdf:type ex:Country }`; Cypher (§2.3.2): `MATCH (capital:City)-[:CAPITAL_OF]->(country:Country) RETURN capital.name` (hoặc bản tối giản `MATCH (capital:City)-[:CAPITAL_OF]->(:Country)`).
+
+Lý do: Cả hai đều là khớp mẫu đồ thị và nối trên biến trùng tên — §2.4.1 xếp chúng cùng hàng "Mô hình truy vấn". Nhưng độ "sát" thể hiện ở chỗ cú pháp phản chiếu **hình dạng dữ liệu**: Cypher viết đúng cái nhìn thấy trên đồ thị — nhãn nằm trong ngoặc tròn cạnh nút, kiểu quan hệ trong ngoặc vuông trên cạnh (§2.3.1); điều kiện "là Country" được nhúng ngay vào mẫu, gọn vì trong LPG phân loại vốn là nhãn gắn trên nút (§2.2.4). SPARQL phải tách "là Country" thành một mẫu bộ ba riêng vì trong RDF phân loại cũng là một bộ ba bình đẳng như mọi sự kiện khác (§2.1.4) — câu truy vấn dài hơn nhưng phản ánh đúng sự thống nhất của mô hình: một cơ chế cho mọi thứ. Một điểm sát quan trọng: cả hai cùng chung số phận với dữ liệu thật — Cypher lọc `:City` chỉ khớp nhãn khai báo, SPARQL khớp `rdf:type` chỉ khớp bộ ba có mặt; bên nào cũng không tự suy luận phân lớp (§2.1.6).
+
+Bằng chứng: §2.1.4 (mọi thông tin là bộ ba); §2.1.6 (mẫu BGP, nối biến); §2.3.1–2.3.2 (ASCII-art, lọc thuộc tính); §2.4.1 (hàng "Mô hình truy vấn").
+
+**Câu 6 (★).** Trong dataset capstone, vì sao `?m a ex:Mechanism` trả về rỗng dù `rateOfChange_1` là một cơ chế? Cách sửa tối thiểu là gì, và cách sửa "bền" là gì (xem Chương 5)?
+
+Vì SPARQL chỉ khớp các bộ ba **có mặt** trong đồ thị, còn `rateOfChange_1` được khai báo `a ex:RateOfChangeMechanism` — chưa từng có bộ ba `rateOfChange_1 a ex:Mechanism` nào được ghi ra.
+
+Lý do: §2.1.6 ("Bẫy `rdf:type` với phân lớp") giải thích: RDF thuần không suy luận phân lớp; quan hệ `RateOfChangeMechanism rdfs:subClassOf … rdfs:subClassOf ex:Mechanism` tồn tại trong dataset nhưng SPARQL không tự "trèo" lên lớp cha. Đây không phải lỗi của truy vấn mà là ranh giới giữa **khớp mẫu** và **suy luận** — hai việc khác nhau mà §2.7 yêu cầu người đọc phân biệt được. Cách sửa tối thiểu: hỏi đúng lớp khai báo `?m a ex:RateOfChangeMechanism`, hoặc hợp (UNION) các lớp con cụ thể mà bạn biết — trung thực với dữ liệu nhưng giòn: thêm lớp con mới là truy vấn cũ sai. Cách sửa bền: đưa ngữ nghĩa phân lớp vào suy diễn — dùng entailment RDFS/OWL để bộ suy luận bổ sung (materialize) các bộ ba `rdf:type` suy ra, hoặc truy vấn qua engine hỗ trợ suy luận; khi đó `?m a ex:Mechanism` trả về đúng vì các bộ ba cần thiết đã có trong đồ thị đóng. §2.4.2 (khác biệt Ba) gọi đây là lợi thế "hệ ngữ nghĩa chuẩn" của RDF, và §2.7 đánh dấu câu hỏi "mọi cơ chế" thuộc về Chương 5.
+
+Bằng chứng: §2.1.6 (bẫy rdf:type, "SPARQL chỉ khớp bộ ba có mặt"); §2.4.2 khác biệt Ba (entailment); §2.7 (câu hỏi cần RDFS/OWL, Chương 5).
+
+**Câu 7 (★★).** Bạn được giao thiết kế đồ thị đội bóng: "cầu thủ ghi bàn trong trận đấu". Vẽ nó bằng RDF (cần nút trung gian kiểu `DerivativeApplication`) và bằng LPG (thuộc tính trên cạnh). Với thiết kế nào việc hỏi "cầu thủ này ghi bao nhiêu bàn ở sân nhà" đơn giản hơn? Bài này lặp lại đúng quyết định thiết kế của §2.2.4.
+
+Bản RDF: bàn thắng là quan hệ nhiều ngôi (cầu thủ, trận, phút, địa điểm), mà bộ ba không mang thuộc tính (§2.1.1), nên phải nút trung gian: `ex:goal_1 a ex:GoalEvent ; ex:scorer ex:player_7 ; ex:inMatch ex:match_5 ; ex:minute 78 ; ex:venue ex:HanoiStadium`. Câu hỏi "bao nhiêu bàn ở sân nhà" cần nối ba mẫu: `goal → scorer`, `goal → inMatch → venue`, rồi FILTER — giống hệt cấu trúc ba-mẫu của §2.1.6. Bản LPG (phương án 1 của §2.2.4, đổ vai diễn lên cạnh): `(:Player)-[:SCORED {minute: 78}]->(:Match)-[:HELD_AT]->(:Stadium)`; truy vấn Cypher: `MATCH (p:Player {name:"…"})-[:SCORED]->(m:Match)-[:HELD_AT]->(s:Stadium {home:true}) RETURN count(m)` — một chuỗi duyệt trực quan, ít bước khớp hơn.
+
+Lý do: Với câu hỏi thuần thống kê này, thiết kế cạnh-mang-thuộc-tính của LPG đơn giản hơn vì dữ liệu nằm gọn trên cạnh, không phải đi qua nút trung gian (§2.2.1). Nhưng §2.2.4 cũng cảnh báo mặt kia của quyết định: nếu bàn thắng cần được tham chiếu lại (VAR, bằng chứng, thời điểm), phương án 2 — nút `:GoalEvent` — mới đúng, và khi đó LPG "nút hoá quan hệ" giống hệt reification RDF: "phép n-ary không thuộc riêng mô hình nào — nó là bài toán miền".
+
+Bằng chứng: §2.1.1 (bộ ba không mang thuộc tính); §2.2.1 (quan hệ mang thuộc tính); §2.2.4 (hai lựa chọn cạnh-vs-nút, "nút hoá quan hệ"); §2.1.6 (nối nhiều mẫu qua nút trung gian); §2.3.3 (duyệt nhiều bước Cypher).
+
+**Câu 8 (★★★).** `ex:hasValue` là literal nên "giá trị 12.5 của `position_1`" không tham gia được vào phép nối (không thể là chủ thể). Thiết kế nào cho phép coi "giá trị" như một thực thể có lịch sử (ai đo, đo lúc nào, sai số bao nhiêu)? Mô hình đó phá vỡ nguyên tắc IRI-vs-literal ở mục 2.1.5 như thế nào — và Chương 6 sẽ cần điều đó.
+
+Thiết kế: tái hóa phép đo thành một đối tượng n-ary có IRI — cùng khuôn mẫu `DerivativeApplication` ở §2.1.6: `ex:measurement_1 a ex:Measurement ; ex:measures ex:position_1 ; ex:hasValue "12.5"^^xsd:double ; ex:measuredBy ex:sensor_A ; ex:measuredAt "…"^^xsd:dateTime ; ex:uncertainty "0.1"^^xsd:double`.
+
+Lý do: §2.1.1 cấm literal làm chủ thể, nên con số 12.5 đúng nghĩa là "lá" của đồ thị — không gắn tiếp được gì. Nhưng khi giá trị cần lịch sử (ai đo, khi nào, sai số), nó không còn "chỉ là dữ liệu" theo nghĩa của quy tắc §2.1.5 ("cái gì sẽ được tham chiếu lại thì cho IRI"). Mô hình trên **không phá vỡ** nguyên tắc mà **dịch ranh giới áp dụng** của nó: IRI được cấp cho *sự kiện đo* — thứ sẽ được tham chiếu lại — còn *con số* vẫn nằm đúng vai literal ở vị trí đối tượng. Cái bị phá là tính kinh tế của biểu diễn: một "sự thật" gọn (`position_1 hasValue 12.5`) giờ thành bốn, năm bộ ba, và các truy vấn FILTER kiểu §2.1.6 phải nối thêm qua nút Measurement. Lý do Chương 6 cần điều này: bằng chứng (claim "phép đo này đáng tin đến mức nào") phải trỏ đến một định danh bền vững — blank node không làm được (§2.1.3), và literal thì không thể là chủ thể của bộ ba bằng chứng. RDF 1.2 với `rdf:reifies` (§2.1.7) là hướng đi ngắn hơn cho cùng bài toán, nhưng chưa phải baseline.
+
+Bằng chứng: §2.1.1 (literal không là chủ thể); §2.1.5 (quy tắc IRI-vs-literal, "literal là lá"); §2.1.3 (blank node không định danh bền); §2.1.6 (khuôn mẫu DerivativeApplication); §2.1.7 (rdf:reifies, dán nhãn draft).
+
 ## 2.7 Chúng ta đã biết gì
 
 - Đồ thị RDF là tập hợp các bộ ba với ràng buộc vị trí chính xác; IRI là cơ chế định
