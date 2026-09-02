@@ -290,6 +290,170 @@
   note         = {Internal source ID: HOGAN-CH6. Book chapter 4 per verified kgbook.org table of contents.}
 }
 
+% --- Chapter 4 enrichment: Description Logic theory & reasoners ---
+
+@book{dl-handbook,
+  title     = {The Description Logic Handbook: Theory, Implementation, and Applications},
+  author    = {Baader, Franz and Calvanese, Diego and McGuinness, Deborah L. and Nardi, Daniele and Patel-Schneider, Peter F.},
+  edition   = {2},
+  publisher = {Cambridge University Press},
+  year      = {2007},
+  isbn      = {978-0-521-87625-4},
+  url       = {https://www.cambridge.org/9780521876254},
+  note      = {Stable. Internal source ID: DL-01. Canonical reference for the interpretation/model/entailment and TBox/ABox/RBox apparatus.}
+}
+
+@inproceedings{factpp-reasoner,
+  title     = {{FaCT++} Description Logic Reasoner: System Description},
+  author    = {Tsarkov, Dmitry and Horrocks, Ian},
+  booktitle = {Proceedings of the 3rd International Joint Conference on Automated Reasoning (IJCAR 2006)},
+  series    = {LNAI},
+  volume    = {4130},
+  publisher = {Springer},
+  year      = {2006},
+  doi       = {10.1007/11814771_26},
+  note      = {Stable. Internal source ID: DL-02. Classic optimized-tableau ALC/SHIQ reasoner.}
+}
+
+@article{hermit-reasoner,
+  title   = {Hypertableau Reasoning for Description Logics},
+  author  = {Motik, Boris and Shearer, Rob and Horrocks, Ian},
+  journal = {Journal of Artificial Intelligence Research},
+  volume  = {36},
+  pages   = {165--228},
+  year    = {2009},
+  doi     = {10.1613/jair.2811},
+  url     = {https://www.cs.ox.ac.uk/isg/tools/HermiT/},
+  note    = {Stable. Internal source ID: DL-03. HermiT uses OWL 2 Direct Semantics and passes all direct-semantics conformance tests.}
+}
+
+@article{konclude-reasoner,
+  title   = {Konclude: System Description},
+  author  = {Steigmiller, Andreas and Liebig, Thomas and Glimm, Birte},
+  journal = {Journal of Web Semantics},
+  year    = {2014},
+  doi     = {10.1016/j.websem.2014.06.003},
+  note    = {Stable. Internal source ID: DL-04. State-of-the-art OWL 2 DL reasoner (Ulm University).}
+}
+
+@article{protege,
+  title   = {Creating Semantic Web Contents with {Prot{\'e}g{\'e}}-2000},
+  author  = {Noy, Natasha F. and Sintek, Michael and Decker, Stefan and Crub{\'e}zy, Mark and Fergerson, Ray W. and Musen, Mark A.},
+  journal = {IEEE Intelligent Systems},
+  volume  = {16},
+  number  = {2},
+  pages   = {60--71},
+  year    = {2001},
+  doi     = {10.1109/5254.920601},
+  url     = {https://protegeproject.github.io/protege/},
+  note    = {Stable. Internal source ID: DL-05. The editor where Ch4 class expressions and axioms are authored.}
+}
+
+% --- Chapter 4 enrichment: OWL 2 EL real-world ontologies & reasoners ---
+
+@misc{snomed-ct,
+  title        = {What is {SNOMED CT}?},
+  author       = {{SNOMED International}},
+  howpublished = {SNOMED International},
+  year         = {2024},
+  url          = {https://www.snomed.org/what-is-snomed-ct},
+  note         = {Stable. Internal source ID: EL-01. Flagship OWL 2 EL clinical terminology, named in the W3C Profiles spec.}
+}
+
+@article{elk-reasoner,
+  title   = {The Incredible {ELK}: From Polynomial Procedures to Efficient Reasoning with {EL} Ontologies},
+  author  = {Kazakov, Yevgeny and Kr{\"o}tzsch, Markus and Simancik, Filip},
+  journal = {Journal of Automated Reasoning},
+  volume  = {53},
+  number  = {1},
+  pages   = {1--61},
+  year    = {2014},
+  doi     = {10.1007/s10817-013-9296-3},
+  url     = {https://github.com/liveontologies/elk-reasoner},
+  note    = {Stable. Internal source ID: EL-02. Polynomial-time OWL 2 EL classifier (consequence-based procedure).}
+}
+
+@misc{snorocket,
+  title        = {{Snorocket}: A Description Logic Classifier for {EL++} with Concrete Domains},
+  author       = {{CSIRO Australian e-Health Research Centre}},
+  howpublished = {GitHub repository},
+  year         = {2024},
+  url          = {https://github.com/aehrc/snorocket},
+  note         = {Emerging. Internal source ID: EL-03. OWL API reasoner and Prot{\'e}g{\'e} plugin from the group maintaining SNOMED CT tooling.}
+}
+
+@misc{gene-ontology,
+  title        = {Gene Ontology Documentation},
+  author       = {{Gene Ontology Consortium}},
+  howpublished = {Gene Ontology Consortium},
+  year         = {2024},
+  url          = {https://geneontology.org/docs/ontology-documentation/},
+  note         = {Stable. Internal source ID: EL-04. Large OBO Foundry biomedical ontology; EL-style class-hierarchy reasoning.}
+}
+
+@misc{uberon,
+  title        = {{UBERON}: Multi-Species Anatomy Ontology},
+  author       = {{Uberon / OBO Foundry project}},
+  howpublished = {GitHub repository},
+  year         = {2024},
+  url          = {https://github.com/obophenotype/uberon},
+  note         = {Stable. Internal source ID: EL-05. Cross-species anatomy ontology under OBO Foundry; classified with EL reasoners.}
+}
+
+% --- Chapter 4 enrichment: OWL 2 QL (OBDA / DL-Lite) ---
+
+@misc{ontop-obda,
+  title        = {{Ontop} Virtual Knowledge Graph System: Guide},
+  author       = {{Ontop project}},
+  howpublished = {Ontop documentation},
+  year         = {2024},
+  url          = {https://ontop-vkg.org/guide/},
+  note         = {Stable. Internal source ID: QL-01. Production OBDA system rewriting SPARQL to SQL; supports OWL 2 QL.}
+}
+
+@article{dl-lite-family,
+  title   = {The {DL-Lite} Family and Relations},
+  author  = {Artale, Alessandro and Calvanese, Diego and Kontchakov, Roman and Zakharyaschev, Michael},
+  journal = {Journal of Artificial Intelligence Research},
+  volume  = {36},
+  pages   = {1--69},
+  year    = {2009},
+  doi     = {10.1613/jair.2787},
+  url     = {https://arxiv.org/abs/1401.3487},
+  note    = {Stable. Internal source ID: QL-02. Tractable DL family underlying OWL 2 QL; LOGSPACE data complexity via first-order rewriting.}
+}
+
+% --- Chapter 4 enrichment: OWL 2 RL (rule engines / Datalog) ---
+
+@misc{rdfox,
+  title        = {{RDFox}: In-Memory RDF Store and Semantic Reasoning Engine},
+  author       = {{Oxford Semantic Technologies}},
+  howpublished = {Oxford Interoperable Semantics Group},
+  year         = {2024},
+  url          = {https://www.cs.ox.ac.uk/isg/tools/RDFox/},
+  note         = {Stable. Internal source ID: RLP-01. Supports RDF, RDFS, OWL 2 RL and Datalog with incremental, parallel forward-chaining materialization.}
+}
+
+@misc{apache-jena-rules,
+  title        = {Apache {Jena} Inference Engine Documentation},
+  author       = {{Apache Software Foundation}},
+  howpublished = {Apache Jena documentation},
+  year         = {2024},
+  url          = {https://jena.apache.org/documentation/inference/},
+  note         = {Stable. Internal source ID: RLP-02. GenericRuleReasoner: RETE-based forward/backward/hybrid rule engine over RDF, the RL mechanism.}
+}
+
+@techreport{w3c-rif-overview,
+  title       = {Overview of the Rule Interchange Format ({RIF})},
+  author      = {Hirtle, Charles and others},
+  institution = {World Wide Web Consortium},
+  type        = {W3C Recommendation},
+  year        = {2010},
+  month       = jun,
+  url         = {https://www.w3.org/TR/rif-overview/},
+  note        = {Stable. Internal source ID: RLP-03. RIF-Core corresponds to Datalog; RIF defines RIF+RDF and RIF+OWL 2 semantics.}
+}
+
 % ---------------------------------------------------------------------------
 % Chapter 5 — Inference, Rules, and Validation
 % ---------------------------------------------------------------------------

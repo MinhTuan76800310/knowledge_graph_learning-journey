@@ -18,6 +18,8 @@ Last verified: 2026-08-25
 | SPARQL 1.2 Query Language | 1.2 | Working Draft | 2026-08-20 | https://www.w3.org/TR/sparql12-query/ | Emerging; not yet stable |
 | OWL 2 Web Ontology Language Document Overview (Second Edition) | 2 | Recommendation | 2012-12-11 | https://www.w3.org/TR/owl2-overview/ | Stable baseline |
 | OWL 2 Primer (Second Edition) | 2 | Recommendation | 2012-12-11 | https://www.w3.org/TR/owl2-primer/ | Stable baseline |
+| OWL 2 Profiles (EL, QL, RL) | 2 | Recommendation | 2012-12-11 | https://www.w3.org/TR/owl2-profiles/ | Stable baseline; EL grammar (Sec 2, BNF Sec 6.1) admits property chains |
+| Overview of the Rule Interchange Format (RIF) | 1.0 | Recommendation | 2010-06-22 | https://www.w3.org/TR/rif-overview/ | Stable; RIF-Core = Datalog; RL interop anchor |
 | Shapes Constraint Language (SHACL) | 1.0 | Recommendation | 2017-07-20 | https://www.w3.org/TR/shacl/ | Stable baseline; SHACL 1.2 Core exists as Working Draft (2026-08-03) |
 | PROV-O: The PROV Ontology | 1.0 | Recommendation | 2013-04-30 | https://www.w3.org/TR/prov-o/ | Stable baseline for provenance |
 | Turtle 1.1 | 1.1 | Recommendation | 2014-02-25 | https://www.w3.org/TR/turtle/ | Stable baseline |
@@ -36,6 +38,12 @@ Last verified: 2026-08-25
 | Knowledge Graphs (Springer, 2021) | Aidan Hogan et al. | ACADEMIC | https://kgbook.org | Copyrighted Springer book. Research reference only; no copied prose or figures | All chapters |
 | Stanford CS224W — Machine Learning with Graphs | Stanford University / Jure Leskovec | ACADEMIC | https://snap.stanford.edu/class/cs224w/ | Course materials; KG embeddings and reasoning sections only | 8 |
 | Ontology Development 101 | Natalya F. Noy & Deborah L. McGuinness, Stanford / Protégé team | TUTORIAL | https://protege.stanford.edu/publications/ontology_development/ontology101.pdf | Foundational ontology engineering methodology | 4 |
+| The Description Logic Handbook (2nd ed.) | Baader, Calvanese, McGuinness, Nardi, Patel-Schneider (Cambridge UP, 2007) | ACADEMIC | https://www.cambridge.org/9780521876254 | Canonical DL formal-semantics reference behind OWL's design | 4 (EN) |
+| FaCT++ Description Logic Reasoner | Tsarkov & Horrocks, IJCAR 2006 | RESEARCH_PAPER | https://doi.org/10.1007/11814771_26 | Classic optimized-tableau DL reasoner | 4 (EN) |
+| Hypertableau Reasoning for Description Logics (HermiT) | Motik, Shearer & Horrocks, JAIR 2009 | RESEARCH_PAPER | https://www.cs.ox.ac.uk/isg/tools/HermiT/ | OWL 2 DL reasoner; Direct Semantics conformance | 4 (EN) |
+| Konclude: System Description | Steigmiller, Liebig & Glimm, JWS 2014 | RESEARCH_PAPER | https://doi.org/10.1016/j.websem.2014.06.003 | State-of-the-art OWL 2 DL reasoner | 4 (EN) |
+| Creating Semantic Web Contents with Protégé-2000 | Noy et al., IEEE Intelligent Systems 2001 | RESEARCH_PAPER | https://protegeproject.github.io/protege/ | The OWL editor where Ch4 axioms are authored | 4 (EN) |
+| The DL-Lite Family and Relations | Artale, Calvanese, Kontchakov & Zakharyaschev, JAIR 2009 | RESEARCH_PAPER | https://arxiv.org/abs/1401.3487 | Tractable DL family underlying OWL 2 QL | 4 (EN) |
 | Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks | Lewis et al., 2020 | RESEARCH_PAPER | https://arxiv.org/abs/2005.11401 | NeurIPS 2020 paper; RAG origin | 9 |
 | Dense Passage Retrieval for Open-Domain Question Answering | Karpukhin et al., 2020 | RESEARCH_PAPER | https://arxiv.org/abs/2004.04906 | EMNLP 2020 paper; dual-encoder dense retrieval | 9 |
 | From Local to Global: A Graph RAG Approach to Query-Focused Summarization | Edge et al., 2024 | RESEARCH_PAPER | https://arxiv.org/abs/2404.16130 | Microsoft GraphRAG primary paper; one implementation family | 9 |
@@ -64,6 +72,14 @@ Last verified: 2026-08-25
 | Building Knowledge Graphs with LLMs | Neo4j, Inc. | TUTORIAL | https://neo4j.com/docs/genai/ | 7, 9 |
 | Microsoft GraphRAG Documentation | Microsoft Research | OFFICIAL_DOCUMENTATION | https://microsoft.github.io/graphrag/ | 9 |
 | Microsoft GraphRAG Indexing Architecture | Microsoft Research | OFFICIAL_DOCUMENTATION | https://microsoft.github.io/graphrag/index/architecture/ | 9 |
+| SNOMED CT — What is SNOMED CT? | SNOMED International | CASE_STUDY | https://www.snomed.org/what-is-snomed-ct | 4 (EN) |
+| ELK Reasoner | Live Ontologies Project | OFFICIAL_DOCUMENTATION | https://github.com/liveontologies/elk-reasoner | 4 (EN) |
+| Snorocket DL Classifier | CSIRO Australian e-Health Research Centre | OFFICIAL_DOCUMENTATION | https://github.com/aehrc/snorocket | 4 (EN) |
+| Gene Ontology Documentation | Gene Ontology Consortium | CASE_STUDY | https://geneontology.org/docs/ontology-documentation/ | 4 (EN) |
+| UBERON Multi-Species Anatomy Ontology | OBO Foundry / Uberon project | CASE_STUDY | https://github.com/obophenotype/uberon | 4 (EN) |
+| Ontop Virtual Knowledge Graph System | Ontop project | OFFICIAL_DOCUMENTATION | https://ontop-vkg.org/guide/ | 4 (EN) |
+| RDFox | Oxford Semantic Technologies | CASE_STUDY | https://www.cs.ox.ac.uk/isg/tools/RDFox/ | 4 (EN) |
+| Apache Jena Inference Engine | Apache Software Foundation | OFFICIAL_DOCUMENTATION | https://jena.apache.org/documentation/inference/ | 4 (EN) |
 
 ## Python Libraries Evaluated
 
