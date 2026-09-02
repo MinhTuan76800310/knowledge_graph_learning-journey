@@ -1,5 +1,11 @@
 # Knowledge Graph: Từ Đồ thị đến Hệ thống Tri thức
 
+[![release](https://img.shields.io/github/v/release/MinhTuan76800310/knowledge_graph_learning-journey?label=release&color=blue)](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/latest)
+[![license: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
+[![language: Vietnamese](https://img.shields.io/badge/lang-vi-green)](#editions)
+[![language: English](https://img.shields.io/badge/lang-en-yellowgreen)](#editions)
+[![pages: 364 vi · 70 en](https://img.shields.io/badge/pages-364_vi%20%C2%B7%2070_en-lightgrey)](#editions)
+
 > **An open-source, executable, bilingual textbook.** Knowledge Graphs from first
 > principles to production knowledge systems — explained at the mechanism level, with
 > runnable experiments and traceable citations. Written in **Vietnamese** (canonical,
@@ -10,13 +16,34 @@
 
 **License:** [GPL-3.0-or-later](LICENSE)
 
+> Badges above are all verifiable today. There is deliberately **no CI badge**: the
+> pipeline is still planned (see [Project status](#project-status)), and a build-passing
+> badge would contradict the book's own epistemic-honesty rule.
+
+---
+
+## The two ideas this book is built on
+
+```text
+Mental Model 1  (introduced in Chapter 1)
+  Knowledge Graph  =  Data Graph  +  Semantics  +  Context
+
+Mental Model 2  (emerges gradually; capstone architecture in Chapter 10)
+  Knowledge System =  Knowledge Graph
+                      + Acquisition + Inference + Validation + Evolution
+```
+
+These are **engineering learning models**, not universally accepted formal definitions.
+The book is explicit about the distinction between book-defined models and external
+standards.
+
 ---
 
 ## Table of contents
 
+- [The two ideas this book is built on](#the-two-ideas-this-book-is-built-on)
 - [What this book is](#what-this-book-is)
 - [Editions](#editions)
-- [Two mental models](#two-mental-models)
 - [Chapters](#chapters)
 - [Repository structure](#repository-structure)
 - [Getting started](#getting-started)
@@ -24,6 +51,7 @@
 - [Testing and validation](#testing-and-validation)
 - [Project status](#project-status)
 - [Writing conventions](#writing-conventions)
+- [Contributing](#contributing)
 - [About the author](#about-the-author)
 - [Copyright, sources, citation](#copyright-sources-citation)
 
@@ -67,24 +95,6 @@ Vietnamese (complete):
 English (Chapters 1–3):
   https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/download/v0.2.0/knowledge-graph-book-en-v0.2.0.pdf
 ```
-
-## Two mental models
-
-**Mental Model 1** (introduced in Chapter 1):
-
-```
-Knowledge Graph = Data Graph + Semantics + Context
-```
-
-**Mental Model 2** (emerges gradually, becomes the capstone architecture in Chapter 10):
-
-```
-Knowledge System = Knowledge Graph + Acquisition + Inference + Validation + Evolution
-```
-
-These are **engineering learning models**, not universally accepted formal definitions.
-The book is explicit about the distinction between book-defined models and external
-standards.
 
 ## Chapters
 
@@ -252,6 +262,33 @@ Current per-section state is tracked in [`docs/BOOK_STATUS.md`](docs/BOOK_STATUS
 - **Example continuity**: one recurring capstone domain (the Mechanism Knowledge Graph)
   rather than many unrelated toy domains.
 
+## Contributing
+
+Contributions are welcome — especially **semantic corrections**, which the author treats
+as the highest-priority feedback and acts on first.
+
+The project follows a traceable workflow, documented in [`CLAUDE.md`](CLAUDE.md) and
+[`AGENTS.md`](AGENTS.md):
+
+```text
+Issue → Branch → Commits → PR → Validate → Merge
+```
+
+How to help:
+
+- **Report an error or gap** — open an [issue](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/issues)
+  pointing to the chapter/section and, where relevant, the registered source it conflicts
+  with.
+- **Propose a change** — branch from `main`, keep one coherent change per branch, and open
+  a PR to `main`. Run `uv run pytest`, `uv run ruff check .`, and (for manuscript changes)
+  `make book-check` before requesting review.
+- **Contribute to the English edition** — Chapters 4–10 are open; each translation must
+  preserve parity with the Vietnamese canonical text and pass the same acceptance gate.
+
+Before writing for this book, read [`docs/BOOK_PEDAGOGY.md`](docs/BOOK_PEDAGOGY.md) — it is
+the canonical writing policy (mechanism-first tone, epistemic discipline, source
+traceability).
+
 ## About the author
 
 This book is an open, public **learning journey** by
@@ -266,11 +303,6 @@ The project values are explicit in the writing:
   book-defined.
 - Keep everything **verifiable**: every external claim traces to a registered source;
   every chapter passes an independent acceptance audit.
-
-Feedback, corrections, and contributions are welcome — especially semantic corrections,
-which the author treats as serious and acts on first. Open an
-[issue](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/issues) or a
-pull request.
 
 ## Copyright, sources, citation
 
