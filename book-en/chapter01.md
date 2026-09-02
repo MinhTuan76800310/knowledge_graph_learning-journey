@@ -648,6 +648,40 @@ experiments are complete and runnable; for detailed status see `docs/EXPERIMENT_
    What information must the Context layer contain that the Semantics layer cannot provide?
    Why is Semantics alone insufficient?
 
+### 1.10.1 Suggested answers
+
+**Question 1 (★).** Given the graphs `(A)--[R]-->(B)` and `(C)--[R]-->(D)` with the same label R. Without an ontology, can you assert that R has the same meaning in both cases? Explain.
+
+No. Without an ontology (or any semantics declaration), we are NOT allowed to assert that R carries the same meaning in the two places. The label `R` is by itself just a string; two edges sharing the same string does not guarantee they are the same relation. This is exactly the "Case A" situation in §1.2: an edge `[:KNOWS]` with no definition of what `:KNOWS` means is still a data graph, not yet knowledge.
+
+Reasoning: §1.3 defines Semantics as "the meaning layer of the graph" and states plainly that "Semantics is not in the shape of the edge — two graphs can have identical structure yet entirely different semantics." The same label can be used by two groups under two different conventions (for instance `R` = "knows" in one graph, `R` = "transfers money to" in the other), and only an explicit declaration about the predicate can tell them apart. §1.3 also warns against confusing the label (level 4) with the entity: "treating two identical labels as one entity" is the root of a whole family of later design errors.
+
+Evidence: §1.2 (Case A/B) and §1.3 (the definition of Semantics, the four levels of Entity) show that meaning lives in the semantics layer, not in the label; §1.8 Mistake 2 reinforces that "Knowledge lies in semantics and context, not in graph size." To assert that R is the same, you need an ontology declaring R's domain/range and definition, or some mechanism that links the ontologies of the two graphs.
+
+**Question 2 (★★).** Two graphs contain the same set of triples but use different IRIs for the same real-world entity. Do they represent the same knowledge? What additional assumption is needed to assert "yes"?
+
+Not necessarily. "The same set of triples" holds only at the syntactic level if we treat the IRIs as meaningless symbols; but if each IRI is interpreted independently, the two graphs are not guaranteed to be talking about the same entity. §1.3 names this exact situation: "two different identifiers can point to the same entity — this is exactly the entity resolution problem," and the "Common misconception" box stresses that `ex:Hanoi` is only a string that "is *not* the city of Hanoi." The `ex:Hanoi` vs `wd:Q1858` example in §1.3 illustrates precisely this problem.
+
+Reasoning: under the four levels of Entity in §1.3 (real-world entity / graph node / identifier / label), the claim that two different identifiers point to the same entity is something that must be *stated*; it is not self-evident. The Identity layer in §1.4 is exactly the layer that "solves the problem of one entity having many names/representations."
+
+Evidence: to assert "yes," you need an additional identity-union assumption — an explicit declaration that the two IRIs denote the same entity, for example a `sameAs` relation (named in §1.4: "Identity (persistent IRIs, entity resolution, sameAs)"), or an alignment mapping between the two IRI namespaces, together with contextual grounds for trusting that mapping. Without this assumption, the machine sees only two different symbols and has no basis on which to merge them.
+
+**Question 3 (★★).** Wikidata lets anyone add statements without ontology approval. How does this affect automated inference? What mechanisms does Wikidata use to compensate?
+
+This "schema-less" model limits formal-style automated inference (RDFS/OWL entailment), because inference needs tight ontology axioms to derive new conclusions; when statements are added freely without passing ontology review, quality is uneven and there is no trustworthy axiom base from which the machine can infer what was not written explicitly. §1.7 ("Schema-less Knowledge Graph") says exactly this: "Disadvantage: uneven quality, hard to infer automatically."
+
+Reasoning: without an approved ontology, the machine cannot rely on domain/range/subclass to entail; instead Wikidata manages knowledge through context on each individual statement. §1.7 records: "Wikidata addresses this with qualifiers/references/ranks instead of OWL axioms."
+
+Evidence: per the official Wikidata documentation (Help: Statements), the three additional components are **qualifiers** ("additional information that describes or clarifies the value of a property"), **references** ("point to the specific sources that support the data"), and **ranks** (managing multiple values / consensus; "if there is a consensus, it should be indicated with the *preferred* rank" — the levels being preferred/normal/deprecated). These are precisely the Context layer (provenance, scope, confidence) described in §1.3, used to evaluate and handle contradiction instead of leaning on formal entailment. This also matches §1.8 Mistake 4: a statement being present is not yet "accepted knowledge"; ranks and the consensus policy are how Wikidata governs that acceptance level.
+
+**Question 4 (★★★).** Suppose you design a KG for an AI-agent system that must make medical decisions. What information must the Context layer contain that the Semantics layer cannot provide? Why is Semantics alone insufficient?
+
+For medical decisions, the Context layer must carry at minimum: **provenance** (who / which authority asserts it — a health-ministry guideline, a randomized trial, or a blog), **time** (valid from when, when it expires — treatment protocols change year to year), **scope** (which population it applies to, which jurisdiction, what the contraindications are), and **confidence** (the level of evidence, the level of consensus). These four are exactly the Context components listed in §1.3 and §1.2: "provenance, time, scope, confidence."
+
+Reasoning: Semantics tells the machine *what the symbols mean* and *what types to infer* (schema, ontology, domain/range, identity, constraints — §1.3), but it cannot answer "where did this statement come from, is it still correct, how trustworthy is it, and when two sources conflict, which one should we believe." §1.3 states the two key principles: "Context enables evaluation; context does not establish truth," and "Context is the basis for handling contradiction. If two sources assert opposite things about the same mechanism, the Semantics layer does not know which side to trust; the Context layer provides the information to evaluate."
+
+Evidence: §1.2 (Case B/D) shows that a triple becomes knowledge only once it also carries a timestamp and a citation source; §1.6 Step 5'/Step 5 illustrates attaching `source`/`validFrom`/`confidence` to a statement. In medicine, without Context an agent cannot tell an outdated 2015 guideline from a 2025 recommendation, or grade-A evidence from an expert opinion — that is, it cannot govern risk. So Semantics alone is insufficient: it guarantees *correct meaning and correct type*, whereas *trustworthiness and current validity* belong to Context.
+
 ## 1.11 What we know
 
 - A graph is a data structure; a Knowledge Graph is a knowledge structure.
