@@ -25,6 +25,21 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | OWL-04 | `w3c-owl2-direct-semantics` | OWL 2 Direct Semantics |
 | OWL-05 | `w3c-owl2-profiles` | OWL 2 Profiles |
 | OWL-06 | `w3c-owl2-rdf-semantics` | OWL 2 RDF-Based Semantics |
+| DL-01 | `dl-handbook` | The Description Logic Handbook (2nd ed.) |
+| DL-02 | `factpp-reasoner` | FaCT++ Description Logic Reasoner |
+| DL-03 | `hermit-reasoner` | HermiT / Hypertableau Reasoning |
+| DL-04 | `konclude-reasoner` | Konclude: System Description |
+| DL-05 | `protege` | Protege ontology editor |
+| EL-01 | `snomed-ct` | What is SNOMED CT? |
+| EL-02 | `elk-reasoner` | The Incredible ELK / ELK reasoner |
+| EL-03 | `snorocket` | Snorocket DL Classifier (CSIRO AEHRC) |
+| EL-04 | `gene-ontology` | Gene Ontology Documentation |
+| EL-05 | `uberon` | UBERON Multi-Species Anatomy Ontology |
+| QL-01 | `ontop-obda` | Ontop Virtual Knowledge Graph System |
+| QL-02 | `dl-lite-family` | The DL-Lite Family and Relations |
+| RLP-01 | `rdfox` | RDFox |
+| RLP-02 | `apache-jena-rules` | Apache Jena Inference / GenericRuleReasoner |
+| RLP-03 | `w3c-rif-overview` | Overview of the Rule Interchange Format (RIF) |
 | SH-01 | `w3c-shacl` | Shapes Constraint Language (SHACL) |
 | SH-02 | `w3c-shacl12-core` | SHACL 1.2 Core |
 | SWRL-01 | `swrl-submission` | SWRL: Semantic Web Rule Language |

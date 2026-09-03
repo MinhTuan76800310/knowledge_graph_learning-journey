@@ -31,6 +31,7 @@ if [ "$LANG" = "en" ]; then
     "From Graph to Knowledge"
     "Data Models and Query Languages"
     "Schema, Identity, and Context"
+    "Ontologies and Formal Meaning"
   )
   TOC_PAT='Contents'
   BIB_TITLE='References'

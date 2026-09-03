@@ -1482,6 +1482,246 @@
         "2"
       ],
       "key_finding": "elementId() returns STRING; uniqueness guaranteed only within a single transaction across the DBMS; no mapping guarantees outside a transaction; internal IDs are reused after deletion (brittle apps) -> Neo4j recommends application-generated IDs; id() is Deprecated and returns INTEGER."
+    },
+    {
+      "id": "DL-01",
+      "canonical_url": "https://www.cambridge.org/9780521876254",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.cambridge.org/9780521876254",
+      "title": "The Description Logic Handbook (2nd ed.)",
+      "document_status": "Academic book (Cambridge University Press, 2007)",
+      "publication_date": "2007",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/DL-01.md",
+      "key_finding": "Canonical DL reference: interpretation->model->entailment, TBox/ABox/RBox, classes-as-sets semantics, syntax-vs-model-theoretic distinction. Grounds Ch4 DL-intuition section."
+    },
+    {
+      "id": "DL-02",
+      "canonical_url": "https://doi.org/10.1007/11814771_26",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1007/11814771_26",
+      "title": "FaCT++ Description Logic Reasoner: System Description",
+      "document_status": "IJCAR 2006 (LNAI 4130), Springer",
+      "publication_date": "2006",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/DL-02.md",
+      "key_finding": "Classic optimized-tableau ALC/SHIQ reasoner; established the tableau tradition HermiT later superseded."
+    },
+    {
+      "id": "DL-03",
+      "canonical_url": "https://www.cs.ox.ac.uk/isg/tools/HermiT/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.cs.ox.ac.uk/isg/tools/HermiT/",
+      "title": "HermiT / Hypertableau Reasoning for Description Logics",
+      "document_status": "JAIR 36 (2009) + Oxford ISG tool page",
+      "publication_date": "2009",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/DL-03.md",
+      "key_finding": "Production OWL 2 DL reasoner; official page states it uses Direct Semantics and passes all OWL 2 direct-semantics conformance tests."
+    },
+    {
+      "id": "DL-04",
+      "canonical_url": "https://doi.org/10.1016/j.websem.2014.06.003",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1016/j.websem.2014.06.003",
+      "title": "Konclude: System Description",
+      "document_status": "Journal of Web Semantics (Elsevier, 2014)",
+      "publication_date": "2014",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/DL-04.md",
+      "key_finding": "State-of-the-art OWL 2 DL reasoner (Ulm University); the full-expressivity pole of the expressivity-vs-efficiency trade-off."
+    },
+    {
+      "id": "DL-05",
+      "canonical_url": "https://protegeproject.github.io/protege/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://protegeproject.github.io/protege/",
+      "title": "Protege ontology editor",
+      "document_status": "IEEE Intelligent Systems 16(2) 2001 + official docs",
+      "publication_date": "2001",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/DL-05.md",
+      "key_finding": "Practical editor where Ch4 class expressions/axioms are authored; drives DL reasoners."
+    },
+    {
+      "id": "EL-01",
+      "canonical_url": "https://www.snomed.org/what-is-snomed-ct",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.snomed.org/what-is-snomed-ct",
+      "title": "What is SNOMED CT?",
+      "document_status": "SNOMED International (stable)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/EL-01.md",
+      "key_finding": "Production clinical terminology for EHRs; flagship OWL 2 EL ontology named in the W3C Profiles spec."
+    },
+    {
+      "id": "EL-02",
+      "canonical_url": "https://github.com/liveontologies/elk-reasoner",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://github.com/liveontologies/elk-reasoner",
+      "title": "ELK Reasoner / The Incredible ELK",
+      "document_status": "JAR 53(1) 2014 + official repo",
+      "publication_date": "2014",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/EL-02.md",
+      "key_finding": "Java OWL 2 EL classifier implementing a polynomial-time consequence-based procedure; usable as CLI, OWL API library, and Protege plugin."
+    },
+    {
+      "id": "EL-03",
+      "canonical_url": "https://github.com/aehrc/snorocket",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://github.com/aehrc/snorocket",
+      "title": "Snorocket DL Classifier (CSIRO AEHRC)",
+      "document_status": "GitHub repository (emerging)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/EL-03.md",
+      "key_finding": "EL++ classifier with concrete-domain support; OWL API reasoner + Protege plugin from the group maintaining SNOMED CT tooling."
+    },
+    {
+      "id": "EL-04",
+      "canonical_url": "https://geneontology.org/docs/ontology-documentation/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://geneontology.org/docs/ontology-documentation/",
+      "title": "Gene Ontology Documentation",
+      "document_status": "Gene Ontology Consortium (stable)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/EL-04.md",
+      "key_finding": "Large OBO Foundry biomedical ontology built from typed relations (is_a, part_of, occurs_in); EL-style subclass reasoning. NOTE: page does not literally label it 'OWL 2 EL'; verified as OBO Foundry class-rich terminology, not overclaimed."
+    },
+    {
+      "id": "EL-05",
+      "canonical_url": "https://github.com/obophenotype/uberon",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://github.com/obophenotype/uberon",
+      "title": "UBERON Multi-Species Anatomy Ontology",
+      "document_status": "OBO Foundry (stable)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/EL-05.md",
+      "key_finding": "Integrated cross-species anatomy ontology; class-rich terminology of the kind EL targets, commonly classified with EL reasoners. Profile label inferred from OBO nature, not stated on page."
+    },
+    {
+      "id": "QL-01",
+      "canonical_url": "https://ontop-vkg.org/guide/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://ontop-vkg.org/guide/",
+      "title": "Ontop Virtual Knowledge Graph System",
+      "document_status": "Ontop documentation (stable)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/QL-01.md",
+      "key_finding": "Production OBDA/VKG system rewriting SPARQL to SQL over relational sources; explicitly supports RDFS and OWL 2 QL via R2RML mappings."
+    },
+    {
+      "id": "QL-02",
+      "canonical_url": "https://arxiv.org/abs/1401.3487",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/1401.3487",
+      "title": "The DL-Lite Family and Relations",
+      "document_status": "JAIR 36 (2009)",
+      "publication_date": "2009",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/QL-02.md",
+      "key_finding": "Tractable DL family OWL 2 QL is built on; LOGSPACE instance checking and positive-existential query answering via first-order rewriting."
+    },
+    {
+      "id": "RLP-01",
+      "canonical_url": "https://www.cs.ox.ac.uk/isg/tools/RDFox/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.cs.ox.ac.uk/isg/tools/RDFox/",
+      "title": "RDFox",
+      "document_status": "Oxford Semantic Technologies (stable)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/RLP-01.md",
+      "key_finding": "In-memory RDF store supporting RDF, RDFS, OWL 2 RL and Datalog with incremental, shared-memory parallel forward-chaining materialization."
+    },
+    {
+      "id": "RLP-02",
+      "canonical_url": "https://jena.apache.org/documentation/inference/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://jena.apache.org/documentation/inference/",
+      "title": "Apache Jena Inference / GenericRuleReasoner",
+      "document_status": "Apache Jena documentation (stable)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/RLP-02.md",
+      "key_finding": "RETE-based forward/backward/hybrid rule engine over RDF; Jena's RDFS/OWL reasoners built on it - the RL mechanism."
+    },
+    {
+      "id": "RLP-03",
+      "canonical_url": "https://www.w3.org/TR/rif-overview/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.w3.org/TR/rif-overview/",
+      "title": "Overview of the Rule Interchange Format (RIF)",
+      "document_status": "W3C Recommendation (2010-06-22)",
+      "publication_date": "2010",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/RLP-03.md",
+      "key_finding": "W3C rule-interchange suite; RIF-Core corresponds to Datalog (Horn without function symbols); defines RIF+RDF and RIF+OWL 2 semantics."
     }
   ]
 }
