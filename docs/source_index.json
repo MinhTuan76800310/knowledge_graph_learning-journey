@@ -1834,6 +1834,38 @@
       ],
       "research_note_path": "docs/research_notes/DEFLOGIC-01.md",
       "key_finding": "Foundational non-monotonic default logic: true-by-default conclusions retracted when contradicted (bird/penguin). Contrast with the monotonic forward chaining that guarantees no retraction."
+    },
+    {
+      "id": "SPARQLALG-01",
+      "canonical_url": "https://doi.org/10.1145/1567274.1567278",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1145/1567274.1567278",
+      "title": "Semantics and Complexity of SPARQL",
+      "document_status": "Peer-reviewed journal paper (ACM TODS 34(3):16:1-16:45)",
+      "publication_date": "2009",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/SPARQLALG-01.md",
+      "key_finding": "Defines SPARQL's compositional relational algebra over solution mappings (join, left join, filter, union) and proves SPARQL evaluation complexity: NP-complete in combined complexity for the BGP/UNION fragment, PSPACE-complete with OPTIONAL."
+    },
+    {
+      "id": "GDM-01",
+      "canonical_url": "https://doi.org/10.1007/978-3-319-96193-4_1",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1007/978-3-319-96193-4_1",
+      "title": "An Introduction to Graph Data Management",
+      "document_status": "Peer-reviewed book chapter (Graph Data Management, Springer LNCS 11510, pp. 1-32)",
+      "publication_date": "2018",
+      "used_in_chapters": [
+        "2"
+      ],
+      "research_note_path": "docs/research_notes/GDM-01.md",
+      "key_finding": "Formal definition of the labeled property graph as an attributed graph tuple with node/edge labels and property functions; the academic reference behind the Ch2 7-tuple LPG formalization."
     }
   ]
 }

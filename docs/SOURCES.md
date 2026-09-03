@@ -61,6 +61,8 @@ Last verified: 2026-08-25
 | Datalog and Recursive Query Processing | Green, Huang, Loo & Zhou, 2013 | RESEARCH_PAPER | https://doi.org/10.1561/1900000017 | Foundations and Trends in Databases 6(2–3):105–195; Datalog fixpoint semantics survey | 5 (EN) |
 | On Closed World Data Bases | Reiter, 1978 | RESEARCH_PAPER | https://doi.org/10.1007/978-1-4684-3384-5_3 | Logic and Data Bases (Gallaire & Minker eds.) pp. 55–76; formalizes the CWA | 5 (EN) |
 | A Logic for Default Reasoning | Reiter, 1980 | RESEARCH_PAPER | https://doi.org/10.1016/0004-3702(80)90014-4 | Artificial Intelligence 13(1–2):81–132; non-monotonic default logic | 5 (EN) |
+| Semantics and Complexity of SPARQL | Pérez, Arenas & Gutiérrez, 2009 | RESEARCH_PAPER | https://doi.org/10.1145/1567274.1567278 | ACM TODS 34(3):16:1–16:45; formal SPARQL relational algebra (join, left join, filter, union) and evaluation complexity | 2 (EN) |
+| An Introduction to Graph Data Management | Angles & Gutiérrez, 2018 | RESEARCH_PAPER | https://doi.org/10.1007/978-3-319-96193-4_1 | Springer LNCS 11510, pp. 1–32; formal attributed property-graph model | 2 (EN) |
 
 ## Official Documentation & Case Studies
 

@@ -48,16 +48,27 @@ chapter's main argument can be read in full without running any code.
 
 ## 1.2 The mental model
 
-> 📦 **Preview — Three standard terms you will meet in this chapter**
+> 📦 **Concept Orientation — Standards and Core Theory Encountered Early**
 >
-> This chapter mentions a few terms from the web-standards world. Here is a short
-> introduction:
+> This book builds progressively across 10 chapters. To prevent friction when encountering foundational concepts that receive full treatment in later chapters, here is a concise guide to what each term means and how to understand it in the immediate context:
 >
-> - **W3C** (World Wide Web Consortium): the organization that develops web standards, including the RDF and OWL standards.
-> - **RDF** (Resource Description Framework): the W3C's standard triple-based graph data model. Covered in detail in Chapter 2.
-> - **IRI** (Internationalized Resource Identifier): a global string identifier used to name entities in RDF. Covered in detail in Chapter 2.
+> **Web Standards & Languages:**
+> - **W3C** (World Wide Web Consortium): The international standards body governing web specifications, including RDF, OWL, and SPARQL.
+> - **RDF** (Resource Description Framework): The standard graph data model representing knowledge as directed triples: `(subject, predicate, object)`. Covered in Chapter 2.
+> - **IRI** (Internationalized Resource Identifier): A globally unique web address used to name entities and relations unambiguously across systems. Covered in Chapter 2.
+> - **RDFS** (RDF Schema): A minimal vocabulary extending RDF with class hierarchies (`subClassOf`) and property typing (`domain`, `range`) for basic type inference. Covered in Chapter 3.
+> - **OWL** (Web Ontology Language): A formal, logic-based ontology language based on Description Logics that enables automated deduction and consistency checking. Covered in Chapter 4.
+> - **SHACL** (Shapes Constraint Language): A declarative language for validating graph structure against structural shapes and business rules. Covered in Chapter 5.
+> - **SPARQL**: The standard query language for RDF graphs, matching graph patterns via relational algebra. Covered in Chapter 2.
 >
-> Other terms such as RDFS, OWL, SHACL, and SPARQL will be introduced when they first appear in their respective chapters. You do not need to memorize them in advance.
+> **Logic, Semantics & Machine Learning Concepts:**
+> - **Ontology vs. Taxonomy**: A *taxonomy* organizes terms strictly into hierarchical "is-a" parent-child trees; an *ontology* is a formal logical theory defining concepts, rich relation types, cardinality constraints, and inference axioms (formalized in Chapter 4).
+> - **Inference & Entailment (Deduction)**: The deterministic process of deriving new true facts from existing assertions using formal mathematical rules (e.g., if $A$ requires $B$ and $B$ requires $C$, then $A$ requires $C$). Formalized in Chapter 5.
+> - **Model Theory & First-Order Logic**: The mathematical branch of logic that assigns precise truth values to syntactic symbols by mapping them to abstract domain sets and relations. Introduced in Chapter 4.
+> - **Open World vs. Closed World Assumption**: A *Closed World* (used in relational databases) assumes anything not explicitly stored is false; an *Open World* (used in Semantic Web KGs) assumes anything not stated is merely unknown, not necessarily false. Formalized in Chapter 4.
+> - **Provenance**: Lineage metadata recording who created a statement, from which source document, using which tool, and at what timestamp. Formalized in Chapter 6.
+> - **Vector Embeddings & Graph ML**: Numerical vectors in continuous space learned by machine learning models to represent entities and predict missing edges statistically (contrasting with deterministic logic rules). Formalized in Chapter 8.
+> - **GraphRAG**: An architecture that combines structured graph traversal with large language models to generate accurate, verifiable answers with traceable citations. Formalized in Chapter 9.
 
 ### Knowledge Graph = Data Graph + Semantics + Context
 
@@ -375,6 +386,39 @@ by each standard's formal semantics and entailment relations, not by constraint 
 **Book Engineering Model** (the book's own notation): KSE = (K, T, C) where K ⊆ V × L × V
 is the triple set, T is the ontology axiom set, and C is context information (provenance,
 time, scope, confidence). This notation is defined by the book, not an industry standard.
+
+### Beyond Binary Edges: n-ary Relations and Hypergraphs
+
+The direct triple model $K \subseteq V \times L \times V$ formalizes a **binary relational graph**: every edge connects exactly two vertices (a subject and an object). For simple statements like `(Hanoi, capitalOf, Vietnam)`, binary edges are natural and mathematically clean.
+
+However, scientific, biomedical, and industrial facts are frequently **$n$-ary relations** involving three or more participants ($n \ge 3$). Consider:
+- In chemistry: `(Enzyme_A, catalyzesReaction, Substrate_B, intoProduct, Molecule_C, atTemperature, 37C)`.
+- In medicine: `(Patient_X, receivedTreatment, Drug_Y, atDosage, 50mg, prescribedBy, Doctor_Z)`.
+- In our capstone domain: the seed mechanism *"velocity is the rate of change of position with respect to time"* binds four participants at once — a *Mechanism*, a *Quantity Differentiated* (position), a *Reference Variable* (time), and a *Mathematical Operation* (derivative).
+
+Pairwise binary triples $(s, p, o)$ cannot directly capture these multi-participant assertions without decomposing them. In theoretical computer science and knowledge representation, two primary formalisms address this:
+
+#### 1. Native Hypergraphs
+A **Hypergraph** $\mathcal{H} = (V, \mathcal{E})$ generalizes a graph by allowing each **hyperedge** $e \in \mathcal{E}$ to encompass an arbitrary subset of vertices $S \subseteq V$:
+$$\mathcal{E} \subseteq \mathcal{P}(V) \setminus \{\emptyset\}$$
+where $\mathcal{P}(V)$ denotes the power set (the set of all subsets) of $V$. In a labeled directed hypergraph, a hyperedge connects an ordered sequence or set of input vertices (sources) to output vertices (targets) under a shared predicate. Native hypergraph models preserve multi-party interactions as single atomic units, which avoids fragmenting relational context.
+
+#### 2. Bipartite Graph Expansion (Incidence Graphs)
+Because mainstream graph databases and RDF engines are optimized for binary edges, standard practice projects $n$-ary hyperedges into binary triples via a **bipartite graph expansion**, constructing what graph theorists call an **incidence graph**:
+1. Create an intermediate node representing the **event, application, or relationship instance** (e.g., `derivativeApplication_1` or `prescription_902`).
+2. Connect this central node to each participating entity using specialized binary role properties — `differentiand`, `withRespectTo`, and `hasOperation` point from the application to its participants, while `hasApplication` links the mechanism to it.
+
+In our capstone domain, instead of an unwieldy multi-node edge, we write:
+```turtle
+ex:rateOfChange_1  ex:hasApplication  ex:derivativeApplication_1 .
+
+ex:derivativeApplication_1  a               ex:DerivativeApplication ;
+                            ex:hasOperation     ex:derivativeOperation_1 ;
+                            ex:differentiand    ex:position_1 ;
+                            ex:withRespectTo    ex:time_1 .
+```
+
+This transformation proves that **the binary triple model $K \subseteq V \times L \times V$ is universal**: any $n$-ary fact or hyperedge can be represented by introducing an intermediate event node and directed role edges. Chapter 3 will formalize this pattern as **n-ary modeling** and **reification**, showing how it forms the basis for attaching provenance, timestamps, and confidence scores to complex knowledge assertions.
 
 ## 1.6 Running example
 
@@ -764,6 +808,10 @@ management. Chapter 2 opens the next rung: *representing and querying mechanism 
 | Quantity | A measurable value serving as a mechanism's input/output (position, velocity) | §1.3 |
 | Reference variable | The independent variable a rate is taken with respect to (e.g. time) | §1.6 |
 | DerivativeApplication | An intermediate object binding a mechanism, the quantity differentiated, the variable, and the operation in one application | §1.6 |
+| Binary relation | A relation connecting exactly two entities: $(s, p, o) \in V \times L \times V$ | §1.5 |
+| N-ary relation | A multi-participant relation connecting three or more entities ($n \ge 3$) | §1.5, Chapter 3 |
+| Hypergraph | A graph generalization where each hyperedge can connect an arbitrary subset of vertices | §1.5 |
+| Incidence graph | A bipartite expansion representing an $n$-ary hyperedge as binary triples via an intermediate event node | §1.5, Chapter 3 |
 
 ## Further reading
 

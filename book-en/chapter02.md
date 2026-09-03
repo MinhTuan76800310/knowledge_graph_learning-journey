@@ -115,41 +115,43 @@ In short: an IRI gives us a unified *namespace* so systems can refer to one anot
 ### 2.1.3 Blank node: a resource that needs no global name
 
 Blank nodes are usually introduced as "anonymous nodes used when no global identifier is
-needed". That is true but incomplete. Let us clarify their intuitive semantics:
+needed". That is true but incomplete. In formal knowledge representation, blank nodes have a precise mathematical foundation:
 
-- A blank node represents **a resource that exists but is not named by an IRI**. It is
-  still a full node of the graph: it can be the subject or the object of a triple.
-- **A blank node label is not a global identifier.** When you see `_:b0` in an RDF document,
-  the name `b0` only has meaning *within that document*. It is a serialization artifact,
-  not a stable cross-system identifier.
-- **Existential semantics.** Logically, a blank node carries the meaning "there exists some
-  resource such that…". For example, the triple `(ex:Hanoi, ex:hasAddress, _:b0)` says
-  "Hanoi has an address, and that address is some resource" — without needing to (or being
-  able to) give that address a global name.
+- **Existential semantics in First-Order Logic.** A blank node does not merely lack a name; it functions mathematically as an **existentially quantified variable ($\exists x$)**. For example, the RDF triple:
+  ```turtle
+  ex:Hanoi  ex:hasAddress  _:b0 .
+  ```
+  translates in First-Order Logic to the formula:
+  $$\exists x \; (\text{hasAddress}(\text{Hanoi}, x))$$
+  It asserts: *"There exists some resource $x$ such that Hanoi has $x$ as its address."* The blank node identifier `_:b0` is a local serialization artifact (a scoped variable name within the file), not a global identifier.
 
-Because blank node labels are only local, two graphs that use different blank node labels
-can still be *the same graph* semantically. This is exactly why comparing graphs needs the
-concept of **isomorphism** rather than raw string comparison — we meet it again in section
-2.1.5. This chapter keeps blank nodes at the intuitive level; full formal semantics is
-reserved for later chapters.
+- **Graph Homomorphism and Entailment.** Because blank nodes act as existential variables, comparing two RDF graphs requires the mathematical concept of **Graph Homomorphism** rather than raw string equality.
+  > ℹ **What is a Graph Homomorphism?**
+  > A *homomorphism* $h: G_2 \to G_1$ is a structure-preserving mapping from the terms of $G_2$ to $G_1$. It maps every blank node in $G_2$ to a term (an IRI, literal, or blank node) in $G_1$, while leaving all constant IRIs and literals unchanged ($h(c) = c$), such that:
+  > $$\forall (s, p, o) \in G_2 \implies (h(s), h(p), h(o)) \in G_1$$
+  > In RDF Model Theory [@w3c-rdf11-mt], graph $G_1$ logically entails graph $G_2$ (written $G_1 \models G_2$) under simple entailment **if and only if there exists a graph homomorphism from $G_2$ to $G_1$**. Intuitively, $G_2$ "matches" a pattern within $G_1$ where the blank nodes act as wildcards.
 
-Blank nodes have a concrete design consequence for the capstone. Suppose we model a
-derivative application with a blank node:
+- **Lean Graphs and Computational Complexity.** Blank nodes can introduce internal logical redundancy. Consider a graph containing two triples:
+  ```turtle
+  ex:Hanoi  ex:near  ex:HaiPhong .
+  ex:Hanoi  ex:near  _:b1 .
+  ```
+  The second triple states *"Hanoi is near something"*. But the first triple already proves that Hanoi is near HaiPhong! Mapping `_:b1 ↦ ex:HaiPhong` is a valid homomorphism from the entire graph to its first triple alone.
+  
+  An RDF graph is called **lean** if it contains no internal redundancy — formally, if there is no homomorphism from the graph to any of its proper subgraphs [@w3c-rdf11-mt]. Deciding whether an arbitrary RDF graph is lean is **co-NP-complete**, and computing its minimal lean form is **NP-hard**.
+  > ℹ **What do co-NP-complete and NP-hard mean here?**
+  > A problem is *NP-complete* if a proposed *yes*-answer can be checked quickly (in polynomial time) but finding that answer in the worst case may require searching an exponential number of combinations. A problem is *co-NP-complete* when the opposite holds: a *no*-answer is the part that is easy to certify. For leanness, "this graph is **not** lean" is easy to prove — just exhibit one homomorphism onto a proper subgraph — whereas "this graph **is** lean" means ruling out every such homomorphism, which is the hard direction. *NP-hard* means at least as hard as any NP-complete problem. In practice, for graphs with hundreds of interconnected blank nodes, computing the minimal lean form can become computationally intractable.
 
-```turtle
-ex:rateOfChange_1 ex:hasApplication _:b1 .
-_:b1 ex:differentiand ex:position_1 ;
-     ex:withRespectTo ex:time_1 .
-```
-
-Design question: if this book is ingested into the system twice (two extractions), are the
-two blank nodes `_:b1` and `_:b2` the same application? **No** — a blank node has no stable
-identifier by which we could assert "this is that very application". By Chapter 6, when we
-need to attach evidence to this specific application (the claim *"this application is
-correct"*), the system has no way to point at the blank node durably. The design lesson:
-blank nodes suit ephemeral existential structure; when an object will be referenced again
-(identity, evidence, context), give it an IRI. Chapter 3 formalizes this lesson through the
-n-ary model (`DerivativeApplication`).
+- **Design consequence for system architecture:** Because blank node labels are local to a single document, two extractions of the same sentence will yield distinct blank node identifiers (`_:b1` vs `_:b2`).
+  Suppose we model a derivative application with a blank node:
+  ```turtle
+  ex:rateOfChange_1 ex:hasApplication _:b1 .
+  _:b1 ex:differentiand ex:position_1 ;
+       ex:withRespectTo ex:time_1 .
+  ```
+  If this text is ingested twice, the two blank nodes `_:b1` and `_:b2` **cannot be reconciled by name**. Later in Chapter 6, when the system needs to attach evidence to this specific application (the claim *"this derivative application was published by Source A in 2020"*), there is no durable, cross-system identifier to attach the claim to.
+  
+  **The engineering lesson:** Blank nodes suit transient, purely existential structures; whenever an entity will be cross-referenced, evaluated, or audited over time, give it a durable IRI. Chapter 3 formalizes this through the n-ary model (`DerivativeApplication`).
 
 ### 2.1.4 Representing a knowledge domain in RDF
 
@@ -449,6 +451,32 @@ The variable `?country` joins the two patterns. Result:
 ?capital = Paris, ?country = France
 ```
 
+#### SPARQL Relational Algebra: Join, Left Join, and Conjunctive Queries
+
+To understand how query engines optimize and execute complex SPARQL queries, we must examine the formal **SPARQL Relational Algebra** [@perez-sparql-semantics-2009]:
+
+1. **Solution Mapping ($\mu$):** A partial function $\mu: \mathcal{V} \to \mathcal{T}$ mapping a subset of variables $\mathcal{V}$ to RDF terms $\mathcal{T}$ (IRIs, blank nodes, literals). The set of variables where $\mu$ is defined is denoted $\text{dom}(\mu)$.
+2. **Compatibility ($\mu_1 \sim \mu_2$):** Two solution mappings $\mu_1$ and $\mu_2$ are **compatible** if and only if they assign identical terms to every variable they share:
+   $$\forall v \in \text{dom}(\mu_1) \cap \text{dom}(\mu_2) \implies \mu_1(v) = \mu_2(v)$$
+   If $\mu_1$ and $\mu_2$ share no variables ($\text{dom}(\mu_1) \cap \text{dom}(\mu_2) = \emptyset$), they are vacuously compatible. When compatible, their union $\mu_1 \cup \mu_2$ forms a valid, merged solution mapping.
+
+The query engine evaluates graph patterns using four core algebraic operators over multisets of mappings $\Omega_1, \Omega_2$:
+
+- **Join ($\bowtie$):** Joins two patterns by merging all compatible pairs:
+  $$\Omega_1 \bowtie \Omega_2 = \{ \mu_1 \cup \mu_2 \mid \mu_1 \in \Omega_1, \mu_2 \in \Omega_2 \text{ and } \mu_1 \sim \mu_2 \}$$
+  When you write two triple patterns separated by a period (`.`) in a BGP, the engine computes their algebraic Join.
+- **Filter ($\sigma_\varphi$):** Restricts solutions to those satisfying a boolean expression $\varphi$:
+  $$\sigma_\varphi(\Omega) = \{ \mu \in \Omega \mid \mu \text{ satisfies } \varphi \}$$
+- **Left Join ($\ \vec{\bowtie}_\varphi\ $):** The mathematical foundation of the `OPTIONAL` keyword. It retains all joined mappings that satisfy $\varphi$, while preserving every mapping from $\Omega_1$ that has *no* compatible counterpart in $\Omega_2$:
+  $$\Omega_1 \ \vec{\bowtie}_\varphi\ \Omega_2 = \sigma_\varphi(\Omega_1 \bowtie \Omega_2) \cup \{ \mu_1 \in \Omega_1 \mid \forall \mu_2 \in \Omega_2, \mu_1 \not\sim \mu_2 \text{ or } \neg\varphi(\mu_1 \cup \mu_2) \}$$
+  This ensures that optional data enriches a solution when available, without discarding the primary record when absent.
+- **Union ($\cup$):** Computes the multiset union of two patterns (`UNION`).
+
+> ℹ **Theoretical Depth: Conjunctive Queries and Complexity**
+> In database theory, evaluating a Basic Graph Pattern (BGP) is mathematically equivalent to evaluating a **Conjunctive Query (CQ)** (queries constructed solely from conjunctions $\wedge$ and existential quantifiers $\exists$, corresponding to SELECT-PROJECT-JOIN queries in relational algebra).
+> 
+> A celebrated theorem by Chandra and Merlin (1977) and Vardi (1982) establishes that Conjunctive Query evaluation is **NP-complete in combined complexity** (the size of the query pattern *and* the graph together). However, its **data complexity** (the size of the graph for a fixed query) is in **$AC_0$** (efficiently parallelizable, well within polynomial time). In practice, because queries typically contain fewer than 20 patterns while the graph contains billions of triples, query engines evaluate joins very quickly using indexed hash joins and merge joins.
+
 #### FILTER and OPTIONAL
 
 `FILTER` restricts solution mappings by a condition on values:
@@ -638,10 +666,9 @@ vanish. This is the point of comparison with Cypher in §2.3 when we meet `OPTIO
 
 Now we look at the same knowledge domain through the second model family.
 
-### 2.2.1 Components of the model
+### 2.2.1 Components and formal model
 
-The Labeled Property Graph model consists of the following components [@neo4j-data-modeling]
-[@neo4j-modeling-fundamentals]:
+The Labeled Property Graph (LPG) model consists of the following components [@neo4j-data-modeling] [@neo4j-modeling-fundamentals]:
 
 - **Node**: represents an entity.
 - **Label**: classifies a node. A node can carry several labels; for example, a node can be
@@ -653,10 +680,24 @@ The Labeled Property Graph model consists of the following components [@neo4j-da
 - **Direction**: a relationship always has a direction (from one node to another), though a
   user may query ignoring direction.
 
-The most important structural difference from RDF: **relationships are first-class citizens
-and can carry their own properties**. In RDF, a triple cannot have properties; to attach
-information to a relationship, you must use a reification technique or n-ary modeling (more
-involved). In a property graph, you simply add a property to the relationship.
+#### Formal Mathematical Definition
+Formally, an Attributed Labeled Property Graph is defined as a 7-tuple [@angles-gdm-2018]:
+$$G = (V, E, \rho, \lambda_V, \lambda_E, \sigma_V, \sigma_E)$$
+where:
+1. $V$ is a finite set of node identifiers.
+2. $E$ is a finite set of relationship identifiers, disjoint from $V$ ($V \cap E = \emptyset$).
+3. $\rho: E \to V \times V$ is an incidence function mapping each edge to an ordered pair of nodes (source, target).
+4. $\lambda_V: V \to \mathcal{P}(L_V)$ maps each node to a finite subset of labels from alphabet $L_V$.
+5. $\lambda_E: E \to L_E$ maps each edge to a relationship type from alphabet $L_E$.
+6. $\sigma_V: V \times K_V \to \text{Val}$ is a partial function assigning property values to nodes for property keys $K_V$.
+7. $\sigma_E: E \times K_E \to \text{Val}$ is a partial function assigning property values to edges for property keys $K_E$.
+
+The most important structural difference from RDF: **relationships are first-class citizens with their own identifiers ($e \in E$) and can carry their own properties ($\sigma_E$)**. In basic RDF, an edge is merely a predicate IRI connecting subject and object; it has no independent node identity to which properties can be directly attached. In an LPG, attaching a timestamp or confidence to a relationship requires no complex reification pattern.
+
+> ℹ **Core Architecture: Index-Free Adjacency**
+> What gives property graph engines (such as Neo4j, Memgraph, or Kùzu) exceptional traversal speed is **Index-Free Adjacency**.
+> In a traditional relational database or triple store, traversing from node $A$ to node $B$ along edge $R$ requires an index lookup (e.g., searching a B-tree table index for matching keys), costing $O(\log N)$ time per step.
+> In contrast, an engine with *Index-Free Adjacency* stores direct physical or memory pointers to neighboring edges inside the node record itself. Traversing an edge takes $O(1)$ constant time per step — dereferencing a pointer. As a result, multi-hop traversal latency depends strictly on the size of the traversed subgraph, completely independent of the total size of the database.
 
 ### 2.2.2 Identity: database-internal and domain identity
 
@@ -1204,6 +1245,15 @@ the next rung: *RDFS schema, canonical identity, per-source context*.
 | Entailment | A new conclusion derived from axioms | §2.4.1 |
 | Serialize / Parse | Turn a graph into text / read text into a graph | §2.1.5 |
 | Graph isomorphism | Two graphs are equivalent if a bijection preserves their triples | §2.1.5 |
+| Graph homomorphism | A structure-preserving mapping from blank nodes to graph terms; basis for RDF simple entailment | §2.1.3 |
+| Lean graph | An irredundant RDF graph that has no homomorphism to any proper subgraph | §2.1.3 |
+| NP-complete | A computational complexity class verifiable in polynomial time but worst-case exponential to solve | §2.1.3, §2.1.6 |
+| co-NP-complete | The complement of an NP-complete problem: a *no*-answer is easy to certify (witness), while proving the *yes*-answer may require exhaustive search | §2.1.3 |
+| NP-hard | At least as hard as any NP-complete problem; computing the minimal lean form of an RDF graph is NP-hard | §2.1.3 |
+| Combined complexity | Complexity measured in the size of both the query and the data together (contrast with data complexity) | §2.1.6 |
+| SPARQL Relational Algebra | Formal compositional algebra defining Join ($\bowtie$), Left Join ($\vec{\bowtie}$), Filter ($\sigma$), and Union ($\cup$) over solution multisets | §2.1.6 |
+| Conjunctive Query (CQ) | A database query constructed purely from conjunctions ($\wedge$) and existential quantifiers ($\exists$); equivalent to BGPs | §2.1.6 |
+| Index-Free Adjacency | Direct memory pointer linkage between nodes and edges, ensuring $O(1)$ traversal per step | §2.2.1 |
 | W3C (World Wide Web Consortium) | The organization that develops web standards | §2.0 |
 
 ## Further reading
