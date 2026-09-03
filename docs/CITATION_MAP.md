@@ -44,6 +44,13 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | SH-02 | `w3c-shacl12-core` | SHACL 1.2 Core |
 | SWRL-01 | `swrl-submission` | SWRL: Semantic Web Rule Language |
 | RIF-01 | `w3c-rif-core` | RIF Core Dialect |
+| SOUFFLE-01 | `souffle` | Soufflé: On Synthesis of Program Analyzers |
+| DATALOG-01 | `datalog-survey-2013` | Datalog and Recursive Query Processing |
+| OWLRL-01 | `owlrl` | OWL-RL: RDF Closure Rules (RDFS + OWL 2 RL) |
+| PYSHACL-01 | `pyshacl` | pySHACL: A Pure Python SHACL Validator |
+| SHCTS-01 | `shacl-cts` | SHACL Test Suite (W3C Data Shapes) |
+| CWA-01 | `reiter-cwa-1978` | On Closed World Data Bases |
+| DEFLOGIC-01 | `reiter-default-1980` | A Logic for Default Reasoning |
 | NARY-01 | `w3c-nary-relations` | Defining N-ary Relations on the Semantic Web |
 | WD-01 | `wikidata-statements` | Wikidata Help: Statements |
 | WD-02 | `wikidata-qualifiers` | Wikidata Help: Qualifiers |

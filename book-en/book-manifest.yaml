@@ -2,7 +2,7 @@
 # scripts/build_book.sh reads this (when LANG=en) to assemble the book in order.
 #
 # English edition is built incrementally, mirroring the Vietnamese release order.
-# Currently: Chapters 1-4 (English preview).
+# Currently: Chapters 1-5 (English preview).
 
 book:
   output_name: knowledge-graph-book-en
@@ -13,6 +13,7 @@ sources:
   - chapter02.md
   - chapter03.md
   - chapter04.md
+  - chapter05.md
 
 # Chapters not yet translated (added as they reach DRAFTED):
 # - preface.md, how-to-use.md, introduction.md

@@ -1722,6 +1722,118 @@
       ],
       "research_note_path": "docs/research_notes/RLP-03.md",
       "key_finding": "W3C rule-interchange suite; RIF-Core corresponds to Datalog (Horn without function symbols); defines RIF+RDF and RIF+OWL 2 semantics."
+    },
+    {
+      "id": "SOUFFLE-01",
+      "canonical_url": "https://doi.org/10.1007/978-3-319-41540-6_23",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://link.springer.com/chapter/10.1007/978-3-319-41540-6_23",
+      "title": "Soufflé: On Synthesis of Program Analyzers",
+      "document_status": "Peer-reviewed conference paper (CAV 2016, LNCS 9779:422–430)",
+      "publication_date": "2016",
+      "used_in_chapters": [
+        "5"
+      ],
+      "research_note_path": "docs/research_notes/SOUFFLE-01.md",
+      "key_finding": "Compiles Datalog to parallel C++; industrial-scale forward-chaining fixpoint evaluation used for points-to/taint static analysis. Concrete evidence that the abstract G_{i+1} recurrence is the inner loop of real rule engines."
+    },
+    {
+      "id": "DATALOG-01",
+      "canonical_url": "https://doi.org/10.1561/1900000017",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.nowpublishers.com/article/Details/DBS-067",
+      "title": "Datalog and Recursive Query Processing",
+      "document_status": "Peer-reviewed survey (Foundations and Trends in Databases 6(2–3):105–195)",
+      "publication_date": "2013",
+      "used_in_chapters": [
+        "5"
+      ],
+      "research_note_path": "docs/research_notes/DATALOG-01.md",
+      "key_finding": "Standard survey of Datalog fixpoint semantics and evaluation strategies (naive/semi-naive); safe function-free Horn rules. Authors verified via DBLP: Green, Huang, Loo, Zhou."
+    },
+    {
+      "id": "OWLRL-01",
+      "canonical_url": "https://github.com/RDFLib/OWL-RL",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://github.com/RDFLib/OWL-RL",
+      "title": "OWL-RL: RDF Closure Rules for RDFS and OWL 2 RL",
+      "document_status": "Open-source tool (RDFLib project, stable)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "5"
+      ],
+      "research_note_path": "docs/research_notes/OWLRL-01.md",
+      "key_finding": "Pure-Python forward-chaining materialization of RDFS and OWL 2 RL closures over an RDFLib graph; implements rdfs2/rdfs3/rdfs7/rdfs9 and the OWL 2 RL/RDF rule set."
+    },
+    {
+      "id": "PYSHACL-01",
+      "canonical_url": "https://github.com/RDFLib/pySHACL",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://github.com/RDFLib/pySHACL",
+      "title": "pySHACL: A Pure Python SHACL Validator",
+      "document_status": "Open-source tool (RDFLib project, stable)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "5"
+      ],
+      "research_note_path": "docs/research_notes/PYSHACL-01.md",
+      "key_finding": "Implements the SHACL 1.0 Recommendation: target/focus/path/value/constraint/result pipeline and the ValidationReport/ValidationResult structure; the validator used in this book's toolchain."
+    },
+    {
+      "id": "SHCTS-01",
+      "canonical_url": "https://w3c.github.io/data-shapes/data-shapes-test-suite/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://w3c.github.io/data-shapes/data-shapes-test-suite/",
+      "title": "SHACL Test Suite",
+      "document_status": "W3C Data Shapes conformance test suite (stable)",
+      "publication_date": "2024",
+      "used_in_chapters": [
+        "5"
+      ],
+      "research_note_path": "docs/research_notes/SHCTS-01.md",
+      "key_finding": "Runs each SHACL validator against shared shapes/data and checks the produced report — makes 'does my validator implement sh:class subclass semantics?' a testable question, not a guess."
+    },
+    {
+      "id": "CWA-01",
+      "canonical_url": "https://doi.org/10.1007/978-1-4684-3384-5_3",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://link.springer.com/chapter/10.1007/978-1-4684-3384-5_3",
+      "title": "On Closed World Data Bases (Reiter)",
+      "document_status": "Peer-reviewed book chapter (Logic and Data Bases, Gallaire & Minker eds., pp. 55–76)",
+      "publication_date": "1978",
+      "used_in_chapters": [
+        "5"
+      ],
+      "research_note_path": "docs/research_notes/CWA-01.md",
+      "key_finding": "Formalizes the Closed World Assumption: what is not derivable from the database is taken as false. The precise origin of the 'closed-world flavor' SHACL count constraints evoke — but SHACL is not CWA in Reiter's logical sense."
+    },
+    {
+      "id": "DEFLOGIC-01",
+      "canonical_url": "https://doi.org/10.1016/0004-3702(80)90014-4",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-03T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1016/0004-3702(80)90014-4",
+      "title": "A Logic for Default Reasoning (Reiter)",
+      "document_status": "Peer-reviewed journal paper (Artificial Intelligence 13(1–2):81–132)",
+      "publication_date": "1980",
+      "used_in_chapters": [
+        "5"
+      ],
+      "research_note_path": "docs/research_notes/DEFLOGIC-01.md",
+      "key_finding": "Foundational non-monotonic default logic: true-by-default conclusions retracted when contradicted (bird/penguin). Contrast with the monotonic forward chaining that guarantees no retraction."
     }
   ]
 }
