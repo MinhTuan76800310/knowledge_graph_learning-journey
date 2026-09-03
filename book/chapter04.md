@@ -249,8 +249,8 @@ con của tập mà Place được gán.
 Quay lại ví dụ: trong diễn giải I ở trên, $City^I = \{h, p\}$ và $Place^I = \{h, v, p, f\}$.
 Vì $\{h, p\} \subseteq \{h, v, p, f\}$, diễn giải I **thỏa mãn** tiên đề `City ⊑ Place`.
 
-Ngược lại, xét diễn giải J với $City^J = \{h, p\}$ và $Place^J = \{h\}$. Vì $\{h, p\} \not\subseteq \{h\}$
-(phần tử p thuộc $City^J$ nhưng không thuộc $Place^J$), diễn giải J **không thỏa mãn** tiên đề
+Ngược lại, xét diễn giải K với $City^K = \{h, p\}$ và $Place^K = \{h\}$. Vì $\{h, p\} \not\subseteq \{h\}$
+(phần tử p thuộc $City^K$ nhưng không thuộc $Place^K$), diễn giải K **không thỏa mãn** tiên đề
 này.
 
 Một diễn giải **thỏa mãn** một tiên đề khi điều kiện ngữ nghĩa của tiên đề đó đúng trong
@@ -276,7 +276,7 @@ Xét ontology O gồm hai tiên đề:
 Diễn giải I ở trên (với $Place^I = \{h, v, p, f\}$, $City^I = \{h, p\}$, $Country^I = \{v, f\}$)
 thỏa mãn cả hai → I là một mô hình của O.
 
-Diễn giải J (với $Place^J = \{h\}$) không thỏa mãn (1) → J không phải mô hình của O.
+Diễn giải K (với $Place^K = \{h\}$) không thỏa mãn (1) → K không phải mô hình của O.
 
 > 🖊 **Tự kiểm tra:** Tại sao "mô hình" không giống với "ontology"? Ontology là tập tiên đề
 > (mô tả các ràng buộc). Mô hình là một diễn giải cụ thể thỏa mãn các ràng buộc đó. Một
@@ -429,24 +429,26 @@ Cả bốn điều kiện đúng → $\mathit{rateOfChange\_1}^I = m_1 \in \math
 giải I tuân theo định nghĩa cơ chế.
 
 **Đối chứng — một diễn giải thỏa mãn ontology thành phố nhưng vi phạm tiên đề cơ chế.**
-Xét diễn giải J diễn giải các ký hiệu địa lý như bình thường: $\mathit{City}^J = \{h, p\}$,
-$\mathit{capitalOf}^J = \{(h,v), (p,f)\}$ — J thỏa mãn `City ⊑ Place`, `capitalOf` nối
-thành phố–quốc gia, v.v. Nhưng J gán $\mathit{rateOfChange\_1}^J = m_5$ với
-$hasOperation^J = \varnothing$. Khi đó $m_5 \notin (\exists hasOperation.\mathit{DerivativeOperation})^J$
-— không có part tử nào vừa là DerivativeOperation vừa liên kết hasOperation với $m_5$ — nên
-$m_5 \notin \mathit{RateOfChangeMechanism}^J$. J là mô hình của ontology thành phố nhưng
-*không* là mô hình của ontology cơ chế. Bài học của §4.3 được tái khẳng định trên miền cơ
-chế: **thỏa mãn một bộ tiên đề không ngụ ý thỏa mãn bộ khác**; một diễn giải hợp lệ về địa lý
-vẫn có thể "vô lý" về mặt cơ chế.
+Xét diễn giải L diễn giải các ký hiệu địa lý như bình thường: $\mathit{City}^L = \{h, p\}$,
+$\mathit{capitalOf}^L = \{(h,v), (p,f)\}$ — L thỏa mãn `City ⊑ Place`, `capitalOf` nối
+thành phố–quốc gia, v.v. Nhưng L gán $\mathit{rateOfChange\_1}^L = m_5$ với
+$hasOperation^L = \varnothing$. Khi đó $m_5 \notin (\exists hasOperation.\mathit{DerivativeOperation})^L$
+— không có part tử nào vừa là DerivativeOperation vừa liên kết hasOperation với $m_5$ — nên theo
+định nghĩa, $m_5 \notin \mathit{RateOfChangeMechanism}^L$. Ngoài định nghĩa, ontology cơ chế còn
+**khẳng định** cá thể `rateOfChange_1 : RateOfChangeMechanism` (rateOfChange_1 *là* một cơ chế tốc
+độ biến thiên). Vì L đặt $\mathit{rateOfChange\_1}^L = m_5$ ra ngoài lớp này, L vi phạm khẳng định
+ấy. Do vậy L là mô hình của ontology thành phố nhưng *không* là mô hình của ontology cơ chế. Bài
+học của §4.3 được tái khẳng định trên miền cơ chế: **thỏa mãn một bộ tiên đề không ngụ ý thỏa mãn
+bộ khác**; một diễn giải hợp lệ về địa lý vẫn có thể "vô lý" về mặt cơ chế.
 
-> 🖊 **Tự kiểm tra:** Dựng một diễn giải K trên miền cơ chế gồm năm phần tử
-> $\{m_1, d_1, d_2, q_1, r_1\}$ với $hasOperation^K = \{(m_1, d_1), (m_1, d_2)\}$ và
-> $\mathit{DerivativeOperation}^K = \{d_1\}$. Hỏi: $m_1$ có thuộc
-> $(\exists hasOperation.\mathit{DerivativeOperation})^K$ không? *Chỉ dẫn — đáp án:* kiểm
-> tra từng cặp trong $hasOperation^K$. Cặp $\langle m_1, d_1\rangle$ đưa đến $d_1$, và
-> $d_1 \in \mathit{DerivativeOperation}^K$ → có ít nhất một liên kết như vậy → câu trả lời
+> 🖊 **Tự kiểm tra:** Dựng một diễn giải M trên miền cơ chế gồm năm phần tử
+> $\{m_1, d_1, d_2, q_1, r_1\}$ với $hasOperation^M = \{(m_1, d_1), (m_1, d_2)\}$ và
+> $\mathit{DerivativeOperation}^M = \{d_1\}$. Hỏi: $m_1$ có thuộc
+> $(\exists hasOperation.\mathit{DerivativeOperation})^M$ không? *Chỉ dẫn — đáp án:* kiểm
+> tra từng cặp trong $hasOperation^M$. Cặp $\langle m_1, d_1\rangle$ đưa đến $d_1$, và
+> $d_1 \in \mathit{DerivativeOperation}^M$ → có ít nhất một liên kết như vậy → câu trả lời
 > là **có**: $m_1$ thuộc hạn chế tồn tại. (Lưu ý: cặp $\langle m_1, d_2\rangle$ đưa đến $d_2
-> \notin \mathit{DerivativeOperation}^K$ nhưng điều đó không bác bỏ câu trả lời — hạn chế
+> \notin \mathit{DerivativeOperation}^M$ nhưng điều đó không bác bỏ câu trả lời — hạn chế
 > tồn tại chỉ cần *một* liên kết đúng. Định nghĩa hình thức của $\exists R.C$ và $\forall R.C$
 > ở §4.6.)
 
@@ -630,9 +632,14 @@ Tập các phần tử trong miền **không** thuộc C. Lưu ý: phủ định
 diễn giải $\Delta^I$, không phải "mọi thứ trong vũ trụ".
 
 Trên miền cơ chế: `¬RateOfChangeMechanism` là lớp mọi thực thể **không phải** cơ chế tốc
-độ biến thiên. Cá thể `derivativeOperation_1 : DerivativeOperation` (phép toán đạo hàm,
-§4.3) thuộc lớp phủ định này, vì nó là một phép toán, không phải một cơ chế. Phủ định cho
-phép nói "X không thuộc loại Y" mà không cần liệt kê tường minh.
+độ biến thiên. Trong diễn giải I của §4.3, $\mathit{RateOfChangeMechanism}^I = \{m_1\}$ còn
+$\mathit{derivativeOperation\_1}^I = d_1 \notin \{m_1\}$, nên $d_1 \in (\neg\mathit{RateOfChangeMechanism})^I$
+— tức `derivativeOperation_1` rơi vào lớp phủ định này. Lưu ý quan trọng: điều đó đúng *trong I*
+vì I gán $d_1$ ra ngoài lớp cơ chế; nó **không** phải một hệ quả logic từ `DerivativeOperation ⊑
+¬RateOfChangeMechanism`. Muốn suy ra hệ quả đó cho *mọi* diễn giải, ta phải tiên đề hóa
+`DisjointClasses(DerivativeOperation, RateOfChangeMechanism)` (xem §4.4) — không được giả định
+tách rời khi chưa có tiên đề. Phủ định cho phép nói "X không thuộc loại Y" trong một diễn giải cụ
+thể mà không cần liệt kê tường minh.
 
 ### Hạn chế tồn tại (Existential Restriction)
 
@@ -1145,28 +1152,40 @@ nào? Xét các tiên đề đã viết:
   → EL (cho phép ⊑, ⊓, ∃)
 - `RateOfChangeMechanism ≡ Mechanism ⊓ ∃hasApplication.DerivativeApplication`
   → EL (≡ là tổ hợp của ⊑ và ⊑)
-- `Reflexive(hasIdentity)` → EL (OWL 2 EL cho phép self-restriction)
+- `Reflexive(hasIdentity)` → EL (`ReflexiveObjectProperty` là một property axiom nằm trong
+  OWL 2 EL. Lưu ý: đây là một *property characteristic*, không phải restriction `Self`
+  (`∃R.Self`) — constructor `Self` **không** thuộc EL; biểu thức lớp của EL chỉ giới hạn ở ⊤, ⊥,
+  lớp được đặt tên, ⊓, `∃R.C` và `≥n R.C`.)
+- `requires o requires ⊑ requires` → **EL** (property chain **nằm trong** OWL 2 EL: văn phạm EL
+  chấp nhận `SubObjectPropertyOf` kèm `ObjectPropertyChain`, chỉ bị ràng buộc bởi một quy tắc lan
+  truyền range mang tính sổ sách [@w3c-owl2-profiles])
 - `Irreflexive(requires)`, `Asymmetric(hasInput)`, `Asymmetric(requires)` → **không** EL
-  (các property characteristic này nằm ngoài EL)
-- `requires o requires ⊑ requires` → **không** EL (EL không hỗ trợ property chain)
+  (ba property characteristic này nằm ngoài văn phạm EL)
 
 Vậy **lõi khái niệm** (Mechanism, RateOfChangeMechanism, DerivativeApplication) thuộc **OWL 2 EL**
-— phù hợp vì đây là ontology TBox-heavy, cần suy luận phân loại đa thức. Các ràng buộc về
-đối xứng/bắc cầu (property characteristics) đẩy ontology lên OWL 2 **RL** (nếu dùng rule engine)
-hoặc OWL 2 **Full** (nếu giữ nguyên). Nếu chỉ truy vấn dữ liệu cá thể (ABox) mà không cần suy
-luận phân loại, OWL 2 **QL** cho phép rewriting xuống SQL.
+— phù hợp vì đây là ontology TBox-heavy, cần suy luận phân loại đa thức. Các ràng buộc bất đối
+xứng/khản xạ (property characteristics) không thuộc EL; chúng là thành viên của văn phạm **OWL 2
+RL** và **OWL 2 DL**. Một ontology cơ chế tuân thủ DL mà giữ các characteristic này vẫn là **OWL 2
+DL** (hoặc **OWL 2 RL** nếu nhắm tới rule engine) — *không phải* OWL 2 Full. OWL 2 Full là tập mở
+rộng không quyết định được, áp dụng từ vựng OWL lên đồ thị RDF tùy ý mà không có các ràng buộc
+toàn cục của DL; việc dùng `Asymmetric`/`Irreflexive` thông thường bên trong một ontology DL không
+đưa ontology tới Full. Nếu chỉ truy vấn dữ liệu cá thể (ABox) mà không cần suy luận phân loại,
+OWL 2 **QL** cho phép rewriting xuống SQL.
 
 > 🖊 **Tự kiểm tra:** Ontology cơ chế có thể giảm xuống OWL 2 EL bằng cách bỏ đi những tính
 > chất nào? Đánh đổi là gì?
 >
 > <details><summary>Đáp án</summary>
 >
-> Bỏ `Irreflexive(requires)`, `Asymmetric(hasInput)`, `Asymmetric(requires)` và
-> `requires o requires ⊑ requires`. Khi đó mọi tiên đề còn lại đều nằm trong EL:
-> suy luận phân loại (subsumption) chạy đa thức, nhưng mất khả năng phát hiện vòng tròn
-> phụ thuộc bất hợp lệ (nhờ `requires` bất đối xứng) và mất tính bắc cầu suy dẫn
-> (`A requires B` + `B requires C` không còn suy ra `A requires C`). Đây là đánh đổi
-> điển hình giữa biểu đạt và hiệu suất.
+> Bỏ đúng ba property characteristic ngoài EL: `Irreflexive(requires)`, `Asymmetric(hasInput)`,
+> `Asymmetric(requires)`. `Reflexive(hasIdentity)` và chuỗi `requires o requires ⊑ requires` được
+> **giữ lại** — cả hai đã nằm trong văn phạm OWL 2 EL [@w3c-owl2-profiles]. Sau phép giảm này mọi
+> tiên đề còn lại đều thuộc EL, nên suy luận phân loại (subsumption) chạy đa thức. Cái mất đi là
+> ba ràng buộc bị bỏ đơn giản biến mất: không còn phát hiện được vòng phụ thuộc bất hợp lệ hay
+> vòng lặp tự tham chiếu qua `requires` (đó là vai trò của `Asymmetric`/`Irreflexive`). Chú ý điều
+> **không** mất: vì giữ chuỗi, `A requires B` + `B requires C` vẫn suy ra `A requires C`. Đây là
+> một lưu ý chung — giảm ontology về một profile là phép biến đổi *cú pháp*, không bảo toàn phép
+> suy diễn; mọi khả năng biểu đạt mà profile cấm đều mất đi chứ không được xấp xỉ.
 > </details>
 
 ## 4.13 Cầu nối đến Mechanism Knowledge Graph
@@ -1400,7 +1419,7 @@ Không — ngược lại là đằng khác. Asymmetric nghĩa là $R^I \cap (R^
 
 **Câu 8 (★★★).** Bạn cần suy luận phân loại trên TBox cơ chế (hàng trăm lớp) và muốn đảm bảo thời gian đa thức. Dựa vào §4.12, bạn phải từ bỏ những tính chất nào của ontology hiện tại? Nếu thay vào đó bạn chỉ cần truy vấn ABox lớn bằng SQL, profile nào phù hợp hơn?
 
-Để giữ suy luận phân loại trong thời gian đa thức của OWL 2 EL, phải bỏ các property characteristic mà EL cấm: `Irreflexive(requires)`, `Asymmetric(hasInput)`, `Asymmetric(requires)`. Đánh đổi: mất khả năng phát hiện vòng tròn phụ thuộc bất hợp lệ (nhờ `requires` bất đối xứng/phản xạ đảo). Lưu ý quan trọng về mặt chuẩn: **khác** với mục tự kiểm tra ở §4.12, chuỗi thuộc tính `requires o requires ⊑ requires` **không cần bỏ** — theo OWL 2 Profiles (W3C), văn phạm EL cho phép `SubObjectPropertyOf` kèm `ObjectPropertyChain`, nên property chain **nằm trong** EL; EL chỉ loại Symmetric/Asymmetric/Irreflexive/DisjointObjectProperties. Vì vậy tập cần bỏ tối thiểu là **ba** characteristic trên, không phải bốn. Nếu chỉ cần truy vấn ABox lớn bằng SQL: chọn **OWL 2 QL** — thiết kế cho query rewriting sang ngôn ngữ quan hệ, phù hợp khi ABox rất lớn. Bằng chứng: §4.12 (bảng EL/QL/RL và phân loại ontology cơ chế); đối chiếu chuẩn OWL 2 Profiles của W3C để sửa lại điểm property chain.
+Để giữ suy luận phân loại trong thời gian đa thức của OWL 2 EL, phải bỏ các property characteristic mà EL cấm: `Irreflexive(requires)`, `Asymmetric(hasInput)`, `Asymmetric(requires)`. Đánh đổi: mất khả năng phát hiện vòng tròn phụ thuộc bất hợp lệ (nhờ `requires` bất đối xứng/phản xạ đảo). Lưu ý quan trọng về mặt chuẩn (khớp với mục tự kiểm tra §4.12): chuỗi thuộc tính `requires o requires ⊑ requires` **không cần bỏ** — theo OWL 2 Profiles (W3C), văn phạm EL cho phép `SubObjectPropertyOf` kèm `ObjectPropertyChain`, nên property chain **nằm trong** EL; EL chỉ loại Symmetric/Asymmetric/Irreflexive/DisjointObjectProperties. Vì vậy tập cần bỏ tối thiểu là **ba** characteristic trên, không phải bốn. Nếu chỉ cần truy vấn ABox lớn bằng SQL: chọn **OWL 2 QL** — thiết kế cho query rewriting sang ngôn ngữ quan hệ, phù hợp khi ABox rất lớn. Bằng chứng: §4.12 (bảng EL/QL/RL và phân loại ontology cơ chế); đối chiếu chuẩn OWL 2 Profiles của W3C để sửa lại điểm property chain.
 
 ## 4.16 Chúng ta đã biết gì
 

@@ -258,9 +258,9 @@ Back to the example: in interpretation I above, $City^I = \{h, p\}$ and
 $Place^I = \{h, v, p, f\}$. Because $\{h, p\} \subseteq \{h, v, p, f\}$, interpretation I
 **satisfies** the axiom `City ⊑ Place`.
 
-Conversely, consider an interpretation J with $City^J = \{h, p\}$ and $Place^J = \{h\}$.
-Because $\{h, p\} \not\subseteq \{h\}$ (the element p is in $City^J$ but not in $Place^J$),
-interpretation J **does not satisfy** this axiom.
+Conversely, consider an interpretation K with $City^K = \{h, p\}$ and $Place^K = \{h\}$.
+Because $\{h, p\} \not\subseteq \{h\}$ (the element p is in $City^K$ but not in $Place^K$),
+interpretation K **does not satisfy** this axiom.
 
 An interpretation **satisfies** an axiom when the axiom's semantic condition holds in that
 interpretation.
@@ -285,7 +285,7 @@ Consider an ontology O with two axioms:
 Interpretation I above (with $Place^I = \{h, v, p, f\}$, $City^I = \{h, p\}$,
 $Country^I = \{v, f\}$) satisfies both → I is a model of O.
 
-Interpretation J (with $Place^J = \{h\}$) does not satisfy (1) → J is not a model of O.
+Interpretation K (with $Place^K = \{h\}$) does not satisfy (1) → K is not a model of O.
 
 > 🖊 **Self-check:** Why is a "model" not the same as an "ontology"? An ontology is a set of
 > axioms (describing constraints). A model is a concrete interpretation that satisfies those
@@ -442,25 +442,28 @@ All four conditions hold → $\mathit{rateOfChange\_1}^I = m_1 \in
 \mathit{RateOfChangeMechanism}^I$. Interpretation I obeys the mechanism definition.
 
 **Counter-example — an interpretation that satisfies the city ontology but violates the
-mechanism axiom.** Consider an interpretation J that interprets the geographic symbols as
-usual: $\mathit{City}^J = \{h, p\}$, $\mathit{capitalOf}^J = \{(h,v), (p,f)\}$ — J satisfies
-`City ⊑ Place`, `capitalOf` linking city–country, and so on. But J assigns
-$\mathit{rateOfChange\_1}^J = m_5$ with $hasOperation^J = \varnothing$. Then $m_5 \notin
-(\exists hasOperation.\mathit{DerivativeOperation})^J$ — no element is both a
-DerivativeOperation and linked by hasOperation to $m_5$ — so $m_5 \notin
-\mathit{RateOfChangeMechanism}^J$. J is a model of the city ontology but *not* a model of the
-mechanism ontology. The lesson of §4.3 is reaffirmed over the mechanism domain: **satisfying
-one set of axioms does not imply satisfying another**; an interpretation valid geographically
-can still be "nonsensical" mechanistically.
+mechanism axiom.** Consider an interpretation L that interprets the geographic symbols as
+usual: $\mathit{City}^L = \{h, p\}$, $\mathit{capitalOf}^L = \{(h,v), (p,f)\}$ — L satisfies
+`City ⊑ Place`, `capitalOf` linking city–country, and so on. But L assigns
+$\mathit{rateOfChange\_1}^L = m_5$ with $hasOperation^L = \varnothing$. Then $m_5 \notin
+(\exists hasOperation.\mathit{DerivativeOperation})^L$ — no element is both a
+DerivativeOperation and linked by hasOperation to $m_5$ — so by the definition, $m_5 \notin
+\mathit{RateOfChangeMechanism}^L$. Beyond the definition, the mechanism ontology also **asserts**
+the individual `rateOfChange_1 : RateOfChangeMechanism` (rateOfChange_1 *is* a rate-of-change
+mechanism). Because L places $\mathit{rateOfChange\_1}^L = m_5$ outside this class, L violates
+that assertion. Hence L is a model of the city ontology but *not* a model of the mechanism
+ontology. The lesson of §4.3 is reaffirmed over the mechanism domain: **satisfying one set of
+axioms does not imply satisfying another**; an interpretation valid geographically can still be
+"nonsensical" mechanistically.
 
-> 🖊 **Self-check:** Build an interpretation K over the mechanism domain with five elements
-> $\{m_1, d_1, d_2, q_1, r_1\}$ where $hasOperation^K = \{(m_1, d_1), (m_1, d_2)\}$ and
-> $\mathit{DerivativeOperation}^K = \{d_1\}$. Question: does $m_1$ belong to
-> $(\exists hasOperation.\mathit{DerivativeOperation})^K$? *Hint — answer:* check each pair in
-> $hasOperation^K$. The pair $\langle m_1, d_1\rangle$ leads to $d_1$, and $d_1 \in
-> \mathit{DerivativeOperation}^K$ → at least one such link exists → the answer is **yes**:
+> 🖊 **Self-check:** Build an interpretation M over the mechanism domain with five elements
+> $\{m_1, d_1, d_2, q_1, r_1\}$ where $hasOperation^M = \{(m_1, d_1), (m_1, d_2)\}$ and
+> $\mathit{DerivativeOperation}^M = \{d_1\}$. Question: does $m_1$ belong to
+> $(\exists hasOperation.\mathit{DerivativeOperation})^M$? *Hint — answer:* check each pair in
+> $hasOperation^M$. The pair $\langle m_1, d_1\rangle$ leads to $d_1$, and $d_1 \in
+> \mathit{DerivativeOperation}^M$ → at least one such link exists → the answer is **yes**:
 > $m_1$ satisfies the existential restriction. (Note: the pair $\langle m_1, d_2\rangle$ leads
-> to $d_2 \notin \mathit{DerivativeOperation}^K$, but that does not overturn the answer — an
+> to $d_2 \notin \mathit{DerivativeOperation}^M$, but that does not overturn the answer — an
 > existential restriction needs only *one* correct link. The formal definitions of $\exists
 > R.C$ and $\forall R.C$ are in §4.6.)
 
@@ -652,10 +655,15 @@ The set of elements in the domain **not** in C. Note: negation is relative to th
 interpretation domain $\Delta^I$, not to "everything in the universe".
 
 Over the mechanism domain: `¬RateOfChangeMechanism` is the class of every entity that is
-**not** a rate-of-change mechanism. The individual `derivativeOperation_1 :
-DerivativeOperation` (the derivative operation, §4.3) belongs to this complement class,
-because it is an operation, not a mechanism. Negation lets you say "X is not of type Y"
-without listing everything explicitly.
+**not** a rate-of-change mechanism. In interpretation I of §4.3, $\mathit{RateOfChangeMechanism}^I
+= \{m_1\}$ while $\mathit{derivativeOperation\_1}^I = d_1 \notin \{m_1\}$, so $d_1 \in
+(\neg\mathit{RateOfChangeMechanism})^I$ — that is, `derivativeOperation_1` falls into this
+complement class. Important caveat: this holds *in I* because I assigns $d_1$ outside the mechanism
+class; it is **not** a logical consequence of `DerivativeOperation ⊑ ¬RateOfChangeMechanism`. To
+derive that consequence for *every* interpretation, we must axiomatize `DisjointClasses(DerivativeOperation,
+RateOfChangeMechanism)` (see §4.4) — disjointness must not be assumed without an explicit axiom.
+Negation lets you say "X is not of type Y" within a specific interpretation without listing
+everything explicitly.
 
 ### Existential restriction
 
