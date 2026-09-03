@@ -48,6 +48,8 @@ Last verified: 2026-08-25
 | Tabular→RDF (CSV/TSV) | W3C Model for Tabular Data + csv2rdf (REC 2015) | — | STANDARD | Stable | Table/row/column/cell model + annotations for generating RDF from tabular data | 7 |
 | Record linkage / entity resolution | Fellegi & Sunter (JASA 1969) | Hogan et al. Ch.6 Creation & Enrichment | RESEARCH_PAPER / ACADEMIC | Stable | Comparison vector γ, m/u probabilities, two-threshold decision rule | 7 |
 | Schema matching | Rahm & Bernstein (VLDB J 2001) | — | RESEARCH_PAPER | Stable | Element vs structure level; schema/instance/hybrid matchers | 7 |
+| SPARQL relational algebra (Ch1-2 enrichment) | Pérez, Arenas & Gutiérrez, "Semantics and Complexity of SPARQL" (ACM TODS 2009) | W3C SPARQL 1.1 Query Language (REC 2013) | RESEARCH_PAPER / STANDARD | Stable | Formal compositional algebra for solution mappings (join, left join, filter, union); NP-complete combined complexity proof | 2 (EN) |
+| Property graph formal model (Ch1-2 enrichment) | Angles & Gutiérrez, "An Introduction to Graph Data Management" (Springer 2018) | Neo4j Graph Data Modeling Fundamentals | RESEARCH_PAPER / OFFICIAL_DOCUMENTATION | Stable | Attributed graph tuple formalization grounding the Ch2 7-tuple LPG definition | 2 (EN) |
 | Data integration theory | Lenzerini (PODS 2002) | — | RESEARCH_PAPER | Stable | Data integration system (G, S, M); GAV/LAV; sound/complete/exact mappings | 7 |
 
 ## Source type legend

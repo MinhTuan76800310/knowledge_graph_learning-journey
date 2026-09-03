@@ -116,6 +116,8 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | DQSTD-01 | `iso-25012-2008` | ISO/IEC 25012:2008 Data Quality Model |
 | GOVDATA-01 | `iso-8000-2022` | ISO 8000-1:2022 Data Quality — Overview |
 | TKG-01 | `cai-tkgc-2023` | Temporal Knowledge Graph Completion: A Survey |
+| SPARQLALG-01 | `perez-sparql-semantics-2009` | Semantics and Complexity of SPARQL |
+| GDM-01 | `angles-gdm-2018` | An Introduction to Graph Data Management |
 
 ## Notes — Chapter 10
 
