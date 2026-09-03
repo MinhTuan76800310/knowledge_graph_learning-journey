@@ -534,6 +534,84 @@
   note         = {Internal source ID: HOGAN-CH5. Forward chaining fixpoint, soundness/completeness definitions.}
 }
 
+% --- Chapter 5 enrichment: rule engines, Datalog, SHACL tooling, CWA/default logic ---
+
+@inproceedings{souffle,
+  title     = {Souffl{\'e}: On Synthesis of Program Analyzers},
+  author    = {Jordan, Herbert and Scholz, Bernhard and Suboti{\'c}, Marko},
+  booktitle = {Computer Aided Verification (CAV 2016)},
+  publisher = {Springer},
+  series    = {LNCS},
+  volume    = {9779},
+  pages     = {422--430},
+  year      = {2016},
+  doi       = {10.1007/978-3-319-41540-6_23},
+  note      = {Stable. Internal source ID: SOUFFLE-01. Compiles Datalog to parallel C++; industrial forward-chaining fixpoint evaluation for static analysis.}
+}
+
+@article{datalog-survey-2013,
+  title   = {Datalog and Recursive Query Processing},
+  author  = {Green, Timothy J. and Huang, Shan and Loo, Boon Thau and Zhou, Wenchao},
+  journal = {Foundations and Trends in Databases},
+  volume  = {6},
+  number  = {2--3},
+  pages   = {105--195},
+  year    = {2013},
+  doi     = {10.1561/1900000017},
+  note    = {Stable. Internal source ID: DATALOG-01. Standard survey of Datalog fixpoint semantics and evaluation (naive/semi-naive); safe function-free Horn rules.}
+}
+
+@misc{owlrl,
+  title        = {{OWL-RL}: {RDF} Closure Rules for {RDFS} and {OWL} 2 {RL}},
+  author       = {{RDFLib project}},
+  howpublished = {GitHub},
+  year         = {2024},
+  url          = {https://github.com/RDFLib/OWL-RL},
+  note         = {Stable tool. Internal source ID: OWLRL-01. Pure-Python forward-chaining materialization of RDFS and OWL 2 RL closures over an RDFLib graph.}
+}
+
+@misc{pyshacl,
+  title        = {{pySHACL}: A Pure Python {SHACL} Validator},
+  author       = {{RDFLib project}},
+  howpublished = {GitHub},
+  year         = {2024},
+  url          = {https://github.com/RDFLib/pySHACL},
+  note         = {Stable tool. Internal source ID: PYSHACL-01. Implements the SHACL 1.0 Recommendation; target/focus/path/value/constraint/result pipeline and validation report.}
+}
+
+@misc{shacl-cts,
+  title        = {{SHACL} Test Suite},
+  author       = {{W3C Data Shapes Working Group}},
+  howpublished = {W3C},
+  year         = {2024},
+  url          = {https://w3c.github.io/data-shapes/data-shapes-test-suite/},
+  note         = {Stable. Internal source ID: SHCTS-01. Conformance test suite: runs each validator against shared shapes/data and checks the produced report.}
+}
+
+@incollection{reiter-cwa-1978,
+  title     = {On Closed World Data Bases},
+  author    = {Reiter, Raymond},
+  booktitle = {Logic and Data Bases},
+  editor    = {Gallaire, H{\'e}l{\`e}ne and Minker, Jack},
+  publisher = {Plenum Press},
+  pages     = {55--76},
+  year      = {1978},
+  doi       = {10.1007/978-1-4684-3384-5_3},
+  note      = {Stable. Internal source ID: CWA-01. Formalizes the Closed World Assumption: what is not derivable from the database is taken as false.}
+}
+
+@article{reiter-default-1980,
+  title   = {A Logic for Default Reasoning},
+  author  = {Reiter, Raymond},
+  journal = {Artificial Intelligence},
+  volume  = {13},
+  number  = {1--2},
+  pages   = {81--132},
+  year    = {1980},
+  doi     = {10.1016/0004-3702(80)90014-4},
+  note    = {Stable. Internal source ID: DEFLOGIC-01. Non-monotonic default logic: true-by-default conclusions retracted when contradicted; contrast with monotonic forward chaining.}
+}
+
 % ---------------------------------------------------------------------------
 % Chapter 6 — Claims, Evidence, Provenance, Time, Contradiction
 % ---------------------------------------------------------------------------

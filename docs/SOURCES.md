@@ -57,6 +57,10 @@ Last verified: 2026-08-25
 | Enabling Large Language Models to Generate Text with Citations | Gao, Yen, Yu & Chen, 2023 | RESEARCH_PAPER | https://arxiv.org/abs/2305.14627 | EMNLP 2023; ALCE citation benchmark | 9 |
 | Introduction to Neural Network based Approaches for Question Answering over Knowledge Graphs | Chakraborty et al., 2019 | RESEARCH_PAPER | https://arxiv.org/abs/1907.09361 | KGQA survey; paradigms and subproblems | 9 |
 | Unifying Large Language Models and Knowledge Graphs: A Roadmap | Zhu et al., 2023 | RESEARCH_PAPER | https://arxiv.org/abs/2306.08302 | Survey paper; DOI 10.1109/TKDE.2024.3352100; used in Chapter 9 only | 9 |
+| Soufflé: On Synthesis of Program Analyzers | Jordan, Scholz & Subotić, CAV 2016 | RESEARCH_PAPER | https://doi.org/10.1007/978-3-319-41540-6_23 | LNCS 9779:422–430; Datalog→parallel C++; industrial forward-chaining fixpoint | 5 (EN) |
+| Datalog and Recursive Query Processing | Green, Huang, Loo & Zhou, 2013 | RESEARCH_PAPER | https://doi.org/10.1561/1900000017 | Foundations and Trends in Databases 6(2–3):105–195; Datalog fixpoint semantics survey | 5 (EN) |
+| On Closed World Data Bases | Reiter, 1978 | RESEARCH_PAPER | https://doi.org/10.1007/978-1-4684-3384-5_3 | Logic and Data Bases (Gallaire & Minker eds.) pp. 55–76; formalizes the CWA | 5 (EN) |
+| A Logic for Default Reasoning | Reiter, 1980 | RESEARCH_PAPER | https://doi.org/10.1016/0004-3702(80)90014-4 | Artificial Intelligence 13(1–2):81–132; non-monotonic default logic | 5 (EN) |
 
 ## Official Documentation & Case Studies
 
@@ -80,6 +84,9 @@ Last verified: 2026-08-25
 | Ontop Virtual Knowledge Graph System | Ontop project | OFFICIAL_DOCUMENTATION | https://ontop-vkg.org/guide/ | 4 (EN) |
 | RDFox | Oxford Semantic Technologies | CASE_STUDY | https://www.cs.ox.ac.uk/isg/tools/RDFox/ | 4 (EN) |
 | Apache Jena Inference Engine | Apache Software Foundation | OFFICIAL_DOCUMENTATION | https://jena.apache.org/documentation/inference/ | 4 (EN) |
+| OWL-RL (RDF Closure Rules) | RDFLib project | OFFICIAL_DOCUMENTATION | https://github.com/RDFLib/OWL-RL | 5 (EN) |
+| pySHACL (SHACL validator) | RDFLib project | OFFICIAL_DOCUMENTATION | https://github.com/RDFLib/pySHACL | 5 (EN) |
+| SHACL Test Suite | W3C Data Shapes WG | OFFICIAL_DOCUMENTATION | https://w3c.github.io/data-shapes/data-shapes-test-suite/ | 5 (EN) |
 
 ## Python Libraries Evaluated
 
