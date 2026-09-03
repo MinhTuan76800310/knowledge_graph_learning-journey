@@ -113,42 +113,78 @@ chiếu lẫn nhau, nhưng **ý nghĩa của tham chiếu đó không tự độ
 ### 2.1.3 Blank node: tài nguyên không cần tên toàn cục
 
 Blank node thường được giới thiệu là "nút ẩn danh dùng khi không cần định danh toàn
-cục". Điều đó đúng nhưng chưa đủ. Hãy làm rõ ngữ nghĩa trực giác của nó:
+cục". Điều đó đúng nhưng chưa đủ. Trong biểu diễn tri thức hình thức, blank node có một
+nền tảng toán học chính xác:
 
-- Blank node biểu diễn **một tài nguyên tồn tại nhưng không được đặt tên bằng IRI**.
-  Nó vẫn là một nút đầy đủ của đồ thị: có thể là chủ thể hoặc đối tượng của bộ ba.
-- **Nhãn blank node không phải định danh toàn cục.** Khi bạn thấy `_:b0` trong một tài
-  liệu RDF, cái tên `b0` chỉ có ý nghĩa *trong phạm vi tài liệu đó*. Nó là một sản phẩm
-  của tuần tự hóa (serialization artifact), không phải một định danh ổn định xuyên hệ
-  thống.
-- **Ngữ nghĩa tồn tại.** Về mặt logic, blank node mang nghĩa "tồn tại một tài nguyên
-  nào đó sao cho…". Ví dụ, bộ ba `(ex:Hanoi, ex:hasAddress, _:b0)` nói rằng "Hà Nội có
-  một địa chỉ, và địa chỉ đó là một tài nguyên nào đó" — mà không cần (hoặc chưa thể)
-  đặt tên toàn cục cho địa chỉ ấy.
+- **Ngữ nghĩa tồn tại trong logic bậc nhất (First-Order Logic).** Một blank node không
+  chỉ đơn thuần thiếu tên; về mặt toán học nó hoạt động như một **biến được lượng từ hóa
+  tồn tại ($\exists x$)**. Ví dụ, bộ ba RDF:
+  ```turtle
+  ex:Hanoi  ex:hasAddress  _:b0 .
+  ```
+  dịch sang logic bậc nhất thành công thức:
+  $$\exists x \; (\text{hasAddress}(\text{Hanoi}, x))$$
+  Nó khẳng định: *"Tồn tại tài nguyên $x$ nào đó sao cho Hà Nội có $x$ làm địa chỉ."*
+  Định danh blank node `_:b0` là một sản phẩm tuần tự hóa cục bộ (một tên biến có phạm vi
+  trong tệp), không phải định danh toàn cục.
 
-Vì nhãn blank node chỉ là cục bộ, hai đồ thị dùng hai nhãn blank node khác nhau vẫn có
-thể là *cùng một đồ thị* về mặt ngữ nghĩa. Đây chính là lý do việc so sánh đồ thị cần
-khái niệm **đẳng cấu** (isomorphism) thay vì so sánh chuỗi thô — ta sẽ gặp lại ở mục
-2.1.5. Chương này giữ blank node ở mức trực giác; ngữ nghĩa hình thức đầy đủ được dành
-cho các chương sau.
+- **Đồng cấu đồ thị (graph homomorphism) và suy dẫn (entailment).** Vì blank node hoạt
+  động như biến tồn tại, việc so sánh hai đồ thị RDF cần khái niệm toán học **đồng cấu đồ
+  thị (graph homomorphism)** thay vì so sánh chuỗi thô.
+  > ℹ **Đồng cấu đồ thị là gì?**
+  > Một *đồng cấu* $h: G_2 \to G_1$ là một ánh xạ bảo toàn cấu trúc từ các hạng tử của
+  > $G_2$ sang $G_1$. Nó ánh xạ mọi blank node trong $G_2$ tới một hạng tử (IRI, literal,
+  > hoặc blank node) trong $G_1$, đồng thời giữ nguyên mọi IRI và literal hằng
+  > ($h(c) = c$), sao cho:
+  > $$\forall (s, p, o) \in G_2 \implies (h(s), h(p), h(o)) \in G_1$$
+  > Trong lý thuyết mô hình RDF (RDF Model Theory) [@w3c-rdf11-mt], đồ thị $G_1$ suy dẫn
+  > logic đồ thị $G_2$ (viết $G_1 \models G_2$) theo suy dẫn đơn (simple entailment)
+  > **khi và chỉ khi tồn tại một đồng cấu đồ thị từ $G_2$ vào $G_1$**. Trực giác: $G_2$
+  > "khớp" một mẫu bên trong $G_1$, trong đó các blank node đóng vai trò ký tự đại diện
+  > (wildcard).
 
-Blank node có hậu quả thiết kế cụ thể cho capstone. Giả sử ta mô hình hóa ứng dụng đạo
-hàm bằng blank node:
+- **Đồ thị lean và độ phức tạp tính toán.** Blank node có thể đưa vào dư thừa logic nội
+  tại. Xét một đồ thị chứa hai bộ ba:
+  ```turtle
+  ex:Hanoi  ex:near  ex:HaiPhong .
+  ex:Hanoi  ex:near  _:b1 .
+  ```
+  Bộ ba thứ hai nói *"Hà Nội gần một thứ gì đó"*. Nhưng bộ ba thứ nhất đã chứng minh Hà
+  Nội gần Hải Phòng! Ánh xạ `_:b1 ↦ ex:HaiPhong` là một đồng cấu hợp lệ từ toàn bộ đồ thị
+  xuống chỉ riêng bộ ba đầu tiên của nó.
 
-```turtle
-ex:rateOfChange_1 ex:hasApplication _:b1 .
-_:b1 ex:differentiand ex:position_1 ;
-     ex:withRespectTo ex:time_1 .
-```
+  Một đồ thị RDF được gọi là **lean** nếu nó không chứa dư thừa nội tại — về mặt hình
+  thức, nếu không tồn tại đồng cấu từ đồ thị tới bất kỳ đồ thị con thực sự (proper
+  subgraph) nào của nó [@w3c-rdf11-mt]. Bài toán quyết định một đồ thị RDF bất kỳ có lean
+  hay không là **co-NP-complete**, và việc tính dạng lean tối thiểu của nó là **NP-hard**.
+  > ℹ **co-NP-complete và NP-hard nghĩa là gì ở đây?**
+  > Một bài toán là *NP-complete* nếu một câu trả lời *yes* đề xuất có thể được kiểm tra
+  > nhanh (trong thời gian đa thức) nhưng việc tìm ra câu trả lời đó trong trường hợp xấu
+  > nhất có thể phải tìm kiếm qua số lượng tổ hợp hàm mũ. Một bài toán là *co-NP-complete*
+  > khi điều ngược lại đúng: phần trả lời *no* mới là phần dễ chứng minh. Với tính lean,
+  > "đồ thị này **không** lean" thì dễ chứng minh — chỉ cần trưng ra một đồng cấu xuống
+  > một đồ thị con thực sự — trong khi "đồ thị này **là** lean" nghĩa là phải loại trừ mọi
+  > đồng cấu như vậy, và đó là hướng khó. *NP-hard* nghĩa là khó ít nhất bằng mọi bài toán
+  > NP-complete. Trong thực hành, với các đồ thị có hàng trăm blank node liên kết với nhau,
+  > việc tính dạng lean tối thiểu có thể trở nên bất khả thi về mặt tính toán.
 
-Câu hỏi thiết kế: nếu sách này được đưa vào hệ thống hai lần (hai lần trích xuất), hai
-blank node `_:b1` và `_:b2` sinh ra có là cùng một ứng dụng không? **Không** — blank node
-không có định danh ổn định để ta có thể khẳng định "đây là chính ứng dụng đó". Đến
-Chương 6, khi cần gắn bằng chứng vào ứng dụng cụ thể này (claim *"ứng dụng này là đúng"*),
-hệ thống cũng không có cách nào trỏ đến blank node một cách bền vững. Bài học thiết kế:
-blank node phù hợp cho cấu trúc tồn tại thoáng qua; khi một đối tượng sẽ được tham chiếu
-lại (định danh, bằng chứng, ngữ cảnh), hãy cho nó một IRI. Chương 3 chính thức hóa bài
-học này qua mô hình n-ary (`DerivativeApplication`).
+- **Hệ quả thiết kế cho kiến trúc hệ thống:** Vì nhãn blank node chỉ cục bộ trong một tài
+  liệu, hai lần trích xuất cùng một câu sẽ cho hai định danh blank node khác nhau
+  (`_:b1` và `_:b2`). Giả sử ta mô hình hóa ứng dụng đạo hàm bằng blank node:
+  ```turtle
+  ex:rateOfChange_1 ex:hasApplication _:b1 .
+  _:b1 ex:differentiand ex:position_1 ;
+       ex:withRespectTo ex:time_1 .
+  ```
+  Nếu văn bản này được nạp vào hai lần, hai blank node `_:b1` và `_:b2` **không thể được
+  hòa giải bằng tên**. Về sau ở Chương 6, khi hệ thống cần gắn bằng chứng vào chính ứng
+  dụng này (claim *"ứng dụng đạo hàm này được Nguồn A công bố năm 2020"*), không có định
+  danh bền vững, xuyên hệ thống để gắn claim vào.
+
+  **Bài học kỹ thuật:** blank node phù hợp với các cấu trúc tồn tại thoáng qua; bất cứ khi
+  nào một thực thể sẽ được tham chiếu chéo, đánh giá hoặc kiểm toán theo thời gian, hãy
+  cho nó một IRI bền vững. Chương 3 hình thức hóa điều này qua mô hình n-ary
+  (`DerivativeApplication`).
 
 ### 2.1.4 Biểu diễn miền tri thức bằng RDF
 
@@ -444,6 +480,48 @@ Biến `?country` nối hai mẫu. Kết quả:
 ?capital = Paris, ?country = France
 ```
 
+#### Đại số quan hệ SPARQL: Join, Left Join và Conjunctive Query
+
+Để hiểu cách engine truy vấn tối ưu và thực thi các truy vấn SPARQL phức tạp, ta phải xem xét
+**Đại số quan hệ SPARQL (SPARQL Relational Algebra)** hình thức [@perez-sparql-semantics-2009]:
+
+1. **Ánh xạ nghiệm ($\mu$):** Một hàm riêng phần $\mu: \mathcal{V} \to \mathcal{T}$ ánh xạ một
+   tập con các biến $\mathcal{V}$ tới các hạng mục RDF $\mathcal{T}$ (IRI, blank node, literal).
+   Tập các biến mà $\mu$ được xác định ký hiệu là $\text{dom}(\mu)$.
+2. **Tính tương thích ($\mu_1 \sim \mu_2$):** Hai ánh xạ nghiệm $\mu_1$ và $\mu_2$ **tương
+   thích** khi và chỉ khi chúng gán cùng một hạng mục cho mọi biến chúng chia sẻ:
+   $$\forall v \in \text{dom}(\mu_1) \cap \text{dom}(\mu_2) \implies \mu_1(v) = \mu_2(v)$$
+   Nếu $\mu_1$ và $\mu_2$ không chia sẻ biến nào ($\text{dom}(\mu_1) \cap \text{dom}(\mu_2) = \emptyset$), chúng tương thích một cách tầm thường. Khi tương thích, hợp của chúng $\mu_1 \cup \mu_2$ tạo thành một ánh xạ nghiệm gộp hợp lệ.
+
+Engine truy vấn đánh giá các mẫu đồ thị bằng bốn toán tử đại số cốt lõi trên các đa tập ánh xạ
+$\Omega_1, \Omega_2$:
+
+- **Join ($\bowtie$):** Nối hai mẫu bằng cách gộp mọi cặp tương thích:
+  $$\Omega_1 \bowtie \Omega_2 = \{ \mu_1 \cup \mu_2 \mid \mu_1 \in \Omega_1, \mu_2 \in \Omega_2 \text{ và } \mu_1 \sim \mu_2 \}$$
+  Khi bạn viết hai mẫu bộ ba ngăn cách bởi một dấu chấm (`.`) trong một BGP, engine tính phép Join đại số của chúng.
+- **Filter ($\sigma_\varphi$):** Giới hạn nghiệm về những ánh xạ thỏa một biểu thức logic $\varphi$:
+  $$\sigma_\varphi(\Omega) = \{ \mu \in \Omega \mid \mu \text{ thỏa } \varphi \}$$
+- **Left Join ($\ \vec{\bowtie}_\varphi\ $):** Nền tảng toán học của từ khóa `OPTIONAL`. Nó giữ
+  mọi ánh xạ đã nối thỏa $\varphi$, đồng thời bảo toàn mọi ánh xạ từ $\Omega_1$ *không* có đối
+  tác tương thích trong $\Omega_2$:
+  $$\Omega_1 \ \vec{\bowtie}_\varphi\ \Omega_2 = \sigma_\varphi(\Omega_1 \bowtie \Omega_2) \cup \{ \mu_1 \in \Omega_1 \mid \forall \mu_2 \in \Omega_2, \mu_1 \not\sim \mu_2 \text{ hoặc } \neg\varphi(\mu_1 \cup \mu_2) \}$$
+  Điều này bảo đảm dữ liệu tùy chọn làm giàu nghiệm khi có mặt, mà không loại bỏ bản ghi chính khi vắng mặt.
+- **Union ($\cup$):** Tính hợp đa tập của hai mẫu (`UNION`).
+
+> ℹ **Độ sâu lý thuyết: Conjunctive Query và độ phức tạp**
+> Trong lý thuyết cơ sở dữ liệu, việc đánh giá một Basic Graph Pattern (BGP) tương đương về mặt
+> toán học với việc đánh giá một **Conjunctive Query (CQ)** (truy vấn chỉ dựng từ các phép hội
+> $\wedge$ và lượng từ tồn tại $\exists$, tương ứng với truy vấn SELECT-PROJECT-JOIN trong đại số
+> quan hệ).
+>
+> Một định lý nổi tiếng của Chandra và Merlin (1977) và Vardi (1982) khẳng định rằng việc đánh
+> giá Conjunctive Query là **NP-complete theo độ phức tạp kết hợp (combined complexity)** (kích
+> thước của mẫu truy vấn *và* đồ thị cộng lại). Tuy nhiên, **độ phức tạp dữ liệu (data
+> complexity)** của nó (kích thước đồ thị với một truy vấn cố định) nằm trong **$AC_0$** (song
+> song hóa hiệu quả, nằm gọn trong thời gian đa thức). Trong thực hành, vì truy vấn thường chứa
+> dưới 20 mẫu trong khi đồ thị chứa hàng tỷ bộ ba, engine truy vấn đánh giá các phép nối rất
+> nhanh bằng hash join và merge join có chỉ mục.
+
 #### FILTER và OPTIONAL
 
 `FILTER` giới hạn các ánh xạ nghiệm theo một điều kiện trên giá trị:
@@ -644,10 +722,58 @@ Mô hình Đồ thị Thuộc tính có nhãn gồm các thành phần sau [@neo
 - **Hướng** (direction): quan hệ luôn có hướng (từ nút này đến nút kia), dù người dùng
   có thể truy vấn bỏ qua hướng.
 
-Điểm khác biệt cấu trúc quan trọng nhất so với RDF: **quan hệ là công dân hạng nhất và
-có thể mang thuộc tính riêng**. Trong RDF, một bộ ba không thể có thuộc tính; muốn gắn
-thông tin vào một quan hệ, bạn phải dùng kỹ thuật tái hiện hoặc mô hình hóa n-ary
-(phức tạp hơn). Trong đồ thị thuộc tính, bạn chỉ việc thêm thuộc tính vào quan hệ.
+#### Định nghĩa toán học hình thức
+
+Về mặt hình thức, một Attributed Labeled Property Graph được định nghĩa là một bộ 7 thành
+phần (7-tuple) [@angles-gdm-2018]:
+$$G = (V, E, \rho, \lambda_V, \lambda_E, \sigma_V, \sigma_E)$$
+trong đó:
+1. $V$ là một tập hữu hạn các định danh nút.
+2. $E$ là một tập hữu hạn các định danh quan hệ, rời với $V$ ($V \cap E = \emptyset$).
+3. $\rho: E \to V \times V$ là hàm liên thuộc (incidence function) ánh xạ mỗi cạnh tới một cặp có thứ tự hai nút (nguồn, đích).
+4. $\lambda_V: V \to \mathcal{P}(L_V)$ ánh xạ mỗi nút tới một tập con hữu hạn các nhãn thuộc bảng chữ cái $L_V$.
+5. $\lambda_E: E \to L_E$ ánh xạ mỗi cạnh tới một kiểu quan hệ thuộc bảng chữ cái $L_E$.
+6. $\sigma_V: V \times K_V \to \text{Val}$ là hàm riêng phần gán giá trị thuộc tính cho nút theo các khóa thuộc tính $K_V$.
+7. $\sigma_E: E \times K_E \to \text{Val}$ là hàm riêng phần gán giá trị thuộc tính cho cạnh theo các khóa thuộc tính $K_E$.
+
+Điểm khác biệt cấu trúc quan trọng nhất so với RDF: **quan hệ là công dân hạng nhất, có
+định danh riêng ($e \in E$) và có thể mang thuộc tính riêng ($\sigma_E$)**. Trong RDF cơ
+bản, một cạnh chỉ là một IRI vị từ nối chủ thể và đối tượng; nó không có định danh nút độc
+lập để gắn trực tiếp thuộc tính vào. Trong LPG, việc gắn mốc thời gian hay độ tin cậy vào
+một quan hệ không cần mẫu tái hiện (reification) phức tạp.
+
+> ℹ **Frontier: thuộc tính vector cho GraphRAG lai ghép.** Miền giá trị $\text{Val}$ trong
+> bộ 7 thành phần không bị giới hạn ở các vô hướng. Các engine đồ thị thuộc tính hiện đại
+> ngày càng lưu **vector nhúng trực tiếp như thuộc tính của nút hoặc cạnh** — ví dụ một
+> mảng `FLOAT[]` chiều $d$. Đây chính là nền lưu trữ cho **GraphRAG lai ghép**: một nút
+> đơn có thể mang cả thuộc tính ký hiệu (`name`, `type`) lẫn embedding học được, nên một
+> kho phục vụ đồng thời cả truy vấn cấu trúc chính xác lẫn tìm kiếm tương tự xấp xỉ.
+> Chương 8 phát triển phía embedding; Chương 9 hợp nhất cả hai. Cho tới khi một kiểu chỉ
+> mục vector chuẩn hóa được chốt, `FLOAT[]` vẫn là phần mở rộng cấp nhà cung cấp chứ không
+> phải một phần của chuẩn nền ISO GQL.
+
+> ℹ **Kiến trúc cốt lõi: Index-Free Adjacency (lân cận không chỉ mục)**
+> Điều mang lại tốc độ duyệt vượt trội cho các engine đồ thị thuộc tính (Neo4j, Memgraph,
+> Kùzu…) là **Index-Free Adjacency**.
+> Trong một hệ quan hệ truyền thống hoặc triple store, để đi từ nút $A$ sang nút $B$ dọc
+> theo cạnh $R$, hệ thống phải tra cứu chỉ mục (chẳng hạn tìm khóa khớp trong một cây B),
+> tốn $O(\log N)$ thời gian cho mỗi bước.
+> Ngược lại, một engine dùng *Index-Free Adjacency* lưu trực tiếp con trỏ vật lý hoặc con
+> trỏ bộ nhớ tới các cạnh lân cận ngay trong bản ghi của nút. Việc đi qua một cạnh tốn
+> thời gian hằng số $O(1)$ mỗi bước — chỉ là giải tham chiếu con trỏ (dereferencing). Nhờ
+> vậy, độ trễ duyệt nhiều bước phụ thuộc chặt vào kích thước của đồ thị con được duyệt,
+> hoàn toàn độc lập với tổng kích thước của cơ sở dữ liệu.
+
+> ⚠️ **Giới hạn khi mở rộng của Index-Free Adjacency.** Việc giải tham chiếu con trỏ $O(1)$
+> của IFA giả định danh sách lân cận là *cục bộ* — nằm trong bộ nhớ hoặc trên cùng trang
+> lưu trữ. Trong triển khai **phân tán**, con trỏ đó trở thành một **RPC mạng**: nhảy sang
+> một nút lân cận lưu trên máy khác tốn một vòng gọi tin (round-trip) đầy đủ, thường chậm
+> hơn hai tới ba bậc độ lớn so với lần lần vết con trỏ cục bộ. Các engine đồ thị phân tán
+> giảm nhẹ điều này bằng **phân hoạch đồ thị (graph partitioning)**: **edge-cut** cắt các
+> cạnh để tối thiểu hóa lưu lượng xuyên phân hoạch, còn **vertex-cut** nhân bản các nút có
+> bậc cao ra nhiều máy để cân bằng tải. IFA vẫn là chuẩn mực *bên trong* một phân hoạch;
+> thách thức trung tâm của xử lý đồ thị phân tán là giữ một lượt duyệt nằm gọn trong một
+> phân hoạch.
 
 ### 2.2.2 Định danh: nội bộ cơ sở dữ liệu và định danh miền
 
@@ -962,6 +1088,42 @@ minh họa đúng điều mục 2.4.1 hứa: **lựa chọn biểu diễn là l�
 thống Mechanism-KG, với tham vọng tích hợp đa nguồn và suy luận được kiểm chứng, nghiêng
 về RDF ở tầng tri thức trung tâm.
 
+### 2.4.4 Khác biệt thứ tư: ngữ nghĩa walk so với trail
+
+Hai mô hình cũng bất đồng về việc *đường đi (path)* là gì, và khác biệt này dễ bị bỏ qua
+vì cả hai ngôn ngữ vẽ cùng một kiểu mũi tên.
+
+- **SPARQL kế thừa ngữ nghĩa walk từ đồng cấu (homomorphism).** Nhớ lại mục 2.1.3: việc
+  đánh giá BGP là một đồng cấu đồ thị từ mẫu vào dữ liệu. Một đồng cấu không đặt ràng
+  buộc rằng hai cạnh mẫu phân biệt phải ánh xạ tới hai cạnh dữ liệu phân biệt — cùng một
+  cạnh có thể được dùng lại. Đường thuộc tính (property path, `p+`, `p*`) cũng được định
+  nghĩa như vậy: một đường đi là một *walk* (dạo), tức một dãy cạnh trong đó hai cạnh liên
+  tiếp chia sẻ một đỉnh, và một cạnh có thể xuất hiện nhiều hơn một lần.
+- **Cypher ép tính duy nhất quan hệ (relationship uniqueness) — ngữ nghĩa trail.** Trong
+  một mẫu `MATCH` đơn, cùng một quan hệ không thể được buộc hai lần. Một đường đi trong
+  Cypher là một *trail* (vết): một walk không lặp cạnh. Đây là một lựa chọn thiết kế có
+  chủ đích, được ghi trong tài liệu Cypher manual, và là điều khiến các mẫu như
+  `MATCH (a)-[r1]->()-[r2]->(b)` đọc tự nhiên mà không âm thầm dùng lại một cạnh.
+
+> ℹ **Walk so với trail — phân biệt một dòng.** Một **walk** có thể lặp đỉnh *và* lặp
+> cạnh. Một **trail** có thể lặp đỉnh nhưng không bao giờ lặp cạnh. Một **path** (theo
+> nghĩa chặt nhất của lý thuyết đồ thị) không lặp cả đỉnh lẫn cạnh. Ngữ nghĩa đồng cấu của
+> SPARQL dựa trên walk; tính duy nhất quan hệ của Cypher dựa trên trail.
+
+Vì sao điều này quan trọng: trên một đồ thị có chu trình, hai ngữ nghĩa cho câu trả lời
+khác nhau. Xét tam giác $A \to B \to C \to A$. Đường thuộc tính SPARQL `A (p+) A` có thể
+đi vòng tam giác hai lần (một walk dài 6), trong khi tương đương trong Cypher
+`MATCH (a:A)-[r*]->(a:A)` không thể dùng lại cạnh nào, nên chu trình ngắn nhất nó tìm
+được có độ dài 3. Truy vấn đếm, phát hiện chu trình và kiểm tra khả đạt vì vậy khác nhau
+giữa hai ngôn ngữ ngay cả khi dữ liệu giống hệt. Khi bạn mang một lượt duyệt từ engine này
+sang engine kia, hãy kiểm tra xem kết quả của bạn có phụ thuộc vào việc dùng lại cạnh
+không.
+
+> 🖊 **Tự kiểm tra:** Trên tam giác $A \to B \to C \to A$, đường thuộc tính SPARQL
+> `A (p+) C` có một *walk* dài 5 từ $A$ đến $C$ không? Tương đương Cypher
+> `MATCH (a)-[r*]->(c)` có chấp nhận cùng tuyến 5 bước đó không? Giải thích khác biệt
+> bằng phân biệt walk/trail.
+
 ## 2.5 Những ngộ nhận thường gặp
 
 1. **"Turtle là RDF."** Sai. Turtle là một cú pháp để viết RDF; RDF là mô hình đồ thị.
@@ -1182,6 +1344,18 @@ nguồn*.
 | Entailment (suy diễn logic) | Kết luận mới suy ra từ tiên đề | §2.4.1 |
 | Serialize / Parse | Chuyển đồ thị thành văn bản / Đọc văn bản thành đồ thị | §2.1.5 |
 | Graph isomorphism (đẳng cấu đồ thị) | Hai đồ thị tương đương nếu có song ánh bảo toàn bộ ba | §2.1.5 |
+| Graph homomorphism (đồng cấu đồ thị) | Ánh xạ bảo toàn cấu trúc từ blank node sang hạng mục đồ thị; nền tảng của suy dẫn đơn RDF | §2.1.3 |
+| Lean graph (đồ thị tinh) | Đồ thị RDF không dư thừa, không có đồng cấu tới bất kỳ đồ thị con thực sự nào | §2.1.3 |
+| NP-complete | Lớp độ phức tạp kiểm tra được trong thời gian đa thức nhưng giải trong trường hợp xấu nhất có thể hàm mũ | §2.1.3, §2.1.6 |
+| co-NP-complete | Phần bù của bài toán NP-complete: câu trả lời *no* dễ chứng minh (witness), còn chứng minh câu trả lời *yes* có thể cần tìm kiếm vét cạn | §2.1.3 |
+| NP-hard | Khó ít nhất bằng mọi bài toán NP-complete; tính dạng lean tối thiểu của đồ thị RDF là NP-hard | §2.1.3 |
+| Combined complexity (độ phức tạp kết hợp) | Độ phức tạp đo theo kích thước của cả truy vấn lẫn dữ liệu cộng lại (đối lập với data complexity) | §2.1.6 |
+| SPARQL Relational Algebra (đại số quan hệ SPARQL) | Đại số tổ hợp hình thức định nghĩa Join ($\bowtie$), Left Join ($\vec{\bowtie}$), Filter ($\sigma$) và Union ($\cup$) trên các đa tập nghiệm | §2.1.6 |
+| Conjunctive Query (CQ) | Truy vấn cơ sở dữ liệu chỉ dựng từ phép hội ($\wedge$) và lượng từ tồn tại ($\exists$); tương đương với BGP | §2.1.6 |
+| Index-Free Adjacency (lân cận không chỉ mục) | Liên kết con trỏ bộ nhớ trực tiếp giữa nút và cạnh, bảo đảm duyệt $O(1)$ mỗi bước | §2.2.1 |
+| Walk / Trail / Path | Ngữ nghĩa duyệt: walk có thể lặp cạnh, trail lặp đỉnh nhưng không lặp cạnh, path không lặp cả hai; SPARQL dựa trên walk, Cypher dựa trên trail | §2.4.4 |
+| Graph partitioning (phân hoạch đồ thị) | Chia đồ thị ra nhiều máy (edge-cut tối thiểu hóa lưu lượng xuyên phân hoạch, vertex-cut nhân bản nút trung tâm) — giới hạn phân tán của Index-Free Adjacency | §2.2.1 |
+| Vector property (thuộc tính vector) | Thuộc tính nút/cạnh chứa embedding (ví dụ `FLOAT[]`), nền lưu trữ cho GraphRAG lai ghép | §2.2.1 |
 | W3C (World Wide Web Consortium) | Tổ chức phát triển chuẩn web | §2.0 |
 
 ## Đọc thêm

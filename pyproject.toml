@@ -23,6 +23,7 @@ dev = [
     "pytest>=8.0",
     "ruff>=0.6",
     "mypy>=1.11",
+    "pymupdf>=1.24",
 ]
 ml = [
     "pykeen>=1.11.1",

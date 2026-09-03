@@ -694,10 +694,14 @@ where:
 
 The most important structural difference from RDF: **relationships are first-class citizens with their own identifiers ($e \in E$) and can carry their own properties ($\sigma_E$)**. In basic RDF, an edge is merely a predicate IRI connecting subject and object; it has no independent node identity to which properties can be directly attached. In an LPG, attaching a timestamp or confidence to a relationship requires no complex reification pattern.
 
+> ℹ **Frontier: vector properties for hybrid GraphRAG.** The value domain $\text{Val}$ in the 7-tuple is not restricted to scalars. Modern property-graph engines increasingly store **vector embeddings directly as node or edge properties** — for example a `FLOAT[]` array of dimension $d$. This is the storage substrate for **hybrid GraphRAG**: a single node can carry both its symbolic properties (`name`, `type`) and a learned embedding, so one store serves both exact structural queries and approximate similarity search. Chapter 8 develops the embedding side; Chapter 9 unifies the two. Until a standard vector-index type is finalized, `FLOAT[]` remains a vendor-level extension rather than part of the ISO GQL baseline.
+
 > ℹ **Core Architecture: Index-Free Adjacency**
 > What gives property graph engines (such as Neo4j, Memgraph, or Kùzu) exceptional traversal speed is **Index-Free Adjacency**.
 > In a traditional relational database or triple store, traversing from node $A$ to node $B$ along edge $R$ requires an index lookup (e.g., searching a B-tree table index for matching keys), costing $O(\log N)$ time per step.
 > In contrast, an engine with *Index-Free Adjacency* stores direct physical or memory pointers to neighboring edges inside the node record itself. Traversing an edge takes $O(1)$ constant time per step — dereferencing a pointer. As a result, multi-hop traversal latency depends strictly on the size of the traversed subgraph, completely independent of the total size of the database.
+
+> ⚠️ **Scaling limit of Index-Free Adjacency.** IFA's $O(1)$ pointer dereference assumes the neighbor list is *local* — in memory or on the same storage page. In a **distributed** deployment, that pointer becomes a **network RPC**: crossing to a neighbor stored on another machine costs a full round-trip, often two to three orders of magnitude slower than a local pointer chase. Distributed graph engines mitigate this with **graph partitioning**: an **edge-cut** splits edges to minimize cross-partition traffic, while a **vertex-cut** replicates high-degree vertices across machines to balance load. IFA remains the gold standard *within* a partition; the central challenge of distributed graph processing is keeping a traversal inside one partition.
 
 ### 2.2.2 Identity: database-internal and domain identity
 
@@ -1021,6 +1025,41 @@ convenient. It illustrates exactly what §2.4.1 promised: **the representation c
 architecture choice**, and the Mechanism-KG system, with its ambitions of multi-source
 integration and verifiable inference, leans toward RDF at its central knowledge layer.
 
+### 2.4.4 A fourth difference: walk versus trail semantics
+
+The two models also disagree about what a *path* is, and this difference is easy to miss
+because both languages draw the same arrows.
+
+- **SPARQL inherits walk semantics from homomorphism.** Recall §2.1.3: BGP evaluation is a
+  graph homomorphism from the pattern into the data. A homomorphism places no restriction
+  that two distinct pattern edges map to two distinct data edges — the same edge may be
+  reused. Property paths (`p+`, `p*`) are defined the same way: a path is a *walk*, a
+  sequence of edges where consecutive edges share a node, and an edge may appear more than
+  once.
+- **Cypher enforces relationship uniqueness — trail semantics.** Within a single `MATCH`
+  pattern, the same relationship cannot be bound twice. A path in Cypher is a *trail*: a
+  walk with no repeated edge. This is a deliberate design choice, documented in the Cypher
+  manual, and it is what makes patterns like `MATCH (a)-[r1]->()-[r2]->(b)` read naturally
+  without silently reusing an edge.
+
+> ℹ **Walk vs trail — the one-line distinction.** A **walk** may repeat vertices *and*
+> edges. A **trail** may repeat vertices but never edges. A **path** (in the strictest
+> graph-theory sense) repeats neither. SPARQL's homomorphism semantics is walk-based;
+> Cypher's relationship-uniqueness is trail-based.
+
+Why it matters: on a cyclic graph the two semantics return different answers. Take the
+triangle $A \to B \to C \to A$. A SPARQL property path `A (p+) A` can circle the triangle
+twice (a walk of length 6), while the Cypher equivalent `MATCH (a:A)-[r*]->(a:A)` cannot
+reuse any edge, so the shortest cycle it finds has length 3. Counting, cycle detection, and
+reachability queries therefore differ between the two languages even when the data is
+identical. When you port a traversal from one engine to the other, check whether your
+result depends on edge reuse.
+
+> 🖊 **Self-check:** On the triangle $A \to B \to C \to A$, does the SPARQL path
+> `A (p+) C` have a *walk* of length 5 from $A$ to $C$? Does Cypher's
+> `MATCH (a)-[r*]->(c)` accept the same 5-step route? Explain the difference using the
+> walk/trail distinction.
+
 ## 2.5 Common Misconceptions
 
 1. **"Turtle is RDF."** False. Turtle is a syntax for writing RDF; RDF is the graph model.
@@ -1254,6 +1293,9 @@ the next rung: *RDFS schema, canonical identity, per-source context*.
 | SPARQL Relational Algebra | Formal compositional algebra defining Join ($\bowtie$), Left Join ($\vec{\bowtie}$), Filter ($\sigma$), and Union ($\cup$) over solution multisets | §2.1.6 |
 | Conjunctive Query (CQ) | A database query constructed purely from conjunctions ($\wedge$) and existential quantifiers ($\exists$); equivalent to BGPs | §2.1.6 |
 | Index-Free Adjacency | Direct memory pointer linkage between nodes and edges, ensuring $O(1)$ traversal per step | §2.2.1 |
+| Walk / Trail / Path | Traversal semantics: a walk may repeat edges, a trail repeats vertices but not edges, a path repeats neither; SPARQL is walk-based, Cypher trail-based | §2.4.4 |
+| Graph partitioning | Splitting a graph across machines (edge-cut minimizes cross traffic, vertex-cut replicates hubs) — the distributed limit of Index-Free Adjacency | §2.2.1 |
+| Vector property | A node/edge property holding an embedding (e.g. `FLOAT[]`), the storage substrate for hybrid GraphRAG | §2.2.1 |
 | W3C (World Wide Web Consortium) | The organization that develops web standards | §2.0 |
 
 ## Further reading

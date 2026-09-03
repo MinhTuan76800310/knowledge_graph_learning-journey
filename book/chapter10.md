@@ -1443,16 +1443,16 @@ Afterword.
 
 Chương 10 dựa trên các nguồn đã đăng ký và kiểm chứng:
 
-- Chất lượng tri thức: `[@zaveri-kgquality-2016]`, `[@iso-25012-2008]`
-- Tinh chỉnh/chất lượng KG: `[@paulheim-refinement-2017]`
-- Tiến hóa/phiên bản bản thể luận: `[@noy-ontology-evolution-2004]`, `[@klein-ontology-versioning-2001]`
-- Duy trì KB, học không ngừng: `[@dong-knowledge-vault-2014]`, `[@mitchell-neverending-2018]`
-- Concept drift: `[@gama-drift-2014]`, `[@widmer-drift-1996]`
-- Nợ kỹ thuật ML, dữ liệu: `[@sculley-debt-2015]`, `[@sambasivan-cascades-2021]`
-- Mục nát benchmark: `[@recht-imagenet-2019]`
-- Sụp đổ mô hình: `[@shumailov-collapse-2024]`
-- KG thời gian: `[@cai-tkgc-2023]`
-- Quản trị dữ liệu: `[@iso-8000-2022]`
+- Chất lượng tri thức: [@zaveri-kgquality-2016], [@iso-25012-2008]
+- Tinh chỉnh/chất lượng KG: [@paulheim-refinement-2017]
+- Tiến hóa/phiên bản bản thể luận: [@noy-ontology-evolution-2004], [@klein-ontology-versioning-2001]
+- Duy trì KB, học không ngừng: [@dong-knowledge-vault-2014], [@mitchell-neverending-2018]
+- Concept drift: [@gama-drift-2014], [@widmer-drift-1996]
+- Nợ kỹ thuật ML, dữ liệu: [@sculley-debt-2015], [@sambasivan-cascades-2021]
+- Mục nát benchmark: [@recht-imagenet-2019]
+- Sụp đổ mô hình: [@shumailov-collapse-2024]
+- KG thời gian: [@cai-tkgc-2023]
+- Quản trị dữ liệu: [@iso-8000-2022]
 
 Thuộc tính tri thức luận (freshness vs correctness, monitoring vs governance, etc.) do
 chương tự định nghĩa dựa trên chuỗi khái niệm Ch1–9; các nguồn học thuật được dùng làm

@@ -46,17 +46,99 @@ bất kỳ dòng mã nào.
 > phân tách các lớp trách nhiệm khi thiết kế hệ thống tri thức, nhưng không thay thế các
 > định nghĩa chuẩn từ **W3C** (World Wide Web Consortium — tổ chức phát triển chuẩn web) hay tài liệu nghiên cứu chuyên ngành.
 
+### Ngộ nhận vector: Vì sao không chỉ nhúng mọi thứ?
+
+Nếu bạn xây dựng hệ thống với LLM hiện đại, một phản biện chính đáng cần được trả lời
+thẳng: *"Vì sao phải tốn công xây đồ thị và định nghĩa quan hệ? Tôi có thể nhúng (embed)
+mọi đoạn văn thành một vector bằng mô hình như `text-embedding-3`, lưu vào cơ sở dữ liệu
+vector như Pinecone hay Milvus, rồi truy xuất nội dung liên quan bằng độ tương đồng cosine.
+Knowledge Graph cho tôi điều gì mà một chỉ mục vector không có?"*
+
+Đây chính là **ngộ nhận vector (vector fallacy)** — niềm tin rằng vì embedding nắm bắt được
+*độ tương đồng về nghĩa*, nên chúng cũng nắm bắt được *cấu trúc tri thức*. Thực tế không
+phải vậy, và khoảng cách đó chính là thứ cuốn sách này lấp đầy.
+
+Bạn đã có sẵn mô hình tinh thần đúng từ đại số tuyến tính. Một embedding ánh xạ mỗi đoạn văn
+thành một điểm $\mathbf{v} \in \mathbb{R}^d$ (trong thực tế thường vài nghìn chiều), và độ
+liên quan được chấm bằng độ tương đồng cosine — tích vô hướng đã chuẩn hóa:
+
+$$\cos(\mathbf{q}, \mathbf{v}) = \frac{\mathbf{q} \cdot \mathbf{v}}{\lVert \mathbf{q} \rVert \, \lVert \mathbf{v} \rVert}$$
+
+Đây là một góc nhìn *liên tục, hình học* về nghĩa: các câu diễn giải khác nhau nằm gần
+nhau, một lỗi chính tả hầu như không dịch chuyển điểm, và một truy vấn mơ hồ vẫn trả về
+danh sách xếp hạng. Điều đó thực sự mạnh — và cũng là *toàn bộ* những gì vector mang lại.
+Khoảng cách giữa hai điểm mã hóa *chúng đọc giống nhau đến mức nào*, chứ không phải *chúng
+được kết nối với nhau trong thế giới thực ra sao*. Không có chỗ nào trong $\mathbb{R}^d$ để
+viết "thuốc này **chống chỉ định** với bệnh kia", vì chống chỉ định là một quan hệ có kiểu,
+có hướng, chứ không phải một phương trong không gian embedding.
+
+Hai cách tiếp cận không phải đối thủ; chúng trả lời những câu hỏi khác nhau. Bảng dưới đây
+là luận điểm của cuốn sách ở dạng thu nhỏ — mỗi chương sau sẽ xây dựng một dòng ở cột bên
+phải.
+
+| Năng lực | Vector liên tục ($\mathbb{R}^d$ + cosine) | Knowledge Graph ký hiệu rời rạc |
+|---|---|---|
+| Tìm kiếm mờ / diễn giải | ✅ Bản chất — nghĩa như hình học | ⚠️ Mong manh — cần từ chính xác hoặc embedding bổ sung |
+| Chịu lỗi chính tả & nhiễu | ✅ Bền — nhiễu nhỏ ít ảnh hưởng | ⚠️ Cần chuẩn hóa / liên kết thực thể |
+| Suy luận quan hệ đa chặng | ❌ Mù cấu trúc — gần nhau, không có đường đi | ✅ Bản chất — đi theo cạnh có kiểu triệu chứng → bệnh → gene → thuốc |
+| Ràng buộc logic cứng | ❌ Không thể ép "một Person không phải cha của chính nó" | ✅ Ép được qua tiên đề OWL / shape SHACL |
+| Nguồn gốc kiểm chứng được | ❌ Mờ — "mô hình đánh giá là tương tự" | ✅ Mỗi cạnh mang nguồn, thời gian, độ tin cậy |
+| Câu trả lời xác định, kiểm toán được | ❌ Thứ tự truy xuất đổi khi nhúng lại | ✅ Cùng đồ thị + cùng quy tắc ⇒ cùng đáp án |
+| Hành vi lỗi theo độ sâu | ❌ Khuếch đại: $k$ chặng nhân độ bất định | ✅ Bị chặn: mỗi chặng là một khẳng định kiểm tra được |
+
+Hai dòng cuối là nơi ngộ nhận thực sự gây hại.
+
+**Khuếch đại lỗi (error cascading).** Một câu trả lời đa chặng ghép từ $k$ đoạn vector truy
+xuất chỉ đúng bằng *tích* độ tin cậy của từng đoạn. Nếu mỗi chặng đúng với xác suất $p$, cả
+chuỗi đúng với xác suất xấp xỉ $p^k$ — với $p = 0{,}85$ và $k = 4$ thì đã là $\approx 0{,}52$.
+Đồ thị không thoát khỏi bất định, nhưng nó biến mỗi chặng thành một *khẳng định tường minh,
+kiểm tra được từng cái một* thay vì một độ tương đồng mờ, nên lỗi có thể định vị và sửa
+được. (Chương 9 định lượng chính xác điều này.)
+
+**Ép ràng buộc (constraint enforcement).** Một chỉ mục vector sẵn lòng trả về láng giềng
+gần nhất của "người quản lý của người mà chính họ quản lý" — nó không có khái niệm rằng một
+số tổ hợp là *bất hợp pháp*. Một knowledge graph có bản thể học có thể *từ chối* hiện thực
+hóa một sự kiện vi phạm tiên đề rời nhau (disjointness) hay lực lượng (cardinality), và có
+thể *suy dẫn* những sự kiện bạn chưa từng lưu. Sự khác biệt đó — truy xuất-cái-gì-gần-giống
+so với biểu diễn-cái-gì-đúng — chính là chủ đề của cuốn sách này.
+
+Không điều nào ở trên phản đối embedding. Các hệ thống hiện đại mạnh nhất là **lai ghép
+(hybrid)**: một chỉ mục vector tìm điểm vào mơ hồ ("đoạn nào nhắc đến triệu chứng này?"),
+rồi một đồ thị đảm nhận phần việc quan hệ kiểm chứng được từ đó ("…và bệnh nhân nào trong
+số đó dùng chung một thuốc chống chỉ định theo một đường tương tác đã ghi chép?"). Chương 8
+phát triển phía embedding; Chương 9 hợp nhất cả hai thành GraphRAG. Chương này và các chương
+kế tiếp xây dựng phía ký hiệu để sự hợp nhất đó đáng tin cậy.
+
+> 🖊 **Tự kiểm tra:** Một đồng nghiệp nói "chúng ta không cần knowledge graph — vector search
+> của tôi đã đạt 92% recall trên bộ đánh giá." Recall chỉ đo việc *đoạn đúng có xuất hiện
+> trong top-$k$ hay không*. Hãy nêu một năng lực trong bảng mà con số 92% recall không nói
+> lên điều gì, và giải thích vì sao.
+
 ## 1.2 Mô hình tinh thần
 
-> 📦 **Preview — Ba thuật ngữ chuẩn sẽ gặp trong chương này**
+> 📦 **Định hướng khái niệm — Chuẩn và Lý thuyết cốt lõi gặp sớm**
 >
-> Chương này nhắc đến một số thuật ngữ từ thế giới chuẩn web. Đây là bản giới thiệu ngắn:
+> Cuốn sách xây dựng dần qua 10 chương. Để tránh ma sát khi gặp các khái niệm nền tảng sẽ
+> được xử lý đầy đủ ở các chương sau, đây là bản hướng dẫn ngắn gọn về nghĩa của từng thuật
+> ngữ và cách hiểu nó trong ngữ cảnh trước mắt:
 >
-> - **W3C** (World Wide Web Consortium): tổ chức phát triển chuẩn web, bao gồm các chuẩn RDF và OWL.
-> - **RDF** (Resource Description Framework): mô hình dữ liệu đồ thị bộ ba chuẩn của W3C. Sẽ học chi tiết ở Chương 2.
-> - **IRI** (Internationalized Resource Identifier): định danh toàn cục dạng chuỗi, dùng để đặt tên cho entity trong RDF. Sẽ học chi tiết ở Chương 2.
+> **Chuẩn web & Ngôn ngữ:**
+> - **W3C** (World Wide Web Consortium): Tổ chức chuẩn hóa quốc tế quản lý các đặc tả web, gồm RDF, OWL và SPARQL.
+> - **RDF** (Resource Description Framework): Mô hình dữ liệu đồ thị chuẩn biểu diễn tri thức thành các bộ ba có hướng: `(subject, predicate, object)`. Học ở Chương 2.
+> - **IRI** (Internationalized Resource Identifier): Địa chỉ web duy nhất toàn cục dùng để đặt tên cho thực thể và quan hệ một cách không nhập nhằng giữa các hệ thống. Học ở Chương 2.
+> - **RDFS** (RDF Schema): Từ vựng tối giản mở rộng RDF bằng phân cấp lớp (`subClassOf`) và định kiểu thuộc tính (`domain`, `range`) cho suy luận kiểu cơ bản. Học ở Chương 3.
+> - **OWL** (Web Ontology Language): Ngôn ngữ bản thể học hình thức dựa trên Description Logics, cho phép suy diễn tự động và kiểm tra nhất quán. Học ở Chương 4.
+> - **SHACL** (Shapes Constraint Language): Ngôn ngữ khai báo để kiểm chứng cấu trúc đồ thị theo các shape cấu trúc và quy tắc nghiệp vụ. Học ở Chương 5.
+> - **SPARQL**: Ngôn ngữ truy vấn chuẩn cho đồ thị RDF, khớp mẫu đồ thị bằng đại số quan hệ. Học ở Chương 2.
 >
-> Các thuật ngữ khác như RDFS, OWL, SHACL, SPARQL sẽ được giới thiệu khi chúng xuất hiện lần đầu ở các chương tương ứng. Bạn không cần nhớ trước.
+> **Khái niệm Logic, Ngữ nghĩa & Học máy:**
+> - **Ontology vs. Taxonomy**: Một *taxonomy* tổ chức các thuật ngữ nghiêm ngặt thành cây cha-con "is-a"; một *ontology* là một lý thuyết logic hình thức định nghĩa khái niệm, kiểu quan hệ phong phú, ràng buộc lực lượng và tiên đề suy luận (hình thức hóa ở Chương 4).
+> - **Suy luận & Suy dẫn (Inference & Entailment)**: Quá trình xác định dẫn xuất các sự kiện đúng mới từ các khẳng định hiện có bằng các quy tắc toán học hình thức (ví dụ nếu $A$ đòi hỏi $B$ và $B$ đòi hỏi $C$ thì $A$ đòi hỏi $C$). Hình thức hóa ở Chương 5.
+> - **Model Theory & Logic vị từ bậc nhất (First-Order Logic)**: Nhánh toán học của logic gán giá trị chân lý chính xác cho các ký hiệu cú pháp bằng cách ánh xạ chúng vào các tập miền và quan hệ trừu tượng. Giới thiệu ở Chương 4.
+> - **Thế giới mở vs. Thế giới đóng (Open World vs. Closed World Assumption)**: *Thế giới đóng* (dùng trong CSDL quan hệ) coi những gì không lưu là sai; *thế giới mở* (dùng trong KG Semantic Web) coi những gì không nêu là chưa biết, chứ không hẳn sai. Hình thức hóa ở Chương 4.
+> - **Provenance**: Siêu dữ liệu dòng dõi ghi ai tạo ra phát biểu, từ tài liệu nguồn nào, bằng công cụ nào, tại thời điểm nào. Hình thức hóa ở Chương 6.
+> - **Vector Embeddings & Graph ML**: Các vector số trong không gian liên tục được mô hình học máy học để biểu diễn thực thể và dự đoán cạnh thiếu theo cách thống kê (đối lập với quy tắc logic xác định). Hình thức hóa ở Chương 8.
+> - **GraphRAG**: Kiến trúc kết hợp duyệt đồ thị có cấu trúc với mô hình ngôn ngữ lớn để sinh câu trả lời chính xác, kiểm chứng được kèm trích dẫn truy vết được. Hình thức hóa ở Chương 9.
 
 ### Knowledge Graph = Data Graph + Semantics + Context
 
@@ -363,6 +445,55 @@ relations của từng chuẩn, không phải bởi constraint checking.
 **Book Engineering Model** (ký hiệu riêng của sách): KSE = (K, T, C) trong đó K ⊆ V × L × V
 là tập triple, T là tập tiên đề ontology và C là thông tin context (provenance, time, scope,
 confidence). Ký hiệu này do sách định nghĩa, không phải chuẩn công nghiệp.
+
+### Vượt ra ngoài cạnh nhị phân: quan hệ n-ngôi và siêu đồ thị
+
+Mô hình triple trực tiếp $K \subseteq V \times L \times V$ hình thức hóa một **đồ thị quan hệ
+nhị phân**: mỗi cạnh nối đúng hai đỉnh (một chủ thể và một đối tượng). Với các phát biểu đơn
+giản như `(Hanoi, capitalOf, Vietnam)`, cạnh nhị phân là tự nhiên và sạch về mặt toán học.
+
+Tuy nhiên, các sự kiện khoa học, y sinh và công nghiệp thường xuyên là **quan hệ n-ngôi
+(n-ary relations)** liên quan ba hay nhiều hơn các thành phần tham gia ($n \ge 3$). Xét:
+- Trong hóa học: `(Enzyme_A, catalyzesReaction, Substrate_B, intoProduct, Molecule_C, atTemperature, 37C)`.
+- Trong y khoa: `(Patient_X, receivedTreatment, Drug_Y, atDosage, 50mg, prescribedBy, Doctor_Z)`.
+- Trong miền capstone của ta: cơ chế hạt giống *"vận tốc bằng tốc độ biến thiên của vị trí theo thời gian"* ràng buộc bốn thành phần cùng lúc — một *Mechanism*, một *Quantity Differentiated* (đại lượng đem vi phân: position), một *Reference Variable* (biến tham chiếu: time), và một *Mathematical Operation* (phép toán: derivative).
+
+Các bộ ba nhị phân từng cặp $(s, p, o)$ không thể nắm trực tiếp những khẳng định nhiều thành
+phần này mà không phân rã chúng. Trong khoa học máy tính lý thuyết và biểu diễn tri thức, có
+hai hình thức chính xử lý việc này:
+
+#### 1. Siêu đồ thị thuần (Native Hypergraphs)
+Một **siêu đồ thị (hypergraph)** $\mathcal{H} = (V, \mathcal{E})$ khái quát hóa đồ thị bằng cách
+cho phép mỗi **siêu cạnh (hyperedge)** $e \in \mathcal{E}$ bao trùm một tập con đỉnh bất kỳ
+$S \subseteq V$:
+$$\mathcal{E} \subseteq \mathcal{P}(V) \setminus \{\emptyset\}$$
+trong đó $\mathcal{P}(V)$ là **tập lũy thừa (power set)** — tập của mọi tập con — của $V$. Trong
+siêu đồ thị có nhãn và có hướng, một siêu cạnh nối một dãy hoặc tập các đỉnh vào (nguồn) tới
+các đỉnh ra (đích) dưới một vị từ chung. Mô hình siêu đồ thị thuần giữ các tương tác nhiều bên
+như một đơn vị nguyên tử duy nhất, tránh làm phân mảnh ngữ cảnh quan hệ.
+
+#### 2. Mở rộng đồ thị hai phía (Đồ thị liên thuộc)
+Vì các hệ quản trị đồ thị và engine RDF phổ biến được tối ưu cho cạnh nhị phân, thực hành chuẩn
+chiếu các siêu cạnh n-ngôi xuống các bộ ba nhị phân qua một **mở rộng đồ thị hai phía (bipartite
+graph expansion)**, tạo ra thứ mà lý thuyết đồ thị gọi là **đồ thị liên thuộc (incidence graph)**:
+1. Tạo một nút trung gian biểu diễn **sự kiện, phép áp dụng, hay thể hiện của quan hệ** (ví dụ `derivativeApplication_1` hoặc `prescription_902`).
+2. Nối nút trung tâm này tới từng thực thể tham gia bằng các thuộc tính vai trò nhị phân chuyên dụng — `differentiand`, `withRespectTo`, và `hasOperation` trỏ từ phép áp dụng tới các thành phần, còn `hasApplication` nối cơ chế tới nó.
+
+Trong miền capstone của ta, thay vì một cạnh đa-nút cồng kềnh, ta viết:
+```turtle
+ex:rateOfChange_1  ex:hasApplication  ex:derivativeApplication_1 .
+
+ex:derivativeApplication_1  a               ex:DerivativeApplication ;
+                            ex:hasOperation     ex:derivativeOperation_1 ;
+                            ex:differentiand    ex:position_1 ;
+                            ex:withRespectTo    ex:time_1 .
+```
+
+Phép biến đổi này chứng minh rằng **mô hình bộ ba nhị phân $K \subseteq V \times L \times V$ là
+phổ quát**: mọi sự kiện n-ngôi hay siêu cạnh đều có thể biểu diễn bằng cách đưa vào một nút sự
+kiện trung gian và các cạnh vai trò có hướng. Chương 3 sẽ hình thức hóa mẫu này thành **mô hình
+n-ngôi (n-ary modeling)** và **hiện thực hóa (reification)**, cho thấy nó là nền tảng để gắn
+provenance, mốc thời gian và điểm độ tin cậy vào các khẳng định tri thức phức tạp.
 
 ## 1.6 Ví dụ xuyên suốt
 
@@ -733,6 +864,9 @@ nấc tiếp theo: *biểu diễn và truy vấn cấu trúc cơ chế*.
 | Quantity (đại lượng) | Giá trị đo được làm đầu vào/đầu ra của cơ chế (vị trí, vận tốc) | §1.3 |
 | Reference variable (biến tham chiếu) | Biến độc lập mà tốc độ được lấy theo (vd: thời gian) | §1.6 |
 | DerivativeApplication (ứng dụng đạo hàm) | Đối tượng trung gian ràng buộc cơ chế, đại lượng được đạo hàm, biến và phép toán trong một ứng dụng | §1.6 |
+| Binary relation (quan hệ nhị phân) | Quan hệ nối đúng hai thực thể: $(s, p, o) \in V \times L \times V$ | §1.5 |
+| Hypergraph (siêu đồ thị) | Khái quát hóa đồ thị, mỗi siêu cạnh nối được một tập con đỉnh bất kỳ | §1.5 |
+| Incidence graph (đồ thị liên thuộc) | Mở rộng hai phía biểu diễn một siêu cạnh n-ngôi thành các bộ ba nhị phân qua nút sự kiện trung gian | §1.5, Chương 3 |
 
 ## Đọc thêm
 
