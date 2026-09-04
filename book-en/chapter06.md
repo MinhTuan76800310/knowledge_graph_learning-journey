@@ -1845,51 +1845,44 @@ ex:claim_roc_now_2  a ex:Claim ;
 No reconciling means the contradiction is genuine. The system must keep both and await human
 review or automated resolution. The `contradicts` relation is explicit and queryable.
 
-## 6.19 The capstone: pipeline from extraction to canonical knowledge
+## 6.19 Claim identity differs from entity identity
 
 ### Intuition
 
-The full pipeline connects all the pieces from Ch1–6: from raw text to canonical knowledge, with
-provenance, evidence, governance, and contradiction detection.
+Claim $C_1$ and Claim $C_2$ may share identical content while remaining two distinct objects.
+Claim identity differs from entity identity and content identity.
 
 ### Mechanism
 
+Three types of identity must be distinguished:
+
+- **Entity identity:** `ex:Hanoi` and `wd:Q1858` may refer to the same entity (via
+  `owl:sameAs`). This was the subject of Chapter 3.
+
+- **Content identity:** Two statements share the same content (the same proposition $P$).
+  $\text{Content}(C_1) = \text{Content}(C_2)$.
+
+- **Claim identity:** $C_1$ and $C_2$ are distinct objects with their own individual IRIs,
+  even when $\text{Content}(C_1) = \text{Content}(C_2)$. Each claim maintains its own
+  provenance, its own evidence relations, and its own governance status.
+
+Example:
+
+```turtle
+ex:claim_A  ex:content   ex:prop_hanoi_capital ;
+            ex:hasSource ex:GSO ;
+            ex:status    ex:Accepted .
+
+ex:claim_B  ex:content   ex:prop_hanoi_capital ;  # Same content!
+            ex:hasSource ex:Wikidata ;
+            ex:status    ex:Candidate .
 ```
-Text → Observation → Assertion → Claim → Evidence → Assessment → Governance → Accepted → Canonical View
-```
 
-The whole pipeline for a single mechanism knowledge entry:
+`ex:claim_A` and `ex:claim_B` are two distinct claim objects. They share identical content
+but have different provenance trails and governance states. If we used content itself as the
+claim's identity (e.g., hashing the proposition triple), we would destroy the ability to
+attach independent provenance to separate sources.
 
-**Stage 1 — Extraction (Ch5):** The NLP pipeline reads text from a source document, passes
-`CandidateMechanismShape` validation, and produces a CandidateMechanism (Ch5 §5.6, §5.12).
-
-**Stage 2 — Claim creation (Ch6 §6.1, §6.10):** The CandidateMechanism is wrapped into a Claim
-object with source, assertion time, and initial state `Candidate`.
-
-**Stage 3 — Evidence collection (Ch6 §6.5):** The system searches for independent evidence
-(supports/contradicts/isRelevantTo). If another source says the same thing, that is supporting
-evidence.
-
-**Stage 4 — Assessment (Ch6 §6.11):** The assessor computes source reliability, evidence
-strength, and optionally confidence values. If the evidence is sufficient, the claim is promoted
-to `Accepted`.
-
-**Stage 5 — Governance (Ch6 §6.12):** Accepted claims enter the Canonical Knowledge View. Later,
-if new claims contest them, the state changes and the contradiction pipeline (§6.18) runs.
-
-**Example with the mechanism claim `claim_roc_A`:**
-
-| Stage | What happens | Metadata produced |
-|-------|-------------|-------------------|
-| 1. Extraction | LLM reads "velocity is the rate of change..." from textbook A | `CandidateMechanism triples`, `ex:extraction_activity_7` |
-| 2. Claim creation | Wrap into `ex:claim_roc_A` with status `Candidate` | `ex:claim_roc_A` |
-| 3. Evidence collection | `ex:textbookB_velocity_def` supplies `ex:supports` | `ex:supports` relation |
-| 4. Assessment | Tier-2 source, evidence sufficient → promoted to `Accepted` | `ex:compositeConfidence 0.86` |
-| 5. Governance | `claim_roc_relativist` appears → `claim_roc_A` becomes `Superseded` | `ex:status ex:Accepted → ex:Superseded` |
-
-The pipeline is **not fully automated** — assessment and governance require human judgment at
-critical points. But the pipeline provides a **traceable, auditable framework** for every piece of
-knowledge in the system.
 
 ## 6.20 Negation is different from Absence
 
@@ -2034,6 +2027,49 @@ Minimum requirement for a valid claim: source (`ex:hasSource`), moment (`ex:stat
 The system can hold two contradictory claims at the content layer while remaining logically consistent at the metadata layer because the contradiction is *contextualized*. Each claim is a separate object with its own source, time, scope, and state (§6.2, §6.15). An OWL reasoner does not see `P ∧ ¬P` in a single logical context — it sees two separate claim objects, each with its own provenance and governance state. The system is consistent as long as no axiom forces the two claims to be simultaneously true in the same interpretation (I31, §6.15).
 
 Concretely, the Claim Ledger contains `ex:claim_A` (population = 8,093,100) and `ex:claim_B` (population = 8,053,663). No OWL axiom says `population` must be globally single-valued. The system is not inconsistent — it records two different statements about the same property, possibly with different valid times (§6.7) or different sources (§6.3). The *Canonical Knowledge View* (§6.15) may become inconsistent when the projection policy projects both, but the ledger itself is always consistent. This is similar to Wikidata's model: an item can have multiple statements for the same property with different ranks and references — the system is not broken, it is *epistemically honest*.
+
+## 6.23 Mechanism Knowledge System — Acquired capabilities
+
+**BEFORE THIS CHAPTER** — the system possessed an OWL ontology (Ch4), deduction, and validation
+(Ch5). However, all data was *given as ground truth*: `rate_of_change.ttl` was entered by hand,
+treating every triple as undeniably true, without asking "who said this?", "since when?", or
+"when two independent sources disagree, whom do we trust?".
+
+**AFTER THIS CHAPTER** — the system possesses an epistemic layer positioned in front of the
+ontology layer:
+- **Decoupling content from provenance:** every statement is a `Claim` carrying full provenance
+  (who said it, when, and from what activity — PROV-O), distinct from its bare relational
+  content (§6.2, §6.4).
+- **Evaluation:** an `Evidence` graph supports or contradicts each claim (§6.5); 5 classes of
+  contradiction are systematically classified and reconciled (§6.6); confidence is formally
+  derived from source reliability and evidence strength via Dempster–Shafer mass functions and
+  Subjective Logic opinion vectors (§6.11).
+- **Time:** 4 distinct temporal clocks (valid, assertion, observation, system time), with
+  bitemporal 2D bounding boxes and point-probe retrospective queries represented via OWL-Time
+  (§6.7, §6.8).
+- **Governance:** claims transition through a formal lifecycle Candidate → Accepted →
+  (Contested →) Superseded, with supersession formally distinguished from contradiction (§6.12,
+  §6.13). The Claim Ledger preserves contradictions losslessly, satisfying AGM belief-revision
+  postulates at each system-time projection slice without destructive data loss (§6.13, §6.14,
+  §6.15).
+- **LLM integration:** LLM extractions enter strictly as `CandidateKnowledge`, never
+  automatically promoted to accepted knowledge without independent multi-source verification
+  (§6.16, §6.17).
+
+**CONCRETE RATE_OF_CHANGE EXAMPLE** — `claim_roc_A` (from textbook A) becomes `Accepted` after
+acquiring `evidence_derivative_calc`; `claim_roc_B` (from textbook B, sharing identical content)
+remains `Candidate` pending independent verification (§6.2, §6.11, §6.17). The classical claim
+"velocity is unbounded" carries valid interval [1687, 1905) and is `Superseded` by the
+relativistic claim carrying valid interval [1905, now) — not refuted, but superseded within its
+temporal scope (§6.7, §6.13). Bitemporal queries retrieve "the definition of velocity believed
+on 2021-06-01" distinctly from "the definition believed today" (§6.7, §6.12).
+
+**WHAT REMAINS UNSOLVED** — the epistemic layer assumes claims already *reside* in the ledger
+with structured provenance attached. The fundamental question of "where does new knowledge
+originate?" — automated LLM extraction from raw corpora, entity resolution across heterogeneous
+sources, and large-scale schema alignment — remains open. Chapter 7 (*Knowledge Acquisition and
+Integration*) opens the next capability frontier: *how an autonomous agent acquires and merges
+knowledge without corrupting an existing, governed knowledge graph*.
 
 ## Terms encountered in this chapter
 
