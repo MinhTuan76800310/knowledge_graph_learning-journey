@@ -1788,6 +1788,54 @@
       "key_finding": "Standard survey of Datalog fixpoint semantics and evaluation strategies (naive/semi-naive); safe function-free Horn rules. Authors verified via DBLP: Green, Huang, Loo, Zhou."
     },
     {
+      "id": "DBFOUND-01",
+      "canonical_url": "https://webdam.di.ens.fr/Alice/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://webdam.di.ens.fr/Alice/",
+      "title": "Foundations of Databases",
+      "document_status": "Peer-reviewed textbook (Addison-Wesley, 1995; free online edition)",
+      "publication_date": "1995",
+      "used_in_chapters": [
+        "5"
+      ],
+      "research_note_path": "docs/research_notes/DBFOUND-01.md",
+      "key_finding": "Canonical reference for Datalog's three equivalent semantics (minimal Herbrand model, proof-theoretic, fixpoint) and its PTIME data / EXPTIME combined complexity. Also the foundational source for safeness/range-restriction in Datalog."
+    },
+    {
+      "id": "RETE-01",
+      "canonical_url": "https://doi.org/10.1016/0004-3702(82)90020-0",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1016/0004-3702(82)90020-0",
+      "title": "Rete: A Fast Algorithm for the Many Pattern/Many Object Pattern Match Problem",
+      "document_status": "Peer-reviewed journal paper (Artificial Intelligence 19(1):17–37)",
+      "publication_date": "1982",
+      "used_in_chapters": [
+        "5"
+      ],
+      "research_note_path": "docs/research_notes/RETE-01.md",
+      "key_finding": "Original RETE network architecture: alpha (single-pattern filter), beta (join + memory), Working Memory Elements (WMEs), agenda and conflict resolution. Trades memory for speed in forward-chaining engines."
+    },
+    {
+      "id": "RDFOX-01",
+      "canonical_url": "https://doi.org/10.1609/aaai.v28i1.8730",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://ojs.aaai.org/index.php/AAAI/article/view/8730",
+      "title": "Parallel Materialisation of Datalog Programs in Centralised, Main-Memory RDF Systems",
+      "document_status": "Peer-reviewed conference paper (AAAI 2014)",
+      "publication_date": "2014",
+      "used_in_chapters": [
+        "5"
+      ],
+      "research_note_path": "docs/research_notes/RDFOX-01.md",
+      "key_finding": "The algorithm paper behind RDFox: parallel, lock-free incremental materialisation of Datalog over compressed, columnar, main-memory RDF graphs. Distinct from the RDFox tool page (RLP-01)."
+    },
+    {
       "id": "OWLRL-01",
       "canonical_url": "https://github.com/RDFLib/OWL-RL",
       "fetch_status": "FETCHED_AND_VERIFIED",

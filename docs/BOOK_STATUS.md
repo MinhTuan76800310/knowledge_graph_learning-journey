@@ -66,7 +66,7 @@ Focus: 6 theoretical pillars (Hypergraphs, Logic Complexity & Decidability, Demp
 | Theoretical Target | Target Chapters | Status | Specification |
 |--------------------|-----------------|--------|---------------|
 | Pillar 1: Hypergraphs & Formal Blank Node Logic | Ch 1–3 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 1 |
-| Pillar 2: Complexity Landscape, FOL-Rewritability & Datalog | Ch 4–5 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 2 |
+| Pillar 2: Complexity Landscape, FOL-Rewritability & Datalog | Ch 4–5 | 🟢 Ch 4 MERGED; 🟢 Ch 5 done (VI+EN parity, PR pending) | `docs/BOOK_V0_3_MILESTONE.md` §Target 2 |
 | Pillar 3: Dempster-Shafer Confidence & AGM Belief Revision | Ch 6 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 3 |
 | Pillar 4: Weisfeiler-Lehman (1-WL), RotatE & Hyperbolic Geometry | Ch 8 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 4 |
 | Pillar 5: Path Explosion Bounds & Long-Context vs GraphRAG | Ch 9 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 5 |

@@ -129,3 +129,13 @@ Last updated: Chapter 6
 | Contradiction ≠ Inconsistency | Mâu thuẫn ≠ Bất nhất | Mâu thuẫn ở nội dung; nhất quán ở metadata | §6.21 |
 | Validation | Kiểm chứng | Kiểm tra dữ liệu có thỏa mãn ràng buộc khai báo hay không | §5 |
 | SHACL | SHACL | Shapes Constraint Language — chuẩn W3C về xác nhận đồ thị | §5 |
+| Immediate consequence operator $T_P$ | Toán tử hệ quả tức thời | $T_P(I)$ = mọi head ground có thân khớp trong $I$; đơn điệu → lfp | §5.2 |
+| Least fixed point | Điểm bất động nhỏ nhất | $\mathrm{lfp}(T_P)=\bigcup_{k\ge0}T_P^k(\emptyset)$; kết quả forward chaining (Knaster–Tarski) | §5.2 |
+| Datalog | Datalog | Luật Horn an toàn, không hàm; ba ngữ nghĩa tương đương; PTIME data / EXPTIME combined | §5.16 |
+| Minimal Herbrand model | Mô hình Herbrand nhỏ nhất | $\mathcal{M}(P)$ = giao mọi Herbrand model ⊇ $D$; trùng $\mathrm{lfp}(T_P)$ | §5.16 |
+| Classical negation | Phủ định cổ điển | $\neg$; OWA; đơn điệu; đúng khi sai trong mọi mô hình | §5.16 |
+| Negation as Failure (NAF) | Phủ định dạng thất bại | `not`/$\sim$; CWA; phi đơn điệu; cần stratification để có mô hình duy nhất | §5.16 |
+| Stratified Datalog | Datalog phân tầng | Vị từ trong `not` phải ở tầng thấp hơn head → perfect model duy nhất | §5.16 |
+| Local Closed-World Semantics | Ngữ nghĩa thế giới đóng cục bộ | SHACL đọc vắng mặt cục bộ; thêm triple có thể lật conform→violate (phi đơn điệu) | §5.10 |
+| RETE algorithm | Thuật toán RETE | Mạng alpha/beta cache khớp từng phần; WME + agenda/conflict resolution; memory-for-speed | §5.5 |
+| Alpha/Beta network | Mạng alpha/beta | Alpha: lọc 1 đầu vào trong một mẫu; Beta: join 2 đầu vào giữa các mẫu + beta memory | §5.5 |
