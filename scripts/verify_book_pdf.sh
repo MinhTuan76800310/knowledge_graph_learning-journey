@@ -34,6 +34,7 @@ if [ "$LANG" = "en" ]; then
     "Ontologies and Formal Meaning"
     "Deduction, Rules, and Validation"
     "Claims, Evidence, Provenance, Time, and Contradiction"
+    "Knowledge Acquisition and Integration"
   )
   TOC_PAT='Contents'
   BIB_TITLE='References'
