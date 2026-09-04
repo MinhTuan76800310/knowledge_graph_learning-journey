@@ -1,0 +1,35 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{shapes.geometric,shapes.misc,positioning,fit,backgrounds,arrows.meta,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  stage/.style={rounded rectangle, draw, align=center, minimum width=6.4cm, minimum height=1.2cm, font=\small},
+  arrow/.style={-{Stealth[length=2.5mm]}, very thick},
+  label/.style={font=\scriptsize\itshape, text=gray!60!black},
+]
+
+% === Counterexample loop (clockwise) ===
+\node[stage, fill=red!8] (obs) at (0, 3.4) {1. Record counterexample\\[-2pt]\scriptsize with full provenance};
+\node[stage, fill=orange!8, right=3.0cm of obs] (assess) {2. Assess scope of refutation\\[-2pt]\scriptsize whole or partial};
+\node[stage, fill=yellow!12, below=3.2cm of assess] (refine) {3. Refine hypothesis\\[-2pt]\scriptsize narrow / split / drop};
+\node[stage, fill=green!8, left=3.0cm of refine] (ledger) {4. Update ledger\\[-2pt]\scriptsize old hypothesis: superseded (Ch6)};
+
+\draw[arrow] (obs) -- (assess);
+\draw[arrow] (assess) -- (refine);
+\draw[arrow] (refine) -- (ledger);
+
+% === Loop back to learning ===
+\node[stage, fill=blue!8, below=3.2cm of ledger] (learn) {5. Learn from counterexample\\[-2pt]\scriptsize becomes hard negative (\S8.27)};
+\draw[arrow] (ledger) -- (learn);
+\draw[arrow, dashed] (learn.west) -- ++(-1.6,0) node[label, left, align=center] {data for\\next training round} |- (obs.west);
+
+% === Annotation ===
+\node[label, align=center, text width=6.0cm, right=1.2cm of assess.south east, anchor=south west]
+  {A counterexample is not a failure:\\ it is the most important channel\\ for a system to learn with discipline.};
+
+\end{tikzpicture}
+\end{document}

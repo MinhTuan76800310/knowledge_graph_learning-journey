@@ -368,6 +368,144 @@ các giả định cấu trúc về mẫu nào đáng học [@hamilton-grl-2020]
 > tương quan số học từ dữ liệu. Đây là lý do vì sao điểm số KGE không bao giờ được dùng
 > làm bằng chứng tri thức luận (Ch6) mà không có Assessment.
 
+### 8.6.4 RotatE: Quan hệ là Phép quay trong Không gian Phức
+
+TransE dùng phép **cộng** (tịnh tiến), DistMult và ComplEx dùng phép **nhân** từng phần tử
+(bilinear). RotatE (Sun và đồng tác giả, 2019) chọn một thao tác hình học khác: **quay**
+[@sun-rotate-2019]. Để thấy vì sao phép quay đáng giá, ta quay lại một đối tượng quen
+thuộc trong đại số phổ thông: số phức.
+
+**Cầu nối từ số phức.** Một số phức $z = a + bi$ biểu diễn một điểm $(a, b)$ trên mặt
+phẳng. Dạng cực $z = r e^{i\theta}$ (với $r = |z| = \sqrt{a^2 + b^2}$ và công thức Euler
+$e^{i\theta} = \cos\theta + i\sin\theta$) cho thấy hai thành phần: độ dài $r$ và góc
+$\theta$. Nhân hai số phức thì **cộng góc, nhân độ dài**:
+$r_1 e^{i\theta_1} \cdot r_2 e^{i\theta_2} = r_1 r_2\, e^{i(\theta_1 + \theta_2)}$.
+Điều then chốt: nhân với một số phức có **độ dài đúng bằng 1** ($|z| = 1$, tức $z =
+e^{i\theta}$) chỉ **quay** điểm đi một góc $\theta$ mà không đổi khoảng cách tới gốc. Đây
+chính là ma trận quay 2D trong đại số tuyến tính:
+
+$$
+\begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}
+\begin{pmatrix} a \\ b \end{pmatrix}
+=
+\begin{pmatrix} a\cos\theta - b\sin\theta \\ a\sin\theta + b\cos\theta \end{pmatrix}
+$$
+
+**Công thức.** Trong RotatE, mỗi thực thể và mỗi quan hệ là một vector số phức $d$ chiều:
+$\mathbf{h}, \mathbf{t} \in \mathbb{C}^d$ và $\mathbf{r} \in \mathbb{C}^d$. Quan hệ bị ràng
+buộc có **mô-đun bằng 1 ở mọi chiều**, $|r_i| = 1$, nên mỗi chiều $i$ chỉ là một góc
+$\theta_{r,i}$: phép quay. Bộ ba $(h, r, t)$ đúng khi $\mathbf{t}$ là ảnh của $\mathbf{h}$
+qua phép quay từng phần tử (tích Hadamard $\circ$):
+
+$$
+\mathbf{t} = \mathbf{h} \circ \mathbf{r}, \qquad
+d_r(\mathbf{h}, \mathbf{t}) = -\|\mathbf{h} \circ \mathbf{r} - \mathbf{t}\|
+$$
+
+Điểm số $d_r$ là khoảng cách phức (mô-đun của hiệu) — càng gần 0, bộ ba càng đáng tin.
+So với TransE (cộng một vector bất kỳ), RotatE **giữ nguyên độ dài** của biểu diễn thực
+thể và chỉ đổi hướng: quan hệ không "kéo" thực thể đi mà "xoay" nó quanh gốc.
+
+**Bốn định lý mẫu quan hệ.** Sức mạnh thật của RotatE là nó **mô tả được bằng cấu trúc**
+bốn loại quan hệ mà TransE và DistMult xử lý kém. Với mỗi loại, điều kiện nằm gọn ở góc
+quay $\theta_{r,i}$:
+
+| Mẫu quan hệ | Ý nghĩa | Điều kiện trên phép quay | Vì sao |
+|-------------|---------|--------------------------|--------|
+| **Đối xứng** (symmetry) | $r(x,y) \Rightarrow r(y,x)$ | $\theta_{r,i} \in \{0, \pi\}$, tức $r_i = \pm 1$ | Quay $0$ hoặc $180^\circ$ rồi quay lại đúng chỗ cũ: $r \circ r = 1$ |
+| **Bất đối xứng** (antisymmetry) | $r(x,y) \Rightarrow \neg r(y,x)$ | $\theta_{r,i} \notin \{0, \pi\}$ | Quay một góc khác $0/\pi$ thì quay ngược lại không về điểm cũ |
+| **Nghịch đảo** (inversion) | $r_1(x,y) \Leftrightarrow r_2(y,x)$ | $\mathbf{r}_2 = \bar{\mathbf{r}}_1$, tức $\theta_{r_2,i} = -\theta_{r_1,i}$ | Liên hợp phức $\bar{z}$ đảo dấu góc, tức quay ngược chiều |
+| **Hợp thành** (composition) | $r_1(x,y) \wedge r_2(y,z) \Rightarrow r_3(x,z)$ | $\mathbf{r}_3 = \mathbf{r}_1 \circ \mathbf{r}_2$, tức $\theta_{r_3,i} = \theta_{r_1,i} + \theta_{r_2,i}$ | Quay liên tiếp hai góc = quay một góc bằng tổng |
+
+Bốn điều này không phải bốn cơ chế riêng lẻ — chúng là **một cơ chế duy nhất** (phép quay
+phức) hiện ra dưới bốn ràng buộc góc khác nhau. TransE chỉ mô tả được hợp thành (cộng
+vector) và bất đối xứng; DistMult chỉ mô tả được đối xứng; ComplEx mô tả được đối xứng và
+bất đối xứng nhưng không bảo toàn được hợp thành một cách tự nhiên. RotatE gom cả bốn.
+
+![Bốn mẫu quan hệ trên mặt phẳng phức: đối xứng (quay 0/π), bất đối xứng (quay góc khác), nghịch đảo (liên hợp = quay ngược), hợp thành (cộng góc). Mỗi quan hệ là một điểm trên đường tròn đơn vị |r_i|=1.](figures/generated/ch08-rotate-geometry.pdf)
+
+Bảng so sánh tổng hợp bốn họ mô hình theo đúng các tiêu chí hình học vừa phân tích:
+
+| Tiêu chí | TransE | DistMult | ComplEx | RotatE |
+|----------|--------|----------|---------|--------|
+| Không gian | $\mathbb{R}^d$ | $\mathbb{R}^d$ | $\mathbb{C}^d$ | $\mathbb{C}^d$, $\|r_i\|=1$ |
+| Phép biến đổi quan hệ | tịnh tiến (cộng) | co giãn (nhân thực) | quay + co giãn | quay thuần túy |
+| Quan hệ 1–N, N–1 | yếu | khá | khá | khá |
+| Đối xứng | không | **có** | có | **có** ($\theta\in\{0,\pi\}$) |
+| Bất đối xứng | có | không | có | **có** ($\theta\notin\{0,\pi\}$) |
+| Nghịch đảo | không | không | không | **có** ($\mathbf{r}_2=\bar{\mathbf{r}}_1$) |
+| Hợp thành | có | không | không | **có** ($\theta_3=\theta_1+\theta_2$) |
+
+> 🖊 **Tự kiểm tra:** Trong hệ thống cơ chế, quan hệ `hasInverseRateOfChange` nối một tốc
+> độ thay đổi với "tốc độ đổi chiều ngược" của nó. RotatE mô tả quan hệ này bằng điều kiện
+> nào trong bảng trên, và góc quay của nó liên hệ ra sao với góc quay của quan hệ gốc?
+> *(Gợi ý: dòng "Nghịch đảo" — $\theta_{r_2,i} = -\theta_{r_1,i}$.)*
+
+> ⚠️ **Mô tả được mẫu hình học ≠ hiểu quan hệ.**
+> RotatE **có khả năng biểu đạt** (expressivity) để khớp các mẫu đối xứng/bất đối
+> xứng/nghịch đảo/hợp thành — nhưng nó vẫn chỉ tối ưu một hàm điểm trên dữ liệu. Việc một
+> bộ ba khớp mẫu quay không chứng minh nó **đúng** về mặt vật lý. Thiên kiến hình học tốt
+> làm giả thuyết đáng tin hơn, không biến giả thuyết thành định luật.
+
+### 8.6.5 Không gian Hyperbolic và Nhúng Poincaré
+
+Bốn mô hình trên đều sống trong không gian **Euclid** (hoặc mặt phẳng phức, về bản chất là
+Euclid 2-chiều mỗi tọa độ). Có một lớp cấu trúc mà không gian Euclid biểu diễn **kém một
+cách căn bản**: **cây phân cấp** — đúng là thứ mà ontology cơ chế (SubClassOf, taxonomy
+`PhysicalMechanism → RateOfChange → ...`) chứa đầy.
+
+**Thiếu hụt thể tích Euclid.** Trong $\mathbb{R}^d$, thể tích hình cầu bán kính $r$ tăng
+theo **đa thức**: $\mathrm{Vol}_{\mathbb{R}^d}(r) \propto r^d$. Nhưng một cây có hệ số phân
+nhánh $b$ có số nút ở độ sâu $l$ tăng theo **cấp số mũ**: $N(l) \propto b^l$. Nhúng một cây
+lớn vào không gian Euclid chiều thấp buộc các nút ở tầng sâu phải **chen chúc** — hoặc ta
+phải tăng chiều $d$ đến mức không tưởng. Đây không phải vấn đề tham số huấn luyện, mà là
+**sự không khớp hình học** giữa độ tăng thể tích đa thức và độ tăng số nút hàm mũ.
+
+**Không gian hyperbolic sửa điều đó.** Hình học hyperbolic $\mathbb{H}^d$ có **độ cong âm**
+không đổi ($K = -1$). Ở độ cong âm, chu vi và thể tích hình cầu tăng **hàm mũ** theo bán
+kính: $\mathrm{Vol}_{\mathbb{H}^d}(r) \propto \sinh^{d-1}(r) \sim \tfrac{1}{2^{d-1}}
+e^{(d-1)r}$. Độ tăng hàm mũ này **khớp** với độ tăng hàm mũ của cây. Trực giác: trên mặt
+phẳng Euclid, một vòng tròn bao quanh gốc chứa ngày càng ít "chỗ" cho các nhánh; trên mặt
+hyperbolic, chu vi phình ra nhanh đến mức mỗi tầng của cây đều có đủ chỗ.
+
+**Mô hình đĩa Poincaré.** Một biểu diễn tiện dụng của $\mathbb{H}^d$ là **đĩa/cầu Poincaré**
+$\mathbb{B}^d = \{\mathbf{x} \in \mathbb{R}^d : \|\mathbf{x}\| < 1\}$ — toàn bộ không gian
+hyperbolic được "nén" vào trong một hình cầu mở. Khoảng cách giữa hai điểm $\mathbf{u},
+\mathbf{v}$ trong đĩa:
+
+$$
+d_{\mathbb{B}}(\mathbf{u}, \mathbf{v}) = \operatorname{arcosh}\!\left(1 + 2\,
+\frac{\|\mathbf{u} - \mathbf{v}\|^2}{(1 - \|\mathbf{u}\|^2)(1 - \|\mathbf{v}\|^2)}\right)
+$$
+
+Hãy đọc công thức bằng đại số tuyến tính cơ bản: tử số là khoảng cách Euclid bình thường
+$\|\mathbf{u}-\mathbf{v}\|^2$; mẫu số có hai thừa số $(1-\|\mathbf{u}\|^2)$ và
+$(1-\|\mathbf{v}\|^2)$ **phình lên vô hạn** khi một điểm tiến ra biên ($\|\mathbf{u}\| \to
+1$). Hệ quả: hai điểm sát biên, dù gần nhau theo Euclid, lại **rất xa nhau theo hyperbolic**.
+$\operatorname{arcosh}$ (nghịch đảo của $\cosh$) chỉ là hàm biến đổi để khoảng cách thỏa tiên
+đề hình học.
+
+**Ý nghĩa với Mechanism KG.** Trong nhúng Poincaré, **các cơ chế gốc trừu tượng**
+(`PhysicalMechanism`, `RateOfChange`) nằm **gần tâm** ($\|\mathbf{u}\| \approx 0$), còn
+**các thể hiện cụ thể theo miền** (`CurrentThroughCapacitor`, `InstantaneousVelocity`) nằm
+**gần biên** ($\|\mathbf{u}\| \to 1$). Một node gần tâm có thể có **rất nhiều** con cháu ở
+tầng ngoài mà chúng vẫn cách nhau đủ xa — đúng tính chất của một taxonomy sâu. Khoảng cách
+hyperbolic tự nhiên mã hóa "cha–con" và "anh–em cùng cha": hai cơ chế cùng cha gần nhau,
+cơ chế gốc cách xa mọi lá.
+
+![Đĩa Poincaré B²: các cơ chế gốc (RateOfChange, PhysicalMechanism) ở gần tâm, các thể hiện miền cụ thể nở ra gần biên. Vùng gần biên bị "phóng đại" khoảng cách, cho phép nhúng cây phân cấp sâu mà không chen chúc.](figures/generated/ch08-poincare-disk.pdf)
+
+> ⚠️ **Hyperbolic không "đúng" hơn Euclid — nó hợp với cây.**
+> Nhúng Poincaré thắng khi dữ liệu có **cấu trúc phân cấp mạnh**. Với đồ thị nhiều chu
+> trình, quan hệ ngang hàng, hoặc không có thứ bậc rõ, lợi thế biến mất và độ phức tạp tính
+> toán (tối ưu trên đa tạp, phép chiếu về đĩa) chỉ thêm chi phí. Chọn hình học theo **dạng
+> cấu trúc** của dữ liệu, không theo mốt.
+
+> ℹ **Cả RotatE và Poincaré đều chỉ là thiên kiến hình học.** RotatE khớp *mẫu quan hệ*;
+> Poincaré khớp *dạng phân cấp*. Cả hai đều là hàm chấm điểm, không phải máy chứng minh.
+> Điểm số của chúng là **tín hiệu xếp hạng ứng viên**, không phải bằng chứng — vẫn phải qua
+> cổng SHACL (Ch5) và quản trị chấp nhận (Ch6) trước khi thành tri thức.
+
 ## 8.7 Giả định Thế giới Mở (OWA) và Lấy mẫu Âm
 
 ### 8.7.1 OWA: Thiếu ≠ Sai
@@ -623,6 +761,63 @@ GNN có thể **tái sử dụng** mẫu đã học mà không cần biết trư
 Đây chính là sức mạnh của học quy nạp trên đồ thị: mô hình học *cách* tính toán biểu
 diễn từ cấu trúc, không học *các giá trị* cố định của từng thực thể.
 
+### 8.14.3 Giới hạn Biểu đạt: Bài kiểm tra Weisfeiler-Lehman (1-WL)
+
+Tuy khung **message → aggregate → update** rất linh hoạt, nhưng một định lý nền tảng của
+học đồ thị hiện đại nói rằng: **hầu hết các GNN tiêu chuẩn (GCN, GAT, R-GCN) bị chặn
+trên đúng bởi sức biểu đạt của bài kiểm tra Weisfeiler-Lehman đơn (1-WL)**
+[@morris-weisfeiler-2019; @xu-gin-2019]. Hiểu 1-WL giúp ta biết GNN *không thể làm gì* —
+một điều quan trọng không kém biết nó *có thể làm gì*.
+
+**Bài kiểm tra 1-WL là gì?** Nó là một thuật toán **tô màu lặp** (color refinement):
+
+```
+Bước 0:    gán mỗi nút một màu khởi đầu c_v^(0) = hash(nhãn(v))
+Bước t+1:  c_v^(t+1) = hash( c_v^(t), { c_u^(t) | u ∈ N(v) } )
+Dừng:      khi tập màu không còn thay đổi
+```
+
+Trong đó `{ c_u^(t) | u ∈ N(v) }` là một **đa tập** (multiset) — tức danh sách lân cận
+có thể lặp lại màu. Mỗi bước, một nút nhận màu mới dựa trên **màu cũ của chính nó** và
+**đa tập màu của các lân cận**. Nếu sau bước $t$, hai đồ thị có phân hoạch màu khác nhau,
+chúng chắc chắn không đẳng cấu. Nếu 1-WL không phân biệt được hai đồ thị, chúng vẫn có
+thể khác nhau — 1-WL chỉ là một phương pháp đủ mà không cần.
+
+**Cầu nối đến message passing.** Nhìn lại công thức message passing: mỗi nút tập hợp
+thông tin từ lân cận rồi cập nhật bản thân. 1-WL cũng làm điều tương tự, nhưng dùng
+**màu rời rạc** (hash) thay vì vector thực. Morris et al. (2019) và Xu et al. (2019)
+chứng minh rằng: **một MPNN có sức biểu đạt bằng 1-WL khi và chỉ khi các hàm gom
+(AGGREGATE) và cập nhật (UPDATE) là đơn ánh (injective)**. Điều này lý giải cho kiến trúc
+**Graph Isomorphism Network (GIN)**:
+
+$$
+\mathbf{h}_v^{(k+1)} = \text{MLP}\!\left((1 + \epsilon)\,\mathbf{h}_v^{(k)} + \sum_{u \in \mathcal{N}(v)} \mathbf{h}_u^{(k)}\right)
+$$
+
+Hệ số $(1+\epsilon)$ và phép cộng đa tập (sum) thay vì mean/max là cố tình: chúng bảo toàn
+thông tin về việc **có bao nhiêu** lân cận mỗi màu — điều cần để đạt tính đơn ánh. GCN dùng
+mean, GAT dùng attention-weighted mean: cả hai đều **mất** thông tin đếm, nên không thể vượt
+khỏi 1-WL.
+
+| Câu hỏi | 1-WL / MPNN trả lời được? |
+|---------|---------------------------|
+| Hai đồ thị có cùng phân hoạch màu cuối? | Có — thuật toán dừng ở phân hoạch ổn định |
+| Phân biệt hai đồ thị bất kỳ? | **Không** — nhiều cặp đồ thị khác nhau nhận cùng màu |
+| Đếm số tam giác $C_3$? | **Không** — cần biết cấu trúc 3 nút, không chỉ 1-hop |
+| Đếm chu trình $C_k$? | **Không** — tương tự tam giác |
+| Phân biệt cấu trúc vòng lặp vs tuyến tính trong cơ chế? | **Không** — nếu bậc nút giống nhau |
+
+> 🖊 **Tự kiểm tra:** Một GNN dùng `mean` aggregation trên đồ thị mà mỗi nút có đúng 3 lân
+cận. Tại sao nó không thể phân biệt một mạch lặp 3 nút (A→B→C→A) với một đường đi dài 3
+nút có cùng số lân cận mỗi nút? *(Gợi ý: mean mất thông tin "là ai", chỉ giữ trung bình.)*
+
+> ⚠️ **Khả năng đồng nhất hóa ≠ suy diễn.**
+> Định lý 1-WL nói MPNN có thể học đủ để **phân biệt** các cấu trúc mà 1-WL phân biệt
+> được. Nó không nói MPNN hiểu *ý nghĩa vật lý* của cấu trúc. Một GNN có thể phân biệt
+> "có vòng lặp hay không" bằng cách học vector — nhưng vẫn không biết vòng lặp đó là phản
+> hồi âm hay một khâu trong chuỗi nhân quả. Điểm GNN là tín hiệu; ngữ nghĩa phải được gắn
+> bởi ontology (Ch4) và quản trị chấp nhận (Ch6).
+
 ## 8.15 R-GCN: Truyền Thông điệp Theo Loại Quan hệ
 
 **R-GCN (Relational Graph Convolutional Network)** là một GNN thiết kế cho đồ thị
@@ -699,6 +894,65 @@ Pooling là một **lựa chọn thiết kế**: cách bạn chọn hàm gom (me
 quyết định thông tin nào của subgraph được giữ lại. Không có pooling nào "đúng" tuyệt
 đối. Quan trọng hơn: vector gom được không phải là "ý nghĩa" của subgraph — nó chỉ là
 một tóm tắt số học phục vụ một bài toán cụ thể.
+
+### 8.17.3 Khi nào 1-WL không đủ: Đếm chu trình và Cơ chế Vòng lặp
+
+Giới hạn 1-WL ở §8.14.3 không phải một tò mò lý thuyết suông — nó **chạm trực tiếp** vào
+nhiệm vụ của hệ thống cơ chế. Hãy xem một phản ví dụ kinh điển mà 1-WL **bó tay**.
+
+**Phản ví dụ: thập giác $C_{10}$ so với hai ngũ giác $2 \times C_5$.**
+Xét hai đồ thị: (a) một chu trình duy nhất dài 10 (thập giác), và (b) hai chu trình rời
+nhau mỗi cái dài 5 (hai ngũ giác). Cả hai đều **2-đều** (mọi nút có đúng 2 lân cận) và có
+cùng số nút (10). Chạy 1-WL: ở bước 0 mọi nút cùng màu (cùng nhãn); ở mỗi bước sau, mỗi
+nút thấy đa tập lân cận $\{màu, màu\}$ giống hệt nhau, nên mọi nút **vẫn cùng một màu** ở
+mọi bước. Phân hoạch màu cuối cùng của hai đồ thị **giống hệt nhau**. Kết luận: **không
+MPNN 1-WL nào phân biệt được $C_{10}$ với $2 \times C_5$**, dù chúng rõ ràng khác nhau về
+cấu trúc toàn cục.
+
+![Cặp đồ thị không đẳng cấu nhưng 1-WL không phân biệt được: thập giác C₁₀ (một chu trình 10 nút) và hai ngũ giác rời 2×C₅ (hai chu trình 5 nút). Cả hai 2-đều; 1-WL tô mọi nút cùng màu ở mọi bước.](figures/generated/ch08-1wl-isomorphism.pdf)
+
+**Hệ quả cho Mechanism KG.** Đây là điều đáng lo với cuốn sách này. Một **cơ chế phản hồi
+vòng kín** ($A \to B \to C \to A$, ví dụ vòng điều nhiệt: nhiệt độ → sai lệch → van nhiên
+liệu → nhiệt độ) và một **chuỗi khuếch đại tuyến tính** có cùng bậc nút *nhìn giống hệt
+nhau* dưới mắt một MPNN chuẩn. Mô hình không thể, chỉ bằng truyền thông điệp 1-WL, biết
+rằng một trong hai có **khâu hồi tiếp** — mà hồi tiếp chính là thứ tạo ra hành vi động lực
+(ổn định, dao động, mất ổn định) mà Chương 10 sẽ khai thác. Muốn phân biệt, phải **đưa
+thêm tín hiệu cấu trúc** mà 1-WL không tự thấy.
+
+**Vượt qua trần 1-WL.** Có ba hướng kiến trúc chính để phá giới hạn này:
+
+1. **GNN bậc cao ($k$-WL, $k \ge 3$):** thay vì tô màu từng nút, tô màu **bộ $k$ nút** có
+   phân biệt vai trò. Sức mạnh tăng theo $k$ (đúng hơn: phân biệt được nhiều cặp hơn),
+   nhưng chi phí tăng theo $O(n^k)$ — không dùng được cho đồ thị lớn.
+2. **Subgraph GNN:** chạy nhiều MPNN trên **các đồ thị con** được chọn có chủ đích (ví dụ
+   mỗi nút được "đánh dấu" một lần — node marking), rồi gộp biểu diễn. Đếm được chu trình
+   ngắn vì mỗi lần đánh dấu phá được tính đối xứng cục bộ.
+3. **Graph Transformer (Graphormer, TokenGT):** bỏ hẳn cơ chế gom lân cận cứng, dùng
+   **self-attention toàn đồ thị** cộng với **mã hóa vị trí cấu trúc** — khoảng cách đường
+   đi ngắn nhất (shortest-path distance), độ trễ (degree centrality), và **bias không gian
+   học được** trên từng cặp nút. Vì attention nhìn thấy **cặp** $(u,v)$ cùng metadata
+   đường đi, nó phân biệt được cấu trúc mà 1-WL gộp lại.
+
+| Kiến trúc | Sức biểu đạt | Đếm chu trình? | Chi phí |
+|-----------|-------------|----------------|---------|
+| MPNN chuẩn (GCN/GAT/R-GCN) | $=$ 1-WL | Không | $O(|E|)$ mỗi lớp |
+| GIN | $=$ 1-WL (đơn ánh tối đa) | Không | $O(|E|)$ mỗi lớp |
+| $k$-WL GNN | $=$ $k$-WL | Có (với $k$ đủ lớn) | $O(n^k)$ |
+| Subgraph GNN | Vượt 1-WL | Có (chu trình ngắn) | $O(n \cdot |E|)$ |
+| Graph Transformer | Vượt 1-WL | Có (qua bias đường đi) | $O(n^2)$ |
+
+> ⚠️ **Vượt 1-WL không miễn phí.**
+> Mỗi kiến trúc phá trần đều đổi bằng chi phí tính toán hoặc bộ nhớ lớn hơn, và thường
+> **kém bền** khi dữ liệu ít. Với đồ thị cơ chế vừa và nhỏ, một MPNN chuẩn cộng thêm
+> **đặc trưng cấu trúc tường minh** (số chu trình, có/không cạnh hồi tiếp, đường đi vòng)
+> thường thực dụng hơn là nguyên một Graph Transformer. Đừng nâng cấp kiến trúc để giải
+> quyết một vấn đề mà một đặc trưng đúng chỗ giải quyết được.
+
+> ℹ **Bài học xuyên suốt:** sức biểu đạt là **trần trên** của những gì mô hình *có thể*
+> học, không phải điều nó *sẽ* học. Một kiến trúc vượt 1-WL vẫn có thể không học ra cấu
+> trúc vòng nếu dữ liệu huấn luyện không có đủ ví dụ vòng. Ngược lại, khi kiến trúc bị
+> chặn ở 1-WL, mọi nỗ lực huấn luyện đều vô ích — mô hình **về nguyên tắc** không phân
+> biệt được hai cơ chế. Chọn kiến trúc trước, huấn luyện sau.
 
 ## 8.18 Tương tự Cấu trúc và Độ tương tự Cosine
 
@@ -931,21 +1185,102 @@ có giá trị khi:
 > nó biến một giả thuyết thống kê thành một tiên đề bảo toàn chân lý, và mọi hệ quả sai
 > sẽ lan truyền trên toàn đồ thị.
 
+### 8.22.4 Học Quy tắc Khả vi (Differentiable Logic Programming)
+
+AMIE+ khai phá quy tắc theo cách **rời rạc**: nó duyệt các mẫu đường đi, đếm hỗ trợ và
+tính độ tin cậy PCA, rồi trả về những quy tắc đạt ngưỡng. Ưu điểm: nhanh, rõ ràng,
+tưởng minh. Nhược điểm: (1) không huấn luyện **end-to-end** theo gradient, (2) khó tối ưu
+mục tiêu liên quan đến chuỗi suy diễn dài hoặc đồ thị nhiễu, (3) quy tắc phức tạp hơn
+một số mắt xích phải tìm bằng tìm kiếm tổ hợp rất lớn. **Học quy tắc khả vi**
+(differentiable rule / Inductive Logic Programming khả vi) ra đời để lấp khoảng trống
+này [@yang-neurallp-2017; @sadeghian-drum-2019; @evans-dilp-2018].
+
+**Biểu diễn quan hệ thành ma trận.** Gọi $\mathcal{R}$ là tập các quan hệ. Mỗi quan hệ
+$r$ được biểu diễn bằng một ma trận kề $\mathbf{M}_r \in \{0,1\}^{|V| \times |V|}$, trong đó
+$[\mathbf{M}_r]_{ij} = 1$ nghĩa là có cạnh $i \xrightarrow{r} j$. Nếu bạn đã học đại số
+tuyến tính cơ bản, ma trận $\mathbf{M}_r$ chỉ là một ma trận sparse ghi lại đồ thị theo từng
+quan hệ — rất giống ma trận kề thông thường.
+
+**Thư giãn (relaxation) softmax trong Neural LP.** Neural LP xây dựng một quy tắc dài $T$
+mắt xích theo kiểu ma trận:
+
+$$
+\mathbf{A}_t = \sum_{r \in \mathcal{R}} \alpha_{t,r}\, \mathbf{M}_r, \qquad
+\sum_{r} \alpha_{t,r} = 1, \quad \alpha_{t,r} > 0
+$$
+
+Ở mỗi bước $t$, mô hình chọn một phân phối xác suất (softmax) qua các quan hệ:
+$\boldsymbol{\alpha}_t \in \Delta^{|\mathcal{R}|}$. Ma trận kết hợp $\mathbf{A}_t$ là **trung
+bình có trọng số** của các ma trận kề. Quy tắc tổng hợp (composed rule) là chuỗi nhân
+ma trận:
+
+$$
+\mathbf{P} = \mathbf{A}_1 \mathbf{A}_2 \cdots \mathbf{A}_T
+$$
+
+Bằng đại số tuyến tính, $\mathbf{P}_{ij}$ cho ta xác suất (hay điểm số) mềm của đường đi
+từ $i$ đến $j$ qua $T$ bước. Với truy vấn $(h, r_{target}, ?)$, điểm trả lời được tính:
+$\mathbf{s} = \mathbf{e}_h^{\top} \mathbf{P}$. Mọi tham số $\alpha_{t,r}$ đều khả vi, nên mô hình
+được tối ưu bằng **hạ gradient** qua entropy chéo (cross-entropy loss) giống phân loại.
+
+**DRUM mở rộng Neural LP bằng RNN trên đường đi.** DRUM (Sadeghian và đồng tác giả,
+2019) nhận ra rằng $\alpha_t$ không cần độc lập mà có thể phụ thuộc vào các bước trước, ví
+dụ qua một mạng RNN ẩn. Điều này cho phép học quy tắc dài hơn với số lượng ứng viên ít hơn
+và tổng quát hóa tốt hơn.
+
+**Trích quy tắc sau huấn luyện.** Khi đã có $\alpha_{t,r}$, ta có thể trích một quy tắc rời
+rạc bằng cách chọn quan hệ có trọng số cao nhất ở mỗi bước: $r_t = \arg\max_r
+\alpha_{t,r}$. Quy tắc này trông giống AMIE+, nhưng nó được chọn để **tối thiểu hóa mất
+mát dự đoán**, không phải để tối đa hỗ trợ/độ tin cậy PCA. Đây là sự khác biệt quan trọng.
+
+> 🖊 **Tự kiểm tra:** Trong công thức $\mathbf{P} = \mathbf{A}_1 \mathbf{A}_2 \cdots
+> \mathbf{A}_T$, tích ma trận này gợi lại phép đệ quy nào trong đồ thị? *(Gợi ý: nếu mỗi
+> $\mathbf{A}_t$ là một bước "theo quan hệ nào đó", tích là số đường đi $T$ bước giữa hai
+> nút — liên quan đến lũy thừa ma trận kề.)*
+
+**$\partial$ILP: Lập trình Logic Khả vi (Differentiable Inductive Logic Programming).**
+Một cách tiếp cận khác của Evans và Grefenstette (2018): thay vì thư giãn dạng chuỗi ma
+trận, $\partial$ILP thư giãn **suy diễn logic** bằng **fuzzy t-norms**. Cụ thể, nó biểu diễn
+mỗi quy tắc Horn dưới dạng một chương trình logic mờ với các trọng số $\theta$, rồi dùng
+gradient để học trọng số. Lợi ích: (1) vẫn giữ được dạng quy tắc tượng trưng, tương thích
+với các bộ kiểm chứng hình thức ở Chương 5; (2) đầu ra là các quy tắc Horn xác suất đọc
+được; (3) có thể cân bằng giữa phức tạp quy tắc (số lượng mắt xích) và khả năng khái
+quát.
+
+**So sánh nhanh với AMIE+:**
+
+| Tiêu chí | AMIE+ | Neural LP / DRUM | $\partial$ILP |
+|----------|-------|------------------|---------------|
+| Không gian quy tắc | rời rạc | thư giãn (gradient) | thư giãn (fuzzy) |
+| Tối ưu | hỗ trợ + PCA confidence | gradient end-to-end | gradient end-to-end |
+| Chuỗi dài | tổ hợp bùng nổ | tích ma trận + RNN | suy diễn mờ |
+| Đầu ra | quy tắc rời rạc | quy tắc $\arg\max$ trọng số | quy tắc Horn xác suất |
+| Giải thích | có | có (nếu trích) | có |
+| Liên hệ logic | gần | trung gian | chặt (Horn) |
+
+> ⚠️ **Học quy tắc khả vi vẫn ra giả thuyết.**
+> Dù có gradient, các quy tắc trích ra vẫn là **giả thuyết dữ liệu**. Gradient giúp chọn quy
+> tắc khớp dự đoán, không biến chúng thành định luật. Một quy tắc Neural LP có thể tối ưu
+> được vì lý do hoàn toàn sai: trùng lặp nguồn, âm tính giả, hoặc tương quan giả (§8.26).
+> Không nên nạp trực tiếp vào bộ suy diễn mà không qua kiểm tra (§8.22.3) và quản trị
+> chấp nhận (Ch6).
+
 ## 8.23 So sánh: Tượng trưng vs Nhúng
 
 Hai họ học quy nạp — quy tắc tượng trưng và nhúng — có những điểm mạnh bổ sung nhau
 [@nickel-relational-ml-2016]:
 
-| Tiêu chí | Học quy tắc (symbolic) | Nhúng (embeddings) |
-|----------|------------------------|--------------------|
-| Đầu ra | Quy tắc đọc được | Vector, điểm số |
-| Giải thích | Có (cấu trúc tường minh) | Khó (hình học ẩn) |
-| Mở rộng tới thực thể mới | Tốt (quy tắc không phụ thuộc định danh) | Chuyển dẫn: kém; quy nạp (GNN): được |
-| Xử lý bất định | Khó (không có độ bất định tự nhiên) | Tự nhiên (điểm số) |
-| Ngữ nghĩa | Gần với logic, nhưng vẫn là giả thuyết | Không có ngữ nghĩa hình thức |
-| Với quan hệ phức tạp | Khó nếu không có đường đi | Linh hoạt |
+| Tiêu chí | Học quy tắc (symbolic) | Nhúng (embeddings) | Khả vi (differentiable) |
+|----------|------------------------|--------------------|-------------------------|
+| Đầu ra | Quy tắc đọc được | Vector, điểm số | Quy tắc Horn xác suất |
+| Giải thích | Có (cấu trúc tường minh) | Khó (hình học ẩn) | Có (quy tắc + trọng số) |
+| Mở rộng tới thực thể mới | Tốt (quy tắc không phụ thuộc định danh) | Chuyển dẫn: kém; quy nạp (GNN): được | Tốt (quy tắc không phụ thuộc định danh) |
+| Xử lý bất định | Khó (không có độ bất định tự nhiên) | Tự nhiên (điểm số) | Tự nhiên (trọng số softmax) |
+| Ngữ nghĩa | Gần với logic, nhưng vẫn là giả thuyết | Không có ngữ nghĩa hình thức | Gần với logic, nhưng vẫn là giả thuyết |
+| Với quan hệ phức tạp | Khó nếu không có đường đi | Linh hoạt | Linh hoạt (chuỗi ma trận) |
+| Huấn luyện | Đếm + ngưỡng | Gradient | Gradient |
 
-Không họ nào "đúng" tuyệt đối. Thực tế tốt nhất thường là kết hợp cả hai — dẫn đến kiến
+Không họ nào "đúng" tuyệt đối. Thực tế tốt nhất thường là kết hợp cả ba — dẫn đến kiến
 trúc lai ở mục tiếp theo.
 
 ## 8.24 Kiến trúc Lai (Hybrid Pipeline): ML sinh ứng viên, Tượng trưng lọc, Tri thức luận quyết định
@@ -1861,6 +2196,9 @@ cao ≠ chân lý; mẫu học được ≠ tri thức được chấp nhận.
 | Bilinear model (DistMult) | ⟨h, r, t⟩; đối xứng | §8.6.1 |
 | ComplEx | Nhúng phức, tích Hermitian; bất đối xứng | §8.6.2 |
 | Inductive bias | Giả định cấu trúc của họ mô hình | §8.6.3 |
+| RotatE | Quan hệ = phép quay phức $\|r_i\|=1$; 4 mẫu quan hệ | §8.6.4 |
+| Hyperbolic geometry | Độ cong âm; thể tích tăng hàm mũ, hợp với cây | §8.6.5 |
+| Poincaré embedding | Nhúng $\mathbb{B}^d$; gốc ở tâm, lá gần biên | §8.6.5 |
 | Negative sampling | Tạo mẫu âm bằng thay thế ngẫu nhiên | §8.7 |
 | False negative | Bộ ba thật bị dùng làm mẫu âm | §8.7.3 |
 | Link prediction | Xếp hạng bộ ba ứng viên còn thiếu | §8.8 |
@@ -1875,6 +2213,7 @@ cao ≠ chân lý; mẫu học được ≠ tri thức được chấp nhận.
 | GNN | Mạng nơ-ron tính theo cấu trúc đồ thị | §8.13 |
 | R-GCN | Biến đổi riêng theo loại quan hệ | §8.15 |
 | Oversmoothing | Biểu diễn hội tụ khi xếp nhiều lớp | §8.16 |
+| 1-WL test (Weisfeiler-Lehman) | Tô màu lặp; trần biểu đạt của MPNN chuẩn | §8.14.3, §8.17.3 |
 | Subgraph representation | Pooling/readout cho toàn bộ subgraph | §8.17 |
 | Structural similarity | Bằng chứng đa chiều; tương tự ≠ đồng nhất | §8.18 |
 | Cosine similarity | cos(a,b) = (a·b)/(‖a‖·‖b‖) | §8.18.2 |
@@ -1882,6 +2221,7 @@ cao ≠ chân lý; mẫu học được ≠ tri thức được chấp nhận.
 | Invariant / incidental structure | Bất biến / ngẫu nhiên khi trừu tượng hóa | §8.21 |
 | Rule induction (AMIE+) | Quy tắc đường đi r1∧r2→r3 | §8.22 |
 | Rule-mining confidence (PCA) | Tần suất dưới giả định PCA; ≠ Ch6 | §8.22.2 |
+| Differentiable logic programming | Neural LP/DRUM/$\partial$ILP; gradient học quy tắc Horn | §8.22.4 |
 | Hybrid pipeline | ML sinh ứng viên → lọc → tri thức luận (BOOK-DEFINED) | §8.24 |
 | Cross-domain generalization | Nhận cơ chế ở miền mới | §8.26 |
 | Spurious correlation / shortcut | Học dấu hiệu bề mặt thay vì cơ chế | §8.26 |
@@ -1918,3 +2258,10 @@ cao ≠ chân lý; mẫu học được ≠ tri thức được chấp nhận.
 - Graph Representation Learning (Hamilton) [@hamilton-grl-2020]
 - PROV-O: The PROV Ontology [@prov-o]
 - Shapes Constraint Language (SHACL) [@w3c-shacl]
+- Weisfeiler and Leman Go Neural: Higher-order Graph Neural Networks (Morris et al.) [@morris-weisfeiler-2019]
+- How Powerful are Graph Neural Networks? (Xu et al., GIN) [@xu-gin-2019]
+- RotatE: Knowledge Graph Embedding by Relational Rotation in Complex Space (Sun et al.) [@sun-rotate-2019]
+- Poincaré Embeddings for Learning Hierarchical Representations (Nickel & Kiela) [@nickel-poincare-2017]
+- Differentiable Learning of Logical Rules for Knowledge Base Reasoning (Yang et al., Neural LP) [@yang-neurallp-2017]
+- DRUM: End-to-end Differentiable Rule Mining on Knowledge Graphs (Sadeghian et al.) [@sadeghian-drum-2019]
+- Learning Explanatory Rules from Noisy Data (Evans & Grefenstette, $\partial$ILP) [@evans-dilp-2018]

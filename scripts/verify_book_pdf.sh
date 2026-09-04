@@ -35,6 +35,7 @@ if [ "$LANG" = "en" ]; then
     "Deduction, Rules, and Validation"
     "Claims, Evidence, Provenance, Time, and Contradiction"
     "Knowledge Acquisition and Integration"
+    "Inductive Knowledge and Learning from Graphs"
   )
   TOC_PAT='Contents'
   BIB_TITLE='References'
