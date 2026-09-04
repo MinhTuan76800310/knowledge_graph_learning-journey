@@ -1304,7 +1304,8 @@ chúng trả giá ở thì suy luận (PTIME) nhưng được bù bằng khả n
 > Profiles [@snomed-ct], được phân loại bởi các bộ suy luận EL thời gian đa thức như **ELK**
 > [@elk-reasoner] và **Snorocket** (EL++ với miền cụ thể, từ nhóm duy trì công cụ SNOMED CT)
 > [@snorocket]; **Gene Ontology** và **UBERON** là các thuật ngữ OBO Foundry cùng dạng giàu lớp
-> [@gene-ontology] [@uberon]. **QL** là profile của knowledge graph ảo: **Ontop** viết lại
+> [@gene-ontology] [@uberon]. **QL** là profile của truy cập dữ liệu dựa trên ontology (OBDA —
+> Ontology-Based Data Access) qua knowledge graph ảo: **Ontop** viết lại
 > SPARQL thành SQL trên database quan hệ và hỗ trợ tường minh OWL 2 QL [@ontop-obda], xây trên
 > họ **DL-Lite** mà tính first-order rewritability mang lại độ phức tạp dữ liệu LOGSPACE
 > [@dl-lite-family]. **RL** là profile của rule engine co giãn: **RDFox** materialize hệ quả
@@ -1735,6 +1736,9 @@ quy tắc và xác nhận*.
 | FOL-Rewritability | Mọi truy vấn hợp viết lại được thành truy vấn First-Order thuần | §4.12 |
 | N2EXPTIME | Mũ kép — OWL 2 DL đủ (complete) ở độ phức tạp kết hợp | §4.12 |
 | PTIME | Thời gian đa thức — OWL 2 EL đủ ở độ phức tạp dữ liệu | §4.12 |
+| $\mathcal{EL}^{++}$ | DL đứng sau OWL 2 EL: thêm chuỗi vai và datatype vào $\mathcal{EL}$ | §4.12 |
+| DL-Lite | Họ DL tối giản đứng sau OWL 2 QL; truy vấn viết lại được sang SQL | §4.12 |
+| OBDA | Ontology-Based Data Access: che ontology lên database quan hệ (Ontop) | §4.12 |
 
 ## Đọc thêm
 

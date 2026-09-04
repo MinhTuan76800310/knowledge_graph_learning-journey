@@ -1345,7 +1345,8 @@ ontologies.
 > spec [@snomed-ct], classified by polynomial-time EL reasoners such as **ELK** [@elk-reasoner]
 > and **Snorocket** (EL++ with concrete domains, from the group that maintains SNOMED CT tooling)
 > [@snorocket]; the **Gene Ontology** and **UBERON** are OBO Foundry terminologies of the same
-> class-rich shape [@gene-ontology] [@uberon]. **QL** is the profile of virtual knowledge graphs:
+> class-rich shape [@gene-ontology] [@uberon]. **QL** is the profile of Ontology-Based Data
+> Access (OBDA) via virtual knowledge graphs:
 > **Ontop** rewrites SPARQL into SQL over relational databases and explicitly supports OWL 2 QL
 > [@ontop-obda], built on the **DL-Lite** family whose first-order rewritability gives LOGSPACE
 > data complexity [@dl-lite-family]. **RL** is the profile of scalable rule engines: **RDFox**
@@ -1781,6 +1782,9 @@ rules, and validation*.
 | FOL-Rewritability | Every conjunctive query rewrites to a plain First-Order query | §4.12 |
 | N2EXPTIME | Double-exponential — OWL 2 DL is complete here in combined complexity | §4.12 |
 | PTIME | Polynomial time — OWL 2 EL is complete here in data complexity | §4.12 |
+| $\mathcal{EL}^{++}$ | The DL behind OWL 2 EL: adds role chains and datatypes to $\mathcal{EL}$ | §4.12 |
+| DL-Lite | Minimalist DL family behind OWL 2 QL; queries rewrite to SQL | §4.12 |
+| OBDA | Ontology-Based Data Access: an ontology layered over a relational database (Ontop) | §4.12 |
 
 ## Further reading
 
