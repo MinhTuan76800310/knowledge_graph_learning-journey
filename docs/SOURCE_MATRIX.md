@@ -3,7 +3,7 @@
 Maps every major topic to its primary and secondary authoritative sources.
 Primary sources are preferred; secondary sources supplement or provide alternative perspectives.
 
-Last verified: 2026-08-25
+Last verified: 2026-09-04
 
 | Topic | Primary source | Secondary source | Source type | Stable/draft | Why authoritative | Chapters |
 |---|---|---|---|---|---|---|
@@ -20,10 +20,10 @@ Last verified: 2026-08-25
 | OWL 2 direct semantics | W3C OWL 2 Direct Semantics (REC 2012) | — | STANDARD | Stable | Model-theoretic semantics for OWL 2 DL; interpretations, satisfiability, entailment | 4 |
 | OWL 2 profiles (EL, QL, RL) | W3C OWL 2 Profiles (REC 2012) | — | STANDARD | Stable | Tractable fragments: EL (poly-time), QL (query rewriting), RL (rule-based) | 4 |
 | Deductive knowledge & Description Logics | Hogan et al. Ch.6 Deductive Knowledge | — | ACADEMIC | Stable | Ontology-based reasoning, DL interpretations, models, entailment, TBox/ABox | 4 |
-| Description Logic theory & reasoners (Ch4 enrichment) | Baader et al., *The Description Logic Handbook* (2nd ed.) | FaCT++ (Tsarkov & Horrocks), HermiT (Motik et al.), Konclude (Steigmiller et al.), Protégé (Noy et al.) | ACADEMIC / OFFICIAL_DOCUMENTATION | Stable | Formal-semantics foundation + production reasoner lineage behind OWL's entailment machinery | 4 (EN) |
-| OWL 2 EL real-world ontologies & reasoners (Ch4 enrichment) | W3C OWL 2 Profiles (REC 2012) | SNOMED CT, ELK (Kazakov et al.), Snorocket, Gene Ontology, UBERON | STANDARD / CASE_STUDY / OFFICIAL_DOCUMENTATION | Stable (Snorocket: Emerging) | Flagship EL terminology + polynomial-time EL classifiers grounding the EL profile | 4 (EN) |
-| OWL 2 QL OBDA & DL-Lite (Ch4 enrichment) | W3C OWL 2 Profiles (REC 2012) | Ontop (VKG/OBDA), DL-Lite family (Artale et al., JAIR 2009) | STANDARD / OFFICIAL_DOCUMENTATION / RESEARCH_PAPER | Stable | Query-rewriting-to-SQL profile and its tractable logical basis | 4 (EN) |
-| OWL 2 RL rule engines & Datalog (Ch4 enrichment) | W3C OWL 2 Profiles (REC 2012) | RDFox, Apache Jena GenericRuleReasoner, W3C RIF | STANDARD / OFFICIAL_DOCUMENTATION / CASE_STUDY | Stable | Rule-based scalable reasoning over RDF; Datalog-compatible interchange | 4 (EN) |
+| Description Logic theory & reasoners (Ch4 enrichment) | Baader et al., *The Description Logic Handbook* (2nd ed.) | FaCT++ (Tsarkov & Horrocks), HermiT (Motik et al.), Konclude (Steigmiller et al.), Protégé (Noy et al.), Horrocks/Sattler/Tobies SROIQ (KR 2006) | ACADEMIC / OFFICIAL_DOCUMENTATION / RESEARCH_PAPER | Stable | Formal-semantics foundation + production reasoner lineage behind OWL's entailment machinery; SROIQ paper fixes OWL 2 DL = SROIQ(D) and its N2EXPTIME combined complexity | 4 |
+| OWL 2 EL real-world ontologies & reasoners (Ch4 enrichment) | W3C OWL 2 Profiles (REC 2012) | SNOMED CT, ELK (Kazakov et al.), Snorocket, Gene Ontology, UBERON | STANDARD / CASE_STUDY / OFFICIAL_DOCUMENTATION | Stable (Snorocket: Emerging) | Flagship EL terminology + polynomial-time EL classifiers grounding the EL profile | 4 |
+| OWL 2 QL OBDA & DL-Lite (Ch4 enrichment) | W3C OWL 2 Profiles (REC 2012) | Ontop (VKG/OBDA), DL-Lite family (Artale et al., JAIR 2009), Calvanese et al. DL-Lite (JAR 2007) | STANDARD / OFFICIAL_DOCUMENTATION / RESEARCH_PAPER | Stable | Query-rewriting-to-SQL profile and its tractable logical basis; DL-Lite paper establishes FO-rewritability → AC0 data complexity | 4 |
+| OWL 2 RL rule engines & Datalog (Ch4 enrichment) | W3C OWL 2 Profiles (REC 2012) | RDFox, Apache Jena GenericRuleReasoner, W3C RIF | STANDARD / OFFICIAL_DOCUMENTATION / CASE_STUDY | Stable | Rule-based scalable reasoning over RDF; Datalog-compatible interchange | 4 |
 | SHACL validation | W3C SHACL (REC 2017) | pySHACL documentation | STANDARD / OFFICIAL_DOCUMENTATION | Stable | Constraint validation for RDF graphs; SHACL 1.2 Core WD 2026-08-03 is emerging | 5 |
 | SPARQL entailment regimes | W3C SPARQL 1.1 Entailment Regimes (REC 2013) | — | STANDARD | Stable | Defines standard regime IRIs; regimes via Service Description, not FROM | 5 |
 | Forward chaining & Datalog engines (Ch5 enrichment) | Hogan et al. Ch.5 Rules and Reasoning | Soufflé (Jordan et al., CAV 2016), Datalog survey (Green et al. 2013), OWL-RL | ACADEMIC / RESEARCH_PAPER / OFFICIAL_DOCUMENTATION | Stable | Industrial fixpoint evaluation grounding the θ + fixpoint mechanism | 5 (EN) |

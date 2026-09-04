@@ -143,6 +143,43 @@ xuất hiện, kèm ý nghĩa:
 Bạn không cần nhớ hết ngay. Bảng này là tài liệu tham khảo; mỗi ký hiệu sẽ được giải thích
 trong ngữ cảnh khi xuất hiện lần đầu.
 
+### Trực giác: hộp cát và từ điển
+
+Trước khi đối mặt với ký hiệu hình thức, hãy dựng một mô hình tinh thần. Một **diễn giải**
+chỉ gồm hai thứ: một **hộp cát** và một **cuốn từ điển**.
+
+**Hộp cát — miền diễn giải $\Delta^I$.** Hãy tưởng tượng một khay đựng những viên
+biến. Mỗi viên là một *đối tượng* — một thành phố cụ thể, một đại lượng vật lý cụ thể, hay một
+cơ chế cụ thể. Hộp cát $\Delta^I$ chính là tập hợp các viên biến đó: một tập khác
+rỗng, trừu tượng. Nó không bắt buộc chứa gì cả — miễn là nó là "vũ trụ con" mà ta đang nói tới.
+
+**Từ điển — hàm diễn giải $\cdot^I$.** Các ký hiệu trong ontology (`City`,
+`capitalOf`, `Hanoi`) chỉ là chữ trên giấy. Hàm diễn giải là cuốn từ điển tra mỗi chữ ra một
+*vật* trong hộp cát. Ba loại ký hiệu, ba loại tra cứu:
+
+- **Cá thể** $a$ (tên riêng): trỏ tới **một viên biến cụ thể** $a^I \in \Delta^I$.
+- **Lớp** $C$ (danh từ chung): trỏ tới **một hộp con** $C^I \subseteq \Delta^I$ — tập các viên biến được xếp vào lớp đó.
+- **Thuộc tính** $R$ (quan hệ hai ngôi): trỏ tới **tập mũi tên có hướng** $R^I \subseteq \Delta^I \times \Delta^I$ nối giữa các viên biến.
+
+Cặp $(\Delta^I, \cdot^I)$ — hộp cát cộng từ điển — chính là một diễn giải
+$I$. Không hơn không kém.
+
+> ℹ **Cầu nối Đại số tuyến tính: quan hệ là ma trận, lớp là vector.** Nếu hộp cát hữu hạn,
+> $|\Delta^I| = n$, bạn đã quen hai vật thể $n$-chiều. Gán mỗi viên biến một chỉ số
+> $1..n$. Khi đó:
+>
+> - Một **lớp** $C$ là một **vector chỉ báo boolean** $\mathbf{c} \in \{0,1\}^n$: $c_i = 1$
+>   nếu viên thứ $i$ nằm trong $C$, ngược lại $0$. Phép giao lớp $C \sqcap D$ thành phép AND
+>   theo từng tọa độ, hợp $\sqcup$ thành OR, phần bù $\neg C$ thành đảo bit.
+> - Một **thuộc tính** $R$ là một **ma trận kề nhị phân** $A \in \{0,1\}^{n \times n}$:
+>   $A_{ij} = 1$ khi và chỉ khi có mũi tên $R$ từ viên $i$ tới viên $j$.
+> - Hạn chế tồn tại $\exists R.C$ hỏi "từ viên $i$ có mũi tên $R$ nào tới một viên thuộc $C$
+>   không?" — tức tích $(A\mathbf{c})_i = \sum_j A_{ij} c_j \ge 1$.
+>
+> Toàn bộ ngữ nghĩa tập hợp dưới đây, trên miền hữu hạn, chính là đại số boolean trên vector
+> chỉ báo và ma trận kề quen thuộc. Logic không phải thứ xa lạ — nó là phần đại số rời rạc của
+> những cấu trúc bạn đã dùng.
+
 ### Diễn giải (Interpretation)
 
 Một **diễn giải** I là một cách gán ý nghĩa toán học cho các ký hiệu trong ontology. Cụ
@@ -260,7 +297,9 @@ diễn giải đó.
 
 Một **mô hình** của ontology O là một diễn giải thỏa mãn **tất cả** các tiên đề trong O.
 
-Nói cách khác: mô hình là diễn giải "hợp lệ" — diễn giải mà mọi tiên đề đều đúng.
+Nói cách khác: mô hình là diễn giải "hợp lệ" — diễn giải mà mọi tiên đề đều đúng. Theo ẩn dụ
+hộp cát: một mô hình là một cách xếp các viên biến sao cho **không một luật nào** (tiên đề)
+bạn viết ra bị phá.
 
 ```
 Models(O) = { I | I thỏa mãn mọi tiên đề trong O }
@@ -463,6 +502,10 @@ City ⊑ Place
 ```
 
 Điều kiện ngữ nghĩa: $City^I \subseteq Place^I$ trong mọi mô hình.
+
+Bằng ẩn dụ tập hợp: vòng tròn của $City$ nằm **hoàn toàn bên trong** vòng tròn của $Place$
+($City^I \subseteq Place^I$) — mọi viên biến được xếp vào City đều đã nằm
+trong hộp Place. Đây chính là *subsumption*: City bị Place "bao hàm".
 
 Đây là quan hệ **một chiều**. Từ `City ⊑ Place`, ta biết mọi City đều là Place. Nhưng ta
 **không** biết mọi Place đều là City. Place có thể chứa các phần tử không thuộc City.
@@ -1069,6 +1112,69 @@ học toàn bộ DL để dùng OWL hiệu quả, nhưng hiểu trực giác DL 
 > trọng. Không phải mọi DL đều "nhanh" — tính khả thi tính toán (tractability) mạnh hơn là mục
 > tiêu của các OWL profiles (§4.12), không phải của DL nói chung.
 
+### Vì sao Description Logic tồn tại: mảnh khả quyết của Logic bậc nhất
+
+Ta đã dùng các tiên đề OWL như thể "hỏi rồi được trả lời" là chuyện hiển nhiên. Nhưng nền tảng
+logic của chúng — **First-Order Logic (FOL, logic bậc nhất)** — mang một giới hạn tính toán sâu
+sắc:
+
+- **Tính đúng của một công thức FOL tùy ý là không khả quyết** (undecidable). Không tồn tại
+  thuật toán luôn dừng và trả lời đúng/sai cho mọi công thức — định lý của Church (1936) và
+  Turing (1936).
+- Nó chỉ **nửa khả quyết** (semi-decidable): nhờ định lý đầy đủ của Gödel, một máy chứng minh
+  sẽ *xác nhận* được mọi hệ quả đúng nếu chạy đủ lâu — nhưng có thể chạy mãi mãi mà không bao
+  giờ kết luận "sai" với một phát biểu không phải hệ quả.
+
+Một bộ suy luận thương mại không thể chấp nhận "chạy mãi mãi". **Description Logic** ra đời vì
+thế: chúng là những **mảnh khả quyết** (decidable fragments) của FOL — bị cắt xén có chủ đích
+về lượng từ và số ngôi — để mọi tác vụ suy luận cốt lõi (nhất quán, bao hàm, kiểm tra thành
+viên) *chắc chắn dừng* với câu trả lời đúng. Nhiều DL nằm gọn trong các mảnh FOL đã biết khả
+quyết như **mảnh hai biến** $\text{FO}^2$ (chỉ dùng $x, y$; khả quyết nhưng NEXPTIME-khó) và
+**mảnh có canh giữ** (guarded fragment). Cú pháp DL — các *mô tả khái niệm* không dùng biến tự
+do — chính là cách "đóng gói" lượng từ để mảnh còn lại vẫn khả quyết.
+
+> ℹ **Đánh đổi cốt lõi.** Thêm một kiến tạo biểu đạt (phủ định, vai nghịch đảo, ràng buộc số
+> lượng…) mở rộng mảnh FOL, và mỗi lần mở rộng như vậy thường *đẩy độ phức tạp suy luận lên*.
+> Toàn bộ §4.12 trả lời đúng câu hỏi này: thêm bao nhiêu biểu đạt thì vẫn tính được trong thực
+> tế?
+
+### Bảng chữ cái đặt tên của Description Logic
+
+Các DL được đặt tên theo **kiến tạo** mà chúng cho phép, ghép từ một lõi nhỏ là $\mathcal{AL}$
+(Attributive Language: lớp nguyên tử, giao $\sqcap$, lượng từ phổ quát $\forall R.C$, và lượng
+từ tồn tại giới hạn $\exists R.\top$). Mỗi chữ cái thêm vào là một tính năng [@dl-handbook]:
+
+| Chữ | Tên | Kiến tạo thêm vào |
+|-----|-----|-------------------|
+| $\mathcal{AL}$ | Attributive Language | lõi: $\top, \bot$, tên lớp, $\sqcap$, $\forall R.C$, $\exists R.\top$ |
+| $\mathcal{C}$ | Complement | phủ định lớp $\neg C$ → được $\mathcal{ALC}$ |
+| $\mathcal{S}$ | (ALC +) transitive Roles | cho phép khai báo vai bắc cầu $R \in R_+$ |
+| $\mathcal{H}$ | role Hierarchies | bao hàm vai $R \sqsubseteq S$ |
+| $\mathcal{R}$ | complex Role inclusion | bao hàm vai phức tạp (chuỗi vai $R \circ S \sqsubseteq T$) |
+| $\mathcal{O}$ | nOminals | cá thể liệt kê $\{a_1, \dots, a_n\}$ như một lớp |
+| $\mathcal{I}$ | Inverse Roles | vai nghịch đảo $R^-$ |
+| $\mathcal{Q}$ | Qualified number restrictions | ràng buộc số lượng có điều kiện $\ge n\,R.C$, $\le n\,R.C$ |
+| $(D)$ | concrete Datatype domains | miền dữ liệu cụ thể (chuỗi, số nguyên, số thực) |
+
+Ghép lại: $\mathcal{SROIQ} = \mathcal{S} + \mathcal{R} + \mathcal{O} + \mathcal{I} + \mathcal{Q}$.
+Và đây là kết luận quan trọng nhất của §4.10:
+
+> **OWL 2 DL chính xác là DL $\mathcal{SROIQ}(D)$** [@horrocks-sroiq-2006] — cộng thêm các đặc
+> trưng đặc thù OWL (punning, chú thích). Viết một ontology OWL 2 DL là viết trong
+> $\mathcal{SROIQ}(D)$; vượt ra ngoài nó, bạn rơi vào OWL 2 Full — **không khả quyết**.
+
+> ℹ **Trong thực hành.** Toàn bộ bộ máy hình thức của chương này — diễn giải, mô hình, suy
+> diễn, TBox/ABox/RBox — là nội dung chuẩn của *The Description Logic Handbook* [@dl-handbook],
+> tài liệu kinh điển đứng sau thiết kế của OWL. Các tác vụ suy luận ta định nghĩa được tính bởi
+> những **bộ suy luận DL** thương mại có chung một phả hệ: **FaCT++** lập nên truyền thống
+> tableau tối ưu [@factpp-reasoner]; **HermiT** thay bằng phép tính hypertableau và cài đặt OWL
+> 2 *Direct* Semantics [@hermit-reasoner]; **Konclude** là bộ suy luận OWL 2 DL hiện đại
+> [@konclude-reasoner]; còn **ELK** nhắm profile OWL 2 EL cho ontology khổng lồ (§4.12)
+> [@elk-reasoner]. Bạn soạn các biểu thức lớp và tiên đề của chương này trong một trình soạn
+> thảo như **Protégé**, rồi chạy các bộ suy luận đó [@protege]. Bài học cho kỹ sư: "điều này có
+> suy ra được không?" là một **phép tính khả quyết** mà các công cụ này chạy, không phải một
+> phán đoán chủ quan.
+
 ### TBox, ABox, RBox: phân loại tinh thần
 
 Trong truyền thống DL, các tiên đề thường được phân thành ba nhóm:
@@ -1144,6 +1250,68 @@ OWL 2 đầy đủ rất biểu đạt, nhưng suy luận trên nó có thể t�
 > ⚠ **Không có profile "tốt nhất".** Lựa chọn phụ thuộc vào cấu trúc ontology và tác vụ suy
 > luận cụ thể. EL không "nhanh hơn QL" trong mọi trường hợp; QL không "tốt hơn RL" cho mọi
 > ứng dụng. Hãy chọn dựa trên yêu cầu thực tế, không dựa trên bảng xếp hạng chung chung.
+
+### Phổ độ phức tạp tính toán của các profile
+
+Bảng đầu §4.12 nêu *tính chất* suy luận của từng profile ("thời gian đa thức", "rewriting sang
+SQL"). Ở đây ta gắn cho chúng những **con số độ phức tạp** cụ thể, vì đó chính là lý do sâu xa
+khiến các profile khác nhau.
+
+Trước hết cần phân biệt hai cách đếm chi phí, bởi một phép suy luận có *hai* đầu vào: ontology
+(các tiên đề TBox/RBox) và dữ liệu cá thể (ABox).
+
+- **Độ phức tạp kết hợp** (combined complexity): tính theo *tổng* kích thước ontology + dữ
+  liệu — trường hợp "viết ontology mới hoàn toàn rồi suy luận".
+- **Độ phức tạp dữ liệu** (data complexity): coi ontology là *cố định*, chỉ tính theo kích
+  thước ABox — trường hợp sản xuất phổ biến nhất: một ontology đã kiểm thử kỹ, phục vụ hàng
+  triệu bản ghi thay đổi liên tục.
+
+Các lớp trong bảng dưới, xếp từ rẻ đến đắt:
+
+- $\text{AC}^0$: họ hàm tính được bằng mạch Boolean độ sâu không đổi, kích thước đa thức, quạt
+  vô hạn — trực giác: *rẻ ngang một phép tra cứu trong database*, và quan trọng hơn là **song
+  song hóa tự do**.
+- **PTIME**: thời gian đa thức theo đầu vào — "co giãn được".
+- **EXPTIME**: thời gian mũ — hàm số xấu đi nhanh, nhưng số mũ cố định.
+- **N2EXPTIME**: mũ kép (double-exponential) — thảm họa về lý thuyết; bộ suy luận thực tế chỉ
+  sống sót vì ontology thật hiếm khi chạm tới ca khó nhất.
+
+| Ngôn ngữ / profile | Mảnh FOL | Kết hợp | Dữ liệu | Kỹ thuật then chốt |
+|--------------------|----------|---------|---------|--------------------|
+| **OWL 2 DL** $= \mathcal{SROIQ}(D)$ | khả quyết (có canh giữ) | N2EXPTIME-đủ [@horrocks-sroiq-2006] | EXPTIME-đủ [@dl-handbook] | (hyper)tableau |
+| **OWL 2 EL** $= \mathcal{EL}^{++}$ | — | EXPTIME-đủ [@dl-handbook] | PTIME-đủ [@w3c-owl2-profiles] | bão hòa / phân loại |
+| **OWL 2 QL** $=$ họ DL-Lite | $\text{FO}^2$, có canh giữ | NP-đủ [@calvanese-dllite-2007] | $\text{AC}^0$ (FO-rewritable) [@calvanese-dllite-2007] | rewriting truy vấn sang SQL |
+| **OWL 2 RL** | kiểu Datalog$^{\pm}$ | EXPTIME-đủ [@w3c-owl2-profiles] | PTIME-đủ [@w3c-owl2-profiles] | forward chaining / RETE |
+
+"Đủ" (complete) nghĩa là bài toán vừa *giải được* trong lớp đó, vừa *khó đúng bằng* mức đó —
+không tồn tại thuật toán tốt hơn về mặt tiệm cận.
+
+Hàng đáng chú ý nhất là **OWL 2 QL**. Vì mọi truy vấn hợp (conjunctive query) trên nó có thể
+**viết lại thành một truy vấn First-Order thuần** [@calvanese-dllite-2007], bộ suy luận không
+"chạy" gì cả ở thì truy vấn — nó chỉ xuất ra câu SQL rồi giao việc cho database engine (đã được
+tối ưu suốt bốn thập kỷ). Đó là lý do độ phức tạp *dữ liệu* tụt xuống $\text{AC}^0$: chi phí
+suy luận bị *đẩy* sang chi phí truy vấn SQL. EL và RL không có tính rewriting mạnh như vậy, nên
+chúng trả giá ở thì suy luận (PTIME) nhưng được bù bằng khả năng biểu đạt lớp rộng hơn.
+
+> ℹ **Đọc bảng thế nào.** Không có hàng nào "thắng". DL đắt nhất nhưng biểu đạt nhất; QL rẻ
+> nhất ở thì dữ liệu nhưng chỉ biểu đạt được ontology rất mỏng; EL và RL nằm giữa, mỗi cái
+> tối ưu cho một kiểu tải (EL: TBox khổng lồ; RL: ABox khổng lồ qua rule engine). Chọn profile
+> là chọn một *điểm trên phổ này*, đúng như cảnh báo "không có profile tốt nhất" ở trên.
+
+> ℹ **Cột mốc thực tế.** Mỗi profile tồn tại vì một lớp hệ thống sản xuất cần đến nó.
+> **EL** là profile của các bộ thuật ngữ y-sinh học lớn: **SNOMED CT**, thuật ngữ lâm sàng
+> đứng sau hồ sơ điện tử y tế, là ontology OWL 2 EL hàng đầu được nêu tên trong đặc tả W3C
+> Profiles [@snomed-ct], được phân loại bởi các bộ suy luận EL thời gian đa thức như **ELK**
+> [@elk-reasoner] và **Snorocket** (EL++ với miền cụ thể, từ nhóm duy trì công cụ SNOMED CT)
+> [@snorocket]; **Gene Ontology** và **UBERON** là các thuật ngữ OBO Foundry cùng dạng giàu lớp
+> [@gene-ontology] [@uberon]. **QL** là profile của truy cập dữ liệu dựa trên ontology (OBDA —
+> Ontology-Based Data Access) qua knowledge graph ảo: **Ontop** viết lại
+> SPARQL thành SQL trên database quan hệ và hỗ trợ tường minh OWL 2 QL [@ontop-obda], xây trên
+> họ **DL-Lite** mà tính first-order rewritability mang lại độ phức tạp dữ liệu LOGSPACE
+> [@dl-lite-family]. **RL** là profile của rule engine co giãn: **RDFox** materialize hệ quả
+> OWL 2 RL bằng forward chaining song song, gia tăng [@rdfox], và **Apache Jena**'s
+> GenericRuleReasoner bắn luật kiểu RL trên mô hình RDF bằng engine RETE [@apache-jena-rules];
+> bộ **RIF** của W3C chuẩn hóa việc trao đổi luật mà RL tương tác [@w3c-rif-overview].
 
 **Phân loại ontology cơ chế.** Ontology Mechanism Knowledge Graph của chúng ta rơi vào profile
 nào? Xét các tiên đề đã viết:
@@ -1279,6 +1447,53 @@ ba tham gia chỉ tồn tại "rách rời" như trong $M_1$, bộ suy luận kh
 chính là lời hứa của §3.3.3 được hoàn tất: cái nút phụ `derivativeApplication_1` mà Chương
 3 dựng bằng tay giờ có ngữ nghĩa hình thức đầy đủ, và Chương 5 sẽ xác nhận nó bằng
 SHACL/rule trên chính đồ thị cơ chế.
+
+### Xếp ontology cơ chế vào ba hộp TBox / RBox / ABox
+
+Phân loại ở §4.10 giờ được áp dụng ngược lại chính ontology cơ chế. Cùng một tập tiên đề, nhìn
+theo trục khái niệm–sự kiện, cho thấy phần nào là *luật* (ít đổi, suy luận được) và phần nào là
+*dữ liệu* (nhiều, thay đổi liên tục).
+
+**TBox** — tri thức khái niệm tổng quát: bao hàm, định nghĩa lớp, và rời nhau.
+
+```
+DerivativeApplication ⊑ MechanismApplication
+DerivativeApplication ⊑ ∃differentiand.Quantity
+RateOfChangeMechanism ≡ Mechanism ⊓ ∃hasApplication.DerivativeApplication
+Mechanism ⊓ Quantity ≡ ⊥
+```
+
+Ba dòng đầu là các tiên đề đã dựng ở trên. Dòng cuối — một khai báo **rời nhau** (disjointness)
+minh họa: một cơ chế không thể đồng thời là một đại lượng. Nó *không* suy ra từ ba dòng trên;
+phải assert tường minh, đúng như Sai lầm 5 (§4.4) đã cảnh báo.
+
+**RBox** — tiên đề về vai. Tính **nghịch đảo** nối hai chiều của quan hệ "áp dụng":
+
+```
+hasApplication ≡ (applicationOf)⁻
+```
+
+Nghĩa là với mọi cặp $(x, y)$: $x \mathrel{\mathit{hasApplication}} y$ khi và chỉ khi
+$y \mathrel{\mathit{applicationOf}} x$. Trong diễn giải, $(R^-)^I = \{(y, x) \mid
+(x, y) \in R^I\}$. Chỉ cần khai báo một chiều; bộ suy luận tự có chiều kia — không
+ai phải assert cả hai.
+
+**ABox** — sự kiện về cá thể cụ thể, thứ mà pipeline trích xuất (Chương 6–7) sẽ nạp hàng loạt:
+
+```
+rateOfChange_1 : Mechanism
+hasApplication(rateOfChange_1, derivativeApplication_1)
+derivativeApplication_1 : DerivativeApplication
+```
+
+Điểm tinh tế: ta **không** viết `rateOfChange_1 : RateOfChangeMechanism`. Ba dòng ABox trên,
+chiếu qua TBox, khiến bộ suy luận **tự suy ra** nhãn đó — đúng cơ chế hai mô hình $M_2$ đã
+minh họa. ABox đưa sự kiện, TBox đưa luật, nhãn suy ra nằm ở giữa.
+
+> ℹ **Vì sao tách theo trục này.** TBox là thứ bạn thiết kế, kiểm thử và phiên bản hóa cẩn thận
+> — nó nhỏ và đắt. ABox là thứ bạn nạp hàng loạt — nó lớn và rẻ để mở rộng. Hai hộp có nhịp
+> thay đổi, công cụ kiểm tra (OWL reasoner cho TBox, SHACL cho ABox — Chương 5), và chiến lược
+> quản trị hoàn toàn khác nhau.
 
 > Bài học: **chất lượng định nghĩa lớp phụ thuộc vào chất lượng mô hình khái niệm.** OWL suy
 > luận chính xác theo các tiên đề ta cung cấp; nó không sửa chữa một mô hình khái niệm yếu.
@@ -1512,6 +1727,18 @@ quy tắc và xác nhận*.
 | Description Logic | Họ ngôn ngữ logic cân bằng biểu đạt và khả thi suy luận | §4.10 |
 | TBox / ABox / RBox | Phân loại tinh thần: tri thức tổng quát / cá thể / thuộc tính | §4.10 |
 | OWL 2 EL / QL / RL | Profiles đánh đổi biểu đạt lấy hiệu suất | §4.12 |
+| Mảnh khả quyết (decidable fragment) | Tập con bị cắt xén của FOL mà suy luận chắc chắn dừng | §4.10 |
+| SROIQ(D) | DL tương đương chính xác với OWL 2 DL | §4.10 |
+| Bảng chữ cái DL | Cách đặt tên DL theo kiến tạo: AL, C, S, H, O, I, Q, D | §4.10 |
+| Độ phức tạp kết hợp (combined complexity) | Chi phí tính theo tổng ontology + dữ liệu | §4.12 |
+| Độ phức tạp dữ liệu (data complexity) | Chi phí khi ontology cố định, chỉ tính theo ABox | §4.12 |
+| AC0 | Lớp rẻ nhất: mạch Boolean độ sâu không đổi, song song hóa tự do | §4.12 |
+| FOL-Rewritability | Mọi truy vấn hợp viết lại được thành truy vấn First-Order thuần | §4.12 |
+| N2EXPTIME | Mũ kép — OWL 2 DL đủ (complete) ở độ phức tạp kết hợp | §4.12 |
+| PTIME | Thời gian đa thức — OWL 2 EL đủ ở độ phức tạp dữ liệu | §4.12 |
+| $\mathcal{EL}^{++}$ | DL đứng sau OWL 2 EL: thêm chuỗi vai và datatype vào $\mathcal{EL}$ | §4.12 |
+| DL-Lite | Họ DL tối giản đứng sau OWL 2 QL; truy vấn viết lại được sang SQL | §4.12 |
+| OBDA | Ontology-Based Data Access: che ontology lên database quan hệ (Ontop) | §4.12 |
 
 ## Đọc thêm
 

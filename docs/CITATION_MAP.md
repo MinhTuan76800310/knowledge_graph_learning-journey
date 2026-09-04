@@ -30,6 +30,7 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | DL-03 | `hermit-reasoner` | HermiT / Hypertableau Reasoning |
 | DL-04 | `konclude-reasoner` | Konclude: System Description |
 | DL-05 | `protege` | Protege ontology editor |
+| SROIQ-01 | `horrocks-sroiq-2006` | Even More Irresistible SROIQ |
 | EL-01 | `snomed-ct` | What is SNOMED CT? |
 | EL-02 | `elk-reasoner` | The Incredible ELK / ELK reasoner |
 | EL-03 | `snorocket` | Snorocket DL Classifier (CSIRO AEHRC) |
@@ -37,6 +38,7 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | EL-05 | `uberon` | UBERON Multi-Species Anatomy Ontology |
 | QL-01 | `ontop-obda` | Ontop Virtual Knowledge Graph System |
 | QL-02 | `dl-lite-family` | The DL-Lite Family and Relations |
+| DLLITE-01 | `calvanese-dllite-2007` | Tractable Reasoning and Efficient Query Answering (DL-Lite Family) |
 | RLP-01 | `rdfox` | RDFox |
 | RLP-02 | `apache-jena-rules` | Apache Jena Inference / GenericRuleReasoner |
 | RLP-03 | `w3c-rif-overview` | Overview of the Rule Interchange Format (RIF) |

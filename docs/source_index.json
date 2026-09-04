@@ -1500,6 +1500,22 @@
       "key_finding": "Canonical DL reference: interpretation->model->entailment, TBox/ABox/RBox, classes-as-sets semantics, syntax-vs-model-theoretic distinction. Grounds Ch4 DL-intuition section."
     },
     {
+      "id": "SROIQ-01",
+      "canonical_url": "https://dblp.org/rec/conf/kr/HorrocksKS06",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://dblp.org/rec/conf/kr/HorrocksKS06",
+      "title": "Even More Irresistible SROIQ",
+      "document_status": "KR 2006, AAAI Press, pp. 57-67",
+      "publication_date": "2006",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/SROIQ-01.md",
+      "key_finding": "Introduces SROIQ and proves its reasoning N2EXPTIME-complete; the DL that OWL 2 DL corresponds to (SROIQ(D))."
+    },
+    {
       "id": "DL-02",
       "canonical_url": "https://doi.org/10.1007/11814771_26",
       "fetch_status": "FETCHED_AND_VERIFIED",
@@ -1674,6 +1690,22 @@
       ],
       "research_note_path": "docs/research_notes/QL-02.md",
       "key_finding": "Tractable DL family OWL 2 QL is built on; LOGSPACE instance checking and positive-existential query answering via first-order rewriting."
+    },
+    {
+      "id": "DLLITE-01",
+      "canonical_url": "https://doi.org/10.1007/s10817-007-9078-x",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1007/s10817-007-9078-x",
+      "title": "Tractable Reasoning and Efficient Query Answering in Description Logics: The DL-Lite Family",
+      "document_status": "Journal of Automated Reasoning 39(3):385-429, Springer, 2007",
+      "publication_date": "2007",
+      "used_in_chapters": [
+        "4"
+      ],
+      "research_note_path": "docs/research_notes/DLLITE-01.md",
+      "key_finding": "Defines DL-Lite; CQ answering is FO-rewritable, giving AC0 data complexity and NP-complete combined complexity — the theoretical basis of OWL 2 QL."
     },
     {
       "id": "RLP-01",
