@@ -69,6 +69,11 @@ Last verified: 2026-09-04
 | Semantics and Complexity of SPARQL | Pérez, Arenas & Gutiérrez, 2009 | RESEARCH_PAPER | https://doi.org/10.1145/1567274.1567278 | ACM TODS 34(3):16:1–16:45; formal SPARQL relational algebra (join, left join, filter, union) and evaluation complexity | 2 (EN) |
 | An Introduction to Graph Data Management | Angles & Gutiérrez, 2018 | RESEARCH_PAPER | https://doi.org/10.1007/978-3-319-96193-4_1 | Springer LNCS 11510, pp. 1–32; formal attributed property-graph model | 2 (EN) |
 
+| A Mathematical Theory of Evidence (Dempster-Shafer) | Shafer, Glenn, 1976 | ACADEMIC | https://press.princeton.edu/books/paperback/9780691100425/a-mathematical-theory-of-evidence | Princeton UP, ISBN 978-0-691-10042-5; canonical mass functions / Bel / Pl / Dempster's rule | 6 |
+| Subjective Logic: A Formalism for Reasoning Under Uncertainty | Jøsang, Audun, 2016 | ACADEMIC | https://link.springer.com/book/10.1007/978-3-319-42337-1 | Springer, DOI 10.1007/978-3-319-42337-1; opinion vectors, simplex, consensus fusion | 6 |
+| On the Logic of Theory Change: Partial Meet Contraction and Revision Functions | Alchourrón, Gärdenfors & Makinson, 1985 | RESEARCH_PAPER | https://www.jstor.org/stable/2274659 | Journal of Symbolic Logic 50(2):510–530; AGM expansion/contraction/revision, Levi & Harper identities | 6 |
+| Developing Time-Oriented Database Applications in SQL | Snodgrass, Richard T., 1999 | ACADEMIC | https://www2.cs.arizona.edu/~rts/tdbbook | Morgan Kaufmann, ISBN 978-1-55860-436-0; valid vs. transaction/system time, bitemporal model | 6 |
+
 ## Official Documentation & Case Studies
 
 | Source | Organization | Type | URL | Chapters |

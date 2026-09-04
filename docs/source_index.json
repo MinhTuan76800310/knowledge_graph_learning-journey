@@ -1946,6 +1946,70 @@
       ],
       "research_note_path": "docs/research_notes/GDM-01.md",
       "key_finding": "Formal definition of the labeled property graph as an attributed graph tuple with node/edge labels and property functions; the academic reference behind the Ch2 7-tuple LPG formalization."
+    },
+    {
+      "id": "SHAFER-01",
+      "canonical_url": "https://press.princeton.edu/books/paperback/9780691100425/a-mathematical-theory-of-evidence",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://press.princeton.edu/books/paperback/9780691100425/a-mathematical-theory-of-evidence",
+      "title": "A Mathematical Theory of Evidence",
+      "document_status": "Peer-reviewed monograph (Princeton University Press, 1976; ISBN 978-0-691-10042-5)",
+      "publication_date": "1976",
+      "used_in_chapters": [
+        "6"
+      ],
+      "research_note_path": "docs/research_notes/SHAFER-01.md",
+      "key_finding": "Canonical Dempster-Shafer theory: frames of discernment, mass functions m(A), belief Bel(A), plausibility Pl(A), Dempster's rule of combination, and the Zadeh paradox under high conflict."
+    },
+    {
+      "id": "JOSANG-01",
+      "canonical_url": "https://link.springer.com/book/10.1007/978-3-319-42337-1",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://link.springer.com/book/10.1007/978-3-319-42337-1",
+      "title": "Subjective Logic: A Formalism for Reasoning Under Uncertainty",
+      "document_status": "Peer-reviewed monograph (Springer International Publishing, 2016)",
+      "publication_date": "2016",
+      "used_in_chapters": [
+        "6"
+      ],
+      "research_note_path": "docs/research_notes/JOSANG-01.md",
+      "key_finding": "Subjective Logic opinion vector (b,d,u,a), barycentric simplex, reference probability P(x)=b_x+a_x u_x, and consensus fusion operator for combining independent opinions."
+    },
+    {
+      "id": "AGM-01",
+      "canonical_url": "https://www.jstor.org/stable/2274659",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.cambridge.org/core/product/identifier/S0022481200026098/type/journal_article",
+      "title": "On the Logic of Theory Change: Partial Meet Contraction and Revision Functions",
+      "document_status": "Peer-reviewed journal article (Journal of Symbolic Logic 50(2):510-530, 1985)",
+      "publication_date": "1985",
+      "used_in_chapters": [
+        "6"
+      ],
+      "research_note_path": "docs/research_notes/AGM-01.md",
+      "key_finding": "Original AGM postulates for belief revision: expansion (K+phi), contraction (K div phi), revision (K*phi=(K div not phi)+phi); Levi and Harper identities; principle of minimal information loss."
+    },
+    {
+      "id": "SNODGRASS-01",
+      "canonical_url": "https://www2.cs.arizona.edu/~rts/tdbbook",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-04T00:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www2.cs.arizona.edu/~rts/tdbbook",
+      "title": "Developing Time-Oriented Database Applications in SQL",
+      "document_status": "Peer-reviewed monograph (Morgan Kaufmann, 1999; ISBN 978-1-55860-436-0; author's page hosts electronic edition)",
+      "publication_date": "1999",
+      "used_in_chapters": [
+        "6"
+      ],
+      "research_note_path": "docs/research_notes/SNODGRASS-01.md",
+      "key_finding": "Foundational temporal database text distinguishing valid time, transaction time and system time; bitemporal modeling and time-varying relations."
     }
   ]
 }

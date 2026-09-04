@@ -47,7 +47,11 @@ forward chaining (data-driven). Phù hợp khi ít truy vấn trên đồ thị 
 
 **Batch Governance (Quản trị hàng loạt).** Áp dụng quyết định quản trị (re-validate, retire, supersede) lên nhiều claim cùng lúc với chính sách rõ ràng, log và cơ chế rollback. Thao tác hàng loạt an toàn vì có quản trị, không phải vì chạy nhanh (Chương 10).
 
+**Belief revision (AGM) (Sửa đổi niềm tin AGM).** Lý thuyết hình thức của Alchourrón–Gärdenfors–Makinson về cách một tập niềm tin thay đổi hợp lý khi gặp bằng chứng trái ngược: ba phép mở rộng $K+\varphi$, co rút $K\div\varphi$, sửa đổi $K*\varphi$, nối với nhau qua đẳng thức Levi/Harper và 6 tiên đề tối thiểu (mất ít thông tin nhất) (Chương 6).
+
 **Benchmark Decay (Mục nát benchmark).** Tập kiểm tra cũ dần không còn phản ánh phân phối hiện tại; điểm cao trên benchmark cũ không chứng minh chất lượng hiện tại. Tái tạo benchmark theo đúng quy trình tạo gốc là cách kiểm chứng (Chương 10).
+
+**Bitemporal / 2D bitemporal grid (Song thời gian / Lưới tọa độ bitemporal 2D).** Mô hình lưu mỗi claim dưới dạng hình chữ nhật $R=[T_v^{\text{start}},T_v^{\text{end}}]\times[T_{tx}^{\text{start}},T_{tx}^{\text{end}}]$ trong đó trục ngang là valid time và trục dọc là system/transaction time. Một truy vấn point-probe $(T_v^*,T_{tx}^*)$ kiểm tra claim nào chứa điểm đó; nguyên tắc append-only đảm bảo lịch sử niềm tin không bị xóa (Chương 6).
 
 **Blank node (Nút trống).** Một nút trong đồ thị RDF biểu diễn một tài nguyên tồn tại nhưng
 không được đặt tên bằng IRI. Nhãn của blank node chỉ có phạm vi cục bộ trong một tài liệu;
@@ -125,6 +129,8 @@ tuyên bố. Trong mô hình kỹ thuật của sách: KG = Data Graph + Semanti
 
 **Cross-domain generalization (Tổng quát hóa chéo miền).** Khả năng mô hình nhận ra cơ chế trong một miền mới dù từ vựng bề mặt khác hẳn. Được kiểm tra bằng thử nghiệm: huấn luyện trên miền A, kiểm tra trên miền B.
 
+**Cumulative fusion (Subjective Logic) (Kết hợp lũy tích).** Phép $\oplus$ kết hợp hai opinion độc lập $\omega_1,\omega_2$ (cùng base rate $a$): $b_\oplus=(b_1u_2+b_2u_1)/(u_1+u_2-u_1u_2)$, tương tự cho $d_\oplus$, và $u_\oplus=u_1u_2/(u_1+u_2-u_1u_2)$. Tính chất chủ chốt: khi hai nguồn đồng thuận, vô tri co hẹp đơn điệu $u_\oplus\le\min(u_1,u_2)$ — thêm bằng chứng cùng chiều làm niềm tin chắc hơn (Chương 6).
+
 **Cypher.** Ngôn ngữ truy vấn khai báo do Neo4j phát triển cho đồ thị thuộc tính, dùng mẫu
 ASCII-art (`MATCH ... RETURN`). Cypher tương thích phần lớn với GQL nhưng không trùng khớp.
 
@@ -140,6 +146,8 @@ nghĩa hình thức về ý nghĩa. Trả lời được "có gì" nhưng chưa 
 **Deduction (Suy diễn).** Quy tắc chung + tiền đề → hệ quả tất yếu. Bảo toàn chân lý. Không sinh tri thức mới mà chỉ làm tường minh những gì đã ngầm chứa. Khác quy nạp (giả thuyết có thể sai).
 
 **Degradation (Suy thoái).** Suy giảm kéo dài của một chiều chất lượng (độ đúng, độ đủ, độ tươi, nhất quán, đáng tin). Phát hiện bằng mức + xu hướng qua các cửa sổ (Chương 10).
+
+**Dempster–Shafer theory (Lý thuyết bằng chứng Dempster–Shafer).** Tổng quát hóa xác suất Bayes của Shafer: thay vì gán xác suất cho từng mệnh đề, gán **khối lượng** $m:2^{\Theta}\to[0,1]$ cho các tập trong **khung phân biệt** $\Theta$, với $m(\emptyset)=0$ và $\sum m=1$. Khối lượng trên cả $\Theta$ biểu thị vô tri. Hai hàm **Belief** $\mathrm{Bel}(A)=\sum_{B\subseteq A}m(B)$ và **Plausibility** $\mathrm{Pl}(A)=1-\mathrm{Bel}(\bar A)$ kẹp claim vào khoảng $[\mathrm{Bel},\mathrm{Pl}]$. Quy tắc kết hợp Dempster chuẩn hóa qua $1-K$ với $K$ = mức xung đột; khi $K\to1$ (nghịch lý Zadeh) không nên trộn hai nguồn xung đột mà giữ nhánh tách biệt (Chương 6).
 
 **Denotation (Sự biểu thị).** Quan hệ giữa một định danh và thực thể mà nó chỉ đến. Định
 danh không phải là thực thể; sự biểu thị do quy ước và con người gán, không tự động có sẵn.
@@ -201,6 +209,8 @@ shape. Được chọn bởi cơ chế target (sh:targetClass, sh:targetNode, et
 $G_{i+1} = G_i \cup \{ \theta(\text{head}(r)) \mid r \in R, \; \theta(\text{body}(r)) \subseteq G_i \}$,
 dừng khi đạt điểm bất động (fixpoint) $G_{n+1} = G_n$. Đảm bảo dừng khi thỏa mãn các điều
 kiện: đồ thị hữu hạn, quy tắc hữu hạn, function-free, safe variables.
+
+**Frame of discernment (Khung phân biệt).** Trong lý thuyết Dempster–Shafer, tập $\Theta$ các giả thuyết đôi một loại trừ nhau mà bằng chứng được phân bổ trên đó. Hàm khối lượng gán $m$ cho các tập con của $\Theta$; khối lượng đặt trên chính $\Theta$ (không phải tập đơn nào) biểu thị vô tri — chưa nghiêng về giả thuyết nào (Chương 6).
 
 **Freshness (Độ tươi).** Phép đo tính thời sự: claim còn được bằng chứng hiện tại hỗ trợ gần đây không. Độ tươi không phải phán quyết đúng/sai; tươi ≠ đúng (Chương 10).
 
@@ -284,6 +294,8 @@ thuộc tính) và quan hệ (có hướng, có kiểu, và có thể có thuộ
 
 **Level vs Trend (Mức vs Xu hướng).** Mức là trạng thái hiện tại; xu hướng là đạo hàm qua cửa sổ. Xu hướng dự báo tốt hơn cho bảo trì; một mức không nói lên suy thoái (Chương 10).
 
+**Levi identity (Đẳng thức Levi).** Trong AGM, phép sửa đổi biểu diễn qua co rút và mở rộng: $K*\varphi = (K\div\neg\varphi)+\varphi$ — muốn tiếp nhận $\varphi$ thì trước hết bỏ cái đối lập $\neg\varphi$, rồi thêm $\varphi$. Tương ứng thao tác "dời claim cũ sang Superseded rồi thêm claim mới" (Chương 6).
+
 **Lexical retrieval (Truy xuất từ vựng).** Khớp từ chính xác giữa câu hỏi và tài liệu với trọng số (BM25). Giỏi thuật ngữ chính xác, dốt đồng nghĩa/paraphrase không có từ chung (Chương 9).
 
 **Link prediction (Dự đoán liên kết).** Với đồ thị quan sát được một phần, xếp hạng các bộ ba ứng viên còn thiếu. Đầu ra là danh sách có thứ tự, không phải sự thật được khẳng định.
@@ -307,6 +319,8 @@ bộ ba.
 bao đóng và lưu trữ kết quả. Khác với bản thân quan hệ entailment (là khái niệm ngữ nghĩa,
 không phải thao tác tính toán). Có thể không khả thi với ontology quá biểu cảm. So sánh với
 query-time reasoning (§5.4).
+
+**Mass function (Hàm khối lượng).** Trong lý thuyết Dempster–Shafer, hàm $m: 2^{\Theta} \to [0,1]$ với $m(\emptyset) = 0$ và $\sum_{B \subseteq \Theta} m(B) = 1$, gán khối lượng cho mỗi tập con của khung phân biệt $\Theta$. $m(\Theta)=1$ = vô tri toàn phần, khác hẳn $m(\{\text{Acc}\}) = 0.5$ — ghim một nửa lên tập đơn (Chương 6).
 
 **Message passing (Truyền thông điệp).** Cơ chế tính toán của GNN: message → aggregate → update. Mỗi nút gửi thông điệp đến lân cận, tập hợp chúng, và cập nhật biểu diễn. Là một khung, không phải một thuật toán.
 
@@ -369,6 +383,8 @@ thế giới đóng (thiếu = sai/vắng).
 **Path explosion (Bùng nổ đường đi).** Số đường đi giữa các nút tăng theo cấp số nhân khi đồ thị lớn. Cần giới hạn cấu trúc và ưu tiên đường quyết định (Chương 9).
 
 **Path-based explanation (Giải thích theo đường đi).** Giải thích dự đoán bằng cách chỉ ra đường đi trong đồ thị dẫn tới kết luận. Tự nhiên với học quy tắc, khó với KGE/GNN.
+
+**Point-probe (Thăm dò điểm).** Trong mô hình bitemporal 2D, một truy vấn là một điểm $(T_v^*, T_{tx}^*)$ trong lưới tọa độ (valid time × system time). Câu trả lời là claim có hình chữ nhật chứa điểm đó — kiểm tra bằng hai bất đẳng thức $T_v^{\text{start}} \le T_v^* < T_v^{\text{end}}$ và $T_{tx}^{\text{start}} \le T_{tx}^* < T_{tx}^{\text{end}}$. Cùng một năm hiệu lực nhưng hai thời điểm hỏi khác nhau cho hai câu trả lời khác nhau (Chương 6).
 
 **Precision (Độ chính xác).** Trong số đơn vị đã truy xuất, bao nhiêu là liên quan: |R∩A|/|A|. Đo chất lượng truy xuất, không phải độ đúng của câu trả lời (Chương 9).
 
@@ -506,6 +522,8 @@ tác vụ suy luận.
 
 **Subject / Predicate / Object (Chủ thể / Vị từ / Đối tượng).** Ba vị trí của một bộ ba RDF.
 Chủ thể là IRI hoặc blank node; vị từ chỉ là IRI; đối tượng là IRI, literal hoặc blank node.
+
+**Subjective logic (Logic chủ quan).** Khung của Jøsang biểu diễn niềm tin về một mệnh đề bằng **opinion** $\omega = (b, d, u, a)$: belief, disbelief, uncertainty ($b+d+u=1$) và base rate $a$. Sống trên tam giác đều 2-simplex (tọa độ trọng tâm); **xác suất chủ quan** tham chiếu $P(x) = b + a \cdot u$. Hai opinion độc lập kết hợp bằng **cumulative fusion** $\oplus$ với tính chất co hẹp vô tri đơn điệu khi đồng thuận. Tương đương số học với Dempster–Shafer nhưng trực quan hơn về hình học (Chương 6).
 
 **Substitution (Phép thế).** Ánh xạ $\theta$ gán mỗi biến trong quy tắc với một giá trị cụ thể
 (IRI, literal, blank node). Cầu nối giữa quy tắc trừu tượng và dữ liệu đồ thị: $\theta(\text{body})$

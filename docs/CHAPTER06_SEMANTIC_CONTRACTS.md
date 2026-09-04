@@ -266,3 +266,60 @@ This document is the semantic contract against which `book/chapter06.md` is revi
   - MUST NOT require separate storage for epistemic metadata.
   - MUST NOT treat governance layer as optional for production systems.
   - MUST NOT assume layer boundaries are rigid — they are conceptual.
+
+## Bitemporal 2D Coordinate Grid (Rectangle + Point-Probe)
+
+- **Source:** SNODGRASS-01 (Developing Time-Oriented Database Applications in SQL, Snodgrass 1999)
+- **Formal meaning:** A bitemporal record occupies a rectangle R = [Tv_start, Tv_end] × [Ttx_start, Ttx_end] in the 2D plane whose horizontal axis is valid time and whose vertical axis is transaction/system time. A point-probe query (Tv*, Ttx*) asks "at system time Ttx*, what did the system believe about validity interval Tv*?" and is answered by the rectangle containing that point: Tv_start ≤ Tv* < Tv_end and Ttx_start ≤ Ttx* < Ttx_end. When a correction arrives, the old rectangle is not deleted — its transaction interval is closed and a new rectangle is appended (append-only). Different system-time slices may therefore give different answers for the same valid-time year, and this reflects belief history, not contradiction.
+- **Book wording:** "Mỗi bản ghi chiếm một hình chữ nhật R trong lưới 2D; một point-probe (Tv*, Ttx*) rơi vào ô nào thì nhận ô đó."
+- **Dangerous simplification:** Reducing bitemporal to two timestamp columns (loses the interval/rectangle semantics and the valid-time retrospection); conflating a corrected retrospective value with a contradiction.
+- **MUST NOT infer:**
+  - MUST NOT say bitemporal means merely "two timestamp columns".
+  - MUST NOT say deleting/updating the old record is an acceptable correction strategy (append-only principle).
+  - MUST NOT treat two answers for the same valid-time year at different system times as a contradiction — it is belief history.
+  - MUST NOT apply the probe inequalities at open boundaries without the half-open convention.
+
+## Dempster–Shafer Theory of Evidence
+
+- **Source:** SHAFER-01 (A Mathematical Theory of Evidence, Shafer 1976)
+- **Formal meaning:** Generalizes Bayesian probability by assigning mass m : 2^Θ → [0,1] to subsets of a frame of discernment Θ (a set of mutually exclusive hypotheses), with m(∅) = 0 and Σ_{B⊆Θ} m(B) = 1. Mass on Θ as a whole expresses total ignorance (m(Θ)=1), distinct from a 0.5 singleton. The belief and plausibility functions Bel(A) = Σ_{B⊆A} m(B) and Pl(A) = 1 − Bel(Ā) bracket a claim into an interval [Bel, Pl]; its width is the uncommitted ignorance. Dempster's rule of combination (m₁⊕m₂)(A) = (1/(1−K)) Σ_{B∩C=A} m₁(B)m₂(C) merges independent sources, where K = Σ_{B∩C=∅} m₁(B)m₂(C) measures conflict. As K → 1 the normalization 1/(1−K) becomes numerically arbitrary (Zadeh's paradox).
+- **Book wording:** "Gán khối lượng cho các tập trong khung phân biệt; Bel/Pl kẹp claim vào một khoảng; quy tắc Dempster chuẩn hóa qua 1−K."
+- **Dangerous simplification:** Applying Dempster's rule to highly conflicting sources and reading the normalized result as a confident conclusion; presenting [Bel, Pl] as a single point probability.
+- **MUST NOT infer:**
+  - MUST NOT use Dempster's rule when conflict K is large — the book keeps conflicting branches separate (Claim Ledger, state Contested).
+  - MUST NOT equate a wide [Bel, Pl] interval with a mid-point probability.
+  - MUST NOT claim Dempster–Shafer is a drop-in replacement for Bayesian probability — it is a generalization that represents ignorance explicitly.
+
+## Subjective Logic (Opinions, Simplex, Fusion)
+
+- **Source:** JOSANG-01 (Subjective Logic, Jøsang 2016)
+- **Formal meaning:** An opinion is a quadruple ω = (b, d, u, a) with belief, disbelief, uncertainty and base rate; b + d + u = 1. Because of the constraint, an opinion lives on an equilateral 2-simplex (barycentric coordinates) with vertices Belief–Disbelief–Uncertainty. The reference (subjective) probability is P(x) = b + a·u. Cumulative fusion ⊕ of two independent opinions (same a) is b⊕ = (b₁u₂ + b₂u₁)/(u₁+u₂−u₁u₂), d⊕ = (d₁u₂ + d₂u₁)/(u₁+u₂−u₁u₂), u⊕ = (u₁u₂)/(u₁+u₂−u₁u₂). Key property: when sources agree, uncertainty shrinks monotonically, u⊕ ≤ min(u₁, u₂). Subjective Logic is numerically equivalent to Dempster–Shafer but geometrically transparent.
+- **Book wording:** "Opinion ω=(b,d,u,a) sống trên tam giác đều; xác suất chủ quan P=b+a·u; kết hợp ⊕ làm vô tri co hẹp khi đồng thuận."
+- **Dangerous simplification:** Reading fusion as a guarantee of certainty; collapsing opinion into a single scalar and losing the b/d/u breakdown.
+- **MUST NOT infer:**
+  - MUST NOT say fusion always reduces uncertainty — only when sources are consistent; conflicting opinions keep b and d both substantial.
+  - MUST NOT equate subjective probability with objective probability.
+  - MUST NOT ignore the base rate a when computing P(x).
+
+## AGM Belief Revision (Expansion, Contraction, Revision)
+
+- **Source:** AGM-01 (On the Logic of Theory Change, Alchourrón, Gärdenfors & Makinson 1985)
+- **Formal meaning:** AGM formalizes rational change of a belief set K (closed under logical consequence). Expansion K+φ adds φ and closes under logic (does not self-heal contradiction). Contraction K÷φ removes φ while keeping logical closure and losing as little information as possible. Revision K*φ accepts φ even if it contradicts K, giving up the minimal set of old beliefs. Two identities link the operations: Levi K*φ = (K÷¬φ)+φ and Harper K÷φ = K ∩ (K*¬φ). Six postulates govern revision (success, inclusion, vacuity, consistency, extensionality, super-/sub-expansion), capturing the minimal-information-loss principle.
+- **Book wording:** "Ba phép: mở rộng K+φ, co rút K÷φ, sửa đổi K*φ; nối bằng đẳng thức Levi/Harper; 6 tiên đề tối thiểu."
+- **Dangerous simplification:** Presenting AGM as an algorithm (it is a set of rationality constraints, not a unique procedure); claiming revision always has a unique result (selection functions may differ).
+- **MUST NOT infer:**
+  - MUST NOT say AGM prescribes a unique revision operator — it specifies rationality postulates that many operators satisfy.
+  - MUST NOT apply expansion K+φ when ¬φ ∈ K and expect consistency (expansion becomes trivial).
+  - MUST NOT conflate contraction with deletion of a single sentence — it removes the logical consequences needed to drop φ.
+
+## Claim Ledger as Lossless Projection Satisfying AGM
+
+- **Source:** Book-defined bridge between AGM-01 and the Claim Ledger architecture (PROV-DM-01, SNODGRASS-01)
+- **Formal meaning:** Classical AGM is destructive: K*φ replaces K, and the old belief set is discarded (only an abstract entrenchment ordering survives). The book's Claim Ledger reverses this: the raw graph G_raw only appends claims forever, and the "active belief set" at system time t_tx is a projection K_active(t_tx) = Π_active(G_raw, t_tx). AGM revision happens in the projection layer — Π_active "contracts" a claim by closing its system-time interval rather than deleting it. Each t_tx slice of the projection satisfies the AGM postulates (consistency, minimality), but G_raw itself keeps the whole history for retrospective point-probing. This is the "lossless epistemic projection": AGM-rational belief change at the view layer combined with full audit history at the raw layer.
+- **Book wording:** "Sửa đổi AGM diễn ra trong lớp chiếu Π_active, không trong kho thô G_raw — mỗi lát cắt t_tx thỏa mãn AGM, lịch sử nguyên vẹn."
+- **Dangerous simplification:** Claiming the Claim Ledger literally IS an AGM belief set (it is not — it is an append-only store plus a family of projections); saying projection preserves contradictions (it does not — projection filters by Accepted + valid time).
+- **MUST NOT infer:**
+  - MUST NOT say the Claim Ledger is a single AGM belief set — it is G_raw + Π_active.
+  - MUST NOT say AGM revision in the book deletes claims from G_raw — revision is confined to the projection.
+  - MUST NOT assume every projection policy yields an AGM-rational slice — only policies respecting consistency and minimality do.
+  - MUST NOT conflate the lossless raw layer with the canonical view (I30: storing a claim ≠ asserting it).

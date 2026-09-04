@@ -123,6 +123,10 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | TKG-01 | `cai-tkgc-2023` | Temporal Knowledge Graph Completion: A Survey |
 | SPARQLALG-01 | `perez-sparql-semantics-2009` | Semantics and Complexity of SPARQL |
 | GDM-01 | `angles-gdm-2018` | An Introduction to Graph Data Management |
+| SHAFER-01 | `shafer-evidence-1976` | A Mathematical Theory of Evidence |
+| JOSANG-01 | `josang-subjective-logic-2016` | Subjective Logic: A Formalism for Reasoning Under Uncertainty |
+| AGM-01 | `alchourron-agm-1985` | On the Logic of Theory Change: Partial Meet Contraction and Revision Functions |
+| SNODGRASS-01 | `snodgrass-temporal-1999` | Developing Time-Oriented Database Applications in SQL |
 
 ## Notes — Chapter 10
 
