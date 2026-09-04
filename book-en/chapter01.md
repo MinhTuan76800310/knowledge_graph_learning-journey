@@ -46,6 +46,73 @@ chapter's main argument can be read in full without running any code.
 > the **W3C** (World Wide Web Consortium — the organization that develops web standards) or
 > from the specialized research literature.
 
+### The Vector Fallacy: Why Not Just Embed Everything?
+
+If you build with modern LLMs, one objection deserves a direct answer: *"Why bother
+constructing graphs and defining relations at all? I can embed every passage into a vector
+with a model like `text-embedding-3`, store it in a vector database such as Pinecone or
+Milvus, and retrieve whatever is relevant by cosine similarity. What does a Knowledge Graph
+give me that a vector index does not?"*
+
+This is the **vector fallacy** — the belief that because embeddings capture *meaning
+similarity*, they also capture *knowledge structure*. They do not, and the gap is exactly
+what this book fills.
+
+You already have the right mental model from linear algebra. An embedding maps each text
+chunk to a point $\mathbf{v} \in \mathbb{R}^d$ (a few thousand dimensions in practice), and
+relevance is scored by cosine similarity — the normalized dot product:
+
+$$\cos(\mathbf{q}, \mathbf{v}) = \frac{\mathbf{q} \cdot \mathbf{v}}{\lVert \mathbf{q} \rVert \, \lVert \mathbf{v} \rVert}$$
+
+This is a *continuous, geometric* view of meaning: paraphrases land close together, a typo
+barely moves the point, and a vague query still returns a ranked list. That is genuinely
+powerful — and it is also the whole of what the vector gives you. The distance between two
+points encodes *how alike they read*, not *how they are connected in the world*. There is no
+place in $\mathbb{R}^d$ to write down "this drug is **contraindicated by** that condition",
+because contraindication is a typed, directional relation, not a direction in embedding
+space.
+
+The two approaches are not rivals; they answer different questions. The table below is the
+book's thesis in miniature — every later chapter builds one row of the right-hand column.
+
+| Capability | Continuous vectors ($\mathbb{R}^d$ + cosine) | Discrete symbolic Knowledge Graph |
+|---|---|---|
+| Fuzzy / paraphrase search | ✅ Native — meaning as geometry | ⚠️ Brittle — needs exact terms or added embeddings |
+| Typo & noise tolerance | ✅ Robust — small perturbation | ⚠️ Needs normalization / entity linking |
+| Multi-hop relational reasoning | ❌ Topologically blind — proximity, not a path | ✅ Native — follow typed edges symptom → disease → gene → drug |
+| Hard logical constraints | ❌ Cannot enforce "a Person is not its own parent" | ✅ Enforceable via OWL axioms / SHACL shapes |
+| Verifiable provenance | ❌ Opaque — "the model judged it similar" | ✅ Every edge carries source, time, confidence |
+| Deterministic, auditable answers | ❌ Retrieval order shifts on re-embedding | ✅ Same graph + same rules ⇒ same answer |
+| Error behavior over depth | ❌ Cascades: $k$ hops multiply uncertainty | ✅ Bounded: each hop is a checkable assertion |
+
+The last two rows are where the fallacy actually bites.
+
+**Error cascading.** A multi-hop answer assembled from $k$ retrieved vector chunks is only as
+sound as the *product* of their individual reliabilities. If each hop is correct with
+probability $p$, the whole chain is correct with probability roughly $p^k$ — at $p = 0.85$
+and $k = 4$ that is already $\approx 0.52$. A graph does not escape uncertainty, but it makes
+each hop an *explicit, individually checkable assertion* rather than a fuzzy similarity, so a
+failure is localizable and repairable. (Chapter 9 quantifies this precisely.)
+
+**Constraint enforcement.** A vector index will happily return the nearest neighbor to "the
+manager of the person who manages them in turn" — it has no notion that some combinations are
+*illegal*. A knowledge graph with an ontology can *refuse* to materialize a fact that
+violates a disjointness or cardinality axiom, and can *derive* facts you never stored. That
+difference — retrieve-what-is-close versus represent-what-is-true — is the subject of this
+book.
+
+None of this argues against embeddings. The strongest modern systems are **hybrid**: a vector
+index finds the fuzzy entry point ("which passages mention this symptom?"), and a graph does
+the verifiable relational work from there ("…and which of those patients share a
+contraindicated drug along a documented interaction path?"). Chapter 8 develops the embedding
+side; Chapter 9 fuses the two into GraphRAG. This chapter and the ones right after it build
+the symbolic side that makes the fusion trustworthy.
+
+> 🖊 **Self-check:** A colleague says "we don't need a knowledge graph — our vector search
+> already hits 92% recall on the eval set." Recall measures only whether the *right chunk
+> appeared in the top-$k$*. Name one capability from the table that a 92%-recall number tells
+> you nothing about, and explain why.
+
 ## 1.2 The mental model
 
 > 📦 **Concept Orientation — Standards and Core Theory Encountered Early**
@@ -809,7 +876,6 @@ management. Chapter 2 opens the next rung: *representing and querying mechanism 
 | Reference variable | The independent variable a rate is taken with respect to (e.g. time) | §1.6 |
 | DerivativeApplication | An intermediate object binding a mechanism, the quantity differentiated, the variable, and the operation in one application | §1.6 |
 | Binary relation | A relation connecting exactly two entities: $(s, p, o) \in V \times L \times V$ | §1.5 |
-| N-ary relation | A multi-participant relation connecting three or more entities ($n \ge 3$) | §1.5, Chapter 3 |
 | Hypergraph | A graph generalization where each hyperedge can connect an arbitrary subset of vertices | §1.5 |
 | Incidence graph | A bipartite expansion representing an $n$-ary hyperedge as binary triples via an intermediate event node | §1.5, Chapter 3 |
 

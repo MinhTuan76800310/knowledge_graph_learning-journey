@@ -81,12 +81,20 @@ done
 [ "$FAIL" -eq 1 ] && { echo "verify_book_pdf: GATE FAILED"; exit 1; }
 
 # --- Extract text from the print PDF for content checks ---------------------
-pdftotext "$PRINT" "$WORK/book.txt" 2>/dev/null \
-  || { fail "pdftotext extraction failed"; echo "verify_book_pdf: GATE FAILED"; exit 1; }
+# PyMuPDF (not pdftotext): Times New Roman's ToUnicode CMap mis-maps Vietnamese
+# precomposed glyphs, so pdftotext drops diacritics even though the PDF renders
+# correctly (see scripts/extract_pdf_text.py). PyMuPDF preserves them.
+python "$ROOT/scripts/extract_pdf_text.py" "$PRINT" "$WORK/book.txt" \
+  || { fail "PDF text extraction failed"; echo "verify_book_pdf: GATE FAILED"; exit 1; }
+# Whitespace-normalized copy for title/TOC/bibliography checks: PyMuPDF may
+# drop or insert a space at some glyph boundaries ("sử dụng" -> "sửdụng"), so
+# match on space-free substrings to stay robust.
+tr -d '[:space:]' < "$WORK/book.txt" > "$WORK/book.norm.txt"
 
 # --- 2. Expected titles ------------------------------------------------------
 for title in "${EXPECTED_TITLES[@]}"; do
-  if grep -qF "$title" "$WORK/book.txt"; then
+  norm_title="${title//[[:space:]]/}"
+  if grep -qF "$norm_title" "$WORK/book.norm.txt"; then
     pass "title present: $title"
   else
     fail "title missing from PDF text: $title"
@@ -94,16 +102,17 @@ for title in "${EXPECTED_TITLES[@]}"; do
 done
 
 # --- 3. Table of contents ----------------------------------------------------
-# pdftotext may emit combining diacritics, so match a normalization-tolerant
-# substring rather than the exact precomposed heading.
-if grep -q "$TOC_PAT" "$WORK/book.txt"; then
+# Match a whitespace-normalized substring rather than the exact heading.
+norm_toc="${TOC_PAT//[[:space:]]/}"
+if grep -qF "$norm_toc" "$WORK/book.norm.txt"; then
   pass "table of contents present"
 else
   fail "no TOC heading found (Mục lục / Contents)"
 fi
 
 # --- 4. Bibliography ----------------------------------------------------------
-if grep -qF "$BIB_TITLE" "$WORK/book.txt"; then
+norm_bib="${BIB_TITLE//[[:space:]]/}"
+if grep -qF "$norm_bib" "$WORK/book.norm.txt"; then
   pass "bibliography section present"
 else
   fail "bibliography section '$BIB_TITLE' missing"

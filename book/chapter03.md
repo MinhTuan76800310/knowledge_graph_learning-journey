@@ -542,6 +542,25 @@ thông tin chảy tràn trong từng lớp. Đây là chỗ tính "nguy hiểm" 
 nhiên*: một cạnh sameAs sai không trộn hai nút, nó trộn **hai lớp tương đương** — toàn bộ
 những gì thuộc một bên được gán cho bên kia.
 
+> ℹ **Toán học đằng sau "lớp tương đương".** Một quan hệ hai ngôi $\sim$ trên tập $S$ là
+> một **quan hệ tương đương (equivalence relation)** nếu nó:
+> - **phản xạ (reflexive)**: $\forall a \in S,\; a \sim a$;
+> - **đối xứng (symmetric)**: $\forall a, b \in S,\; a \sim b \implies b \sim a$;
+> - **bắc cầu (transitive)**: $\forall a, b, c \in S,\; (a \sim b \wedge b \sim c) \implies a \sim c$.
+>
+> `owl:sameAs` mang đúng ba tính chất này (tính phản xạ được OWL cài sẵn vào khái niệm đồng
+> nhất), nên nó *chính là* một quan hệ tương đương trên tập các cá thể. Mọi quan hệ tương
+> đương phân hoạch tập của nó thành các **lớp tương đương** rời nhau $[a] = \{b \in S \mid b \sim a\}$,
+> và hai lớp hoặc trùng nhau hoặc rời nhau.
+>
+> Áp dụng vào đồ thị: **đồ thị thương (quotient graph)** $G/{\sim}$ là đồ thị có các đỉnh là
+> những lớp tương đương của các đỉnh $G$, với một cạnh $[u] \to [v]$ khi nào tồn tại $u' \in [u]$
+> và $v' \in [v]$ được nối bởi một cạnh trong $G$. Việc đóng (closure) các khẳng định
+> `owl:sameAs` chính xác là phép dựng $G/{\sim}$: bộ suy luận thay đồ thị gốc bằng đồ thị
+> thương của nó, trong đó mỗi lớp đã trộn trở thành một nút duy nhất. Đây là lý do việc trộn
+> mang tính *cấu trúc*, không phải trang trí — bạn không thêm một liên kết, bạn đang sụp đổ
+> (collapse) các đỉnh.
+
 Chính hệ quả lan truyền này làm `owl:sameAs` vừa mạnh vừa nguy hiểm:
 
 - **Mạnh**: một khẳng định đúng duy nhất có thể hợp nhất dữ liệu của nhiều nguồn mà
@@ -584,6 +603,14 @@ suy luận lan truyền nó qua toàn bộ đồ thị.
 > ⚑ **Bài học:** trên miền cơ chế, `owl:sameAs` càng nguy hiểm vì các cơ chế khác nhau
 > thường dùng *chung* operation, chung output type, và chỉ khác nhau ở input hoặc điều
 > kiện. Bằng chứng đồng nhất phải đủ chi tiết để phân biệt chúng (xem §3.2.5).
+
+> ⚑ **Thảm họa sụp đổ định danh (Identity Collapse Catastrophe).** Một cạnh
+> `owl:sameAs` sai duy nhất sẽ sụp đổ đồ thị thương $G/{\sim}$ bằng cách trộn hai lớp
+> tương đương. Sự sụp đổ không cục bộ: mọi thuộc tính, mọi quan hệ và mọi suy diễn tương
+> lai liên quan tới một trong hai lớp đều bị nhiễm. Trên một đồ thị dày, lỗi lan truyền
+> theo cả hai chiều (qua mọi thuộc tính chung) và lan ra ngoài (tới mọi truy vấn mới chạm
+> lớp đã trộn). Thảm họa không nằm ở bản thân cạnh đó; nó nằm ở chỗ phép dựng đồ thị thương
+> âm thầm biến một lỗi cục bộ thành một lỗi toàn cục, mang tính cấu trúc.
 
 ### 3.2.5 Từ ứng viên đến khẳng định được chấp nhận
 
@@ -1086,6 +1113,30 @@ quan sát có phạm vi.
 
 ### 3.3.7 Ngữ cảnh không tạo ra sự thật
 
+Trước khi đi đến kết luận, hãy đặt bốn cơ chế cạnh nhau trên cùng một khẳng định — "phát
+biểu `(ex:Hanoi, ex:capitalOf, ex:Vietnam)` đúng, với độ tin cậy 0.95, từ nguồn A, kể từ
+1976" — để sự đánh đổi được rõ ràng.
+
+| Cơ chế | Hình thức hình thức | Hạt | Trạng thái chuẩn | Gắn vào |
+|--------|---------------------|-----|------------------|---------|
+| Tái hiện RDF 1.1 | 4 bộ ba: `_:st a rdf:Statement ; rdf:subject ex:Hanoi ; rdf:predicate ex:capitalOf ; rdf:object ex:Vietnam` | một phát biểu | Ổn định (RDF 1.1) | một bộ ba đơn, qua một nút tái hiện |
+| Named graph / RDF dataset (quads) | $(s, p, o, n) \in S \times P \times O \times N$ | cả đồ thị | Ổn định (RDF 1.1) | một *nhóm* phát biểu cùng chung tên $n$ |
+| RDF 1.2 triple term | `<< ex:Hanoi ex:capitalOf ex:Vietnam >>` dùng như hạng tử chủ/đối | một phát biểu | Dự thảo (chưa phải nền) | một bộ ba đơn, tham chiếu trực tiếp |
+| Thuộc tính cạnh LPG | $\sigma_E(e, \text{confidence}) = 0.95$ | một cạnh | Cấp nhà cung cấp (Neo4j…) | một quan hệ đơn, nguyên bản |
+
+Ba cách đọc bảng:
+
+- **Hạt (granularity) là ngã rẽ đầu tiên.** Named graph là một *quad* — nó mang ngữ cảnh
+  cho cả nhóm một lúc, nên đây là cơ chế rẻ nhất khi nhiều phát biểu chung một nguồn.
+  Tái hiện và triple term là *trên từng phát biểu*: chúng cho phép nói về một mệnh đề,
+  với cái giá là một cấu trúc thêm cho mỗi mệnh đề.
+- **RDF 1.2 triple term là phiên bản "gọn hơn" của tái hiện.** Nếu tái hiện cần bốn bộ ba
+  và một blank node, thì `<< s p o >>` là một hạng tử đơn bạn có thể đặt ở vị trí chủ thể
+  hoặc đối tượng — nhưng nó là *dự thảo*, chưa phải nền ổn định mà sách này dạy.
+- **Thuộc tính cạnh LPG là cơ chế duy nhất không cần cấu trúc thêm nào**, vì cạnh đã có
+  định danh $e \in E$ và hàm thuộc tính $\sigma_E$ (Chương 2 §2.2.1). Sự tiện lợi đó chính
+  là điều mô hình nhị phân của RDF không sánh được nếu không tái hiện hay nút n-ary.
+
 Năm cơ chế vừa xét — named graph, thực thể n-ary, thuộc tính quan hệ, triple term, và
 qualifier — đều là cơ chế **biểu diễn**. Gắn `source: A`, `validFrom: 1976`, hay đặt bộ ba vào một
 named graph mang tên nguồn A, không làm phát biểu đúng hơn; nó chỉ cho biết phát biểu
@@ -1508,6 +1559,10 @@ luận tự động*.
 | Canonical identifier (định danh chính tắc) | Định danh duy nhất được chọn làm "tên thật" của thực thể | §3.2.5 |
 | Alias (bí danh) | Những tên khác cùng biểu thị thực thể, nối về định danh chính tắc | §3.2.5 |
 | owl:sameAs | Khẳng định hai định danh là một, kéo theo lan truyền thông tin | §3.2.4 |
+| Equivalence relation (quan hệ tương đương) | Quan hệ có tính phản xạ, đối xứng và bắc cầu | §3.2.4 |
+| Equivalence class (lớp tương đương) | Tập con rời nhau sinh bởi một quan hệ tương đương; mọi phần tử đôi một đồng nhất | §3.2.4 |
+| Quotient graph (đồ thị thương) | $G/{\sim}$: đồ thị có các đỉnh là những lớp tương đương của các đỉnh $G$ | §3.2.4 |
+| Identity Collapse Catastrophe (thảm họa sụp đổ định danh) | Một cạnh `owl:sameAs` sai trộn hai lớp tương đương, nhiễm mọi thuộc tính, quan hệ và suy diễn liên quan tới một trong hai lớp | §3.2.4 |
 | Unique name assumption | Giả định tên khác nhau thì thực thể khác nhau — OWL không có | §3.2.3 |
 | Named graph (đồ thị có tên) | Cơ chế gom nhóm phát biểu trong RDF dataset | §3.3.2 |
 | N-ary relation (quan hệ n-ngôi) | Quan hệ nhiều hơn hai tham gia hoặc cần thuộc tính riêng | §3.3.3 |

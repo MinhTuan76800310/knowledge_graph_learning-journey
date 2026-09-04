@@ -543,6 +543,24 @@ and all information flows freely within each class. This is where the "dangerous
 becomes *non-obvious*: one wrong sameAs edge does not merge two nodes, it merges **two
 equivalence classes** — everything belonging to one side is assigned to the other.
 
+> ℹ **The mathematics behind "equivalence class".** A binary relation $\sim$ on a set $S$
+> is an **equivalence relation** if it is:
+> - **reflexive**: $\forall a \in S,\; a \sim a$;
+> - **symmetric**: $\forall a, b \in S,\; a \sim b \implies b \sim a$;
+> - **transitive**: $\forall a, b, c \in S,\; (a \sim b \wedge b \sim c) \implies a \sim c$.
+>
+> `owl:sameAs` carries exactly these three properties (reflexivity is built into OWL's
+> identity), so it *is* an equivalence relation on the set of individuals. Every equivalence
+> relation partitions its set into disjoint **equivalence classes** $[a] = \{b \in S \mid b \sim a\}$,
+> and two classes are either identical or disjoint.
+>
+> Applying this to a graph: the **quotient graph** $G/{\sim}$ is the graph whose vertices are
+> the equivalence classes of $G$'s vertices, with an edge $[u] \to [v]$ whenever some $u' \in [u]$
+> and $v' \in [v]$ were joined by an edge in $G$. An `owl:sameAs` closure is precisely the
+> construction of $G/{\sim}$: the reasoner replaces the original graph by its quotient, where
+> each merged class is a single node. This is why the merge is *structural*, not cosmetic —
+> you are not adding a link, you are collapsing vertices.
+
 It is exactly this propagation consequence that makes `owl:sameAs` both powerful and
 dangerous:
 
@@ -587,6 +605,14 @@ it across the whole graph.
 > different mechanisms often *share* an operation, share an output type, and differ only in
 > input or condition. Evidence of identity must be detailed enough to tell them apart (see
 > §3.2.5).
+
+> ⚑ **Identity Collapse Catastrophe.** A single wrong `owl:sameAs` edge collapses the
+> quotient graph $G/{\sim}$ by merging two equivalence classes. The collapse is not local:
+> every property, every relation, and every future inference involving either class is
+> contaminated. In a dense graph the error propagates in both directions (across every shared
+> property) and outward (to every new query touching the merged class). The catastrophe is
+> not the edge itself; it is the fact that the quotient construction silently turns a local
+> mistake into a global, structural one.
 
 ### 3.2.5 From candidate to accepted assertion
 
@@ -1090,6 +1116,32 @@ a contradiction instead of two scoped observations.
 
 ### 3.3.7 Context does not create truth
 
+Before the conclusion, put the four mechanisms side by side on the same assertion — "the
+statement `(ex:Hanoi, ex:capitalOf, ex:Vietnam)` holds, with confidence 0.95, from source A,
+as of 1976" — so the trade-offs are explicit.
+
+| Mechanism | Formal shape | Granularity | Standard status | Attaches to |
+|-----------|--------------|-------------|-----------------|-------------|
+| RDF 1.1 reification | 4 triples: `_:st a rdf:Statement ; rdf:subject ex:Hanoi ; rdf:predicate ex:capitalOf ; rdf:object ex:Vietnam` | one statement | Stable (RDF 1.1) | a single triple, via a reified node |
+| Named graph / RDF dataset (quads) | $(s, p, o, n) \in S \times P \times O \times N$ | a whole graph | Stable (RDF 1.1) | a *group* of statements sharing a name $n$ |
+| RDF 1.2 triple term | `<< ex:Hanoi ex:capitalOf ex:Vietnam >>` used as a subject/object term | one statement | Draft (not baseline) | a single triple, referenced directly |
+| LPG edge property | $\sigma_E(e, \text{confidence}) = 0.95$ | one edge | Vendor (Neo4j et al.) | a single relationship, natively |
+
+Three readings of the table:
+
+- **Granularity is the first fork.** A named graph is a *quad* — it carries context for a
+  whole group at once, which is why it is the cheapest mechanism when many statements share a
+  source. Reification and triple terms are *per-statement*: they let you talk about one
+  proposition, at the cost of one extra structure per proposition.
+- **The RDF 1.2 triple term is the "tighter" version of reification.** Where reification
+  needs four triples and a blank node, `<< s p o >>` is a single term you can put in the
+  subject or object position — but it is a *draft*, not yet the stable baseline this book
+  teaches.
+- **LPG edge properties are the only mechanism that needs no extra structure at all**,
+  because the edge already has an identity $e \in E$ and a property function $\sigma_E$
+  (Chapter 2 §2.2.1). That convenience is exactly what RDF's binary model cannot match
+  without reification or an n-ary node.
+
 The five mechanisms just examined — named graph, n-ary entity, relation property, triple term,
 and qualifier — are all **representation** mechanisms. Attaching `source: A`, `validFrom: 1976`,
 or placing
@@ -1513,6 +1565,10 @@ semantics, ontology, automated inference*.
 | Canonical identifier | The single identifier chosen as an entity's "true name" | §3.2.5 |
 | Alias | Other names denoting the same entity, linked back to the canonical identifier | §3.2.5 |
 | owl:sameAs | Asserts two identifiers are one, entailing information propagation | §3.2.4 |
+| Equivalence relation | A relation that is reflexive, symmetric, and transitive | §3.2.4 |
+| Equivalence class | A disjoint subset formed by an equivalence relation; all members are mutually identical | §3.2.4 |
+| Quotient graph | $G/{\sim}$: a graph whose vertices are the equivalence classes of $G$'s vertices | §3.2.4 |
+| Identity Collapse Catastrophe | A wrong `owl:sameAs` edge merges two equivalence classes, contaminating every property, relation, and inference involving either class | §3.2.4 |
 | Unique name assumption | The assumption that different names mean different entities — OWL has none | §3.2.3 |
 | Named graph | A mechanism for grouping statements within an RDF dataset | §3.3.2 |
 | N-ary relation | A relation with more than two participants, or one needing its own properties | §3.3.3 |
