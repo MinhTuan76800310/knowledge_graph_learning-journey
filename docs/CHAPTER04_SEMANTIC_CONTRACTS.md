@@ -288,3 +288,36 @@ This document is the semantic contract against which `book/chapter04.md` is revi
 - **MUST NOT infer:**
   - MUST NOT say entailment mutates the source graph.
   - MUST NOT conflate semantic consequence with implementation behavior.
+
+## Decidable Fragments & FOL Undecidability
+
+- **Source:** Church (1936), Turing (1936) — undecidability of first-order validity; Gödel completeness theorem (1930) — semi-decidability of validity; Baader et al., *The Description Logic Handbook* (DL-01) — DLs as decidable fragments of FOL.
+- **Formal meaning:** The set of valid first-order formulas is recursively enumerable but not decidable: a complete proof system confirms every valid formula, yet no algorithm decides validity of arbitrary FOL sentences (Church–Turing). Description Logics are deliberately restricted fragments of FOL (many inside the two-variable fragment FO² and the guarded fragment) chosen so that core inference (satisfiability, subsumption, instance checking) is decidable.
+- **Book wording:** "FOL không khả quyết (Church–Turing 1936); chỉ nửa khả quyết (định lý đầy đủ Gödel). DL là mảnh khả quyết của FOL."
+- **Dangerous simplification:** Conflating Gödel's *completeness* theorem (validity is r.e.) with his *incompleteness* theorems (limits of arithmetic). The book must invoke completeness for semi-decidability, not incompleteness.
+- **MUST NOT infer:**
+  - MUST NOT say FOL is "not semi-decidable" — valid FOL formulas ARE recursively enumerable.
+  - MUST NOT attribute FOL undecidability to Gödel's incompleteness theorems; it is Church–Turing (1936).
+  - MUST NOT imply every decidable fragment is tractable — decidability ≠ polynomial time.
+
+## OWL 2 DL = SROIQ(D) and the Complexity Spectrum
+
+- **Source:** Horrocks, Sattler & Tobies, "Even More Irresistible SROIQ" (KR 2006, SROIQ-01); Calvanese et al., "The DL-Lite Family" (JAR 2007, DLLITE-01); Baader et al., DL Handbook (DL-01); W3C OWL 2 Profiles (OWL-05).
+- **Formal meaning:** OWL 2 DL corresponds to the description logic SROIQ(D) (SROIQ with concrete datatype domains). Reasoning in SROIQ is N2EXPTIME-complete in combined complexity and EXPTIME-complete in data complexity. OWL 2 EL (EL++) is EXPTIME-complete combined / PTIME-complete data. OWL 2 QL (DL-Lite family) is NP-complete combined / AC0 data via first-order (SQL) rewritability of conjunctive queries. OWL 2 RL is EXPTIME-complete combined / PTIME-complete data (Datalog-style forward chaining). "Combined complexity" counts ontology + data together; "data complexity" fixes the ontology and counts only the ABox.
+- **Book wording:** Complexity matrix in §4.12; "OWL 2 DL chính xác là SROIQ(D)" in §4.10.
+- **Dangerous simplification:** Reporting a single number per profile without separating combined from data complexity — the two differ by orders of magnitude (e.g. QL: NP combined vs AC0 data).
+- **MUST NOT infer:**
+  - MUST NOT state OWL 2 RL combined complexity as 2EXPTIME — it is EXPTIME-complete.
+  - MUST NOT present worst-case complexity as typical reasoner runtime.
+  - MUST NOT say AC0 data complexity applies to arbitrary (non-conjunctive) queries over OWL 2 QL.
+  - MUST NOT conflate "OWL 2 DL = SROIQ(D)" with "OWL 2 Full = SROIQ(D)" — Full is strictly more expressive and undecidable.
+
+## DL Naming Alphabet
+
+- **Source:** Baader et al., *The Description Logic Handbook* (DL-01); Horrocks et al., SROIQ (SROIQ-01).
+- **Formal meaning:** Description Logics are named by the constructors they admit, built from the core AL (Attributive Language: ⊤, ⊥, class names, ⊓, ∀R.C, ∃R.⊤). Letters add features: C = full negation (ALC); S = ALC + transitive roles; H = role hierarchies; R = complex role inclusion (role chains); O = nominals; I = inverse roles; Q = qualified number restrictions; (D) = concrete datatypes. SROIQ = S + R + O + I + Q; OWL 2 DL = SROIQ(D).
+- **Book wording:** Naming-alphabet table in §4.10.
+- **Dangerous simplification:** Implying each letter maps to a unique OWL 2 feature with no overlap (e.g. R subsumes H and adds complex role chains).
+- **MUST NOT infer:**
+  - MUST NOT present the letters as a strict superset chain — they are orthogonal feature flags.
+  - MUST NOT claim every DL name corresponds to a distinct OWL 2 profile.

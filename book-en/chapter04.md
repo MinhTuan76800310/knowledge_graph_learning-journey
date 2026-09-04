@@ -145,6 +145,48 @@ will appear, with their meaning:
 You do not need to memorize all of this at once. The table is a reference; each symbol is
 explained in context when it first appears.
 
+### Intuition: the sandbox and the dictionary
+
+Before facing the formal notation, build a mental model. An **interpretation** is just two things:
+a **sandbox** and a **dictionary**.
+
+**The sandbox — interpretation domain $\Delta^I$.** Picture a tray holding pebbles.
+Each pebble is an *object* — a specific city, a specific physical quantity, or a specific
+mechanism. The sandbox $\Delta^I$ is the set of those pebbles: a non-empty, abstract
+set. It does not have to contain anything specific — it only needs to be the "mini-universe" we
+are talking about.
+
+**The dictionary — interpretation function $\cdot^I$.** Symbols in an ontology (`City`,
+`capitalOf`, `Hanoi`) are just ink on paper. The interpretation function is the dictionary that
+looks up each symbol and maps it to a *thing* in the sandbox. Three kinds of symbol, three kinds
+of lookup:
+
+- **Individual** $a$ (a name): points to **one specific pebble** $a^I \in
+  \Delta^I$.
+- **Class** $C$ (a common noun): points to **a subset** $C^I \subseteq
+  \Delta^I$ — the pebbles sorted into that class.
+- **Property** $R$ (a binary relation): points to **a set of directed arrows**
+  $R^I \subseteq \Delta^I \times \Delta^I$ connecting pebbles.
+
+The pair $(\Delta^I, \cdot^I)$ — sandbox plus dictionary — is one
+interpretation $I$. Nothing more, nothing less.
+
+> ℹ **Linear algebra bridge: properties are matrices, classes are vectors.** If the sandbox is
+> finite, $|\Delta^I| = n$, you already know two $n$-dimensional objects. Assign each
+> pebble an index $1..n$. Then:
+>
+> - A **class** $C$ is a **boolean indicator vector** $\mathbf{c} \in \{0,1\}^n$: $c_i = 1$ if
+>   pebble $i$ belongs to $C$, $0$ otherwise. Class intersection $C \sqcap D$ becomes
+>   element-wise AND, union $\sqcup$ becomes OR, complement $\neg C$ becomes bit-flip.
+> - A **property** $R$ is a **binary adjacency matrix** $A \in \{0,1\}^{n \times n}$: $A_{ij} = 1$
+>   iff there is an $R$-arrow from pebble $i$ to pebble $j$.
+> - The existential restriction $\exists R.C$ asks "from pebble $i$ is there an $R$-arrow to any
+>   pebble in $C$?" — i.e. the product $(A\mathbf{c})_i = \sum_j A_{ij} c_j \ge 1$.
+>
+> All the set-based semantics below, on a finite domain, are just Boolean algebra on indicator
+> vectors and adjacency matrices. Logic is not alien — it is the discrete-algebra part of
+> structures you already use.
+
 ### Interpretation
 
 An **interpretation** I is one way of assigning mathematical meaning to the symbols in an
@@ -269,7 +311,9 @@ interpretation.
 
 A **model** of an ontology O is an interpretation that satisfies **all** the axioms in O.
 
-In other words: a model is a "valid" interpretation — one in which every axiom is true.
+In other words: a model is a "valid" interpretation — one in which every axiom is true. In the
+sandbox metaphor: a model is one way of arranging the pebbles so that **not a single law**
+(axiom) you wrote is broken.
 
 ```
 Models(O) = { I | I satisfies every axiom in O }
@@ -478,6 +522,10 @@ City ⊑ Place
 ```
 
 Semantic condition: $City^I \subseteq Place^I$ in every model.
+
+In the set picture: the circle of $City$ lies **completely inside** the circle of $Place$
+($City^I \subseteq Place^I$) — every pebble sorted into City is already
+in the Place box. This is *subsumption*: City is subsumed by Place.
 
 This is a **one-directional** relation. From `City ⊑ Place`, we know every City is a Place.
 But we do **not** know that every Place is a City. Place may contain elements that are not in
@@ -1102,6 +1150,57 @@ helps avoid misconceptions.
 > "fast" — strong computational tractability is the goal of the OWL profiles (§4.12), not of
 > DL in general.
 
+### Why Description Logic exists: decidable fragments of First-Order Logic
+
+We have used OWL axioms as if "ask, get an answer" were obvious. But their underlying logic —
+**First-Order Logic (FOL)** — carries a deep computational limit:
+
+- **Validity of an arbitrary FOL formula is undecidable.** No algorithm always halts and
+  answers true/false for every formula — Church's (1936) and Turing's (1936) theorem.
+- It is only **semi-decidable**: by Gödel's completeness theorem, a prover will *confirm*
+  every true consequence given enough time — but it may run forever without ever concluding
+  "no" on a statement that is not a consequence.
+
+A production reasoner cannot accept "run forever." **Description Logics** exist for exactly
+this reason: they are **decidable fragments** of FOL — deliberately trimmed in their
+quantifiers and arities — so that every core reasoning task (consistency, subsumption,
+instance checking) *provably halts* with a correct answer. Many DLs sit inside known decidable
+FOL fragments such as the **two-variable fragment** $\text{FO}^2$ (uses only $x, y$; decidable
+but NEXPTIME-hard) and the **guarded fragment**. The DL syntax — *concept descriptions* with no
+free variables — is precisely the device that "packages" quantification so the remaining
+fragment stays decidable.
+
+> ℹ **The core trade-off.** Adding an expressive construct (negation, inverse roles, number
+> restrictions…) widens the FOL fragment, and each such widening usually *pushes reasoning
+> complexity up*. §4.12 is entirely about answering this question: how much expressivity can we
+> add and still compute in practice?
+
+### The naming alphabet of Description Logic
+
+DLs are named after the **constructs** they allow, assembled from a small core $\mathcal{AL}$
+(Attributive Language: atomic classes, intersection $\sqcap$, universal restriction
+$\forall R.C$, and the limited existential $\exists R.\top$). Each added letter is one feature
+[@dl-handbook]:
+
+| Letter | Name | Construct added |
+|--------|------|-----------------|
+| $\mathcal{AL}$ | Attributive Language | core: $\top, \bot$, class names, $\sqcap$, $\forall R.C$, $\exists R.\top$ |
+| $\mathcal{C}$ | Complement | class negation $\neg C$ → gives $\mathcal{ALC}$ |
+| $\mathcal{S}$ | (ALC +) transitive Roles | allows declaring a role transitive $R \in R_+$ |
+| $\mathcal{H}$ | role Hierarchies | role inclusion $R \sqsubseteq S$ |
+| $\mathcal{R}$ | complex Role inclusion | complex role inclusion (role chains $R \circ S \sqsubseteq T$) |
+| $\mathcal{O}$ | nOminals | enumerated individuals $\{a_1, \dots, a_n\}$ as a class |
+| $\mathcal{I}$ | Inverse Roles | inverse role $R^-$ |
+| $\mathcal{Q}$ | Qualified number restrictions | qualified number restrictions $\ge n\,R.C$, $\le n\,R.C$ |
+| $(D)$ | concrete Datatype domains | concrete datatype domains (strings, integers, reals) |
+
+Assembled: $\mathcal{SROIQ} = \mathcal{S} + \mathcal{R} + \mathcal{O} + \mathcal{I} +
+\mathcal{Q}$. And this is the most important conclusion of §4.10:
+
+> **OWL 2 DL is exactly the DL $\mathcal{SROIQ}(D)$** [@horrocks-sroiq-2006] — plus OWL-specific
+> features (punning, annotations). Writing an OWL 2 DL ontology is writing in
+> $\mathcal{SROIQ}(D)$; step outside it and you fall into OWL 2 Full — **undecidable**.
+
 > **In practice.** The formal apparatus of this chapter — interpretations, models,
 > entailment, TBox/ABox/RBox — is the standard content of the *Description Logic Handbook*
 > [@dl-handbook], the canonical reference behind OWL's design. The reasoning tasks we defined
@@ -1191,6 +1290,54 @@ Full OWL 2 is highly expressive, but reasoning over it can be expensive. W3C def
 > ⚠ **There is no "best" profile.** The choice depends on the ontology's structure and the
 > specific reasoning task. EL is not "faster than QL" in every case; QL is not "better than RL"
 > for every application. Choose based on real requirements, not on a generic ranking.
+
+### The computational complexity spectrum of the profiles
+
+The table at the top of §4.12 states each profile's reasoning *character* ("polynomial time",
+"rewriting to SQL"). Here we attach the actual **complexity numbers**, because they are the deep
+reason the profiles differ.
+
+First, two ways of counting cost, because a single inference has *two* inputs: the ontology (the
+TBox/RBox axioms) and the instance data (the ABox).
+
+- **Combined complexity**: measured against the *total* size of ontology + data — the "write a
+  fresh ontology, then reason" case.
+- **Data complexity**: treat the ontology as *fixed*, measure only against the ABox — the common
+  production case: one well-tested ontology serving millions of changing records.
+
+The classes in the table below, ordered cheapest to dearest:
+
+- $\text{AC}^0$: functions computable by constant-depth, polynomial-size Boolean circuits with
+  unbounded fan-in — intuition: *about as cheap as a database lookup*, and, more importantly,
+  *freely parallelizable*.
+- **PTIME**: polynomial time in the input — "scales".
+- **EXPTIME**: exponential time — the function degrades fast, but the exponent is fixed.
+- **N2EXPTIME**: double-exponential — a theoretical disaster; real reasoners survive only
+  because genuine ontologies rarely hit the hardest cases.
+
+| Language / profile | FOL fragment | Combined | Data | Key technique |
+|--------------------|--------------|----------|------|---------------|
+| **OWL 2 DL** $= \mathcal{SROIQ}(D)$ | decidable (guarded) | N2EXPTIME-complete [@horrocks-sroiq-2006] | EXPTIME-complete [@dl-handbook] | (hyper)tableau |
+| **OWL 2 EL** $= \mathcal{EL}^{++}$ | — | EXPTIME-complete [@dl-handbook] | PTIME-complete [@w3c-owl2-profiles] | saturation / classification |
+| **OWL 2 QL** $=$ DL-Lite family | $\text{FO}^2$, guarded | NP-complete [@calvanese-dllite-2007] | $\text{AC}^0$ (FO-rewritable) [@calvanese-dllite-2007] | query rewriting to SQL |
+| **OWL 2 RL** | Datalog$^{\pm}$-style | EXPTIME-complete [@w3c-owl2-profiles] | PTIME-complete [@w3c-owl2-profiles] | forward chaining / RETE |
+
+"Complete" means the problem is both *solvable* in that class and *exactly as hard* as that
+class — no asymptotically better algorithm exists.
+
+The most striking row is **OWL 2 QL**. Because every conjunctive query over it can be
+**rewritten into a plain First-Order query** [@calvanese-dllite-2007], the reasoner does not
+"run" anything at query time — it emits an SQL statement and hands the work to a database engine
+optimized over four decades. That is why the *data* complexity drops to $\text{AC}^0$: the
+reasoning cost is *displaced* into the SQL query cost. EL and RL lack such strong rewritability,
+so they pay at inference time (PTIME) but are compensated with a richer class of expressible
+ontologies.
+
+> ℹ **How to read the table.** No row "wins". DL is the dearest but the most expressive; QL is
+> the cheapest at data time but expresses only very thin ontologies; EL and RL sit in between,
+> each tuned to a workload (EL: huge TBox; RL: huge ABox through a rule engine). Choosing a
+> profile is choosing a *point on this spectrum*, exactly as the "no best profile" caveat above
+> warns.
 
 > **Real-world anchors.** Each profile exists because a class of production systems needs it.
 > **EL** is the profile of large biomedical terminologies: **SNOMED CT**, the clinical terminology
@@ -1341,6 +1488,56 @@ If the three participants merely exist "in pieces" as in $M_1$, the reasoner doe
 classify. This is precisely the promise of §3.3.3 fulfilled: the auxiliary node
 `derivativeApplication_1` that Chapter 3 built by hand now has full formal meaning, and
 Chapter 5 will confirm it with SHACL/rules over the mechanism graph itself.
+
+### Sorting the mechanism ontology into TBox / RBox / ABox
+
+The classification from §4.10 now turns back on the mechanism ontology itself. The same set of
+axioms, viewed along the concept–event axis, separates the *laws* (few, stable, reasoned over)
+from the *data* (many, changing constantly).
+
+**TBox** — general conceptual knowledge: subsumption, class definitions, and disjointness.
+
+```
+DerivativeApplication ⊑ MechanismApplication
+DerivativeApplication ⊑ ∃differentiand.Quantity
+RateOfChangeMechanism ≡ Mechanism ⊓ ∃hasApplication.DerivativeApplication
+Mechanism ⊓ Quantity ≡ ⊥
+```
+
+The first three lines are the axioms built above. The last is an illustrative **disjointness**
+declaration: a mechanism cannot simultaneously be a quantity. It does *not* follow from the
+three lines above; it must be asserted explicitly, exactly as Error 5 (§4.4) warned.
+
+**RBox** — axioms about roles. **Inverseness** links the two directions of the "application"
+relation:
+
+```
+hasApplication ≡ (applicationOf)⁻
+```
+
+Meaning: for every pair $(x, y)$, $x \mathrel{\mathit{hasApplication}} y$ if and only if
+$y \mathrel{\mathit{applicationOf}} x$. In an interpretation, $(R^-)^I = \{(y, x)
+\mid (x, y) \in R^I\}$. Declare one direction; the reasoner gets the other for free
+— no one has to assert both.
+
+**ABox** — facts about specific individuals, the kind an extraction pipeline (Chapters 6–7)
+loads in bulk:
+
+```
+rateOfChange_1 : Mechanism
+hasApplication(rateOfChange_1, derivativeApplication_1)
+derivativeApplication_1 : DerivativeApplication
+```
+
+The subtle point: we do **not** write `rateOfChange_1 : RateOfChangeMechanism`. The three ABox
+lines above, projected through the TBox, make the reasoner **infer** that label — exactly the
+two-model $M_2$ mechanism illustrated earlier. The ABox supplies events, the TBox supplies laws,
+and the inferred label sits in between.
+
+> ℹ **Why split along this axis.** The TBox is what you design, test, and version carefully —
+> it is small and expensive. The ABox is what you load in bulk — it is large and cheap to grow.
+> The two boxes have different change cadences, different checking tools (an OWL reasoner for
+> the TBox, SHACL for the ABox — Chapter 5), and entirely different governance strategies.
 
 > Lesson: **the quality of a class definition depends on the quality of the conceptual model.**
 > OWL reasons precisely according to the axioms we supply; it does not repair a weak conceptual
@@ -1575,6 +1772,15 @@ rules, and validation*.
 | Description Logic | A family of logical languages balancing expressiveness and reasoning feasibility | §4.10 |
 | TBox / ABox / RBox | Mental classification: general / individual / property knowledge | §4.10 |
 | OWL 2 EL / QL / RL | Profiles trading expressiveness for performance | §4.12 |
+| Decidable fragment | A deliberately trimmed subset of FOL where reasoning provably halts | §4.10 |
+| SROIQ(D) | The DL exactly equivalent to OWL 2 DL | §4.10 |
+| DL naming alphabet | How DLs are named by constructs: AL, C, S, H, O, I, Q, D | §4.10 |
+| Combined complexity | Cost measured against ontology + data together | §4.12 |
+| Data complexity | Cost with the ontology fixed, measured only against the ABox | §4.12 |
+| AC0 | Cheapest class: constant-depth Boolean circuits, freely parallelizable | §4.12 |
+| FOL-Rewritability | Every conjunctive query rewrites to a plain First-Order query | §4.12 |
+| N2EXPTIME | Double-exponential — OWL 2 DL is complete here in combined complexity | §4.12 |
+| PTIME | Polynomial time — OWL 2 EL is complete here in data complexity | §4.12 |
 
 ## Further reading
 
