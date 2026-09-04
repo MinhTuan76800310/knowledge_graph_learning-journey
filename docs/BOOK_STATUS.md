@@ -4,7 +4,7 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-09-02 (**v0.2.0 RELEASED**: tag `v0.2.0`; Vietnamese complete book
+Last updated: 2026-09-05 (**v0.2.0 RELEASED**: tag `v0.2.0`; Vietnamese complete book
 `knowledge-graph-book-v0.2.0.pdf`, 364 print pages + English edition
 `knowledge-graph-book-en-v0.2.0.pdf`, 70 print pages, Ch1–3. Delta over v0.1.0: English
 edition launched (Ch1–3, PRs #27/#30/#40) + Vietnamese Chapter 3 quality pass (#42).
@@ -53,7 +53,10 @@ chapter by chapter and kept in parity. It builds with `LANG=en`.
 | 1 — From Graph to Knowledge | ✅ | ✅ (Issue #31) | ✅ | MERGED (PR #27) |
 | 2 — Data Models and Query Languages | ✅ | ✅ (Issue #31) | ✅ | MERGED (PR #30) |
 | 3 — Schema, Identity, and Context | ✅ | ✅ (parity with VI #42) | ✅ | MERGED (PR #40) |
-| 4–10 | 🔲 |  | 🔲 | PLANNED |
+| 4 — Ontologies and Formal Meaning | ✅ | ✅ (Pillar 2, PR #68) | ✅ | MERGED (PR #59/#68) |
+| 5 — Deduction, Rules, and Validation | ✅ | ✅ (Pillar 2, PR #70) | ✅ | MERGED (PR #62/#70) |
+| 6 — Claims, Evidence, Provenance, Time, Contradiction | ✅ | ✅ (Pillar 3, parity with VI) | ✅ | PR pending (branch `en-vi-ch6-pillar3`) |
+| 7–10 | 🔲 |  | 🔲 | PLANNED |
 
 English build verified at v0.2.0: 70 print pages, `verify_book_pdf.sh` (LANG=en) gate
 PASSED.
@@ -66,8 +69,8 @@ Focus: 6 theoretical pillars (Hypergraphs, Logic Complexity & Decidability, Demp
 | Theoretical Target | Target Chapters | Status | Specification |
 |--------------------|-----------------|--------|---------------|
 | Pillar 1: Hypergraphs & Formal Blank Node Logic | Ch 1–3 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 1 |
-| Pillar 2: Complexity Landscape, FOL-Rewritability & Datalog | Ch 4–5 | 🟢 Ch 4 MERGED; 🟢 Ch 5 done (VI+EN parity, PR pending) | `docs/BOOK_V0_3_MILESTONE.md` §Target 2 |
-| Pillar 3: Dempster-Shafer Confidence & AGM Belief Revision | Ch 6 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 3 |
+| Pillar 2: Complexity Landscape, FOL-Rewritability & Datalog | Ch 4–5 | 🟢 Ch 4 MERGED (PR #68); 🟢 Ch 5 MERGED (PR #70) | `docs/BOOK_V0_3_MILESTONE.md` §Target 2 |
+| Pillar 3: Dempster-Shafer Confidence & AGM Belief Revision | Ch 6 | 🟢 Ch 6 done (VI+EN parity, PR pending) | `docs/BOOK_V0_3_MILESTONE.md` §Target 3 |
 | Pillar 4: Weisfeiler-Lehman (1-WL), RotatE & Hyperbolic Geometry | Ch 8 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 4 |
 | Pillar 5: Path Explosion Bounds & Long-Context vs GraphRAG | Ch 9 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 5 |
 | Pillar 6: Closed-Loop Stability & Autophagous Model Collapse | Ch 10 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 6 |

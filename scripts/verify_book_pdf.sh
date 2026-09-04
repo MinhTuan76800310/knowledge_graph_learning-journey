@@ -33,6 +33,7 @@ if [ "$LANG" = "en" ]; then
     "Schema, Identity, and Context"
     "Ontologies and Formal Meaning"
     "Deduction, Rules, and Validation"
+    "Claims, Evidence, Provenance, Time, and Contradiction"
   )
   TOC_PAT='Contents'
   BIB_TITLE='References'

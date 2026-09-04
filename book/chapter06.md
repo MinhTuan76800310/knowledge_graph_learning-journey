@@ -570,6 +570,64 @@ Ví dụ: Ngày 2020-01-15, hệ thống ghi nhận "dân số Hà Nội = 8.093
 time = 2024). Bản ghi cũ không bị xóa — system time cho phép truy vấn "hệ thống đã tin
 điều gì vào ngày 2022?" và nhận được câu trả lời đúng.
 
+### Lưới tọa độ bitemporal 2D
+
+Trực giác trên trở thành *cơ chế hình thức* khi ta vẽ hai trục thời gian vuông góc nhau.
+Mô hình **bitemporal** của Snodgrass [@snodgrass-temporal-1999] coi mỗi bản ghi chiếm
+một **hình chữ nhật** trong mặt phẳng hai chiều:
+
+$$
+R \;=\; \bigl[T_v^{\text{start}},\, T_v^{\text{end}}\bigr] \times \bigl[T_{tx}^{\text{start}},\, T_{tx}^{\text{end}}\bigr]
+$$
+
+- Trục hoành $T_v$ = **valid time** — phát biểu đúng *trong thế giới* suốt khoảng nào.
+- Trục tung $T_{tx}$ = **transaction/system time** — *hệ thống tin* phát biểu đó suốt
+  khoảng nào.
+
+Một phát biểu không còn là một điểm hay một khoảng đơn lẻ; nó là một **vùng** trong
+lưới. Hai phát biểu cùng nói về một đại lượng nhưng ở hai thời điểm hệ thống khác nhau
+chiếm hai hình chữ nhật *đè lên nhau một phần* — và đó chính là chỗ mô hình bitemporal
+vượt trội so với việc chỉ lưu "bản ghi mới nhất".
+
+![Lưới tọa độ bitemporal 2D. Trục hoành = valid time, trục tung = transaction/system time. Claim C1 (dải [300K,450K]) chiếm hình chữ nhật xanh; sau khi hiệu chỉnh cảm biến, claim C2 (dải [300K,400K]) chiếm hình chữ nhật cam phủ lên vùng hồi cứu. C1 không bị xóa. Hai point-probe rơi vào hai ô khác nhau và cho hai câu trả lời khác nhau.](figures/generated/ch06-bitemporal-grid.pdf)
+
+**Cơ chế point-probe.** Một truy vấn bitemporal là một **điểm** $(T_v^*, T_{tx}^*)$
+trong lưới. Câu hỏi nó đặt ra, đọc nguyên văn: *"Tại thời điểm hệ thống $T_{tx}^*$, hệ
+thống tin điều gì về khoảng hiệu lực $T_v^*$?"* Câu trả lời là claim có hình chữ nhật
+chứa điểm đó — kiểm tra bằng hai bất đẳng thức:
+
+$$
+T_v^{\text{start}} \le T_v^* < T_v^{\text{end}}
+\quad\text{và}\quad
+T_{tx}^{\text{start}} \le T_{tx}^* < T_{tx}^{\text{end}}
+$$
+
+Trong hình trên, cùng một năm hiệu lực $T_v^* = 2022$ nhưng hai thời điểm hỏi khác nhau
+cho hai câu trả lời khác nhau:
+
+| Probe | $T_{tx}^*$ (hỏi lúc) | $T_v^*$ (về năm) | Rơi vào ô | Hệ thống tin |
+|-------|---------------------|------------------|-----------|--------------|
+| Probe 1 | 2021 | 2022 | C1 | dải [300K, 450K] |
+| Probe 2 | 2024 | 2022 | C2 | dải [300K, 400K] |
+
+Cùng một sự kiện trong quá khứ (năm 2022), hai câu trả lời khác nhau — không mâu thuẫn,
+chỉ phản ánh *lịch sử niềm tin* của hệ thống. Probe 1 hỏi trước khi cảm biến được hiệu
+chỉnh nên nhận con số cũ; Probe 2 hỏi sau nên nhận con số đã sửa.
+
+**Nguyên tắc Append-Only (không phá huỷ).** Khi C2 xuất hiện, C1 **không bị xóa**; C2
+chỉ *phủ lên* (overlay) vùng hồi cứu bằng cách đóng khoảng system time của C1
+($T_{tx}^{\text{end}} \leftarrow 2024$) và mở một hình chữ nhật mới. Đây là điểm phân
+biệt mô hình bitemporal khỏi `UPDATE` quan hệ: lịch sử niềm tin là **bất biến**
+(immutable), mọi "sửa đổi" thực chất là **thêm** (append). Nhờ vậy hệ thống trả lời được
+cả câu hỏi *hồi cứu* ("tháng 6/2021 ta tin gì?") lẫn câu hỏi *hiện tại* ("giờ ta tin
+gì?") mà không cần bản sao lưu riêng.
+
+> ⚠️ **Ngộ nhận phổ biến:** "Bitemporal = hai cột timestamp." Sai. Hai cột timestamp
+> rời rạc chỉ ghi *thời điểm* phát biểu ra đời. Mô hình bitemporal đúng nghĩa lưu *hai
+> khoảng* (valid interval + transaction interval), tức một hình chữ nhật, và cho phép
+> point-probe rơi vào bất kỳ ô nào của lưới. Sự khác biệt nằm ở chỗ **hồi cứu được cả
+> trục valid time**, không chỉ trục system time.
+
 ### Biểu diễn bằng OWL-Time
 
 OWL-Time [@owl-time] cung cấp từ vựng RDF cho thời gian:
@@ -945,6 +1003,122 @@ Giá trị 0.86 là *hệ quả của chính sách*, có thể tái tính và đ
 số ngẫu nhiên. Khi chính sách thay đổi, toàn bộ composite cũ phải được đánh dấu quá
 hạn chứ không giữ nguyên.
 
+### Khi trung bình tuyến tính sụp đổ: Dempster–Shafer và Subjective Logic
+
+Chính sách `0.6·source + 0.4·evidence` đủ dùng khi các tín hiệu *hòa thuận*. Nó sụp đổ
+trong đúng hai tình huống mà một hệ tri thức luận phải xử lý được: **xung đột** và
+**vô tri**.
+
+Xét xung đột. Nguồn A nói xác suất claim đúng là 0.9; bằng chứng độc lập nói 0.1. Trung
+bình tuyến tính cho `0.6·0.9 + 0.4·0.1 = 0.58`. Nhưng con số 0.58 *không phân biệt được*
+với trường hợp "cả hai nguồn chỉ biết lơ mơ quanh mức 50/50". Phép trung bình đã **tẩy
+sạch dấu vết của bất đồng**: hai nguồn đang cãi nhau dữ dội, nhưng đầu ra lại trông như
+một đánh giá trung lập, do dự. Một hệ thống chỉ lưu một scalar không thể biết khi nào
+nên *tin* và khi nào nên *hoãn phán*.
+
+Xét vô tri. Không có nguồn nào, không có bằng chứng nào. Confidence đúng phải phản ánh
+"ta không biết", chứ không phải "0.5". Nhưng 0.5 cũng chính là giá trị phép trung bình
+trả ra khi hai nguồn xung đột. **Cùng một con số, hai ý nghĩa trái ngược.** Scalar
+confidence không đủ biểu đạt.
+
+Hai học thuyết dưới đây sửa khiếm khuyết đó bằng cách mang theo *độ rộng* (khoảng tin
+cậy) thay vì một điểm.
+
+**Lý thuyết bằng chứng Dempster–Shafer.** Shafer [@shafer-evidence-1976] tổng quát hóa
+xác suất Bayes. Thay vì gán xác suất cho từng mệnh đề, nó gán **khối lượng** (mass) cho
+các *tập* mệnh đề trong một **khung phân biệt** (frame of discernment) $\Theta$ — tập
+hợp các giả thuyết đôi một loại trừ nhau. Với $\Theta = \{\text{Acc}, \text{Rej}\}$:
+
+- Một **hàm khối lượng** $m : 2^{\Theta} \to [0,1]$ thỏa $m(\emptyset) = 0$ và
+  $\sum_{B \subseteq \Theta} m(B) = 1$.
+- Khối lượng đặt trên *cả* $\Theta$ biểu thị **vô tri toàn phần**: $m(\Theta) = 1$ nghĩa
+  là "chưa nghiêng về giả thuyết nào", khác hẳn $m(\{\text{Acc}\}) = 0.5$.
+- **Hàm niềm tin** (belief) và **hàm hợp lý** (plausibility) kẹp claim vào một khoảng:
+
+$$
+\mathrm{Bel}(A) = \sum_{B \subseteq A} m(B), \qquad
+\mathrm{Pl}(A) = 1 - \mathrm{Bel}(\bar{A})
+$$
+
+  Khoảng $[\mathrm{Bel}(A), \mathrm{Pl}(A)]$ là **khoảng tin cậy**: độ rộng
+  $\mathrm{Pl} - \mathrm{Bel}$ *chính là* phần vô tri chưa quy kết. Bayes là trường hợp
+  đặc biệt khi mọi khối lượng đều nằm trên tập đơn (độ rộng = 0).
+
+**Quy tắc kết hợp Dempster.** Hai nguồn độc lập $m_1, m_2$ kết hợp bằng giao các tập:
+
+$$
+(m_1 \oplus m_2)(A) = \frac{1}{1 - K} \sum_{B \cap C = A} m_1(B)\, m_2(C), \qquad
+K = \sum_{B \cap C = \emptyset} m_1(B)\, m_2(C)
+$$
+
+$K$ đo **mức xung đột** — khối lượng rơi vào giao rỗng. Ví dụ Mechanism-KG, hai thẩm
+định viên về `claim_roc_A`:
+
+- Nguồn 1 (bình duyệt chéo): $m_1(\{\text{Acc}\}) = 0.8,\; m_1(\Theta) = 0.2$.
+- Nguồn 2 (bằng chứng mâu thuẫn): $m_2(\{\text{Rej}\}) = 0.7,\; m_2(\Theta) = 0.3$.
+
+Tính: $K = 0.8 \cdot 0.7 = 0.56$; $1 - K = 0.44$. Kết quả chuẩn hóa:
+
+| Tập | Khối lượng kết hợp | Cách tính |
+|-----|-------------------|-----------|
+| $\{\text{Acc}\}$ | $0.545$ | $(0.8\cdot0.3 + 0.2\cdot0)/0.44$ |
+| $\{\text{Rej}\}$ | $0.318$ | $(0.2\cdot0.7)/0.44$ |
+| $\Theta$ | $0.136$ | $(0.2\cdot0.3)/0.44$ |
+
+$\mathrm{Bel}(\text{Acc}) = 0.545$, $\mathrm{Pl}(\text{Acc}) = 1 - 0.318 = 0.682$.
+
+> ⚠️ **Nghịch lý Zadeh.** Để ý $K = 0.56$ — hai nguồn *gần như đối lập*. Nhưng quy tắc
+> Dempster **ném bỏ** toàn bộ khối lượng xung đột ($0.56$) rồi chuẩn hóa phần còn lại,
+> cho ra một kết luận *trông chắc chắn* ($\mathrm{Bel} = 0.545$) từ hai chứng nhân cãi
+> nhau. Khi $K \to 1$, mẫu số $1-K \to 0$ và kết hợp trở nên tùy tiện về mặt số học. Bài
+> học: Dempster–Shafer kết hợp tốt bằng chứng *hòa thuận* và biểu diễn *vô tri*, nhưng
+> **không được dùng để ép hai nguồn xung đột thành một con số**. Khi $K$ lớn, sách giữ
+> hai nhánh tách biệt trong Claim Ledger với trạng thái `Contested` (§6.14) — bảo tồn
+> mâu thuẫn thay vì trộn lẫn.
+
+**Subjective Logic.** Jøsang [@josang-subjective-logic-2016] trình bày cùng ý tưởng bằng
+một tọa độ trực quan hơn. Một **opinion** là bộ bốn $\omega = (b, d, u, a)$:
+
+- $b$ = belief, $d$ = disbelief, $u$ = uncertainty, với $b + d + u = 1$;
+- $a \in [0,1]$ = **base rate** (xác suất tiên nghiệm mặc định, thường $0.5$).
+
+Vì $b+d+u=1$, opinion sống trên một **giác đều 2-simplex** (tam giác) với ba đỉnh
+Belief–Disbelief–Uncertainty — tọa độ trọng tâm (barycentric). Đỉnh $u$ = vô tri hoàn
+toàn; cạnh đáy $u=0$ = đã quả quyết (Bayes thuần). **Xác suất chủ quan** tham chiếu:
+
+$$
+P(x) = b + a \cdot u
+$$
+
+Phép **kết hợp lũy tích** $\oplus$ cho hai nguồn độc lập $\omega_1, \omega_2$ (cùng $a$):
+
+$$
+b_{\oplus} = \frac{b_1 u_2 + b_2 u_1}{u_1 + u_2 - u_1 u_2}, \quad
+d_{\oplus} = \frac{d_1 u_2 + d_2 u_1}{u_1 + u_2 - u_1 u_2}, \quad
+u_{\oplus} = \frac{u_1 u_2}{u_1 + u_2 - u_1 u_2}
+$$
+
+Tính chất chủ chốt — **co hẹp đơn điệu của vô tri**: khi hai nguồn đồng thuận,
+$u_{\oplus} \le \min(u_1, u_2)$; bằng chứng hội tụ làm khoảng tin cậy *hẹp lại*, niềm
+tin *tăng lên*. Ví dụ hai nguồn cùng nghiêng chấp nhận $\omega_1 = \omega_2 = (0.6, 0,
+0.4)$:
+
+$$
+u_{\oplus} = \frac{0.4 \cdot 0.4}{0.4 + 0.4 - 0.16} = \frac{0.16}{0.64} = 0.25, \quad
+b_{\oplus} = \frac{0.6\cdot0.4 + 0.6\cdot0.4}{0.64} = 0.75
+$$
+
+Hai nguồn đồng thuận đẩy belief từ $0.6$ lên $0.75$ và *giảm* vô tri từ $0.4$ xuống
+$0.25$ — đúng trực giác "thêm bằng chứng độc lập cùng chiều thì chắc hơn". Với $a=0.5$,
+xác suất chủ quan $P = 0.75 + 0.5\cdot0.25 = 0.875$.
+
+Subjective Logic và Dempster–Shafer tương đương nhau về số học (cùng ví dụ xung đột ở
+trên cho $b=0.545, d=0.318, u=0.136$ — đúng các giá trị Bel/Pl đã tính). Khác biệt nằm
+ở cách *trình bày*: SL cho một tọa độ hình học để nhìn thấy ngay claim đang ở gần đỉnh
+vô tri hay gần cạnh quả quyết, và tách $b$ khỏi $d$ để **nhìn thấy cả hai chiều của
+xung đột** thay vì nén thành một scalar. Đó là điều phép trung bình tuyến tính đầu mục
+này không làm được.
+
 **Mô hình độ tin cậy nguồn cho cơ chế.** "Nguồn uy tín" cần được lượng hóa. Một mô hình
 đơn giản: xếp hạng theo tầng, mỗi nguồn gán điểm cơ sở, có thể điều chỉnh bằng lịch sử:
 
@@ -1181,6 +1355,75 @@ cụm "rate of change"), thì version mới **supersede** version cũ:
 Điều này tạo ra một **hệ thống giống git cho tri thức**: mỗi phiên bản thuật toán là một
 "release", mỗi claim là một "commit" có provenance. Suy diễn sau này kế thừa toàn bộ
 lịch sử — không xóa, chỉ thêm lớp.
+
+### Nền tảng hình thức: sửa đổi niềm tin AGM
+
+"Không xóa, chỉ thêm lớp" là một nguyên tắc thiết kế. Nó có một đối tác *hình thức* trong
+lý thuyết sửa đổi niềm tin: **AGM** của Alchourrón, Gärdenfors và Makinson
+[@alchourron-agm-1985] — khuôn mẫu chuẩn cho câu hỏi "một tập niềm tin phải thay đổi *hợp
+lý* thế nào khi gặp bằng chứng trái ngược?". AGM làm việc trên một **tập niềm tin** (belief
+set) $K$ — đóng dưới hệ quả logic — với ba phép biến đổi:
+
+- **Mở rộng (expansion)** $K + \varphi$: thêm $\varphi$ vào $K$ rồi đóng lại dưới logic.
+  Đơn giản nhưng *không tự chữa mâu thuẫn* — nếu $\neg\varphi \in K$ thì $K+\varphi$ thành
+  vô lý nhất quán (trivial).
+- **Co rút (contraction)** $K \div \varphi$: bỏ $\varphi$ ra khỏi $K$ sao cho phần còn lại
+  vẫn đóng logic và **mất ít thông tin nhất** (minimal information loss).
+- **Sửa đổi (revision)** $K * \varphi$: tiếp nhận $\varphi$ *dù nó mâu thuẫn* với $K$,
+  bằng cách bỏ đi những niềm tin cũ cản đường — nhưng bỏ ít nhất có thể.
+
+Hai **đẳng thức** nối ba phép này cho thấy revision không phải khái niệm nguyên thủy:
+
+$$
+K * \varphi \;=\; (K \div \neg\varphi) + \varphi \qquad \text{(đẳng thức Levi)}
+$$
+$$
+K \div \varphi \;=\; K \cap (K * \neg\varphi) \qquad \text{(đẳng thức Harper)}
+$$
+
+Levi nói: *sửa đổi* bằng $\varphi$ = trước hết *co rút* cái đối lập $\neg\varphi$, rồi *mở
+rộng* thêm $\varphi$. Đây chính xác là thao tác "dời claim cũ sang Superseded rồi thêm
+claim mới" mà §6.13 mô tả bằng lời.
+
+AGM đề ra **6 tiên đề** cho phép sửa đổi (chấp nhận $\varphi$):
+
+| # | Tiên đề | Nội dung |
+|---|---------|----------|
+| 1 | Thành công (Success) | $\varphi \in K * \varphi$ — sau khi sửa, phải tin $\varphi$ |
+| 2 | Bao hàm (Inclusion) | $K * \varphi \subseteq \mathrm{Cn}(K \cup \{\varphi\})$ — không thêm gì ngoài hệ quả của cái đã có |
+| 3 | Rỗng lẽ ra không (Vacuity) | Nếu $\neg\varphi \notin \mathrm{Cn}(K)$ thì $\mathrm{Cn}(K \cup \{\varphi\}) \subseteq K * \varphi$ — khi $\varphi$ không xung đột, chỉ cần mở rộng, đừng bỏ gì |
+| 4 | Nhất quán (Consistency) | $K * \varphi$ vô lý nhất quán chỉ khi chính $\varphi$ vô lý |
+| 5 | Mở rộng tính (Extensionality) | $\varphi \equiv \psi \Rightarrow K * \varphi \equiv K * \psi$ — phụ thuộc nội dung, không phụ thuộc cú pháp |
+| 6 | Siêu/mở rộng con (Super- & Sub-expansion) | $(K * \varphi) + \psi \subseteq K * (\varphi \wedge \psi)$, đẳng thức khi $\neg\psi \notin K * \varphi$ — sửa đổi "tiết kiệm", không bỏ nhiều hơn mức cần |
+
+**Cầu nối tới Claim Ledger.** AGM cổ điển *phá huỷ*: $K * \varphi$ **thay thế** $K$, tập
+cũ biến mất (chỉ còn lại một quan hệ "thứ bậc" — entrenchment — trừu tượng). Kiến trúc
+Claim Ledger của sách đảo ngược hướng đó thành **chiếu bất tổn** (lossless projection).
+Đồ thị thô $G_{\text{raw}}$ chỉ **append** mọi claim vĩnh viễn; "tập niềm tin đang hoạt
+động" tại thời điểm hệ thống $t_{tx}$ là một *hàm chiếu*:
+
+$$
+K_{\text{active}}(t_{tx}) \;=\; \Pi_{\text{active}}\bigl(G_{\text{raw}},\, t_{tx}\bigr)
+$$
+
+Phép sửa đổi AGM diễn ra **trong lớp chiếu**, không trong kho thô: $\Pi_{\text{active}}$
+"co rút" một claim bằng cách đóng system-time interval của nó (§6.7) chứ không xóa nó.
+Mỗi lát cắt $t_{tx}$ của chiếu thỏa mãn các tiên đề AGM (nhất quán, tối thiểu), nhưng bản
+thân $G_{\text{raw}}$ vẫn giữ toàn bộ lịch sử để point-probe hồi cứu.
+
+| Tiêu chí | AGM cổ điển (belief set) | Claim Ledger (sách) |
+|----------|--------------------------|---------------------|
+| Đối tượng | Tập đóng logic $K$ | Đồ thị thô $G_{\text{raw}}$ + hàm chiếu $\Pi_{\text{active}}$ |
+| Phép sửa đổi | $K * \varphi$ **thay thế** $K$ | Append claim mới, đóng system-time claim cũ |
+| Mất thông tin | Tối thiểu (minimal loss) | **Không mất** (lossless) — lịch sử nguyên vẹn |
+| Hồi cứu | Không (chỉ entrenchment trừu tượng) | Có — point-probe mọi $t_{tx}$ (§6.7) |
+| Trạng thái | Một belief set duy nhất | Nhiều claim với governance state (§6.12) |
+
+> ℹ️ **Vì sao điều này quan trọng.** AGM cho ta *tiêu chuẩn hợp lý* của thay đổi niềm tin
+> (sửa đổi phải tiết kiệm, nhất quán, tôn trọng nội dung). Claim Ledger cho ta *cơ chế lưu
+> trữ* không phá huỷ. Ghép lại: hệ thống vừa hành xử đúng chuẩn AGM ở lớp nhìn, vừa không
+> bao giờ mất chứng cứ ở lớp thô — "git cho tri thức" giờ có một nền tảng hình thức đứng
+> sau.
 
 ## 6.14 Đồ thị bằng chứng và Bảo tồn mâu thuẫn
 
@@ -1853,6 +2096,17 @@ thập và hợp nhất tri thức mà không làm hỏng graph đã được qu
 | Contradiction taxonomy | 5 loại: logical, value, temporal, scope, source | §6.6 |
 | Valid / assertion / observation / system time | Bốn đồng hồ khác nhau của cùng một phát biểu | §6.7, §6.8 |
 | Bitemporal (song thời gian) | Lưu cả valid time lẫn system time | §6.7 |
+| Lưới tọa độ bitemporal 2D | Hình chữ nhật $[T_v^{\text{start}}, T_v^{\text{end}}] \times [T_{tx}^{\text{start}}, T_{tx}^{\text{end}}]$ + point-probe | §6.7 |
+| Point-probe | Truy vấn điểm $(T_v, T_{tx})$ rơi vào ô nào | §6.7 |
+| Append-Only (không phá huỷ) | Claim cũ không bị xóa — chỉ thêm claim mới phủ lên | §6.7 |
+| Dempster–Shafer evidence | Khung $\Theta$, hàm khối $m:2^{\Theta}\to[0,1]$, $\mathrm{Bel}$, $\mathrm{Pl}$, khoảng $[\mathrm{Bel},\mathrm{Pl}]$ | §6.11 |
+| Quy tắc Dempster | $(m_1\oplus m_2)(A) = \frac{1}{1-K}\sum_{B\cap C=A} m_1(B)m_2(C)$; $K$ = mức xung đột | §6.11 |
+| Nghịch lý Zadeh | $K\approx 1$ → Dempster ép hai nguồn xung đột thành kết luận sai | §6.11 |
+| Subjective Logic opinion | Bộ $\omega = (b,d,u,a)$ với $b+d+u=1$, $P(x)=b+a\cdot u$ | §6.11 |
+| Kết hợp lũy tích $\oplus$ | $u_{\oplus} = u_1 u_2 / (u_1+u_2-u_1u_2)$ — co hẹp vô tri khi đồng thuận | §6.11 |
+| AGM belief revision | $K+\varphi$ / $K\div\varphi$ / $K*\varphi$; đẳng thức Levi, Harper; 6 tiên đề | §6.13 |
+| Đẳng thức Levi | $K*\varphi = (K\div\neg\varphi) + \varphi$ | §6.13 |
+| Claim Ledger lossless projection | $\Pi_{\text{active}}(G_{\text{raw}}, t_{tx})$ — AGM mà không phá huỷ | §6.13 |
 | ProperInterval (OWL-Time) | Khoảng thời gian có điểm đầu và điểm cuối | §6.7 |
 | Qualified statement (n-ary) | Gói quan hệ thành object để gắn metadata (Wikidata pattern) | §6.9 |
 | Governance states | Candidate, Accepted, Rejected, Contested, Superseded | §6.12 |
@@ -1873,3 +2127,7 @@ thập và hợp nhất tri thức mà không làm hỏng graph đã được qu
 - RDF 1.1 Concepts and Abstract Syntax [@w3c-rdf11-concepts]
 - Defining N-ary Relations on the Semantic Web [@w3c-nary-relations]
 - Knowledge Graphs (Hogan et al.) [@hogan-knowledge-graphs]
+- A Mathematical Theory of Evidence (Shafer 1976) [@shafer-evidence-1976]
+- Subjective Logic: A Formal Framework for Human Reasoning (Jøsang 2016) [@josang-subjective-logic-2016]
+- On the Logic of Theory Change (Alchourrón, Gärdenfors & Makinson 1985) [@alchourron-agm-1985]
+- Developing Time-Oriented Database Applications in SQL (Snodgrass 1999) [@snodgrass-temporal-1999]

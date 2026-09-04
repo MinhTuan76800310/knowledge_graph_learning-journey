@@ -715,9 +715,33 @@ concepts:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
-    explanation_level: intuition
+    explanation_level: mechanism
     incidental_gloss: false
-    notes: "Valid time + system time; enables 'what did system believe at time T?' queries"
+    notes: "Valid time + system time as a 2D rectangle R=[Tv_start,Tv_end]x[Ttx_start,Ttx_end]; point-probe query; append-only non-destructive history (Snodgrass)"
+
+  dempster_shafer:
+    first_mentioned_chapter: 6
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Theory of evidence: frame Θ, mass m:2^Θ→[0,1] with m(∅)=0, Bel/Pl interval; Dempster's rule with conflict K; Zadeh paradox — keep conflicting branches, don't blend"
+
+  subjective_logic:
+    first_mentioned_chapter: 6
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Opinion ω=(b,d,u,a), b+d+u=1 on barycentric simplex; reference probability P=b+a·u; cumulative fusion ⊕ shrinks uncertainty monotonically"
+
+  agm_belief_revision:
+    first_mentioned_chapter: 6
+    first_required_use_chapter: 6
+    first_explained_chapter: 6
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Expansion/contraction/revision on a belief set; Levi & Harper identities; 6 rationality postulates; Claim Ledger = lossless projection satisfying AGM per system-time slice"
 
   supersession:
     first_mentioned_chapter: 6

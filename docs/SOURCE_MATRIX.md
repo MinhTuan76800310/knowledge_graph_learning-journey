@@ -52,6 +52,11 @@ Last verified: 2026-09-04
 | Property graph formal model (Ch1-2 enrichment) | Angles & Gutiérrez, "An Introduction to Graph Data Management" (Springer 2018) | Neo4j Graph Data Modeling Fundamentals | RESEARCH_PAPER / OFFICIAL_DOCUMENTATION | Stable | Attributed graph tuple formalization grounding the Ch2 7-tuple LPG definition | 2 (EN) |
 | Data integration theory | Lenzerini (PODS 2002) | — | RESEARCH_PAPER | Stable | Data integration system (G, S, M); GAV/LAV; sound/complete/exact mappings | 7 |
 
+| Bitemporal coordinate grid & temporal claim history (Ch6 enrichment) | Snodgrass, *Developing Time-Oriented Database Applications in SQL* (1999) | OWL-Time (REC 2006) | ACADEMIC / STANDARD | Stable | Foundational valid-time vs. transaction-time model behind the 2D bitemporal grid | 6 |
+| Dempster-Shafer evidence combination (Ch6 enrichment) | Shafer, *A Mathematical Theory of Evidence* (1976) | Jøsang, *Subjective Logic* (2016) | ACADEMIC | Stable | Mass functions, Bel/Pl interval, Dempster's rule, Zadeh conflict paradox | 6 |
+| Subjective Logic opinion fusion (Ch6 enrichment) | Jøsang, *Subjective Logic* (2016) | — | ACADEMIC | Stable | Opinion vector (b,d,u,a), barycentric simplex, reference probability, consensus fusion | 6 |
+| AGM belief revision & lossless epistemic projection (Ch6 enrichment) | Alchourrón, Gärdenfors & Makinson, *On the Logic of Theory Change* (1985) | — | RESEARCH_PAPER | Stable | Expansion/contraction/revision, Levi/Harper identities, minimal information loss | 6 |
+
 ## Source type legend
 
 - **STANDARD**: W3C Recommendation, Candidate Recommendation, or Working Draft
