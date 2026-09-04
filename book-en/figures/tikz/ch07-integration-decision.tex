@@ -1,0 +1,54 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{shapes.geometric,shapes.misc,positioning,fit,backgrounds,arrows.meta,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+    node distance=1.1cm and 1.4cm,
+    box/.style={rectangle, draw, minimum width=2.6cm, minimum height=0.8cm, align=center, font=\scriptsize},
+    label/.style={font=\scriptsize\itshape, text=gray!60!black},
+    arrow/.style={-{Stealth[length=2.5mm]}, thick},
+]
+
+% ====== Inputs ======
+\node[box, fill=blue!8] (gate) at (0, 3.2) {Candidate past the SHACL gate\\
+\scriptsize(valid)};
+\node[box, fill=blue!8, right=of gate] (conflict) {Conflict?\\
+\scriptsize(Ch6 taxonomy)};
+
+\draw[arrow] (gate) -- (conflict);
+
+% ====== Decision diamond ======
+\node[diamond, draw, fill=orange!8, minimum width=3.2cm, minimum height=1.6cm, align=center, font=\scriptsize, below=1.2cm of $(gate)!0.5!(conflict)$] (dec) {Unreconcilable?};
+
+\draw[arrow] (conflict) -- (dec);
+
+\node[label, right=0.15cm of dec, align=left] (q) {integration decision};
+
+% ====== Three branches ======
+\node[box, fill=green!8, below left=1.2cm and 1.2cm of dec] (accept) {Accept\\
+\scriptsize ledger insert};
+\node[box, fill=gray!12, below=1.2cm of dec] (defer) {Review\\
+\scriptsize human queue};
+\node[box, fill=red!8, below right=1.2cm and 1.2cm of dec] (reject) {Reject\\
+\scriptsize record reason};
+
+\draw[arrow] (dec) -- node[label, left, pos=0.5] {no} (accept);
+\draw[arrow] (dec) -- node[label, right, pos=0.5] {yes} (defer);
+\draw[arrow] (dec) -- node[label, right, pos=0.5] {insufficient evidence} (reject);
+
+% ====== Ledger ======
+\node[box, fill=red!8, minimum width=4.2cm, below=1.1cm of accept] (ledger) {Claim Ledger\\[-1pt]\scriptsize(commit + provenance)};
+
+\draw[arrow] (accept) -- (ledger);
+\draw[arrow] (defer) -- (ledger);
+\draw[arrow] (reject) -- (ledger);
+
+\node[label, below=0.1cm of ledger, align=center, text width=6cm]
+{Rejected kept with reason; no claim deleted (I5)};
+
+\end{tikzpicture}
+\end{document}
