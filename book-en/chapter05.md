@@ -217,6 +217,120 @@ class-hierarchy mechanism in the mechanism domain.
 > variables remaining. The process of replacing variables with concrete values is called
 > **grounding**.
 
+### The Immediate Consequence Operator $T_P$ and the Least Fixed Point
+
+The recurrence $G_{i+1} = G_i \cup \{\,\theta(\text{head}(r)) \mid \theta(\text{body}(r))
+\subseteq G_i\,\}$ above is one concrete way of writing a more general and more powerful
+notion: the **immediate consequence operator** $T_P$.
+
+Given a rule program $P$ (a set of Horn/Datalog rules) and a set of ground facts $I$,
+$T_P(I)$ is the set of every ground head obtainable from rules in $P$ whose bodies already lie
+entirely in $I$:
+
+$$T_P(I) \;=\; \bigl\{\, \theta(\text{head}(r)) \;\big|\; r \in P,\; \theta(\text{body}(r)) \subseteq I \,\bigr\}$$
+
+Forward chaining is exactly the process of iterating $T_P$ starting from the empty set:
+
+$$\emptyset \;\subseteq\; T_P(\emptyset) \;\subseteq\; T_P^2(\emptyset) \;\subseteq\; T_P^3(\emptyset) \;\subseteq\; \dots$$
+
+**Why does this sequence grow?** Because $T_P$ is **monotone**: if $I \subseteq J$ then
+$T_P(I) \subseteq T_P(J)$ — adding facts cannot remove a body that already matched. Over a
+**finite ground universe** (only finitely many ground facts can exist), a monotonically
+increasing sequence of sets must converge. Its destination is the **least fixed point** of
+$T_P$:
+
+$$\mathrm{lfp}(T_P) \;=\; \bigcup_{k \ge 0} T_P^{k}(\emptyset)$$
+
+> ℹ **The basis of this claim is the Knaster–Tarski theorem.** On the lattice of ground-fact
+> sets (ordered by inclusion), every monotone operator has a least fixed point, and that least
+> fixed point is the intersection of all fixed points. Because $T_P$ is monotone, forward
+> chaining always converges to exactly $\mathrm{lfp}(T_P)$.
+
+An important practical consequence: $\mathrm{lfp}(T_P)$ **does not depend on the order** in
+which you apply the rules. Whichever rule the engine runs first, the final result is unique.
+This is what lets us speak of "the closure of $G_0$ under $P$" as a well-defined object, and
+it is the foundation that lets many engines run rules in parallel (the RETE and RDFox parts of
+§5.5).
+
+### The Linear-Algebra Bridge: Transitive Closure via Powers of the Adjacency Matrix
+
+If you have taken linear algebra, you can grasp this mechanism through a familiar analogy:
+computing the **transitive closure** of a graph via powers of its adjacency matrix.
+
+Let $A$ be the binary adjacency matrix of a graph ($A_{ij}=1$ if there is an edge $i \to j$).
+Paths of length $k$ from $i$ to $j$ are recorded by the entry $(A^k)_{ij}$. The transitive
+closure — every pair $(i,j)$ connected by some path — is the sum of powers:
+
+$$A^{*} \;=\; A + A^{2} + A^{3} + \dots + A^{k}$$
+
+taken until $A^{k+1}$ adds no new non-zero entry; at that point the sum has converged. This is
+a fixed point: the power iteration stops when no new path appears.
+
+| Linear algebra (transitive closure) | Forward chaining ($T_P$) |
+|---|---|
+| $A$ — asserted edges | $G_0$ — asserted graph |
+| $A^k$ — paths of exactly $k$ steps | $T_P^k(\emptyset)$ — facts needing $k$ rule rounds |
+| $A^*$ — all paths | $\mathrm{lfp}(T_P)$ — the closure |
+| Halt when $A^{k+1}$ adds nothing | Halt when $G_{n+1} = G_n$ |
+
+> ℹ **Analogy, not identity.** Forward chaining is more general than pure transitive closure,
+> because a rule can join several patterns at once, not just connect two edges. But the
+> intuition "iterate until nothing new appears" is common to both — and it explains why engines
+> can use sparse matrix multiplication to speed up relational inference.
+
+### Frame-by-Frame Visualization: Forward Chaining on the Mechanism KG
+
+Let us watch this mechanism across four frames on the very mechanism ontology built in
+Chapter 4. The source graph contains three asserted triples; the three Datalog rules below are
+defined over that ontology:
+
+$$r_1:\quad \text{hasInput}(m, q) \leftarrow \text{hasApplication}(m, a) \land \text{differentiand}(a, q)$$
+
+$$r_2:\quad \text{hasReferenceVariable}(m, v) \leftarrow \text{hasApplication}(m, a) \land \text{withRespectTo}(a, v)$$
+
+$$r_3:\quad \text{type}(m, \text{RateOfChangeMechanism}) \leftarrow \text{type}(m, \text{Mechanism}) \land \text{hasInput}(m, \_) \land \text{hasReferenceVariable}(m, \_)$$
+
+> ℹ **$r_3$ is the Datalog form of the DL definition in §4.13.** In Chapter 4,
+> $\text{RateOfChangeMechanism} \equiv \text{Mechanism} \sqcap \exists\text{hasApplication}.\text{DerivativeApplication}$.
+> Here we rewrite it as a forward-chaining rule: a mechanism is classified as a
+> RateOfChangeMechanism when it has both `hasInput` and `hasReferenceVariable` — the two
+> properties every DerivativeApplication supplies (via `differentiand` and `withRespectTo`).
+> The same knowledge, two representation styles.
+
+**Frame 0 — Source graph $G_0$** (three asserted triples):
+
+```turtle
+ex:rateOfChange_1            ex:hasApplication    ex:derivativeApplication_1 .
+ex:derivativeApplication_1   ex:differentiand     ex:position_1 .
+ex:derivativeApplication_1   ex:withRespectTo     ex:time_1 .
+```
+
+**Frame 1 — First pass $G_1 = T_P(G_0) \cup G_0$:** $r_1$ and $r_2$ fire on $G_0$; two newly
+inferred triples appear (highlighted in red):
+
+```turtle
+ex:rateOfChange_1   ex:hasInput                ex:position_1 .   # new — from r_1
+ex:rateOfChange_1   ex:hasReferenceVariable    ex:time_1 .       # new — from r_2
+```
+
+**Frame 2 — Second pass $G_2 = T_P(G_1) \cup G_1$:** $r_3$ fires because `hasInput` and
+`hasReferenceVariable` have just appeared; one new triple is added (highlighted in blue):
+
+```turtle
+ex:rateOfChange_1   rdf:type   ex:RateOfChangeMechanism .        # new — from r_3
+```
+
+**Frame 3 — Fixpoint $G_3 = T_P(G_2) \cup G_2$:** a pass over the rules on $G_2$ produces no
+new triple; $G_3 = G_2$. The system halts, and the closure $\mathrm{lfp}(T_P)$ is materialized.
+
+![Frame-by-frame forward chaining on the Mechanism KG: $G_0 \to G_1 \to G_2 \to G_3 = G_2$
+(fixpoint). Frame 0: three asserted triples. Frame 1: two inferred triples (red). Frame 2: one
+inferred triple (blue). Frame 3: no new triple → halt.](figures/generated/ch05-frame-by-frame.pdf)
+
+> 🖊 **Self-check:** In Frame 2, why could $r_3$ not have fired already in Frame 0? Point to
+> the ground fact that is missing from $G_0$ so that $r_3$'s body is not yet satisfied. (Hint:
+> look at the two positions `hasInput(m, _)` and `hasReferenceVariable(m, _)`.)
+
 ### Monotonicity
 
 Forward chaining works correctly thanks to **monotonicity**. An inference regime is monotonic
@@ -515,6 +629,58 @@ For the same question "Place(Hanoi)?", backward chaining:
 > ⚠ **Note:** This is a mental model of computation strategies, not an exact description of
 > every OWL reasoner. Real Description Logic reasoners typically use specialized
 > tableau/hypertableau/classification algorithms, not simply a forward or backward rule engine.
+
+### How Engines Actually Run: the RETE Network
+
+So far we have described forward chaining as a loop that "scans every rule, every
+substitution". That is the semantic definition; a naive implementation, however, is extremely
+slow: each round re-examines every rule against every combination of triples, at a cost of
+about $O(|R| \cdot |G|^{k})$ where $k$ is the number of patterns in a body. Most of that work
+is repeated — the parts of a body that matched last round are still true.
+
+**RETE** (Forgy, 1982 [@forgy-rete-1982]) fixes exactly this by **keeping the intermediate
+matches** instead of recomputing them from scratch. The core idea: *trade memory for speed*.
+
+A RETE network consists of:
+
+- **Alpha network (one-input nodes):** filters *within a single pattern* — e.g. "is the subject
+  an IRI?", "is the predicate equal to `ex:capitalOf`?". Each pattern of a rule goes through its
+  own alpha path; the survivors are the filtered **Working Memory Elements (WMEs)**.
+- **Beta network (two-input nodes):** **joins** variable bindings across different patterns and
+  **caches** the resulting intermediate tuples in **beta memory**. When a new WME arrives, it
+  only needs to be joined with the cached part, not recomputed entirely.
+- **Agenda + conflict resolution:** when a rule matches completely it is placed on the **agenda**
+  (a priority queue); **conflict resolution** chooses which rule fires first when several are
+  simultaneously ready.
+
+> ℹ **Why is RETE fast?** It exploits **monotonicity**: once half of a join is correct, adding a
+> new fact only needs to *extend* the join, never to undo the old part. Beta memory is the
+> physical embodiment of the observation that "$\mathrm{lfp}(T_P)$ is order-independent" (§5.2)
+> — the engine keeps every intermediate match and computes only the delta.
+
+The trade-off: RETE is fast on large rule sets but **consumes memory** to cache all the
+intermediate bindings.
+
+### In-Memory RETE vs Parallel Incremental Datalog
+
+Two families of modern engines reflect two different points on the trade-off curve:
+
+| | In-memory RETE (Drools, Apache Jena) | Parallel incremental Datalog (RDFox) |
+|---|---|---|
+| **Nature** | Alpha/beta network caching bindings | Datalog materialization over a compressed graph |
+| **Optimized for** | Many rules, rich conditions | Large RDF graphs, continuous updates |
+| **Updates** | Incremental per WME | **Incremental, parallel, lock-free** |
+| **Source** | Forgy 1982 [@forgy-rete-1982] | Motik et al. 2014 [@motik-rdfox-2014] |
+
+**RDFox** represents the second direction: it materializes Datalog programs directly over a
+compressed, columnar, in-memory RDF graph, and — unlike sequential RETE — performs **parallel,
+lock-free incremental materialization** [@motik-rdfox-2014]. When a schema changes, it recomputes
+only the affected part of the closure rather than rebuilding from scratch. This is why RDFox
+handles large, frequently-updated graphs while keeping latency low.
+
+> ℹ **One semantics, many implementations.** Whether RETE or parallel Datalog, both must return
+> exactly $\mathrm{lfp}(T_P)$ — the uniqueness of the fixed point (§5.2) is the contract that
+> lets engines compete on speed without changing the result.
 
 ## 5.6 SHACL: Validating Data with Shapes
 
@@ -979,6 +1145,40 @@ name", but entirely different semantics.
 > SHACL cannot replace an ontology for inferring knowledge. A complete knowledge system usually
 > needs both.
 
+### SHACL Is a Non-Monotonic Constraint Language: Local Closed-World Semantics
+
+The table above shows that a shape *checks* rather than *infers*. But there is a deeper
+property that explains **why** SHACL behaves differently from an ontology: SHACL uses **Local
+Closed-World Semantics (LCWA)** and is therefore a **non-monotonic** constraint language.
+
+- **Open World (OWA) — ontology side:** not seeing a triple `hasOperation` ⇒ *unknown* whether
+  it exists; an unnamed witness might exist (§4.8, §5.10). Adding data never retracts a
+  previously derived conclusion — **monotonic**.
+- **Local Closed-World (LCWA) — SHACL side:** for each focus node, what is *absent* from the
+  graph is treated as *non-existent* for that node. Missing a value node ⇒ immediate violation.
+
+The direct consequence: **adding a triple can turn a conforming graph into a violating one.**
+Consider a shape with `sh:maxCount 1` on `ex:hasReferenceVariable`:
+
+```turtle
+# Before: conforms
+ex:roc_1  ex:hasReferenceVariable  ex:time_1 .
+
+# After ADDING one more triple: VIOLATION (exceeds maxCount 1)
+ex:roc_1  ex:hasReferenceVariable  ex:time_1 .
+ex:roc_1  ex:hasReferenceVariable  ex:temp_2 .
+```
+
+The behaviour "adding information retracts an old conclusion" is exactly **non-monotonicity**
+— the opposite of the forward chaining we saw in §5.2. This is the same mechanism as
+*negation as failure* (§5.16): SHACL interprets "not found" as "does not exist", and that
+interpretation is non-monotonic.
+
+> ℹ **Why "local"?** SHACL does not close the whole world blindly like classical CWA (Reiter
+> 1978). It only closes *within the scope of each focus node and each constraint*: absence is
+> counted as a violation only when a specific shape demands presence. Outside that scope, OWA
+> still applies.
+
 ## 5.11 Inference Before Validation: Interaction Between the Two Pipelines
 
 The result of SHACL validation depends on which graph is fed into the validator. This is an
@@ -1346,6 +1546,84 @@ The safe, function-free Horn rules of §5.2 are precisely **Datalog**; the surve
 Recursive Query Processing* [@datalog-survey-2013] is the standard reference for their fixpoint
 semantics and evaluation strategies.
 
+### Datalog and Its Three Equivalent Semantics
+
+Drop function symbols (function-free) and require every head variable to appear in the body
+(**safeness** / range-restriction), and a Horn rule becomes a **Datalog** rule:
+
+$$A \leftarrow B_1, \dots, B_n$$
+
+where $A$ (the head) and each $B_i$ (the body) are atomic formulas $P(t_1, \dots, t_k)$.
+Safeness guarantees each substitution only uses values already present in the graph, so forward
+chaining terminates (§5.2).
+
+Datalog has **three ways of defining "what program $P$ means over database $D$"**, and the
+foundational theorem of Datalog theory says all three give **the same set of facts**
+[@abiteboul-foundations-1995]:
+
+1. **Model-theoretic semantics:** the meaning of $P$ is the **minimal Herbrand model**
+   $\mathcal{M}(P)$ — the intersection of every Herbrand model that satisfies $P$ and contains
+   $D$. (A *Herbrand model* is a truth assignment to all ground atoms under which every rule of
+   $P$ holds.)
+2. **Proof-theoretic semantics:** the set of every ground fact **derivable** by a finite proof
+   tree (backward induction through the rules).
+3. **Fixpoint semantics:** $\mathrm{lfp}(T_P)$ — exactly the forward-chaining closure of §5.2.
+
+$$\mathcal{M}(P) \;=\; \{\text{derivable facts}\} \;=\; \mathrm{lfp}(T_P)$$
+
+> ℹ **Why three that are one?** This is the Knaster–Tarski theorem combined with the Horn
+> property: for monotone Horn rules, "true in the least model", "has a proof", and "reached by
+> iterating $T_P$" coincide. This lets us *choose* the convenient angle: prove correctness with
+> models, implement with the fixpoint, explain with proof trees.
+
+**Complexity.** Datalog has **PTIME-complete data complexity** (fixed program, growing data)
+and **EXPTIME-complete combined complexity** (program and data both varying)
+[@abiteboul-foundations-1995]. The large gap between the two numbers explains why Datalog is
+practical: once the rule set is fixed, inference cost is only polynomial in the data size.
+
+### Classical Negation vs Negation as Failure (NAF)
+
+Pure Horn/Datalog has **no negation**. The moment we want to say "there is no evidence for $q$,
+so conclude $\neg q$", we face two fundamentally different kinds of negation:
+
+| | Classical negation $\neg$ | Negation as Failure $\sim$ (`not`) |
+|---|---|---|
+| **World assumption** | Open (OWA) | Closed (CWA) |
+| **When we conclude $\neg q$ / $\sim q$** | Requires a proof of $\neg q$ or a disjointness axiom | Merely because $q$ **cannot be proven** from the current data |
+| **Monotonic?** | **Yes** — adding facts never retracts a conclusion | **No** — adding a fact can make $q$ provable, retracting $\sim q$ |
+
+The **non-monotonicity** of NAF is a double-edged sword. It enables "if nothing says otherwise,
+treat it as false" reasoning (very natural for database-style data), but it breaks the
+uniqueness of the model. The classic example — a program that is **not stratified**:
+
+$$p \leftarrow \text{not } q \qquad\qquad q \leftarrow \text{not } p$$
+
+This program has **two** minimal models: $\{p\}$ and $\{q\}$. Which should a system pick? No
+monotonic basis prefers one — the result depends on execution order, and the semantics becomes
+ambiguous.
+
+### Stratified Datalog
+
+The standard remedy is **stratification**: partition the program's predicates into ordered
+layers $P_1, \dots, P_n$ such that if a rule in stratum $i$ has a negated body atom
+$\text{not } q$, then every rule defining $q$ must live in a **strictly lower** stratum $j < i$.
+In other words: *never negate a predicate that is being defined at the same time or higher up.*
+
+> ℹ **Theorem:** Every stratified Datalog program has a **unique minimal model** (the **perfect
+> model**). We compute it by running the fixpoint of stratum 1, then stratum 2 (using stratum
+> 1's settled result to evaluate `not`), ... up to stratum $n$. Because each stratum only
+> negates *already-settled* predicates, non-monotonicity no longer causes ambiguity.
+
+Stratification **is not always achievable** — the example $p \leftarrow \text{not } q,\; q
+\leftarrow \text{not } p$ above has a negation cycle and cannot be stratified. Then one needs a
+stronger semantics (stable models / answer set programming), outside this chapter's scope.
+
+Back to SHACL: precisely because SHACL uses LCWA (§5.10) — a local form of NAF — it is
+**non-monotonic**. The constraints `sh:minCount`, `sh:maxCount`, `sh:not` all interpret "not
+found" as "does not exist", so adding data can flip the verdict. SHACL avoids the
+$p \leftrightarrow q$ ambiguity because it **does not infer**: a shape only checks a settled
+graph, never defining predicates recursively against each other.
+
 ### SWRL: Extending OWL with Rules
 
 SWRL (Semantic Web Rule Language) extends OWL by allowing OWL class/property expressions in the
@@ -1422,6 +1700,41 @@ built. Four fully worked examples:
 4. **Repair governance:** When SHACL reports a candidate missing `ex:hasOutput`, the candidate
    repairs (add from source evidence, add a placeholder, remove, change the shape) have different
    knowledge consequences; the decision belongs to domain governance, not to the engine (§5.12).
+
+### Two-Stage Pipeline: Inference Then Validation
+
+This running example can now be packaged into a complete **two-stage pipeline** on the
+mechanism graph — exactly Architecture B from §5.11:
+
+**Stage 1 — Inference (Datalog / Horn rules).** Run the three rules from §5.2 to materialize
+derived properties and classification on `rateOfChange_1`:
+
+$$\text{hasInput}(m, q) \leftarrow \text{hasApplication}(m, a) \land \text{differentiand}(a, q)$$
+
+$$\text{hasReferenceVariable}(m, v) \leftarrow \text{hasApplication}(m, a) \land \text{withRespectTo}(a, v)$$
+
+Result: `rateOfChange_1` gains the two edges `hasInput position_1` and `hasReferenceVariable
+time_1`, and is then given `rdf:type RateOfChangeMechanism`.
+
+**Stage 2 — Validation (SHACL).** A `sh:NodeShape` checks the *enriched* graph from Stage 1:
+
+```turtle
+ex:RateOfChangeMechanismShape a sh:NodeShape ;
+    sh:targetClass ex:RateOfChangeMechanism ;
+    sh:property [ sh:path ex:hasOperation ;
+                  sh:minCount 1 ; sh:class ex:DerivativeOperation ] ;
+    sh:property [ sh:path ex:hasInput ;
+                  sh:minCount 1 ; sh:class ex:Quantity ] ;
+    sh:property [ sh:path ex:hasReferenceVariable ;
+                  sh:minCount 1 ; sh:maxCount 1 ; sh:class ex:ReferenceVariable ] .
+```
+
+> ⚠ **Why the order "infer before validate" is critical.** If Stage 2 ran on the raw graph
+> without Stage 1, the shape would report a **false violation**: `hasInput` and
+> `hasReferenceVariable` were then only *implicit*, so `sh:minCount 1` would fire even though
+> the data is semantically fine. Only after Stage 1 materializes those two edges does Stage 2 see
+> them and produce the correct verdict. This is the practical instantiation of §5.11 (the
+> effective validation graph depends on what has been inferred before validation).
 
 > ⚠ **Design note:** When building a mechanism ontology, do not try to express everything with OWL
 > axioms. Some constraints (minimum counts, datatypes, patterns) are better expressed with SHACL.
@@ -1661,6 +1974,15 @@ evidence, provenance, and time*.
 | Entailment Regime | Determines the inference strength at query time | §5.14 |
 | Graph Repair | Deciding whether to fix the data or the shape, based on governance | §5.12 |
 | Ground Triple (fact) | A triple with no variables, ready in the graph | §5.2 |
+| Immediate consequence operator $T_P$ | $T_P(I)$ = every ground head whose body matches in $I$ | §5.2 |
+| Fixed-point semantics | Program meaning = $\mathrm{lfp}(T_P)$ (Knaster–Tarski) | §5.2 |
+| Minimal Herbrand Model | $\mathcal{M}(P)$ = intersection of all Herbrand models satisfying $P$ and containing $D$ | §5.16 |
+| Datalog | Function-free, safe Horn rules; three equivalent semantics | §5.16 |
+| Classical negation vs NAF ($\neg$ vs $\sim$) | $\neg$ under OWA (monotonic) vs `not` under CWA (non-monotonic) | §5.16 |
+| Stratified Datalog | Lower strata settle first; yields a unique perfect model | §5.16 |
+| Local Closed-World Semantics (LCWA) | SHACL: absence in the graph = non-existence for a focus node | §5.10 |
+| RETE algorithm | Alpha/beta network caching intermediate matches; memory for speed | §5.5 |
+| Alpha / Beta network | Filter within one pattern / join bindings across patterns | §5.5 |
 
 ## Further Reading
 
@@ -1670,3 +1992,6 @@ evidence, provenance, and time*.
 - Hogan et al., *Knowledge Graphs*, Chapter 7: Inductive Knowledge [@hogan-knowledge-graphs] — inductive and probabilistic inference.
 - OWL 2 RL [@w3c-owl2-profiles] — the OWL RL profile and the forward-chaining mechanism.
 - OWL 2 Direct Semantics [@w3c-owl2-direct-semantics] — OWL 2 semantics for soundness/completeness.
+- Abiteboul, Hull & Vianu, *Foundations of Databases* [@abiteboul-foundations-1995] — the canonical source for Datalog, its three semantics, and complexity.
+- Forgy, *Rete: A Fast Algorithm for the Many Pattern/Many Object Pattern Match Problem* [@forgy-rete-1982] — the original RETE algorithm.
+- Motik et al., *Parallel Materialisation of Datalog Programs in Centralised, Main-Memory RDF Systems* [@motik-rdfox-2014] — parallel Datalog materialization (RDFox).

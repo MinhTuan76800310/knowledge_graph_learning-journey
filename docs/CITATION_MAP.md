@@ -48,6 +48,9 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | RIF-01 | `w3c-rif-core` | RIF Core Dialect |
 | SOUFFLE-01 | `souffle` | Soufflé: On Synthesis of Program Analyzers |
 | DATALOG-01 | `datalog-survey-2013` | Datalog and Recursive Query Processing |
+| DBFOUND-01 | `abiteboul-foundations-1995` | Foundations of Databases |
+| RETE-01 | `forgy-rete-1982` | Rete: A Fast Algorithm for the Many Pattern/Many Object Pattern Match Problem |
+| RDFOX-01 | `motik-rdfox-2014` | Parallel Materialisation of Datalog Programs in Centralised, Main-Memory RDF Systems |
 | OWLRL-01 | `owlrl` | OWL-RL: RDF Closure Rules (RDFS + OWL 2 RL) |
 | PYSHACL-01 | `pyshacl` | pySHACL: A Pure Python SHACL Validator |
 | SHCTS-01 | `shacl-cts` | SHACL Test Suite (W3C Data Shapes) |

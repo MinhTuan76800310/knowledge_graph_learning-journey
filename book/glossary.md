@@ -16,6 +16,8 @@ tên/giải thích tiếng Việt, và định nghĩa ngắn dùng trong cuốn 
 **Alias (Bí danh).** Một tên khác cùng biểu thị một thực thể. Khác với định danh chính
 tắc, alias không được hệ thống chọn làm tên quy chiếu duy nhất.
 
+**Alpha/Beta network (Mạng alpha/beta).** Hai tầng của mạng RETE (§5.5): nút alpha một đầu vào lọc ràng buộc *trong* một mẫu; nút beta hai đầu vào nối (join) ràng buộc *giữa* các mẫu và cache bộ ghép trung gian trong beta memory. Cơ chế "memory-for-speed": giữ lại các khớp từng phần để không tính lại từ đầu khi dữ liệu thay đổi.
+
 **Answer claim (Claim con của câu trả lời).** Câu trả lời phân rã thành các claim con, mỗi claim vết được về bằng chứng/đường cấu trúc/claim được chấp nhận. Cho phép trích dẫn và đối chiếu theo từng câu (Chương 9).
 
 **Answer generation (Sinh câu trả lời).** Tầng ánh xạ (câu hỏi, Gói bằng chứng) thành bản nháp câu trả lời với bốn kỷ luật: không thêm quan hệ ngoài gói, tách bạch phát ngôn, trình bày mâu thuẫn, tự kiểm tra. Văn bản trôi chảy không có nghĩa đúng (Chương 9).
@@ -74,6 +76,8 @@ làm tên quy chiếu của một thực thể; các tên khác được giữ n
 tạp: giao (⊓), hợp (⊔), phủ định (¬), hạn chế tồn tại (∃R.C), hạn chế phổ quát (∀R.C).
 Mỗi biểu thức có ngữ nghĩa tập hợp chính xác trong diễn giải.
 
+**Classical negation (Phủ định cổ điển).** Ký hiệu ¬, hoạt động dưới Open World Assumption và đơn điệu: ¬P đúng khi P sai trong mọi mô hình; thêm thông tin không bao giờ rút lại một kết luận ¬P đã suy ra. Khác phủ định dạng thất bại (NAF). Trong OWL/RDFS, ¬ là phủ định lớp/thuộc tính model-theoretic, không phải "không thấy trong dữ liệu" (Chương 5).
+
 **Classification (Phân lớp).** Bài toán gán nhãn ứng viên cho một thực thể/ứng dụng dựa trên mô hình học. Đầu ra là xác suất ứng viên, không phải khẳng định kiểu; phải qua quản trị trước khi ghi vào đồ thị.
 
 **Clustering (Phân cụm).** Gom nhóm khám phá dựa trên biểu diễn/đặc trưng, không có nhãn. Cụm không phải lớp ontology. Phân cụm chỉ gợi ý giả thuyết cơ chế, không phải khẳng định.
@@ -130,6 +134,8 @@ ASCII-art (`MATCH ... RETURN`). Cypher tương thích phần lớn với GQL nh�
 nghĩa hình thức về ý nghĩa. Trả lời được "có gì" nhưng chưa trả lời được "nghĩa là gì".
 
 **Data leakage (Rò rỉ dữ liệu).** Thông tin từ tập kiểm lọt vào quá trình huấn luyện, làm điểm đánh giá lạc quan giả tạo. Các kiểu: trùng lặp, quan hệ nghịch đảo, đường đi, thực thể, thời gian, nguồn.
+
+**Datalog.** Ngôn ngữ truy vấn/khẳng định dạng luật Horn an toàn, không hàm, không có số hạng mới: head(v) ← body₁(v) ∧ ... ∧ bodyₙ(v) với biến trong đầu phải xuất hiện trong thân (safety/range-restriction). Ba ngữ nghĩa tương đương: mô hình Herbrand nhỏ nhất, chứng minh giới hạn, điểm bất động nhỏ nhất của T_P. Độ phức tạp: PTIME theo dữ liệu, EXPTIME kết hợp. Là nền tảng của các engine suy diễn tiến hiệu quả (Chương 5).
 
 **Deduction (Suy diễn).** Quy tắc chung + tiền đề → hệ quả tất yếu. Bảo toàn chân lý. Không sinh tri thức mới mà chỉ làm tường minh những gì đã ngầm chứa. Khác quy nạp (giả thuyết có thể sai).
 
@@ -242,6 +248,8 @@ minh thống nhất ngữ nghĩa, khác định danh không chứng minh khác t
 nguồn có biểu thị cùng một thực thể hay không, đi từ ứng viên đồng nhất qua bằng chứng và
 xem xét đến khẳng định được chấp nhận. Đồng nghĩa thực hành với record linkage.
 
+**Immediate consequence operator $T_P$ (Toán tử hệ quả tức thời).** Với tập sự kiện ground $I$, $T_P(I)$ = tập mọi head ground mà thân đã khớp trong $I$: $T_P(I) = \{\theta(\text{head}(r)) \mid r \in P,\ \theta(\text{body}(r)) \subseteq I\}$. Đơn điệu trên vũ trụ ground hữu hạn, nên theo Knaster–Tarski tồn tại điểm bất động nhỏ nhất $\mathrm{lfp}(T_P) = \bigcup_{k\ge0} T_P^k(\emptyset)$; lặp tới nó chính là forward chaining (Chương 5).
+
 **Index (Chỉ mục truy xuất).** Cấu trúc truy cập dẫn xuất từ KG để tìm nhanh (chuỗi token hóa, vector nhúng, nhãn, lân cận). Không phải KG, không phải Sổ cái; có thể tụt hậu so với trạng thái hiện tại (Chương 9).
 
 **Induction / Quy nạp (induction).** Tổng quát hóa mẫu từ các quan sát, sinh ra giả thuyết có thể sai. Không phải suy diễn (bảo toàn chân lý). Tri thức quy nạp bao gồm cả mô hình mã hóa mẫu lẫn dự đoán của mô hình.
@@ -285,7 +293,11 @@ bộ ba.
 
 **Living Architecture (Kiến trúc sống).** Mô hình hệ thống tri thức như một tập các vòng phản hồi (thu nhận, học, truy xuất, giám sát, bảo trì, quản trị) thay vì pipeline tuyến tính. Mô hình kỹ thuật của sách, không phải sản phẩm (Chương 10).
 
+**Least fixed point (Điểm bất động nhỏ nhất).** Theo định lý Knaster–Tarski: $T_P$ đơn điệu trên dàn đầy đủ (tập con của ground universe) → có điểm bất động nhỏ nhất $\mathrm{lfp}(T_P) = \bigcup_{k\ge0} T_P^k(\emptyset)$. $\mathrm{lfp}(T_P)$ chính là mô hình Herbrand nhỏ nhất $\mathcal{M}(P)$ và là kết quả của forward chaining. Mọi quy tắc đều đã được áp dụng hết (Chương 5).
+
 **Living Knowledge System (Hệ thống tri thức sống).** Một tiến trình vận hành liên tục: thu nhận, học, truy xuất, giám sát, bảo trì và quản trị cùng vận động; không phải cơ sở dữ liệu tĩnh (Chương 10).
+
+**Local Closed-World Semantics (Ngữ nghĩa thế giới đóng cục bộ).** SHACL đọc sự vắng mặt của một bộ ba *trong đồ thị dữ liệu đang xét* như "không thỏa ràng buộc", nhưng không giả định đóng thế giới toàn cục như CWA cổ điển. Hệ quả: thêm bộ ba có thể lật kết quả từ conform sang violate (vd `sh:maxCount`), nên SHACL **phi đơn điệu** — khác forward chaining đơn điệu (Chương 5).
 
 **Lost in the Middle.** Hiệu ứng thực nghiệm: mô hình ngôn ngữ dùng thông tin ở đầu/cuối cửa sổ ngữ cảnh đáng tin cậy hơn thông tin ở giữa. Hệ quả kỹ thuật: thứ tự lắp ráp ngữ cảnh ảnh hưởng chất lượng trả lời (Chương 9).
 
@@ -297,6 +309,8 @@ không phải thao tác tính toán). Có thể không khả thi với ontology 
 query-time reasoning (§5.4).
 
 **Message passing (Truyền thông điệp).** Cơ chế tính toán của GNN: message → aggregate → update. Mỗi nút gửi thông điệp đến lân cận, tập hợp chúng, và cập nhật biểu diễn. Là một khung, không phải một thuật toán.
+
+**Minimal Herbrand model (Mô hình Herbrand nhỏ nhất).** Giao của mọi mô hình Herbrand của chương trình $P$ chứa các sự kiện đã khẳng định $D$. Với Datalog an toàn không hàm, $\mathcal{M}(P)$ trùng với $\mathrm{lfp}(T_P)$ và với tập mọi sự kiện chứng minh được — ba ngữ nghĩa tương đương. Là nền tảng ngữ nghĩa model-theoretic của bao đóng suy diễn (Chương 5).
 
 **Model (Mô hình).** Diễn giải thỏa mãn tất cả các tiên đề trong ontology. Tập hợp các mô hình
 xác định ngữ nghĩa của ontology: suy diễn = đúng trong mọi mô hình.
@@ -328,6 +342,8 @@ không phải ngữ nghĩa hình thức có sẵn.
 **nDCG (Normalized Discounted Cumulative Gain).** Độ đo chất lượng xếp hạng với độ liên quan bậc thang, chiết khấu theo vị trí log, chuẩn hóa bằng thứ tự lý tưởng. Đo chất lượng xếp hạng, không phải độ đúng hay độ tin cậy (Chương 9).
 
 **Negative sampling (Lấy mẫu âm).** Thủ thuật huấn luyện: tạo bộ ba nhiễu bằng cách thay thế đầu/cuối của bộ ba đúng. Là giả định kỹ thuật, không phải khẳng định bộ ba đó sai. Thiếu ≠ sai (OWA).
+
+**Negation as Failure — NAF (Phủ định dạng thất bại).** Ký hiệu `not` / $\sim$ trong Datalog có phủ định: $\text{not } P$ đúng khi $P$ **không chứng minh được** từ dữ liệu (đọc theo CWA). Phi đơn điệu: thêm sự kiện có thể làm một kết luận chứa NAF trở nên sai. Không nhất quán khi có vòng lặp phủ định không phân tầng (vd `p ← not q`, `q ← not p` → hai mô hình nhỏ nhất). Cần stratification để có mô hình duy nhất (Chương 5).
 
 **Never-Done (Hệ thống không bao giờ 'xong').** Tri thức sống liên tục cần duy trì: tái xác minh, tái đánh giá, phân xử mâu thuẫn. 'Xong' là ảo tưởng của hệ tĩnh (Chương 10).
 
@@ -411,6 +427,8 @@ thêm thông tin cho nó.
 
 **Reranking (Tái xếp hạng).** Hai giai đoạn: tầng một rộng/rẻ lấy túi ứng viên, tầng hai chấm từng cặp (question, candidate) cho sắc. Không cứu được recall của tầng một (Chương 9).
 
+**RETE algorithm (Thuật toán RETE).** Thuật toán khớp mẫu nhiều-luật của Forgy (1982) [RETE-01]: xây mạng các nút alpha (lọc trong một mẫu) và beta (nối giữa các mẫu, cache bộ ghép) để tái sử dụng khớp từng phần khi dữ liệu thay đổi. WME (Working Memory Element) là đơn vị dữ liệu vào mạng; agenda + conflict resolution quyết định luật nào fire. Tính cùng bao đóng $\mathrm{lfp}(T_P)$ như forward chaining naive nhưng nhanh hơn bằng đánh đổi bộ nhớ (Chương 5).
+
 **Retirement (Nghỉ hưu).** Đưa tri thức ra khỏi dòng hoạt động với bản ghi có quản trị; nghỉ hưu ≠ xóa — lịch sử niềm tin được giữ (Chương 10).
 
 **Retrieval plan (Kế hoạch truy xuất).** Bộ có thứ tự các phép truy xuất với giới hạn và điều kiện dừng, sinh từ intent + thực thể + phân rã. Kế hoạch chạy xong ≠ đã lấy đủ bằng chứng (Chương 9).
@@ -479,6 +497,8 @@ tác vụ suy luận.
 **Staleness (Cũ / ứ đọng).** Tình trạng một claim còn đó nhưng không còn được bằng chứng hiện tại hỗ trợ. Cũ ≠ sai: có thể vẫn đúng nhưng chưa được kiểm chứng lại (Chương 10).
 
 **Stopping condition (Điều kiện dừng).** Chính sách kết thúc truy xuất lặp: đủ ô bằng chứng, không có thông tin mới, dưới ngưỡng liên quan, hết ngân sách, mâu thuẫn cần con người. Dừng-tìm ≠ đầy đủ (Chương 9).
+
+**Stratified Datalog (Datalog phân tầng).** Chương trình Datalog có NAF được phân tầng khi tồn tại ánh xạ $s$ từ vị từ sang số nguyên sao cho nếu $Q$ xuất hiện trong phạm vi `not` của một luật có head $P$, thì $s(Q) < s(P)$. Khi đó chương trình có **perfect model** duy nhất, tính được bằng cách lặp từng tầng theo thứ tự tăng dần. Không phân tầng được → mơ hồ ngữ nghĩa (Chương 5).
 
 **Structural similarity (Tương tự cấu trúc).** Đánh giá đa chiều hai cấu trúc chia sẻ mẫu vai trò, thao tác, kiểu đối số. Tương tự ≠ đồng nhất, ≠ owl:sameAs.
 

@@ -310,3 +310,47 @@ This document is the semantic contract against which `book/chapter05.md` is revi
   - MUST NOT say SHACL determines the correct repair.
   - MUST NOT treat repair as purely syntactic.
   - MUST NOT equate passing validation with becoming true.
+
+## Datalog and Its Three Equivalent Semantics
+
+- **Source:** DBFOUND-01 (Abiteboul, Hull & Vianu, *Foundations of Databases*, 1995); DATALOG-01 (Green et al. 2013); HOGAN-CH5
+- **Formal meaning:** A Datalog program is a finite set of safe, function-free Horn rules $A \leftarrow B_1,\dots,B_n$ (every head variable occurs in the body). It has three semantics that provably coincide: (1) model-theoretic — the minimal Herbrand model $\mathcal{M}(P)$, the intersection of all Herbrand models of $P$ containing the extensional database $D$; (2) proof-theoretic — the set of facts with a finite derivation; (3) fixpoint — $\mathrm{lfp}(T_P)$, the least fixed point of the immediate consequence operator. Data complexity is PTIME-complete; combined complexity is EXPTIME-complete.
+- **Book wording:** "Các quy tắc Horn an toàn, không hàm chính là Datalog. Ba cách nhìn — mô hình nhỏ nhất, chứng minh được, và điểm bất động của $T_P$ — cho cùng một tập sự kiện. Chi phí theo dữ liệu là PTIME, theo chương trình kết hợp dữ liệu là EXPTIME."
+- **Dangerous simplification:** Presenting the three-way equivalence as holding for arbitrary first-order logic, or for Datalog with function symbols or unsafe rules. Conflating data complexity with combined complexity.
+- **MUST NOT infer:**
+  - MUST NOT claim the three semantics coincide outside safe, function-free Datalog.
+  - MUST NOT state the practical "cheap once rules are fixed" claim on combined complexity; it rests on data complexity.
+  - MUST NOT equate the minimal Herbrand model with an OWL/DL model-theoretic interpretation (different frameworks).
+
+## Monotonicity vs Negation as Failure and Stratification
+
+- **Source:** DBFOUND-01; REITER-CWA-01 (Reiter 1978); HOGAN-CH5
+- **Formal meaning:** Classical negation ($\neg$) is monotonic and read under OWA: a derived $\neg P$ is never retracted by adding facts. Negation as Failure (`not` / $\sim$) is non-monotonic and CWA-flavored: `not P` holds when $P$ is not derivable, so adding a fact for $P$ can invalidate prior conclusions. Unstratified negation is ambiguous — $p \leftarrow \text{not } q,\ q \leftarrow \text{not } p$ has two minimal models. A program is stratified when a level map $s$ assigns each predicate an integer such that any predicate under `not` in a rule with head $P$ satisfies $s(Q) < s(P)$; every stratified program has a unique perfect model computed stratum by stratum.
+- **Book wording:** "Phủ định cổ điển đơn điệu; phủ định dạng thất bại (`not`) phi đơn điệu. Vòng phủ định không phân tầng tạo mơ hồ. Phân tầng — vị từ bị phủ định phải ở tầng thấp hơn — cho mô hình duy nhất."
+- **Dangerous simplification:** Saying `not` is just classical negation; implying stratification is about the data rather than the program; claiming all Datalog-with-not has a unique model.
+- **MUST NOT infer:**
+  - MUST NOT treat NAF as monotonic or as OWA.
+  - MUST NOT assert a unique model for a non-stratifiable negated program.
+  - MUST NOT say stratification can be fixed by reordering data; it is a property of the rule set.
+
+## SHACL as Non-Monotonic Local-Closed-World Validation
+
+- **Source:** SH-01 (SHACL §2–3); REITER-CWA-01 (context only)
+- **Formal meaning:** SHACL evaluates constraints against the supplied data graph and reads the local absence of triples as constraint failure (e.g. `sh:minCount`, `sh:maxCount`). This is a *local* closed-world reading scoped to the focus node's neighborhood, not the global CWA of a logic program. Consequence: SHACL validation is non-monotonic — adding triples can flip a focus node from conforming to violating (e.g. adding a value that exceeds `sh:maxCount`). This is the opposite of forward chaining, which is monotonic.
+- **Book wording:** "SHACL đọc sự vắng mặt cục bộ trong đồ thị đang xét là vi phạm, nên thêm bộ ba có thể lật kết quả từ phù hợp sang vi phạm. Đây là kiểm tra phi đơn điệu — khác suy diễn tiến đơn điệu."
+- **Dangerous simplification:** Calling SHACL "closed-world OWL"; implying SHACL performs global CWA inference; saying validation is monotonic like entailment.
+- **MUST NOT infer:**
+  - MUST NOT say SHACL derives entailments or that its closed-world reading is the global CWA.
+  - MUST NOT claim adding data can only help conformance.
+  - MUST NOT conflate SHACL's local-closed-world validation with Datalog NAF (different mechanisms, both non-monotonic).
+
+## RETE Pattern Matching
+
+- **Source:** RETE-01 (Forgy 1982); RDFOX-01 (Motik et al. 2014)
+- **Formal meaning:** RETE compiles a rule set into a discrimination network: alpha nodes apply single-pattern (intra-element) conditions; beta nodes perform two-input joins of variable bindings across patterns and cache intermediate tuples in beta memory; working-memory elements (WMEs) flow in; matched rule instantiations go on an agenda resolved by a conflict-resolution strategy. RETE reuses partial matches across data changes (memory-for-speed) and computes the same monotonic closure $\mathrm{lfp}(T_P)$ as naive forward chaining, only faster. RDFox instead evaluates Datalog with parallel, lock-free incremental materialisation over a compressed main-memory graph.
+- **Book wording:** "RETE biên dịch tập luật thành mạng alpha (lọc trong một mẫu) + beta (nối giữa mẫu, cache bộ ghép), tái dùng khớp từng phần — đánh đổi bộ nhớ lấy tốc độ. Nó tính cùng bao đóng như forward chaining, chỉ nhanh hơn. RDFox dùng hướng khác: Datalog tăng dần song song."
+- **Dangerous simplification:** Claiming RETE changes the result; presenting RETE as the only rule-engine strategy; implying parallel evaluation alters semantics.
+- **MUST NOT infer:**
+  - MUST NOT say RETE computes something different from naive forward chaining.
+  - MUST NOT claim RETE is universally best; RDFox-style incremental Datalog is an alternative.
+  - MUST NOT imply parallelism changes the fixpoint; it exploits the order-independence of $\mathrm{lfp}(T_P)$.

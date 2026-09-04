@@ -163,7 +163,7 @@ All mathematical and theoretical explanations in the manuscript must adhere to t
 - [ ] **Ch 1 Revisions:** Add "Vector Fallacy: Why Not Just Embeddings?" head-to-head comparison; Hypergraph formalization ($\mathcal{H} = (V, \mathcal{E})$) and Bipartite Incidence Expansion.
 - [ ] **Ch 2 Revisions:** Add Blank Node First-Order Logic semantics ($\exists x$, lean graphs, homomorphism co-NP/NP-hard), SPARQL Relational Algebra, and Attributed LPG 7-tuple.
 - [ ] **Ch 4 Revisions:** Soften formal logic transition with grounded real-world analogies before DL notation; add Decidability Landscape, N2EXPTIME complexity of $\mathcal{SROIQ}$, and FOL-Rewritability of OWL 2 QL.
-- [ ] **Ch 5 Revisions:** Add Frame-by-Frame Forward Chaining visualization to the fixpoint; formal Datalog 3-way semantics; Classical Negation vs. Negation as Failure (NAF).
+- [x] **Ch 5 Revisions:** Add Frame-by-Frame Forward Chaining visualization to the fixpoint; formal Datalog 3-way semantics; Classical Negation vs. Negation as Failure (NAF).
 - [ ] **Ch 6 Revisions:** Add 2D Bitemporal Coordinate Grid visualization (Valid Time vs. System Time); Dempster-Shafer / Subjective Logic confidence composition; AGM Postulates.
 - [ ] **Ch 8 Revisions:** Add Weisfeiler-Lehman (1-WL) expressive power theorem, RotatE complex rotation algebra, Hyperbolic Poincaré embeddings, and Differentiable Logic.
 - [ ] **Ch 9 Revisions:** Add Evidence Packet "Physical Dossier" diagram; Path Explosion combinatorics ($O(\bar{d}^k)$); Multi-hop Error Cascading ($p^k$); Long-Context vs. GraphRAG trade-off matrix.

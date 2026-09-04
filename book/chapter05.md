@@ -218,6 +218,119 @@ phân cấp lớp trong miền cơ chế.
 > (hay ground fact) là một triple trong đó mọi vị trí đều là IRI hoặc literal cụ thể,
 > không còn biến. Quá trình thay thế biến bằng giá trị cụ thể gọi là **grounding**.
 
+### Toán tử hệ quả tức thời $T_P$ và điểm bất động nhỏ nhất
+
+Công thức truy hồi $G_{i+1} = G_i \cup \{\,\theta(\text{head}(r)) \mid \theta(\text{body}(r))
+\subseteq G_i\,\}$ ở trên là một cách viết cụ thể của một khái niệm tổng quát và mạnh hơn:
+**toán tử hệ quả tức thời** (immediate consequence operator) $T_P$.
+
+Cho một chương quy tắc $P$ (một tập các quy tắc Horn/Datalog) và một tập ground fact $I$,
+$T_P(I)$ là tập mọi ground head có được từ các quy tắc trong $P$ mà body của chúng đã hoàn
+toàn nằm trong $I$:
+
+$$T_P(I) \;=\; \bigl\{\, \theta(\text{head}(r)) \;\big|\; r \in P,\; \theta(\text{body}(r)) \subseteq I \,\bigr\}$$
+
+Forward chaining chính là quá trình lặp $T_P$ bắt đầu từ tập rỗng:
+
+$$\emptyset \;\subseteq\; T_P(\emptyset) \;\subseteq\; T_P^2(\emptyset) \;\subseteq\; T_P^3(\emptyset) \;\subseteq\; \dots$$
+
+**Vì sao dãy này tăng dần?** Vì $T_P$ là **đơn điệu**: nếu $I \subseteq J$ thì $T_P(I)
+\subseteq T_P(J)$ — thêm fact vào không thể làm mất đi body đã khớp. Trên một **vũ trụ ground
+hữu hạn** (chỉ có hữu hạn ground fact có thể tồn tại), một dãy tập hợp đơn điệu tăng bắt
+buộc hội tụ. Đích đến của nó là **điểm bất động nhỏ nhất** (least fixed point) của $T_P$:
+
+$$\mathrm{lfp}(T_P) \;=\; \bigcup_{k \ge 0} T_P^{k}(\emptyset)$$
+
+> ℹ **Cơ sở của phát biểu này là định lý Knaster–Tarski.** Trên lattice các tập ground fact
+> (xếp theo quan hệ chứa), mọi toán tử đơn điệu đều có một điểm bất động nhỏ nhất, và điểm
+> bất động nhỏ nhất đó là giao của tất cả các điểm bất động. Vì $T_P$ đơn điệu, forward
+> chaining luôn hội tụ đúng về $\mathrm{lfp}(T_P)$.
+
+Một hệ quả thực tế quan trọng: $\mathrm{lfp}(T_P)$ **không phụ thuộc vào thứ tự** bạn áp
+dụng các quy tắc. Dù engine chạy quy tắc nào trước, kết quả cuối cùng là duy nhất. Đây là
+điều cho phép ta nói về "bao đóng của $G_0$ dưới $P$" như một đối tượng có định nghĩa tốt,
+và là cơ sở để nhiều engine chạy quy tắc song song (phần RETE và RDFox ở §5.5).
+
+### Cầu nối Đại số tuyến tính: bao đóng bắc cầu qua lũy thừa ma trận kề
+
+Nếu đã học Đại số tuyến tính, bạn có thể nắm cơ chế này qua một tương tự quen thuộc: tính
+**bao đóng bắc cầu** (transitive closure) của một đồ thị bằng lũy thừa ma trận kề.
+
+Gọi $A$ là ma trận kề nhị phân của đồ thị ($A_{ij}=1$ nếu có cạnh $i \to j$). Đường đi độ
+dài $k$ từ $i$ đến $j$ được ghi nhận bởi phần tử $(A^k)_{ij}$. Bao đóng bắc cầu — mọi cặp
+$(i,j)$ có đường đi bất kỳ — là tổng lũy thừa:
+
+$$A^{*} \;=\; A + A^{2} + A^{3} + \dots + A^{k}$$
+
+Lấy cho đến khi $A^{k+1}$ không thêm phần tử khác không nào mới; khi đó tổng đã hội tụ. Đây
+chính là một fixpoint: lặp lũy thừa dừng khi không còn đường đi mới xuất hiện.
+
+| Đại số tuyến tính (bao đóng bắc cầu) | Forward chaining ($T_P$) |
+|---|---|
+| $A$ — cạnh asserted | $G_0$ — đồ thị asserted |
+| $A^k$ — đường đi đúng $k$ bước | $T_P^k(\emptyset)$ — fact cần $k$ vòng quy tắc |
+| $A^*$ — mọi đường đi | $\mathrm{lfp}(T_P)$ — bao đóng |
+| Dừng khi $A^{k+1}$ không thêm gì | Dừng khi $G_{n+1} = G_n$ |
+
+> ℹ **Tương tự, không đồng nhất.** Forward chaining tổng quát hơn bao đóng bắc cầu thuần, vì
+> một quy tắc có thể ghép nhiều mẫu cùng lúc (join) chứ không chỉ nối hai cạnh. Nhưng trực
+> giác "lặp đến khi không còn gì mới" là chung cho cả hai — và nó giải thích vì sao các
+> engine có thể dùng phép nhân ma trận thưa (sparse) để tăng tốc suy diễn quan hệ.
+
+### Trực quan hóa từng khung hình: forward chaining trên Mechanism KG
+
+Hãy quan sát cơ chế này qua bốn khung hình trên chính ontology cơ chế đã xây ở Chương 4.
+Đồ thị gốc chứa ba triple khẳng định; ba quy tắc Datalog dưới đây được định nghĩa trên
+ontology đó:
+
+$$r_1:\quad \text{hasInput}(m, q) \leftarrow \text{hasApplication}(m, a) \land \text{differentiand}(a, q)$$
+
+$$r_2:\quad \text{hasReferenceVariable}(m, v) \leftarrow \text{hasApplication}(m, a) \land \text{withRespectTo}(a, v)$$
+
+$$r_3:\quad \text{type}(m, \text{RateOfChangeMechanism}) \leftarrow \text{type}(m, \text{Mechanism}) \land \text{hasInput}(m, \_) \land \text{hasReferenceVariable}(m, \_)$$
+
+> ℹ **$r_3$ là bản Datalog của định nghĩa DL ở §4.13.** Ở Chương 4,
+> $\text{RateOfChangeMechanism} \equiv \text{Mechanism} \sqcap \exists\text{hasApplication}.\text{DerivativeApplication}$.
+> Ở đây ta viết lại nó như một quy tắc suy diễn tiến: một cơ chế được phân loại là
+> RateOfChangeMechanism khi nó có cả `hasInput` lẫn `hasReferenceVariable` — hai thuộc tính
+> mà mọi DerivativeApplication đều cung cấp (qua `differentiand` và `withRespectTo`). Cùng
+> một tri thức, hai hình thức biểu diễn.
+
+**Khung 0 — Đồ thị gốc $G_0$** (ba triple khẳng định):
+
+```turtle
+ex:rateOfChange_1            ex:hasApplication    ex:derivativeApplication_1 .
+ex:derivativeApplication_1   ex:differentiand     ex:position_1 .
+ex:derivativeApplication_1   ex:withRespectTo     ex:time_1 .
+```
+
+**Khung 1 — Lượt áp dụng thứ nhất $G_1 = T_P(G_0) \cup G_0$:** $r_1$ và $r_2$ khớp trên
+$G_0$; hai triple mới suy ra được (tô đỏ):
+
+```turtle
+ex:rateOfChange_1   ex:hasInput                ex:position_1 .   # mới — từ r_1
+ex:rateOfChange_1   ex:hasReferenceVariable    ex:time_1 .       # mới — từ r_2
+```
+
+**Khung 2 — Lượt áp dụng thứ hai $G_2 = T_P(G_1) \cup G_1$:** $r_3$ khớp vì `hasInput` và
+`hasReferenceVariable` vừa xuất hiện; một triple mới suy ra được (tô xanh):
+
+```turtle
+ex:rateOfChange_1   rdf:type   ex:RateOfChangeMechanism .        # mới — từ r_3
+```
+
+**Khung 3 — Điểm bất động $G_3 = T_P(G_2) \cup G_2$:** một lượt áp dụng quy tắc trên $G_2$
+không sinh thêm triple nào; $G_3 = G_2$. Hệ thống dừng, và bao đóng $\mathrm{lfp}(T_P)$ đã
+được vật chất hóa.
+
+![Forward chaining từng khung hình trên Mechanism KG: $G_0 \to G_1 \to G_2 \to G_3 = G_2$
+(fixpoint). Khung 0: ba triple khẳng định. Khung 1: hai triple suy ra (tô đỏ). Khung 2: một
+triple suy ra (tô xanh). Khung 3: không triple mới → dừng.](figures/generated/ch05-frame-by-frame.pdf)
+
+> 🖊 **Tự kiểm tra:** Ở khung 2, vì sao $r_3$ không thể khớp ngay từ khung 0? Hãy chỉ ra
+> ground fact nào còn thiếu trong $G_0$ khiến body của $r_3$ chưa thỏa. (Gợi ý: nhìn vào
+> hai vị trí `hasInput(m, _)` và `hasReferenceVariable(m, _)`.)
+
 ### Đơn điệu (Monotonicity)
 
 Forward chaining hoạt động đúng đắn nhờ tính **đơn điệu** (monotonicity). Một chế độ suy
@@ -494,6 +607,58 @@ Với cùng câu hỏi "Place(Hanoi)?", backward chaining:
 > xác của mọi OWL reasoner. Các reasoner Description Logic thực tế thường dùng thuật toán
 > tableau/hypertableau/classification chuyên biệt, không đơn thuần là forward hay backward
 > rule engine.
+
+### Cơ chế chạy thực tế: mạng RETE
+
+Đến đây ta mô tả forward chaining như một vòng lặp "quét mọi quy tắc, mọi phép thế". Đó là
+định nghĩa ngữ nghĩa; nhưng cài đặt naive thì cực chậm: mỗi vòng lại xét lại mọi quy tắc
+trên mọi tổ hợp triple, chi phí cỡ $O(|R| \cdot |G|^{k})$ với $k$ là số mẫu trong body.
+Phần lớn công sức đó là lặp lại — những phần của body đã khớp ở vòng trước vẫn còn đúng.
+
+**RETE** (Forgy, 1982 [@forgy-rete-1982]) giải quyết đúng điểm này bằng cách **giữ lại các
+phép khớp trung gian** thay vì tính lại từ đầu. Tư tưởng cốt lõi: *đổi bộ nhớ lấy tốc độ*.
+
+Mạng RETE gồm:
+
+- **Mạng alpha (nút một đầu vào):** lọc *bên trong một mẫu* — ví dụ "subject có phải IRI
+  không?", "predicate có bằng `ex:capitalOf` không?". Mỗi mẫu của quy tắc đi qua một đường
+  alpha riêng; kết quả là các **WME** (Working Memory Element — phần tử bộ nhớ làm việc) đã
+  qua lọc.
+- **Mạng beta (nút hai đầu vào):** **nối (join)** ràng buộc biến giữa các mẫu khác nhau và
+  **cache** các binding trung gian trong **beta memory**. Khi một WME mới vào, chỉ cần nối
+  nó với phần đã cache, không tính lại toàn bộ.
+- **Agenda + giải quyết xung đột:** khi một quy tắc khớp hoàn toàn, nó được đặt lên
+  **agenda** (hàng đợi ưu tiên); cơ chế **giải quyết xung đột** chọn quy tắc nào "bắn" trước
+  khi nhiều quy tắc cùng sẵn sàng.
+
+> ℹ **Vì sao RETE nhanh?** Nó khai thác **tính đơn điệu**: một khi nửa phép nối đã đúng,
+> thêm fact mới chỉ cần *nối tiếp*, không phá phần cũ. Beta memory chính là hiện thực hóa
+> của nhận xét "$\mathrm{lfp}(T_P)$ không phụ thuộc thứ tự" (§5.2) — engine giữ mọi khớp
+> trung gian và chỉ tính phần delta.
+
+Đánh đổi: RETE nhanh trên tập quy tắc lớn nhưng **ngốn bộ nhớ** để cache toàn bộ binding
+trung gian.
+
+### RETE trong bộ nhớ vs Datalog tăng dần song song
+
+Hai họ engine hiện đại phản ánh hai cách đánh đổi khác nhau:
+
+| | RETE trong bộ nhớ (Drools, Apache Jena) | Datalog tăng dần song song (RDFox) |
+|---|---|---|
+| **Bản chất** | Mạng alpha/beta cache binding | Vật chất hóa Datalog trên đồ thị nén |
+| **Tối ưu cho** | Nhiều quy tắc, điều kiện phong phú | Đồ thị RDF lớn, cập nhật liên tục |
+| **Cập nhật** | Tăng dần theo WME | **Tăng dần, song song, lock-free** |
+| **Nguồn** | Forgy 1982 [@forgy-rete-1982] | Motik et al. 2014 [@motik-rdfox-2014] |
+
+**RDFox** đại diện cho hướng thứ hai: nó vật chất hóa chương trình Datalog trực tiếp trên đồ
+thị RDF nén dạng cột trong bộ nhớ, và — khác với RETE tuần tự — **vật chất hóa tăng dần,
+song song, không khóa** (parallel, lock-free incremental materialization) [@motik-rdfox-2014].
+Khi một lược đồ thay đổi, nó chỉ tính lại phần closure bị ảnh hưởng thay vì dựng lại từ đầu.
+Đây là lý do RDFox xử lý được đồ thị lớn với cập nhật thường xuyên mà vẫn giữ độ trễ thấp.
+
+> ℹ **Cùng một ngữ nghĩa, nhiều chiến lược cài đặt.** Dù là RETE hay Datalog song song, cả
+> hai đều phải trả về đúng $\mathrm{lfp}(T_P)$ — tính duy nhất của điểm bất động (§5.2)
+> chính là hợp đồng cho phép các engine cạnh tranh về tốc độ mà không đổi kết quả.
 
 ## 5.6 SHACL: Xác nhận dữ liệu bằng Shapes
 
@@ -946,6 +1111,40 @@ hoàn toàn khác.
 > liệu. SHACL không thay thế được ontology cho việc suy diễn tri thức. Hệ thống tri thức
 > hoàn chỉnh thường cần cả hai.
 
+### SHACL là kiểm tra phi đơn điệu: Local Closed-World Semantics
+
+Bảng trên cho thấy shape *kiểm tra* chứ không *suy diễn*. Nhưng có một tính chất sâu hơn
+giải thích **vì sao** SHACL hành xử khác ontology: SHACL dùng **ngữ nghĩa thế giới đóng cục
+bộ** (Local Closed-World Semantics, LCWA) và vì thế là một ngôn ngữ ràng buộc **phi đơn
+điệu** (non-monotonic).
+
+- **Mở thế giới (OWA) — phía ontology:** không thấy triple `hasOperation` ⇒ *chưa biết* có
+  hay không; có thể tồn tại một witness vô danh (§4.8, §5.10). Thêm dữ liệu không bao giờ làm
+  mất kết luận đã suy ra — **đơn điệu**.
+- **Đóng thế giới cục bộ (LCWA) — phía SHACL:** với mỗi focus node, những gì *không có* trong
+  đồ thị được coi là *không tồn tại* đối với node đó. Thiếu value node ⇒ violation ngay.
+
+Hệ quả trực tiếp: **thêm triple có thể biến một đồ thị đang conform thành vi phạm.** Xét
+shape `sh:maxCount 1` trên `ex:hasReferenceVariable`:
+
+```turtle
+# Trước: conform
+ex:roc_1  ex:hasReferenceVariable  ex:time_1 .
+
+# Sau khi THÊM một triple: VI PHẠM (vượt maxCount 1)
+ex:roc_1  ex:hasReferenceVariable  ex:time_1 .
+ex:roc_1  ex:hasReferenceVariable  ex:temp_2 .
+```
+
+Hành vi "thêm thông tin làm mất kết luận cũ" chính là **tính phi đơn điệu** — đối lập với
+forward chaining ở §5.2. Đây là cùng bản chất với *negation as failure* (§5.16): SHACL diễn
+dịch "không tìm thấy" thành "không tồn tại", và phép diễn dịch đó không đơn điệu.
+
+> ℹ **Vì sao "cục bộ"?** SHACL không đóng cả thế giới một cách mù quáng như CWA cổ điển
+> (Reiter 1978). Nó chỉ đóng *trong phạm vi từng focus node và từng constraint*: sự vắng mặt
+> chỉ bị tính là vi phạm khi một shape cụ thể yêu cầu sự hiện diện. Ngoài phạm vi đó, OWA vẫn
+> có hiệu lực.
+
 ## 5.11 Suy diễn trước Xác nhận: Tương tác giữa hai pipeline
 
 Kết quả xác nhận SHACL phụ thuộc vào đồ thị nào được đưa vào validator. Đây là một quyết
@@ -1305,6 +1504,88 @@ Quy tắc Horn có các tính chất quan trọng:
 - **Dừng được:** Trên đồ thị hữu hạn với các điều kiện an toàn (§5.2), forward chaining luôn dừng
 - **Giới hạn biểu diễn:** Không thể biểu diễn phủ định (negation), phép hoặc (disjunction) trong head, hoặc lượng từ tồn tại (existential quantification) trong head
 
+Các quy tắc Horn an toàn, không hàm ở §5.2 chính xác là **Datalog**; khảo cứu *Datalog and
+Recursive Query Processing* [@datalog-survey-2013] là tài liệu chuẩn về ngữ nghĩa điểm bất động
+và các chiến lược đánh giá của chúng.
+
+### Datalog và ba ngữ nghĩa tương đương
+
+Khi bỏ hàm (function-free) và yêu cầu mọi biến trong head phải xuất hiện ở body
+(**safeness** / range-restriction), quy tắc Horn trở thành **Datalog**:
+
+$$A \leftarrow B_1, \dots, B_n$$
+
+với $A$ (head) và mỗi $B_i$ (body) là công thức nguyên tử $P(t_1, \dots, t_k)$. Safeness đảm
+bảo mỗi phép thế chỉ dùng giá trị đã có trong đồ thị, nên forward chaining dừng (§5.2).
+
+Datalog có **ba cách định nghĩa "chương trình $P$ trên cơ sở dữ liệu $D$ có nghĩa là gì"**,
+và định lý nền tảng của lý thuyết Datalog khẳng định cả ba cho **cùng một tập fact**
+[@abiteboul-foundations-1995]:
+
+1. **Ngữ nghĩa mô hình (model-theoretic):** ý nghĩa của $P$ là **mô hình Herbrand tối tiểu**
+   $\mathcal{M}(P)$ — giao của mọi mô hình Herbrand thỏa $P$ và chứa $D$. (Một *mô hình
+   Herbrand* là một cách gán đúng/sai cho mọi ground atom sao cho mọi quy tắc của $P$ đều
+   đúng.)
+2. **Ngữ nghĩa chứng minh (proof-theoretic):** tập mọi ground fact **derivable** bằng các cây
+   chứng minh hữu hạn (quy nạp lùi qua các quy tắc).
+3. **Ngữ nghĩa điểm bất động (fixpoint):** $\mathrm{lfp}(T_P)$ — chính là bao đóng forward
+   chaining ở §5.2.
+
+$$\mathcal{M}(P) \;=\; \{\text{fact derivable}\} \;=\; \mathrm{lfp}(T_P)$$
+
+> ℹ **Vì sao ba mà một?** Đây là định lý Knaster–Tarski hợp với tính chất Horn: với quy tắc
+> Horn đơn điệu, "đúng trong mô hình nhỏ nhất", "có chứng minh", và "đạt được qua lặp $T_P$"
+> trùng nhau. Nhờ đó ta *chọn* góc nhìn thuận tiện: chứng minh tính đúng đắn bằng mô hình,
+> cài đặt bằng fixpoint, giải thích bằng cây chứng minh.
+
+**Độ phức tạp.** Datalog có **data complexity PTIME-đầy đủ** (chương trình cố định, dữ liệu
+lớn dần) và **combined complexity EXPTIME-đầy đủ** (chương trình và dữ liệu cùng biến)
+[@abiteboul-foundations-1995]. Khoảng cách lớn giữa hai con số giải thích vì sao Datalog thực
+dụng: với một bộ quy tắc đã chốt, chi phí suy diễn chỉ đa thức theo kích thước dữ liệu.
+
+### Phủ định cổ điển vs Phủ định dạng thất bại (NAF)
+
+Horn/Datalog thuần **không có phủ định**. Khi muốn nói "không có bằng chứng cho $q$ thì kết
+luận $\neg q$", ta đứng trước hai loại phủ định hoàn toàn khác nhau:
+
+| | Phủ định cổ điển $\neg$ | Negation as Failure $\sim$ (`not`) |
+|---|---|---|
+| **Giả định thế giới** | Mở (OWA) | Đóng (CWA) |
+| **Khi nào kết luận $\neg q$ / $\sim q$** | Cần chứng minh $\neg q$ hoặc tiên đề rời nhau | Chỉ vì $q$ **không chứng minh được** từ dữ liệu hiện có |
+| **Đơn điệu?** | **Có** — thêm fact không rút lại kết luận | **Không** — thêm fact có thể làm $q$ chứng minh được, kéo theo $\sim q$ bị rút lại |
+
+Sự **phi đơn điệu** của NAF là con dao hai lưỡi. Nó cho phép suy luận kiểu "nếu không thấy gì
+nói khác đi thì coi là sai" (rất hợp với dữ liệu dạng cơ sở dữ liệu), nhưng nó phá vỡ tính
+duy nhất của mô hình. Ví dụ kinh điển — một chương trình **không phân tầng**:
+
+$$p \leftarrow \text{not } q \qquad\qquad q \leftarrow \text{not } p$$
+
+Chương trình này có **hai** mô hình tối tiểu: $\{p\}$ và $\{q\}$. Hệ thống nên chọn cái nào?
+Không có cơ sở đơn điệu nào để ưu tiên một trong hai — kết quả phụ thuộc thứ tự chạy, và ngữ
+nghĩa trở nên nhập nhằng.
+
+### Datalog phân tầng (Stratified Datalog)
+
+Giải pháp chuẩn là **phân tầng**: chia các vị từ của chương trình thành các tầng
+$P_1, \dots, P_n$ sao cho nếu một quy tắc ở tầng $i$ chứa $\text{not } q$ trong body, thì mọi
+quy tắc định nghĩa $q$ phải nằm ở tầng **nghiêm ngặt thấp hơn** $j < i$. Nói cách khác: *không
+được phủ định một vị từ đang được định nghĩa cùng lúc hoặc ở tầng cao hơn.*
+
+> ℹ **Định lý:** Mọi chương trình Datalog phân tầng đều có một **mô hình tối tiểu duy nhất**
+> (gọi là **perfect model**). Ta tính nó bằng cách chạy fixpoint tầng 1, rồi tầng 2 (dùng kết
+> quả đã chốt của tầng 1 để đánh giá `not`), ... đến tầng $n$. Vì mỗi tầng chỉ phủ định các vị
+> từ *đã chốt*, tính phi đơn điệu không còn gây nhập nhằng.
+
+Điều kiện phân tầng **không phải lúc nào cũng thỏa được** — ví dụ $p \leftarrow \text{not }
+q,\; q \leftarrow \text{not } p$ ở trên có vòng phủ định nên không phân tầng được. Khi đó phải
+dùng ngữ nghĩa mạnh hơn (stable models / answer set programming) nằm ngoài phạm vi chương này.
+
+Quay lại SHACL: chính vì SHACL dùng LCWA (§5.10) — một dạng NAF cục bộ — mà nó **phi đơn
+điệu**. Các constraint `sh:minCount`, `sh:maxCount`, `sh:not` đều diễn dịch "không thấy" thành
+"không có", nên thêm dữ liệu có thể đổi verdict. SHACL tránh được vòng nhập nhằng kiểu
+$p \leftrightarrow q$ vì nó **không suy diễn**: shape chỉ kiểm tra trên một đồ thị đã chốt,
+không định nghĩa vị từ quy nạp lẫn nhau.
+
 ### SWRL: Mở rộng OWL bằng quy tắc
 
 SWRL (Semantic Web Rule Language) mở rộng OWL bằng cách cho phép dùng OWL class/property
@@ -1381,6 +1662,41 @@ xây dựng. Bốn ví dụ làm việc đầy đủ:
 4. **Repair governance:** Khi SHACL báo candidate thiếu `ex:hasOutput`, các candidate repairs
    (thêm từ bằng chứng nguồn, thêm placeholder, loại bỏ, thay đổi shape) có hệ quả tri thức
    khác nhau; quyết định thuộc về domain governance, không phải engine (§5.12).
+
+### Pipeline hai tầng: suy diễn rồi xác nhận
+
+Ví dụ xuyên suốt này giờ có thể ghép thành một **pipeline hai tầng** hoàn chỉnh trên đồ thị
+cơ chế — đúng kiến trúc B ở §5.11:
+
+**Tầng 1 — Suy diễn (Datalog / quy tắc Horn).** Chạy ba quy tắc từ §5.2 để vật chất hóa các
+thuộc tính dẫn xuất và phân loại trên `rateOfChange_1`:
+
+$$\text{hasInput}(m, q) \leftarrow \text{hasApplication}(m, a) \land \text{differentiand}(a, q)$$
+
+$$\text{hasReferenceVariable}(m, v) \leftarrow \text{hasApplication}(m, a) \land \text{withRespectTo}(a, v)$$
+
+Kết quả: `rateOfChange_1` có thêm hai cạnh `hasInput position_1` và `hasReferenceVariable
+time_1`, rồi được gán `rdf:type RateOfChangeMechanism`.
+
+**Tầng 2 — Xác nhận (SHACL).** Một `sh:NodeShape` kiểm tra đồ thị *đã được làm giàu* ở tầng 1:
+
+```turtle
+ex:RateOfChangeMechanismShape a sh:NodeShape ;
+    sh:targetClass ex:RateOfChangeMechanism ;
+    sh:property [ sh:path ex:hasOperation ;
+                  sh:minCount 1 ; sh:class ex:DerivativeOperation ] ;
+    sh:property [ sh:path ex:hasInput ;
+                  sh:minCount 1 ; sh:class ex:Quantity ] ;
+    sh:property [ sh:path ex:hasReferenceVariable ;
+                  sh:minCount 1 ; sh:maxCount 1 ; sh:class ex:ReferenceVariable ] .
+```
+
+> ⚠ **Vì sao thứ tự "suy diễn trước, xác nhận sau" là sống còn.** Nếu chạy Tầng 2 ngay trên
+> đồ thị gốc (bỏ Tầng 1), shape sẽ báo **violation sai**: `hasInput` và `hasReferenceVariable`
+> lúc ấy chỉ *ngầm ẩn* (chưa asserted), nên `sh:minCount 1` bị vi phạm dù dữ liệu hoàn toàn
+> hợp lệ về mặt ngữ nghĩa. Chỉ sau khi Tầng 1 vật chất hóa hai cạnh ấy, Tầng 2 mới nhìn thấy
+> chúng và cho verdict đúng. Đây là hiện thực hóa của §5.11 (effective validation graph phụ
+> thuộc vào những gì được suy diễn trước khi validate).
 
 > ⚠ **Lưu ý thiết kế:** Khi xây dựng mechanism ontology, đừng cố gắng biểu diễn mọi thứ
 > bằng OWL axioms. Một số ràng buộc (số lượng tối thiểu, kiểu dữ liệu, pattern) phù hợp
@@ -1616,6 +1932,15 @@ nguồn gốc và thời gian*.
 | Entailment Regime (chế độ suy diễn) | Xác định mức độ suy diễn khi truy vấn | §5.14 |
 | Graph Repair | Quyết định sửa dữ liệu hay sửa shape dựa trên governance | §5.12 |
 | Ground Triple (fact) | Triple không còn biến, sẵn sàng trong đồ thị | §5.2 |
+| Toán tử hệ quả tức thời $T_P$ (Immediate consequence operator) | $T_P(I)$ = mọi ground head có body khớp trong $I$ | §5.2 |
+| Ngữ nghĩa điểm bất động (Fixed-point semantics) | Ý nghĩa chương trình = $\mathrm{lfp}(T_P)$ (Knaster–Tarski) | §5.2 |
+| Mô hình Herbrand tối tiểu (Minimal Herbrand Model) | $\mathcal{M}(P)$ = giao mọi mô hình Herbrand thỏa $P$ chứa $D$ | §5.16 |
+| Datalog | Quy tắc Horn function-free, safe; 3 ngữ nghĩa tương đương | §5.16 |
+| Phủ định cổ điển vs NAF ($\neg$ vs $\sim$) | $\neg$ theo OWA (đơn điệu) vs `not` theo CWA (phi đơn điệu) | §5.16 |
+| Datalog phân tầng (Stratified Datalog) | Tầng thấp chốt trước, tầng cao mới `not`; cho perfect model duy nhất | §5.16 |
+| Ngữ nghĩa thế giới đóng cục bộ (LCWA) | SHACL: vắng mặt trong đồ thị = không tồn tại cho focus node | §5.10 |
+| Thuật toán RETE (RETE algorithm) | Mạng alpha/beta cache phép khớp trung gian; đổi bộ nhớ lấy tốc độ | §5.5 |
+| Mạng Alpha / Mạng Beta (Alpha / Beta network) | Lọc trong một mẫu / nối binding giữa các mẫu | §5.5 |
 
 ## Đọc thêm
 
@@ -1625,3 +1950,6 @@ nguồn gốc và thời gian*.
 - Hogan et al., *Knowledge Graphs*, Chapter 7: Inductive Knowledge [@hogan-knowledge-graphs] — suy diễn quy nạp và xác suất.
 - OWL 2 RL [@w3c-owl2-profiles] — OWL RL profile và cơ chế forward chaining.
 - OWL 2 Direct Semantics [@w3c-owl2-direct-semantics] — ngữ nghĩa OWL 2 cho soundness/completeness.
+- Abiteboul, Hull & Vianu, *Foundations of Databases* [@abiteboul-foundations-1995] — nguồn chuẩn cho Datalog, ba ngữ nghĩa và độ phức tạp.
+- Forgy, *Rete: A Fast Algorithm for the Many Pattern/Many Object Pattern Match Problem* [@forgy-rete-1982] — thuật toán RETE gốc.
+- Motik et al., *Parallel Materialisation of Datalog Programs in Centralised, Main-Memory RDF Systems* [@motik-rdfox-2014] — vật chất hóa Datalog song song (RDFox).

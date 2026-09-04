@@ -614,6 +614,46 @@ concepts:
     incidental_gloss: false
     notes: "Goal-driven reasoning; from query → subgoals → assertions; contrasted with forward chaining"
 
+  immediate_consequence_operator:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "T_P(I) = all ground heads whose bodies hold in I; monotone on finite ground universe → lfp(T_P) = ∪ T_P^k(∅); Knaster-Tarski"
+
+  datalog_semantics:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Three equivalent semantics of safe function-free Datalog: model-theoretic (minimal Herbrand model), proof-theoretic, fixpoint lfp(T_P); data PTIME / combined EXPTIME"
+
+  negation_as_failure:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "NAF (not/~): non-monotonic, CWA-flavored; distinct from classical negation (¬, monotonic, OWA); unstratified negation → multiple minimal models"
+
+  stratified_datalog:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Negated predicate must live in a strictly lower stratum → unique perfect model; stratification is a property of the program, not the data"
+
+  rete_algorithm:
+    first_mentioned_chapter: 5
+    first_required_use_chapter: 5
+    first_explained_chapter: 5
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Alpha (1-input filters) + beta (2-input joins + memory) network caching partial matches; WMEs + agenda/conflict resolution; computes same lfp(T_P) faster; memory-for-speed"
+
   # === Chapter 6 concepts ===
   claim:
     first_mentioned_chapter: 3
