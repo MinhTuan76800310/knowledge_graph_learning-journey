@@ -1454,6 +1454,43 @@ concepts:
     incidental_gloss: false
     notes: "Training lineage is provenance, not direct evidence; echo/duplicate sources"
 
+  # Pillar 4 (v0.3) concepts introduced in the Chapter 8 upgrade
+  weisfeiler_lehman_test:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "1-WL color-refinement test; expressive-power ceiling of standard MPNNs (GCN/GAT/R-GCN)"
+  rotate:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Relational rotation in complex space with |r_i|=1; symmetry/antisymmetry/inversion/composition"
+  poincare_embedding:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Hyperbolic (Poincare ball) embedding of hierarchical KGs; root mechanisms at center, leaves at boundary"
+  hyperbolic_geometry:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Negative-curvature geometry: volume grows exponentially, suitable for embedding trees/taxonomies"
+  differentiable_logic_programming:
+    first_mentioned_chapter: 8
+    first_required_use_chapter: 8
+    first_explained_chapter: 8
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Neural LP/DRUM and partial-ILP: differentiable rule learning via matrix-chain or fuzzy t-norm relaxation"
+
   question_interpretation:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9

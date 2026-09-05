@@ -24,6 +24,9 @@ FIGURES = [
     "ch08-hybrid-pipeline",
     "ch08-counterexample-refinement",
     "ch08-full-stack",
+    "ch08-rotate-geometry",
+    "ch08-1wl-isomorphism",
+    "ch08-poincare-disk",
 ]
 
 CITED_KEYS = [
@@ -43,6 +46,13 @@ CITED_KEYS = [
     "hamilton-grl-2020",
     "prov-o",
     "w3c-shacl",
+    "morris-weisfeiler-2019",
+    "xu-gin-2019",
+    "sun-rotate-2019",
+    "nickel-poincare-2017",
+    "evans-dilp-2018",
+    "yang-neurallp-2017",
+    "sadeghian-drum-2019",
 ]
 
 # Registry concept name -> glossary entry prefix (first word(s) of the term).
@@ -58,12 +68,14 @@ GLOSSARY_TERMS = [
     "Cross-domain generalization",
     "Data leakage",
     "Deduction",
+    "Differentiable logic programming",
     "DistMult",
     "False negative",
     "Filtered evaluation",
     "GNN",
     "Hard negative",
     "Hits@K",
+    "Hyperbolic geometry",
     "Induction",
     "Inductive bias",
     "Inductive KG learning",
@@ -78,9 +90,11 @@ GLOSSARY_TERMS = [
     "OOV entity",
     "Oversmoothing",
     "Path-based explanation",
+    "Poincaré embedding",
     "Prediction",
     "R-GCN",
     "Representation learning",
+    "RotatE",
     "Rule induction",
     "Rule-mining confidence",
     "Scoring function",
@@ -93,6 +107,7 @@ GLOSSARY_TERMS = [
     "Training provenance",
     "Transductive learning",
     "TransE",
+    "Weisfeiler-Lehman",
 ]
 
 REGISTRY_PATH = BOOK_DIR / "concept_registry.yaml"
@@ -168,8 +183,10 @@ class TestCh8ConceptRegistry:
             for name, entry in data["concepts"].items()
             if entry.get("first_explained_chapter") == 8
         }
-        # 52 concepts are explained first in Chapter 8.
-        assert len(ch8) == 52, f"Expected 52 Ch8 concepts, found {len(ch8)}"
+        # 57 concepts are explained first in Chapter 8 (52 baseline + 5 from the
+        # Pillar 4 upgrade: RotatE, Poincaré embedding, hyperbolic geometry,
+        # Weisfeiler-Lehman 1-WL test, differentiable logic programming).
+        assert len(ch8) == 57, f"Expected 57 Ch8 concepts, found {len(ch8)}"
 
     def test_ch8_concepts_explained_when_required(self):
         with open(REGISTRY_PATH, encoding="utf-8") as f:

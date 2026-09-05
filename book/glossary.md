@@ -154,6 +154,8 @@ danh không phải là thực thể; sự biểu thị do quy ước và con ng�
 
 **Dense retrieval (Truy xuất mật độ).** Nhúng câu hỏi và đoạn vào vector (dual encoder, DPR) và chấm bằng tích vô hướng/cosine. Bắt được paraphrase; tương tự nhúng là tín hiệu xếp hạng, không phải liên quan chắc chắn hay chân lý (Chương 9).
 
+**Differentiable logic programming (Lập trình logic khả vi).** Họ phương pháp học quy tắc dạng Horn bằng gradient: biểu diễn quan hệ thành ma trận kề $\mathbf{M}_r$, nới rời rạc bằng softmax/fuzzy t-norm để phép hợp thành quy tắc trở nên khả vi (Neural LP, DRUM, $\partial$ILP). Cho phép học end-to-end nhưng quy tắc trích ra vẫn là giả thuyết, không phải định luật logic (Chương 8).
+
 **DistMult (Mô hình song tuyến tính).** Mô hình KGE với hàm chấm điểm f(h,r,t) = ⟨h, r, t⟩ (nhân từng phần tử). Đối xứng: không thể phân biệt (h,r,t) và (t,r,h).
 
 **Effective Validation Graph (Đồ thị xác nhận hiệu lực).** Đồ thị thực sự được SHACL validator
@@ -247,6 +249,8 @@ Passes validation ≠ becomes true.
 **Hits@K.** Tỉ lệ các câu trả lời đúng nằm trong top K ứng viên. Không phân biệt giữa hạng 1 và hạng K.
 
 **Hybrid retrieval (Truy xuất lai).** Kết hợp lexical + dense + ràng buộc/đồ thị rồi gộp danh sách (ví dụ RRF). Làm giảm rủi ro bỏ sót, không làm tăng độ đúng nội dung (Chương 9).
+
+**Hyperbolic geometry (Hình học hyperbolic).** Hình học có độ cong âm không đổi ($K=-1$). Thể tích hình cầu tăng theo cấp số mũ ($\mathrm{Vol}(r)\propto\sinh^{d-1}(r)$) thay vì đa thức ($r^d$) như không gian Euclid, nên nhúng được cây/taxonomy phân nhánh mũ mà không méo hại. Mô hình đĩa Poincaré $\mathbb{B}^d$ là một biểu diễn phổ biến (Chương 8).
 
 **Hypothesis-testing retrieval (Truy xuất kiểm định giả thuyết).** Truy xuất cho giả thuyết cơ chế ứng viên: lấy cả bằng chứng ủng hộ lẫn thách thức (âm tính khó, phản ví dụ, định nghĩa ranh giới). Không-thấy-thách-thức ≠ giả thuyết được chấp nhận (Chương 9).
 
@@ -384,6 +388,8 @@ thế giới đóng (thiếu = sai/vắng).
 
 **Path-based explanation (Giải thích theo đường đi).** Giải thích dự đoán bằng cách chỉ ra đường đi trong đồ thị dẫn tới kết luận. Tự nhiên với học quy tắc, khó với KGE/GNN.
 
+**Poincaré embedding (Nhúng hyperbolic trên đĩa Poincaré).** Nhúng các thực thể vào đĩa Poincaré $\mathbb{B}^d$ với khoảng cách $d_{\mathbb{B}}(\mathbf{u},\mathbf{v}) = \text{arcosh}(1+2\|\mathbf{u}-\mathbf{v}\|^2/((1-\|\mathbf{u}\|^2)(1-\|\mathbf{v}\|^2)))$. Khoảng cách gần tâm ≈ tuyến tính, gần biên ≈ exponent, phù hợp với cấu trúc root→leaf của ontology (Chương 8).
+
 **Point-probe (Thăm dò điểm).** Trong mô hình bitemporal 2D, một truy vấn là một điểm $(T_v^*, T_{tx}^*)$ trong lưới tọa độ (valid time × system time). Câu trả lời là claim có hình chữ nhật chứa điểm đó — kiểm tra bằng hai bất đẳng thức $T_v^{\text{start}} \le T_v^* < T_v^{\text{end}}$ và $T_{tx}^{\text{start}} \le T_{tx}^* < T_{tx}^{\text{end}}$. Cùng một năm hiệu lực nhưng hai thời điểm hỏi khác nhau cho hai câu trả lời khác nhau (Chương 6).
 
 **Precision (Độ chính xác).** Trong số đơn vị đã truy xuất, bao nhiêu là liên quan: |R∩A|/|A|. Đo chất lượng truy xuất, không phải độ đúng của câu trả lời (Chương 9).
@@ -452,6 +458,8 @@ thêm thông tin cho nó.
 **Retrieval provenance (Provenance truy xuất).** Ghi lại câu hỏi, diễn giải, retriever và phiên bản, index snapshot, bộ lọc, top_k, điểm số, re-ranker, thời gian — đủ để tái hiện. Không chứng minh tính đúng (Chương 9).
 
 **Retrieval unit (Đơn vị truy xuất).** Loại đối tượng một bước truy xuất trả về: thực thể, triple, claim, evidence, đoạn nguồn, đường đi, đồ thị con, tóm tắt, câu trả lời chuẩn. Loại đơn vị quyết định recall/precision và khả năng vết nguồn (Chương 9).
+
+**RotatE (Nhúng quay trong không gian phức).** Mô hình KGE: thực thể và quan hệ là vector phức $\mathbf{h},\mathbf{t},\mathbf{r}\in\mathbb{C}^d$ với $|r_i|=1$, mô hình hóa quan hệ như phép quay từng phần tử $\mathbf{t}=\mathbf{h}\circ\mathbf{r}$. Mô tả được bốn mẫu quan hệ: đối xứng, bất đối xứng, nghịch đảo, và hợp thành (Chương 8).
 
 **RRF (Reciprocal Rank Fusion).** Hàm hợp hạng: RRF(d) = Σ 1/(k + rank_i(d)), k≈60. Chỉ dùng hạng, không dùng điểm thô; bền với các thang không so sánh được (Chương 9).
 
@@ -602,3 +610,5 @@ không phù hợp, không chỉ ra cách sửa.
 **Value Node (Nút giá trị).** Trong SHACL: nút reachable từ focus node qua property path.
 Với node shape, value nodes = {focus node}. Với property shape, value nodes là các đích của
 path từ focus node. Constraint được đánh giá trên tập value nodes.
+
+**Weisfeiler-Lehman test (Bài kiểm tra 1-WL).** Thuật toán tô màu lặp (color refinement): khởi tạo màu theo nhãn nút, mỗi bước tô màu mới bằng hash của (màu cũ, đa tập màu lân cận). Hai đồ thị nhận được phân hoạch màu khác nhau thì chắc chắn không đẳng cấu. Định lý nền tảng: mọi MPNN chuẩn (GCN, GAT, R-GCN) có sức biểu đạt bị chặn trên đúng bởi 1-WL — chúng không đếm được tam giác/chu trình, không phân biệt $C_{10}$ với $2\times C_5$ (Chương 8).
