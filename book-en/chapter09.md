@@ -50,7 +50,7 @@
 >   taxonomy; self-check; claim–evidence alignment
 > - Graph reasoning vs LLM reasoning; what GraphRAG does not guarantee; when NOT to use RAG
 > - The Query Execution Router (BOOK-DEFINED); 34 misconceptions; 8 self-check checkpoints;
->   EXP-9-1..EXP-9-9 (deferred to v0.1); the depth audit; Q01–Q50; the end-of-chapter
+>   EXP-9-1..EXP-9-9 (deferred to v0.1); the depth audit; Q01–Q56; the end-of-chapter
 >   competency ladder
 >
 > **Prerequisites:**
@@ -1944,7 +1944,7 @@ with each symbol mapped onto the Q0 example:
 $$\mathbf{p}^{(t+1)} = (1-\alpha)\,\tilde{A}\,\mathbf{p}^{(t)} + \alpha\,\mathbf{s},
 \qquad \mathbf{p}^{(0)}=\mathbf{s},$$
 
-iterating until $\|\mathbf{p}^{(t+1)}-\mathbf{p}^{(t)\|}$ falls below a threshold. Each round is a
+iterating until $\|\mathbf{p}^{(t+1)}-\mathbf{p}^{(t)}\|$ falls below a threshold. Each round is a
 sparse matrix–vector product, $O(|E|)$ — far cheaper than enumerating $O(\bar{d}^k)$.
 
 **Linear-algebra bridge (why it converges):** unrolling the recursion gives the geometric series

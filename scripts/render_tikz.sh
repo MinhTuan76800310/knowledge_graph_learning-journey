@@ -48,7 +48,7 @@ for src in "$SRCDIR"/*.tex; do
     exit 1
   fi
 
-  cp "$TMPDIR/${stem}.pdf" "$pdf_out"
+  cp -f "$TMPDIR/${stem}.pdf" "$pdf_out" 2>/dev/null || cat "$TMPDIR/${stem}.pdf" > "$pdf_out"
   count=$((count + 1))
 done
 

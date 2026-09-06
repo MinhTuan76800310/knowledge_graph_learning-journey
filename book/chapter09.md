@@ -50,7 +50,7 @@
 >   hallucination; tự kiểm tra; đối chiếu claim-bằng chứng
 > - Suy luận đồ thị vs suy luận LLM; GraphRAG không đảm bảo điều gì; khi nào KHÔNG dùng RAG
 > - Router thực thi truy vấn (BOOK-DEFINED); 34 quan niệm sai; 8 điểm tự kiểm tra;
->   EXP-9-1..EXP-9-9 (hoãn đến v0.1); kiểm toán độ sâu; Q01–Q50; bậc năng lực cuối chương
+>   EXP-9-1..EXP-9-9 (hoãn đến v0.1); kiểm toán độ sâu; Q01–Q56; bậc năng lực cuối chương
 >
 > **Tiên quyết:**
 > - Chương 1–2 (đồ thị, node, cạnh, kiểu, đường đi)
@@ -1917,7 +1917,7 @@ với từng ký hiệu ánh xạ vào ví dụ Q0:
 $$\mathbf{p}^{(t+1)} = (1-\alpha)\,\tilde{A}\,\mathbf{p}^{(t)} + \alpha\,\mathbf{s},
 \qquad \mathbf{p}^{(0)}=\mathbf{s},$$
 
-lặp đến khi $\|\mathbf{p}^{(t+1)}-\mathbf{p}^{(t)\|}$ nhỏ dưới ngưỡng. Mỗi vòng lặp là một
+lặp đến khi $\|\mathbf{p}^{(t+1)}-\mathbf{p}^{(t)}\|$ nhỏ dưới ngưỡng. Mỗi vòng lặp là một
 phép nhân ma trận–vector thưa, $O(|E|)$ — rẻ hơn nhiều so với liệt kê $O(\bar{d}^k)$.
 
 **Bắc cầu Đại số tuyến tính (vì sao nó hội tụ):** khai triển đệ quy cho chuỗi hình học
