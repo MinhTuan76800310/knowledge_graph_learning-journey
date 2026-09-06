@@ -106,6 +106,9 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | KGQA-01 | `chakraborty-kgqa-2019` | Introduction to Neural Network based Approaches for Question Answering over Knowledge Graphs |
 | LLMKG-01 | `zhu-llmkg-2023` | Unifying Large Language Models and Knowledge Graphs: A Roadmap |
 | MAGRAPH-01 | `microsoft-graphrag-docs` | Microsoft GraphRAG Documentation |
+| PAGERANK-01 | `page-pagerank-1999` | The PageRank Citation Ranking: Bringing Order to the Web |
+| PPR-01 | `haveliwala-ppr-2002` | Topic-Sensitive PageRank: A Approach for Tailored Search Results |
+| KARP-01 | `karp-reducibility-1972` | Reducibility Among Combinatorial Problems (Steiner Tree in Graphs, NP-complete) |
 | GRLBOOK-01 | `hamilton-grl-2020` | Graph Representation Learning (Hamilton) |
 | KGQ-01 | `zaveri-kgquality-2016` | Quality Assessment for Linked Data: A Survey |
 | REFINE-01 | `paulheim-refinement-2017` | Knowledge graph refinement: A survey of approaches and evaluation methods |
