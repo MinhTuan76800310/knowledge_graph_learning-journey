@@ -517,6 +517,50 @@ Các thuộc tính an toàn cho mỗi vòng:
   - kiểm toán: mỗi quyết định ghi trong audit log
   - công tắc: tắt vòng này nếu tỷ lệ chấp nhận < 5% (chỉ số chính sách)
 
+## 10.20.1 Lý thuyết điều khiển vòng kín & Dao động niềm tin (Closed-Loop Control Theory & Belief Oscillation)
+
+§10.20 liệt kê các thuộc tính an toàn của một vòng phản hồi. Nền tảng toán học của chúng là **lý thuyết điều khiển vòng kín** (closed-loop control theory): Wiener [@wiener-cybernetics-1948] chỉ ra rằng mọi hệ thống mục đích đều là một vòng phản hồi có **trễ** (delay), và trễ là nguồn gốc của dao động.
+
+**Mô hình.** Coi trạng thái niềm tin của một claim là một biến được điều khiển bởi vòng: giám sát → đánh giá → chấp nhận/nghỉ hưu → giám sát lại.
+
+- $r_{\text{ingest}}$: tốc độ đưa claim ứng viên vào vòng (mục/đơn vị thời gian)
+- $\tau_{\text{verify}}$: **độ trễ xác minh** (verification latency) — thời gian từ khi một tín hiệu xuất hiện đến khi vòng phản hồi lại nó
+- Hàm truyền vòng hở (open-loop transfer function):
+
+$$L(s) = G(s)\,H(s)\,e^{-s\,\tau_{\text{verify}}}$$
+
+với $G(s)$ là động học của pipeline thu nhận/đánh giá, $H(s)$ là phản hồi từ trạng thái Sổ cái, và $e^{-s\tau}$ là **trễ thuần túy** (pure transport delay).
+
+**Vì sao trễ gây dao động.** Số hạng $e^{-s\tau}$ giữ nguyên biên độ ($|e^{-j\omega\tau}|=1$) nhưng **trừ pha** một lượng $\omega\tau$ radian tại tần số $\omega$; pha bị ăn mòn nặng nhất ở tần số cao. Vòng kín mất ổn định khi tại tần số cắt biên (gain crossover $\omega_{gc}$) tổng pha chạm $-180°$ mà biên độ còn $\ge 1$.
+
+Kết quả định lượng cho một tọa độ niềm tin hồi quy về đích $b^*$ với độ lợi $a$ nhưng phản hồi trễ $\tau$ — phương trình vi phân trễ $\dot{x}(t) = -a\,x(t-\tau)$:
+
+> **Tiêu chuẩn ổn định:** nghiệm hội tụ tiệm cận ($x(t)\to 0$) khi và chỉ khi $a\,\tau < \dfrac{\pi}{2}$.
+
+Vượt ngưỡng $a\tau = \pi/2$, nghiệm chuyển sang **dao động phân kỳ** (nhánh Hopf): trạng thái niềm tin không tiến về $b^*$ mà quay vòng. Trong hệ rời rạc có bão hòa (chấp nhận/nghỉ hưu là ngưỡng hai trạng thái), dao động này thành **chu kỳ giới hạn** (limit cycle) bền: một claim lật liên tục `Accepted` ↔ `Contested` ↔ `Retracted` mà không bao giờ ổn định.
+
+**Dao động niềm tin (belief oscillation) là gì.** Không phải nhiễu: nó là **cộng hưởng của vòng** khi $\tau_{\text{verify}}$ lớn so với độ lợi cập nhật. Chu kỳ xấp xỉ $T \approx 4\,\tau_{\text{verify}}$ (với relay hai trạng thái). Mỗi lượt lật ghi thêm một vết kiểm toán, phình hàng đợi mâu thuẫn (§10.21) và đốt công sức đánh giá — hệ tự mất ổn định.
+
+**Ổn định Lyapunov.** Gọi $\mathbf{b}_t$ là vector trạng thái niềm tin của toàn bộ claim, $\mathbf{b}^*$ điểm cân bằng nhất quán. Chọn hàm Lyapunov $V(\mathbf{b}) = \lVert \mathbf{b}-\mathbf{b}^*\rVert^2$ (xác định dương). Hệ **ổn định tiệm cận** nếu dọc quỹ đạo $\dot V < 0$, tức mọi thành phần của $\mathbf{b}_t$ đơn điệu tiến về $\mathbf{b}^*$. Điều kiện $a\tau<\pi/2$ ở trên chính là điều kiện $\dot V<0$ cho một tọa độ; khi vi phạm tồn tại hướng làm $V$ tăng → mất ổn định.
+
+**Biện pháp kiến trúc (giữ $\dot V<0$).**
+
+1. **Lọc thông thấp (low-pass filter)** trên tín hiệu phản hồi: triệt thành phần tần số cao, nơi $\omega\tau$ ăn mòn pha nặng nhất → khôi phục biên pha (phase margin).
+2. **Giới hạn tốc độ thu nhận** ở $r_{\text{ingest}}$: giữ $\omega_{gc}$ thấp để $\omega_{gc}\tau_{\text{verify}}$ nhỏ → nới biên trễ cho phép $\tau_{\max}$.
+3. **Dải trễ (hysteresis band)** quanh ngưỡng chấp nhận: claim chỉ lật trạng thái khi vượt ngưỡng *cộng* dải chết, nên nhiễu quanh biên không kích hoạt lật — cách kinh điển triệt relay-oscillation.
+
+![Vòng kín có trễ: đáp ứng bước ổn định (aτ < π/2) so với dao động chu kỳ giới hạn (aτ > π/2).](figures/generated/ch10-closed-loop-stability.pdf)
+
+**Ví dụ RATE_OF_CHANGE:**
+- Claim về `VibrationVelocityRateOfChange` (đạo hàm theo thời gian của vận tốc rung cảm biến) được QA trả lời, user báo sai → CandidateClaim.
+- Pipeline đánh giá chậm ($\tau_{\text{verify}}$ = 3 ngày vì chờ hiệu chuẩn cảm biến), độ lợi cập nhật cao (mỗi cảnh báo lật trạng thái ngay) → $a\tau > \pi/2$.
+- Claim rung giữa `Accepted` (rung bình thường) và `Retracted` (rung bất thường) mỗi chu kỳ, phình hàng đợi mâu thuẫn.
+- Khắc phục: dải trễ ±15% quanh ngưỡng biên độ rung, lọc thông thấp chuỗi đo, giới hạn candidate mỗi ca → $a\tau$ tụt dưới $\pi/2$, trạng thái ổn định.
+
+dao động niềm tin ≠ hệ thống "đang học"
+
+Một hệ học đúng hướng có $\dot V<0$ và tiến về cân bằng; chu kỳ giới hạn là $V$ không giảm — đó là hỏng hóc điều khiển, không phải tiến bộ.
+
 ## 10.21 Tích lũy mâu thuẫn (Contradiction Accumulation)
 
 Sổ cái có thể tích lũy mâu thuẫn theo thời gian:
@@ -837,6 +881,46 @@ Sự bảo vệ là kỷ luật quen thuộc từ đầu sách:
 sụp đổ mô hình ≠ cũ đơn thuần
 
 Đây là một thất bại cấu trúc riêng biệt.
+
+## 10.35.1 Entropy tri thức ($H_K$) & Sụp đổ tự thực (Knowledge Entropy & Autophagous Model Collapse)
+
+§10.35 mô tả sụp đổ mô hình bằng lời. Đây là dạng toán học của nó, và lý do nó **khác về cấu trúc** với sụp đổ phản hồi (§10.34).
+
+**Entropy tri thức.** Gọi $\mathcal{C}$ là tập các lớp khái niệm (quan hệ, cơ chế) trong KG và $p_t(c)$ là tỷ trọng của lớp $c$ ở thế hệ $t$. **Entropy tri thức** (knowledge entropy):
+
+$$H_K(t) = -\sum_{c \in \mathcal{C}} p_t(c)\,\log p_t(c)$$
+
+$H_K$ đo **độ đa dạng** của phân bố tri thức. $H_K$ cao = nhiều lớp cơ chế cùng hiện diện (cả phổ biến lẫn hiếm); $H_K$ thấp = tri thức co về vài lớp đầu ngành.
+
+**Sụp đổ tự thực (autophagous collapse).** "Tự thực" = mô hình nuôi mình bằng chính đầu ra của nó. Shumailov et al. [@shumailov-collapse-2024]: nếu mỗi thế hệ chỉ **khớp lại** (refit) trên $M$ mẫu do thế hệ trước sinh ra mà không có bằng chứng thực nghiệm mới, phương sai phân bố bị co **hệ số $(1-1/M)$ mỗi thế hệ**:
+
+$$\sigma_{t+1}^2 = \sigma_t^2\left(1 - \frac{1}{M}\right) < \sigma_t^2
+\quad\Rightarrow\quad \sigma_t^2 = \sigma_0^2\left(1-\tfrac{1}{M}\right)^{t}$$
+
+(Nguồn hệ số: phương sai ước lượng bằng chẻ $M$ từ $M$ mẫu có kỳ vọng $\sigma^2(1-1/M)$ — hiệu chỉnh Bessel.) Sau $t$ thế hệ, $\sigma_t^2 \to 0$: phân bố **sụp về một điểm**, $H_K(t)$ đạt cực tiểu.
+
+**Tuyệt chủng đuôi (tail extinction).** Lớp hiếm với khối tiên nghiệm nhỏ $p(c) < \epsilon$ có số mẫu kỳ vọng $M\,p(c)$; khi $M\,p(c)\ll 1$, xác suất nó **vắng mặt** khỏi tập huấn luyện thế hệ $t{+}1$ xấp xỉ $e^{-M p(c)}\to 1$. Một khi vắng mặt, mô hình không thể tái sinh nó → $p_t(c)\to 0$ theo cấp số mũ, trong khi các lớp đầu ngành bị **thổi phồng giả tạo** (chiếm lại khối lượng của đuôi). Đây là "các khuyết tật không thể đảo ngược, nơi đuôi phân bố biến mất" mà Shumailov nêu.
+
+**Phân biệt cấu trúc — hai kiểu sụp đổ khác nhau:**
+
+| | Sụp đổ phản hồi (§10.34) | Sụp đổ tự thực (§10.35.1) |
+|---|---|---|
+| Đối tượng | một claim sai bị khuếch đại | toàn bộ phân bố co lại |
+| Cơ chế | vòng lặp vận hành (echo/confirmation) | khớp lại đệ quy trên đầu ra tổng hợp |
+| Triệu chứng | trạng thái lật qua lại | $H_K$ giảm, đuôi biến mất |
+| Khắc phục | phá vòng, cổng provenance Ch7 | nạp bằng chứng thực nghiệm mới |
+
+sụp đổ tự thực ≠ sụp đổ phản hồi
+
+Một cái là lỗi **điều khiển** của một vòng; một cái là lỗi **dân số học** của cả phân bố. Có thể sửa vòng mà phân bố vẫn sụp, và ngược lại.
+
+![Sụp đổ tự thực qua các thế hệ: phương sai co, đuôi tuyệt chủng, $H_K(t)$ giảm.](figures/generated/ch10-knowledge-entropy-collapse.pdf)
+
+**Ví dụ RATE_OF_CHANGE:**
+- Trong Mechanism KG, các cơ chế hiếm như *tốc độ thay đổi chuyển tiếp lượng tử* (quantum transition rate) và *gradient vận tốc trong lớp biên* (boundary-layer velocity gradient) có $p(c)$ nhỏ.
+- Nếu tóm tắt GraphRAG của KG được thu nhận lại làm nguồn mà không kèm phép đo mới: qua vài thế hệ, các lớp hiếm này **tuyệt chủng** (đuôi), chỉ còn đạo hàm giáo khoa phổ thông (vận tốc ô tô, dòng điện).
+- $H_K$ tụt; KG "trông vẫn đông" nhưng mất toàn bộ cơ chế biên — đúng kiểu khuyết tật không thể đảo ngược.
+- Phòng ngừa: giữ nguồn gốc đã đăng ký (Ch6), không để artifact suy diễn thành dữ liệu thu nhận (quy tắc §10.34), và định kỳ nạp bằng chứng thực nghiệm mới để đặt lại $\sigma_t^2$.
 
 ## 10.36 Sụp đổ ≠ Cũ (Collapse ≠ Staleness)
 
@@ -1493,5 +1577,9 @@ bằng chứng, không phải "chuẩn" được sao chép.
 | Automation Gradient | Dốc tự động hóa |
 | Living Architecture | Kiến trúc sống |
 | Orchestration | Điều phối |
+| Closed-loop dynamical stability | Ổn định động học vòng kín |
+| Belief oscillation | Dao động niềm tin |
+| Knowledge entropy | Entropy tri thức |
+| Autophagous model collapse | Sụp đổ mô hình tự thực |
 
 ## Tài liệu tham khảo

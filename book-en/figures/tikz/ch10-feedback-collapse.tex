@@ -1,0 +1,31 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{shapes.geometric,positioning,fit,backgrounds,arrows.meta,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  box/.style={rectangle, draw, rounded corners, align=center, font=\scriptsize, inner sep=3pt},
+  arrow/.style={-{Stealth[length=2.2mm]}, thick},
+  label/.style={font=\tiny\itshape, text=gray!60!black},
+]
+
+% === FEEDBACK COLLAPSE SEQUENCE ===
+\node[box, fill=gray!10, minimum width=5.2cm, minimum height=0.7cm] (s1) at (0, 4.2) {1. The FIRST answer is wrong but fluent};
+\node[box, fill=gray!10, minimum width=5.2cm, minimum height=0.7cm] (s2) at (0, 3.2) {2. User/agent accepts it};
+\node[box, fill=orange!14, minimum width=5.2cm, minimum height=0.7cm] (s3) at (0, 2.2) {3. Becomes the "known" answer};
+\node[box, fill=red!14, minimum width=5.2cm, minimum height=0.7cm] (s4) at (0, 1.2) {4. Retrieved and repeated};
+\node[box, fill=red!22, minimum width=5.2cm, minimum height=0.7cm] (s5) at (0, 0.2) {5. The ORIGINAL evidence is forgotten};
+
+\draw[arrow] (s1) -- (s2);
+\draw[arrow] (s2) -- (s3);
+\draw[arrow] (s3) -- (s4);
+\draw[arrow] (s4) -- (s5);
+\draw[arrow, red!70!black] (s5) to[out=190,in=290] node[left, font=\tiny, text=red!70!black] {self-reinforcing} (s1);
+
+\node[label, align=center, text width=10cm] at (0, -1.0)
+  {Feedback collapse: the loop amplifies one error into a durable distortion\\— SYSTEMATIC and self-reinforcing, not random noise.};
+\end{tikzpicture}
+\end{document}

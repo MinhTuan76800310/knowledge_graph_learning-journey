@@ -92,6 +92,7 @@ docs) are deliberately kept out of printed prose. The manuscript uses Pandoc cit
 | SHORTCUT-01 | `geirhos-shortcut-2020` | Shortcut Learning in Deep Neural Networks |
 | CALIB-01 | `guo-calibration-2017` | On Calibration of Modern Neural Networks |
 | COLLAPSE-01 | `shumailov-collapse-2024` | AI models collapse when trained on recursively generated data |
+| WIENER-01 | `wiener-cybernetics-1948` | Cybernetics: Or Control and Communication in the Animal and the Machine |
 | RAG-01 | `lewis-rag-2020` | Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks |
 | DPR-01 | `karpukhin-dpr-2020` | Dense Passage Retrieval for Open-Domain Question Answering |
 | GRAPHRAG-01 | `edge-graphrag-2024` | From Local to Global: A Graph RAG Approach to Query-Focused Summarization |
