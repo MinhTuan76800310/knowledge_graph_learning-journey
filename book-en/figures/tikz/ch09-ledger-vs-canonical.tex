@@ -1,0 +1,40 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{shapes.geometric,positioning,fit,backgrounds,arrows.meta,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  box/.style={rectangle, draw, rounded corners, align=center, minimum width=7.2cm, font=\scriptsize},
+  claim/.style={rectangle, draw, rounded corners, fill=gray!10, align=center, minimum width=6.2cm, font=\scriptsize},
+  arrow/.style={-{Stealth[length=2.2mm]}, thick},
+  label/.style={font=\scriptsize\itshape, text=gray!60!black},
+]
+
+% === Canonical view ===
+\node[box, fill=green!10] (canon) at (-4.2, 2.2) {\textbf{Canonical View} \\[1pt] ("what is currently accepted")};
+\node[claim, below=0.6cm of canon, fill=green!6] (c1) {C471 Accepted: RATE\_OF\_CHANGE corresponds to three applications};
+
+% === Ledger ===
+\node[box, fill=yellow!15] (ledg) at (4.2, 2.2) {\textbf{Claim Ledger} \\[1pt] ("what has ever been proposed / disputed")};
+\node[claim, below=0.55cm of ledg, fill=yellow!6] (g1) {C471 Accepted (full history)};
+\node[claim, below=0.15cm of g1] (g2) {C472 Candidate: alternative definition};
+\node[claim, below=0.15cm of g2] (g3) {C210 Contested: "the derivative is only a model"};
+\node[claim, below=0.15cm of g3] (g4) {C473 Superseded: old 2019 definition};
+
+% === Question routing ===
+\node[font=\scriptsize, align=center] at (0, 5.1) {\textbf{Select the domain by intent --- §9.23}};
+
+\node[font=\scriptsize, align=center, text=green!50!black] at (-4.2, -1.9)
+  {"what is velocity?" → canonical view};
+
+\node[font=\scriptsize, align=center, text=red!60!black] at (4.2, -1.9)
+  {"who ever objected?" → Ledger};
+
+\node[font=\scriptsize\itshape, text=gray!60!black, align=center, text width=11cm] at (0, -3.2)
+  {An empty canonical view does not mean an empty Ledger ---\\the difference between "no Accepted yet" and "nothing ever existed"};
+
+\end{tikzpicture}
+\end{document}

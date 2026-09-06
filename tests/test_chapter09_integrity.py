@@ -25,6 +25,8 @@ FIGURES = [
     "ch09-query-router",
     "ch09-text-vs-graph-vs-hybrid",
     "ch09-kgqa-rag-graphrag",
+    "ch09-path-explosion",
+    "ch09-pareto-graphrag",
 ]
 
 CITED_KEYS = [
@@ -32,14 +34,17 @@ CITED_KEYS = [
     "cormack-rrf-2009",
     "edge-graphrag-2024",
     "gao-cite-2023",
+    "haveliwala-ppr-2002",
     "hogan-inductive",
     "jarvelin-ndcg-2002",
+    "karp-reducibility-1972",
     "karpukhin-dpr-2020",
     "lewis-rag-2020",
     "liu-lostmid-2023",
     "manning-ir-2008",
     "microsoft-graphrag-docs",
     "nogueira-rerank-2019",
+    "page-pagerank-1999",
     "prov-o",
     "rashkin-ais-2021",
     "robertson-bm25-2009",
@@ -65,6 +70,7 @@ GLOSSARY_TERMS = [
     "Correctness",
     "Dense retrieval",
     "Entity linking",
+    "Error cascading",
     "Evidence diversity",
     "Evidence Packet",
     "Faithfulness",
@@ -80,11 +86,13 @@ GLOSSARY_TERMS = [
     "KGQA",
     "k-hop neighborhood",
     "Lexical retrieval",
+    "Long-context vs GraphRAG",
     "Lost in the Middle",
     "Multi-hop retrieval",
     "nDCG",
     "Path bound",
     "Path explosion",
+    "Personalized PageRank",
     "Precision",
     "Precision@K",
     "Provenance-aware retrieval",
@@ -103,6 +111,7 @@ GLOSSARY_TERMS = [
     "Retrieval unit",
     "RRF",
     "Score semantics",
+    "Steiner tree",
     "Stopping condition",
     "Subgraph retrieval",
     "Symbolic graph retrieval",
@@ -184,8 +193,8 @@ class TestCh9ConceptRegistry:
             for name, entry in data["concepts"].items()
             if entry.get("first_explained_chapter") == 9
         }
-        # 77 concepts are explained first in Chapter 9.
-        assert len(ch9) == 77, f"Expected 77 Ch9 concepts, found {len(ch9)}"
+        # 81 concepts are explained first in Chapter 9 (77 baseline + 4 Pillar 5).
+        assert len(ch9) == 81, f"Expected 81 Ch9 concepts, found {len(ch9)}"
 
     def test_ch9_concepts_explained_when_required(self):
         with open(REGISTRY_PATH, encoding="utf-8") as f:

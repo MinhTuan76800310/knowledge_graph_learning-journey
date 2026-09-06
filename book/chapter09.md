@@ -50,7 +50,7 @@
 >   hallucination; tự kiểm tra; đối chiếu claim-bằng chứng
 > - Suy luận đồ thị vs suy luận LLM; GraphRAG không đảm bảo điều gì; khi nào KHÔNG dùng RAG
 > - Router thực thi truy vấn (BOOK-DEFINED); 34 quan niệm sai; 8 điểm tự kiểm tra;
->   EXP-9-1..EXP-9-9 (hoãn đến v0.1); kiểm toán độ sâu; Q01–Q50; bậc năng lực cuối chương
+>   EXP-9-1..EXP-9-9 (hoãn đến v0.1); kiểm toán độ sâu; Q01–Q56; bậc năng lực cuối chương
 >
 > **Tiên quyết:**
 > - Chương 1–2 (đồ thị, node, cạnh, kiểu, đường đi)
@@ -1224,6 +1224,52 @@ EvidencePacket
 
 ![Gói bằng chứng (Evidence Packet, BOOK-DEFINED): container có cấu trúc — câu hỏi, intent, thực thể, claim, đường đi, đoạn nguồn, provenance, thời gian, đánh giá, metadata truy xuất, và nhãn trạng thái tri thức luận.](figures/generated/ch09-evidence-packet.pdf)
 
+### 9.36.1 Gói bằng chứng là một hồ sơ ba ngăn (3-compartment dossier)
+
+Để làm cho cấu trúc trên *kiểm tra được* trong kiểm toán, chương này đóng khung Gói bằng
+chứng như một **hồ sơ vật lý ba ngăn** (BOOK-DEFINED) — mỗi ngăn chịu một trách nhiệm tri
+thức luận riêng, và mỗi ngăn được đọc bởi một lớp khác nhau của pipeline:
+
+**Ngăn 1 — Bằng chứng thô và trích dẫn (Raw Evidence & Citations).** Mọi mảnh nguồn
+*nguyên văn* mà câu trả lời được phép bám vào: đoạn nguồn verbatim, **băm tài liệu**
+(document hash) để chống giả mạo, **URI span** và **số dòng** (line numbers) để trỏ chính
+xác tới vị trí trong nguồn. Ngăn này trả lời: *"câu trả lời nói điều này dựa trên chữ nào,
+ở đâu?"* — đây là nơi trích dẫn (§9.40) phải trỏ tới, không phải "cả tài liệu".
+
+**Ngăn 2 — Trạng thái tri thức luận (Epistemic Statuses).** Mọi claim liên quan kèm
+**Claim Ledger ID** (C471 vs C210), **trạng thái quản trị** (`Accepted`, `Contested`,
+`Candidate`, `Superseded`), và **cửa sổ thời gian** (valid time / transaction time, §9.25).
+Ngăn này trả lời: *"điều này được hệ thống tin ở mức nào, từ khi nào, và ai đang phản
+đối?"* — đây là nơi tầng sinh đọc để biết câu nào viết như sự thật, câu nào trình bày hai
+phía, câu nào phải kiêng (§9.43).
+
+**Ngăn 3 — Kiểm chứng và vết nguồn gốc (Verification & Lineage Trail).** Chuỗi hoạt động
+**PROV-O** [@prov-o] ghi lại *ai đã làm ra mỗi mục trong gói*: extractor nào (kèm **phiên
+bản mô hình**), bộ đánh giá nào (kèm **chữ ký**), và **điểm tin cậy tổng hợp** (aggregated
+confidence) của từng mục. Ngăn này trả lời: *"mục này được tạo ra bởi quy trình nào, và
+quy trình đó đáng tin đến đâu?"* — đây là nơi kiểm toán đọc lại để tái hiện toàn bộ quá
+trình.
+
+Ánh xạ các trường của cây cấu trúc chuẩn vào ba ngăn:
+
+| Ngăn | Trường trong cây cấu trúc (§9.36) | Trách nhiệm tri thức luận |
+|---|---|---|
+| 1 — Raw Evidence & Citations | `source_passages`, `structural_paths`, `provenance_chain` (nhánh SourceFragment→SourceArtifact) | câu trả lời bám vào chữ nào, ở đâu |
+| 2 — Epistemic Statuses | `canonical_claims`, `competing_claims`, `temporal_scope`, `statuses` | hệ thống tin điều đó ở mức nào, từ khi nào |
+| 3 — Verification & Lineage | `provenance_chain` (nhánh hoạt động PROV-O), `assessments`, `retrieval_metadata` | mục đó do quy trình nào tạo ra, đáng tin đến đâu |
+
+**Vì sao ba ngăn, không phải một danh sách phẳng?** Vì ba câu hỏi kiểm toán — *"dựa trên
+chữ nào"*, *"tin ở mức nào"*, *"do ai tạo ra"* — được trả lời bởi ba lớp khác nhau: tầng
+sinh câu trả lời đọc Ngăn 1–2, tầng tự kiểm tra (§9.67) đối chiếu với Ngăn 1–2, và kiểm
+toán viên đọc Ngăn 3. Trộn chúng vào một danh sách phẳng làm một lỗi ở Ngăn 2 (claim
+Contested bị viết như Accepted) không thể được phát hiện độc lập với một lỗi ở Ngăn 1
+(đoạn nguồn sai). Tách ngăn biến "gói đầy đủ" thành một thuộc tính *kiểm tra được theo
+từng ngăn*.
+
+**Lưu ý trung thực:** một hồ sơ ba ngăn *đầy đủ trường* vẫn không đảm bảo *đủ bằng
+chứng* — nó có thể đầy mà vẫn thiếu mảnh quyết định (lỗi recall §9.30), hoặc đầy nhiễu.
+Ba ngăn là cấu trúc kiểm toán, không phải máy đảm bảo chất lượng.
+
 Vì sao cần một cấu trúc như vậy thay vì "cứ truy xuất rồi đổ vào prompt"?
 
 1. **Tách trách nhiệm:** tầng truy xuất chịu trách nhiệm *lấy đúng gì*; tầng sinh chịu
@@ -1303,9 +1349,40 @@ Ranh giới tri thức luận quyết định:
 Ngược lại, một câu trả lời đúng với thế giới mà không có nguồn trong hệ thống hỗ trợ là
 "đúng may mắn" — không thể phòng vệ trong kiểm toán.
 
+### 9.39.1 Ràng buộc gói đóng (closed-world prompting): phòng hallucination bằng cấu trúc
+
+Trạng thái "có căn cứ" không phải kết quả tự nhiên của việc đưa gói cho mô hình — nó là
+kết quả của một **prompt coi Gói bằng chứng là một thế giới đóng** (closed-world
+constraint). Tầng sinh (§9.37) nhận gói kèm một mệnh lệnh có cấu trúc:
+
+> *"Mọi khẳng định về quan hệ phải trỏ tới một định danh trong gói — một Claim Ledger ID
+> ở Ngăn 2 (C471, C210) hoặc một đoạn nguồn ở Ngăn 1 (URI + số dòng). Nếu câu hỏi không
+> dẫn xuất được từ các mục trong gói, hãy trả lời 'Không biết' (Unknown) hoặc 'Thiếu bằng
+> chứng' (Evidence missing), không được điền bằng tri thức tiềm ẩn của bạn."*
+
+Ba hệ quả thiết kế của mệnh lệnh này:
+
+1. **Mọi câu phát ngôn đều có neo định danh.** Vì mỗi claim con bắt buộc trỏ Ngăn 1/2, một
+   câu *không có* neo là dấu hiệu cảnh báo ngay ở tầng tự kiểm tra (§9.67) — hallucination
+   quan hệ (§9.66, loại 1) bị ép phải "vô hình" để lọt qua.
+2. **Kiêng trả lời là một đầu ra hợp lệ, được định danh.** "Unknown" và "Evidence missing"
+   là hai trạng thái của §9.44; prompt cho phép chúng như *lựa chọn đúng*, không phải một
+   thất bại. Điều này biến kiêng trả lời (§9.43) từ hành vi mong muốn thành hành vi có thể
+   kích hoạt được.
+3. **Thế giới đóng cắt vòng "đúng may mắn" (ô A, §9.42).** Mô hình bị cấm dùng tri thức
+   tiềm ẩn để trả lời, nên một câu trả lời đúng chỉ có thể là đúng *và* nằm trong gói — tức
+   ô C, không phải ô A.
+
+**Lưu ý cam kết:** thế giới đóng làm giảm hallucination nhưng **không loại bỏ** nó — mô
+hình vẫn có thể bịa một "định danh" trông giống Claim ID, hoặc diễn giải sai đoạn nguồn
+thật. Vì vậy ràng buộc gói là *lớp một* (giảm rủi ro), còn đối chiếu claim–bằng chứng
+(§9.67) là *lớp hai* (bắt những câu lọt qua). Hai lớp phối hợp, không lớp nào đủ một mình.
+
 **MUST NOT suy ra:**
 - Không được suy "có căn cứ" ⇒ "đúng".
 - Không được suy "không có căn cứ" ⇒ "sai" (có thể đúng mà không vết được).
+- Không được coi prompt thế-giới-đóng là đủ để loại bỏ hallucination (nó chỉ giảm rủi ro;
+  cần thêm lớp đối chiếu §9.67).
 
 ## 9.40 Trích dẫn và độ đầy đủ trích dẫn (Citation & Citation Completeness)
 
@@ -1402,6 +1479,13 @@ Khi bằng chứng không đủ, hành vi đúng của hệ thống là **kiêng
 Kiêng trả lời *không phải* một lỗi — nó là hành vi tri thức luận đúng đắn. Câu trả lời
 kiêng phải nói được *loại thiếu* nào đang xảy ra (xem §9.44), để người dùng biết đi tiếp
 thế nào.
+
+**Kiêng trả lời được kích hoạt bởi ràng buộc gói đóng (§9.39.1).** Sáu điều kiện trên chỉ
+trở thành hành vi *xảy ra được* khi prompt cho phép mô hình nói "Unknown"/"Evidence
+missing" như một đầu ra hợp lệ thay vì bắt buộc sinh văn bản. Không có giấy phép đó, mô
+hình bị ép "trả lời bằng mọi giá" và kiêng trả lời trở thành không thể — đây là lý do
+§9.39.1 (thiết kế prompt) và §9.43 (chính sách kiêng) là hai mặt của một cơ chế: ràng buộc
+thế-giới-đóng *mở khóa* abstention, còn abstention *tiêu thụ* khóa đó.
 
 **MUST NOT suy ra:**
 - Không được khẳng định kiêng trả lời ⇒ sự kiện là sai (thiếu bằng chứng ≠ sai).
@@ -1690,20 +1774,252 @@ dụ: trong phạm vi 3 chặng từ `VelocityDerivativeApplication`, các đư�
 claim liên quan — và mỗi nút nhánh lại mở thêm nhánh. Đây là **bùng nổ đường đi** (path
 explosion): nếu liệt kê mọi đường, ngữ cảnh sập.
 
-Ba đối sách (BOOK-DEFINED):
+Mục này nâng hiện tượng đó từ một quan sát trực giác thành một **định lượng tổ hợp** có
+thể tính được, rồi trình bày hai họ thuật toán chặn — *ưu tiên* (Personalized PageRank)
+và *kết nối tối thiểu* (xấp xỉ Steiner Tree) — cùng một định luật về **suy giảm lỗi xác
+suất** giải thích vì sao duyệt không ràng buộc thất bại trong sản xuất. Người đọc chỉ cần
+Đại số tuyến tính cơ bản (ma trận kề, lũy thừa ma trận) và Giải tích sơ cấp (lũy thừa,
+chuỗi hình học) — cả hai đều đã dùng từ Ch5.
 
-1. **Giới hạn cấu trúc (§9.13):** độ sâu, loại quan hệ, kiểu nút — cắt phân nhánh ngay
-   từ đầu;
-2. **Ưu tiên đường quyết định:** về mặt giải thích, *một* đường quyết định (đường trả
-   lời được intent) đáng giá *một nghìn* đường phụ; giữ đường quyết định, gom phần còn
-   lại (đường phản đối thì §9.27);
-3. **Khử trùng cấu trúc:** bỏ các đường lặp vai trò/xoay vòng (cycle) không thêm thông
-   tin.
+### 9.55.1 Cơ chế tổ hợp: đếm đường đi $O(\bar{d}^k)$
+
+Gọi $\bar{d}$ là **bậc trung bình** (average degree) của đồ thị — số cạnh trung bình mỗi
+nút. Một phép duyệt mở rộng đều từ một nút neo: mỗi chặng nhân số đường hiện có với
+$\bar{d}$ lựa chọn cạnh tiếp theo. Số đường đi độ dài $k$ do đó tăng theo
+
+$$N(k) \;=\; O\!\left(\bar{d}^{\,k}\right).$$
+
+Đọc công thức bằng lời: *"mỗi chặng nhân đôi/nhân-$\bar{d}$ khối lượng công việc; $k$
+chặng là $\bar{d}$ nhân với chính nó $k$ lần."* Đây là **tăng trưởng hàm mũ theo độ
+sâu** — cùng bản chất với $b^l$ của cây phân cấp mà Ch8 đã dùng để biện minh cho nhúng
+hyperbolic, chỉ khác ở chỗ đây là số *đường đi* chứ không phải số *nút*.
+
+Bảng 9.3 cho thấy tốc độ bùng nổ với ba mức bậc trung bình:
+
+| $\bar{d}$ | $k=1$ | $k=2$ | $k=3$ | $k=4$ |
+|---|---|---|---|---|
+| 4 (cây thưa, đồ thị con cơ chế) | 4 | 16 | 64 | 256 |
+| 10 (đồ thị tri thức vừa) | 10 | 100 | 1.000 | 10.000 |
+| 50 (nút hub như `Time`, `rdf:Resource`) | 50 | 2.500 | 125.000 | 6.250.000 |
+
+Trong miền liên tục của chúng ta, `VelocityDerivativeApplication` có bậc cục bộ ~5
+(`operation`, `differentiand`, `withRespectTo`, `produces`, `instanceOf`), nên $k=3$ cho
+$\approx 5^3 = 125$ đường — còn kiểm soát được. Nhưng nó nối tới `Time` và
+`RATE_OF_CHANGE`, là các **nút hub** có bậc hàng nghìn (mọi cơ chế đều `withRespectTo
+Time`). Một nhánh lọt vào hub ở chặng 2 đã đủ biến $k=4$ thành hàng triệu đường.
+
+**Bắc cầu Đại số tuyến tính.** Số đường đi độ dài đúng $k$ từ nút $i$ tới nút $j$ bằng
+phần tử $(i,j)$ của **lũy thừa ma trận kề** $A^k$ (với $A_{ij}=1$ nếu có cạnh $i\to j$).
+Tổng số walk độ dài $\le k$ là
+
+$$A + A^2 + \dots + A^k,$$
+
+đúng là **bao đóng bắc cầu** mà Ch5 đã dạy khi tính điểm bất động của toán tử $T_P$.
+Bùng nổ đường đi, nhìn qua lăng kính đại số tuyến tính, chỉ là nhận xét: *các phần tử
+của $A^k$ tăng theo cấp số nhân với $k$ khi $\bar{d}>1$.* Đây không phải ẩn dụ — nó là
+cùng một phép nhân ma trận.
+
+![Bùng nổ đường đi $O(\bar{d}^k)$: từ nút neo, mỗi chặng nhân số đường với bậc trung bình; một nhánh lọt vào nút hub (Time) ở chặng 2 làm số đường bùng nổ ở chặng 3–4. Phải chặn bằng ràng buộc cấu trúc và ưu tiên, không thể liệt kê.](figures/generated/ch09-path-explosion.pdf)
+
+### 9.55.2 Suy giảm lỗi xác suất đa chặng: $p^k$
+
+Kể cả khi *liệt kê được*, mỗi chặng của một đường đi đa chặng là một bước **có thể sai**:
+liên kết thực thể ở chặng đó, chọn đúng loại cạnh, ánh xạ đúng quan hệ. Gọi $p_i\in(0,1]$
+là **độ chính xác** (precision) của chặng $i$ — xác suất chặng đó đúng. Nếu các chặng độc
+lập, xác suất *toàn bộ* đường đi $k$ chặng đều đúng là tích
+
+$$P(\text{đường hợp lệ}) \;=\; \prod_{i=1}^{k} p_i \;=\; p^{\,k}\quad(\text{nếu } p_i=p).$$
+
+Đây là **suy giảm lỗi theo cấp số nhân** (probabilistic error cascading): mỗi chặng nhân
+thêm một thừa số $<1$, nên độ tin cậy của đường *rơi rất nhanh* theo độ sâu.
+
+Ví dụ số trên đường đi Q0 của chương — `Velocity` $\to$ `VelocityDerivativeApplication`
+$\to$ `RATE_OF_CHANGE` $\to$ `CurrentDerivativeApplication` $\to$ `ElectricCurrent` — với
+độ chính xác mỗi chặng $p=0.8$ (một retriever/entity-linker khá tốt, *không* hoàn hảo):
+
+| số chặng $k$ | $P=0.8^{\,k}$ | diễn giải |
+|---|---|---|
+| 1 | 0.800 | một cạnh — chấp nhận được |
+| 2 | 0.640 | hai cạnh — đã mất hơn một phần ba độ tin cậy |
+| 3 | 0.512 | **ngang tung đồng xu** — đường 3 chặng chỉ đúng ~50% |
+| 4 | 0.410 | đường 4 chặng *nhiều khả năng sai hơn đúng* |
+| 5 | 0.328 | phần lớn đường 5 chặng là sai |
+
+Điểm mấu chốt: $0.8^3 = 0.512$ — một đường đi mà *mỗi chặng đều "khá tốt"* vẫn chỉ đúng
+khoảng một nửa sau ba chặng. Đây là lý do truy xuất đa chặng trung thực **không bao giờ
+trình bày một đường dài như một chứng minh** (§9.54): xác suất tích lũy đã phá hỏng độ
+tin cậy trước khi ta kịp đọc hết đường.
+
+**MUST NOT suy ra từ $p^k$:**
+- Không được coi $p$ là một hằng số đo được chính xác — nó là ước lượng thiết kế; công
+  thức cho *hình dạng* của sự suy giảm (hàm mũ), không cho một con số chân lý.
+- Không được giả định các chặng độc lập khi chúng không độc lập (liên kết thực thể sai ở
+  chặng 1 thường kéo theo sai ở chặng 2 — khi đó suy giảm còn *nhanh hơn* $p^k$).
+
+### 9.55.3 Vì sao duyệt không ràng buộc thất bại — và chặn bằng ràng buộc tượng trưng
+
+Hai định luật trên ($\bar{d}^k$ và $p^k$) hợp lại giải thích một thất bại sản xuất kinh
+điển: một pipeline vector/heuristic "cứ mở rộng vùng lân cận rồi để mô hình tự chọn" sẽ
+(a) bùng nổ tổ hợp ở $\bar{d}^k$, và (b) ngay cả những đường sống sót cũng suy giảm độ
+tin cậy ở $p^k$. Duyệt *không ràng buộc* — đi mọi loại cạnh, mọi chiều, mọi kiểu nút —
+là nhân $\bar{d}$ lớn nhất có thể ở mỗi chặng.
+
+Đối sách không phải "duyệt chậm hơn" mà là **thu nhỏ $\bar{d}$ trước khi duyệt**, bằng
+chính các công cụ tượng trưng mà cuốn sách đã xây:
+
+- **Ràng buộc ontology (Ch4):** một cạnh `withRespectTo` chỉ hợp lệ giữa một
+  `RateOfChangeMechanism` và một `Quantity`. Lược đồ loại ngay các cạnh sai kiểu, cắt
+  bậc hiệu dụng $\bar{d}\to\bar{d}'$ với $\bar{d}'\ll\bar{d}$.
+- **Kiểm tra shape SHACL (Ch5):** `sh:maxCount`, `sh:class`, `sh:nodeKind` loại các nhánh
+  không thỏa ràng buộc cấu trúc *trước khi* chúng được mở rộng — một phép cắt tỉa có căn
+  cứ ngữ nghĩa, không phải một heuristic điểm số.
+- **Traversal theo quan hệ (§9.14):** chỉ duyệt loại cạnh khớp intent — đây chính là
+  $\bar{d}'$ được chọn theo chính sách.
+
+> **Chặn bùng nổ đường đi là một bài toán ngữ nghĩa, không phải bài toán tốc độ.** Cách
+> rẻ nhất để không duyệt một triệu đường vô nghĩa là *biết trước* (từ ontology + SHACL)
+> rằng chín trăm chín mươi chín nghìn trong số đó sai kiểu — và không bao giờ sinh chúng
+> ra. Vector similarity không làm được điều này: nó xếp hạng, nó không loại trừ theo ràng
+> buộc logic.
+
+### 9.55.4 Personalized PageRank: ưu tiên thay vì liệt kê
+
+Khi không thể (và không nên) liệt kê mọi đường, chiến lược thứ hai là **ưu tiên**: chấm
+mức liên quan topo của mỗi nút với câu hỏi, rồi chỉ giữ phần đầu bảng. Công cụ chuẩn là
+**Personalized PageRank (PPR)** — PageRank "thiên vị" về một tập hạt giống, gốc từ
+PageRank [@page-pagerank-1999] và topic-sensitive PageRank của Haveliwala
+[@haveliwala-ppr-2002].
+
+**Trực giác (random walk with restart):** tưởng tượng một "người đi bộ ngẫu nhiên" trên
+đồ thị: mỗi bước, nó nhảy sang một láng giềng ngẫu nhiên với xác suất $1-\alpha$, hoặc
+**khởi động lại** (teleport) về tập hạt giống với xác suất $\alpha$. PPR là phân phối
+dừng của người đi bộ này — nút nào càng được ghé thăm thường xuyên, nút đó càng *gần*
+hạt giống về mặt topo.
+
+**Cơ chế (dạng ma trận):** gọi
+
+$$\mathbf{p} \;=\; (1-\alpha)\,\tilde{A}\,\mathbf{p} \;+\; \alpha\,\mathbf{s},$$
+
+với từng ký hiệu ánh xạ vào ví dụ Q0:
+
+- $\mathbf{s}\in\mathbb{R}^{n}$ — **phân phối khởi động lại** (restart/seed): khối lượng
+  1 đặt trên các thực thể neo của câu hỏi. Với Q0, $\mathbf{s}$ dồn khối vào
+  `VelocityDerivativeApplication` (và `ElectricCurrent` nếu hỏi so sánh); các tọa độ khác
+  bằng 0.
+- $\tilde{A}$ — **ma trận chuyển chuẩn hóa theo bậc** (degree-normalized, column-stochastic):
+  $\tilde{A}_{ij} = A_{ij}/\deg(j)$, xác suất người đi bộ từ $j$ bước sang láng giềng $i$.
+- $\alpha\in(0,1)$ — **xác suất khởi động lại** (thường $0.1$–$0.2$): neo người đi bộ về
+  hạt giống, ngăn nó trôi dạt ra vô hạn.
+- $\mathbf{p}$ — **phân phối dừng**: mức liên quan topo của mỗi nút với hạt giống.
+
+**Tính bằng power iteration** (lặp lũy thừa — đúng kỹ thuật Ch8 dùng cho nhúng):
+
+$$\mathbf{p}^{(t+1)} = (1-\alpha)\,\tilde{A}\,\mathbf{p}^{(t)} + \alpha\,\mathbf{s},
+\qquad \mathbf{p}^{(0)}=\mathbf{s},$$
+
+lặp đến khi $\|\mathbf{p}^{(t+1)}-\mathbf{p}^{(t)}\|$ nhỏ dưới ngưỡng. Mỗi vòng lặp là một
+phép nhân ma trận–vector thưa, $O(|E|)$ — rẻ hơn nhiều so với liệt kê $O(\bar{d}^k)$.
+
+**Bắc cầu Đại số tuyến tính (vì sao nó hội tụ):** khai triển đệ quy cho chuỗi hình học
+
+$$\mathbf{p} \;=\; \alpha\left(I-(1-\alpha)\tilde{A}\right)^{-1}\mathbf{s}.$$
+
+Vì $\tilde{A}$ column-stochastic (bán kính phổ $=1$) nên $(1-\alpha)\tilde{A}$ có bán kính
+phổ $1-\alpha<1$; ánh xạ $\mathbf{p}\mapsto(1-\alpha)\tilde{A}\mathbf{p}+\alpha\mathbf{s}$
+là một **ánh xạ co** (contraction), do đó điểm bất động tồn tại, duy nhất, và power
+iteration hội tụ về nó — cùng định lý điểm bất động đã đảm bảo Ch5 dừng ở bao đóng.
+
+**PPR phạt nút hub một cách tự nhiên.** Đây là tính chất quyết định cho bùng nổ đường
+đi: vì $\tilde{A}_{ij}=1/\deg(j)$, một nút bậc cao (như `Time`, nối tới *mọi* cơ chế)
+**chia đều** khối lượng của nó cho hàng nghìn láng giềng, nên mỗi láng giềng chỉ nhận
+được một phần rất nhỏ. Hạt giống topo gần (cơ chế `RATE_OF_CHANGE`, ứng dụng anh em
+`CurrentDerivativeApplication`) nhận khối tập trung. Kết quả: PPR *tự động* đẩy hub xuống
+cuối bảng và nâng đồ thị con cục bộ liên quan lên đầu — đúng thứ ta cần để cắt $\bar{d}^k$
+mà không cần một ngưỡng bậc cứng.
+
+**Ví dụ làm việc (Q0):** $\mathbf{s}$ dồn vào `VelocityDerivativeApplication`, $\alpha=0.15$.
+Sau hội tụ, nhóm đầu bảng gồm `RATE_OF_CHANGE` (1 hop), `CurrentDerivativeApplication`
+(2 hop, chia sẻ cơ chế), `DerivativeOperation`, `Position`, `Velocity`. `Time` — dù chỉ
+cách 1 hop — bị đẩy xuống sâu vì $\deg(\text{Time})$ rất lớn. PPR vừa *ưu tiên* đúng đồ
+thị con cơ chế, vừa *chặn* nhánh hub gây bùng nổ.
+
+### 9.55.5 Steiner Tree: đồ thị con kết nối tối thiểu (xấp xỉ 2 lần)
+
+PPR ưu tiên *nút*. Nhưng nhiều câu hỏi cần một **đồ thị con kết nối** tối thiểu nối một
+*tập* thực thể truy vấn — ví dụ Q0 cần nối `Velocity`, `ElectricCurrent`, và
+`RATE_OF_CHANGE` bằng ít cạnh/trọng số nhất. Đây chính xác là bài toán **Steiner Tree in
+Graphs**: cho đồ thị $G=(V,E)$ có trọng số $w$ và tập **terminal** $T\subseteq V$, tìm
+cây con trọng số nhỏ nhất chứa toàn bộ $T$ (được phép dùng các nút trung gian không
+thuộc $T$ — gọi là nút Steiner).
+
+**Độ khó (Karp 1972):** Steiner Tree in Graphs là một trong 21 bài toán **NP-đầy đủ**
+trong danh sách kinh điển của Karp [@karp-reducibility-1972]. Hệ quả: không có thuật toán
+đa thức nào cho lời giải tối ưu chính xác trừ khi $\mathrm{P}=\mathrm{NP}$. Đây là một
+ranh giới *lý thuyết*, không phải giới hạn cài đặt — nó áp dụng cho mọi hệ GraphRAG.
+
+**Thuật toán xấp xỉ 2 lần** (metric closure + cây khung nhỏ nhất, MST):
+
+1. **Bao đóng metric (metric closure):** tính đường đi ngắn nhất giữa *mọi cặp* terminal
+   (all-pairs shortest path, Floyd–Warshall hoặc Dijkstra từ mỗi terminal). Xây đồ thị đầy
+   đủ $G_T$ trên $T$, mỗi cạnh $(u,v)$ mang trọng số $d(u,v)$ = khoảng cách ngắn nhất
+   trong $G$. $G_T$ thỏa **bất đẳng thức tam giác** (nên gọi là *metric*).
+2. **Cây khung nhỏ nhất:** tính MST của $G_T$ (Prim hoặc Kruskal), $O(|T|^2\log|T|)$.
+3. **Khai triển:** thay mỗi cạnh $(u,v)$ của MST bằng đường đi ngắn nhất gốc tương ứng
+   trong $G$; lấy hợp các đường này → một đồ thị con kết nối toàn bộ $T$.
+
+**Đảm bảo xấp xỉ:** trọng số kết quả $\le 2\times$ trọng số Steiner tối ưu. (Chứng minh
+ngắn: MST của bao đóng metric $\le$ trọng số cây Steiner tối ưu "đi vòng" qua các
+terminal; khai triển mỗi cạnh ngắn nhất nhân đôi chiều dài trong trường hợp xấu nhất.)
+Đây là một *cận trên có chứng minh*, không phải một heuristic may rủi.
+
+**Ví dụ làm việc (Q0):** $T=\{\text{Velocity},\ \text{ElectricCurrent},\ \text{RATE\_OF\_CHANGE}\}$.
+
+- Bao đóng metric (đếm theo số hop, mỗi cạnh trọng số 1):
+  $d(\text{Velocity},\text{RATE\_OF\_CHANGE})=2$ (qua `VelocityDerivativeApplication`);
+  $d(\text{ElectricCurrent},\text{RATE\_OF\_CHANGE})=2$ (qua `CurrentDerivativeApplication`);
+  $d(\text{Velocity},\text{ElectricCurrent})=4$ (qua cả hai application + cơ chế).
+- MST của $G_T$ chọn hai cạnh ngắn nhất:
+  $\{\text{Velocity}\!-\!\text{RATE\_OF\_CHANGE}\ (2),\ \text{ElectricCurrent}\!-\!\text{RATE\_OF\_CHANGE}\ (2)\}$,
+  tổng $4$ (bỏ cạnh $4$ vì sẽ tạo chu trình).
+- Khai triển → đồ thị con gồm `RATE_OF_CHANGE`, hai application trung gian (nút Steiner),
+  và bốn cạnh `produces`/`instanceOf`. Đây chính là *đồ thị con đủ tối thiểu* của §9.16,
+  giờ được chọn bằng một thuật toán có hệ số xấp xỉ đảm bảo thay vì bằng mắt.
+
+**Lưu ý trung thực:** Steiner tối thiểu **trọng số kết nối**, không tối thiểu **ngữ
+nghĩa**. Cạnh "ngắn" theo số hop chưa chắc là đường quyết định theo intent (§9.14) — một
+đường 2 hop qua một quan hệ sai kiểu vẫn "ngắn". Vì vậy trong pipeline của chương, Steiner
+chạy *sau* khi ràng buộc ontology/SHACL đã loại cạnh sai kiểu (§9.55.3), để trọng số phản
+ánh độ dài trên tập cạnh *hợp lệ*.
+
+### 9.55.6 Đối sách của chương (tổng hợp)
+
+Năm đối sách, xếp theo thứ tự nên áp dụng (BOOK-DEFINED):
+
+1. **Chặn bằng ràng buộc tượng trưng (§9.55.3):** ontology (Ch4) + SHACL (Ch5) thu nhỏ
+   bậc hiệu dụng $\bar{d}\to\bar{d}'$ *trước khi* duyệt — đối sách rẻ và mạnh nhất;
+2. **Giới hạn cấu trúc (§9.13):** độ sâu tối đa $k$, loại quan hệ, kiểu nút, nhánh tối
+   đa — cắt $\bar{d}'^k$ ngay từ đầu;
+3. **Ưu tiên bằng PPR (§9.55.4):** khi phải xếp hạng nút theo liên quan topo, dùng
+   $\mathbf{p}=(1-\alpha)\tilde{A}\mathbf{p}+\alpha\mathbf{s}$ — tự phạt hub, nâng đồ thị
+   con cục bộ;
+4. **Kết nối bằng xấp xỉ Steiner (§9.55.5):** khi cần một đồ thị con nối nhiều terminal,
+   dùng metric closure + MST (hệ số 2), chạy trên tập cạnh đã lọc;
+5. **Ưu tiên đường quyết định + khử trùng cấu trúc:** *một* đường quyết định (trả lời
+   được intent) đáng giá *một nghìn* đường phụ; giữ đường quyết định, gom phần còn lại
+   (đường phản đối thì §9.27); bỏ các đường lặp vai trò/xoay vòng (cycle) không thêm
+   thông tin.
 
 **MUST NOT suy ra:**
-- Không được khẳng định liệt kê được "mọi đường" (bùng nổ là tính chất thật của đồ thị).
+- Không được khẳng định liệt kê được "mọi đường" (bùng nổ $O(\bar{d}^k)$ là tính chất thật
+  của đồ thị, không phải lỗi cài đặt).
 - Không được khẳng định đường được chọn là đường "duy nhất đúng" — chỉ là đường quyết
   định theo chính sách truy xuất.
+- Không được diễn giải điểm PPR như xác suất đúng hay độ tin cậy tri thức luận (nó là tín
+  hiệu xếp hạng topo, §9.60).
+- Không được khẳng định xấp xỉ Steiner cho đồ thị con *tối ưu* (nó cho cận $\le 2\times$;
+  bài toán gốc NP-đầy đủ [@karp-reducibility-1972]).
+- Không được bỏ qua suy giảm $p^k$ khi trình bày một đường đa chặng dài như một kết luận
+  chắc chắn (§9.54).
 
 ## 9.56 Truy xuất cộng đồng và phân cấp (Community / Hierarchical Retrieval)
 
@@ -2112,6 +2428,81 @@ kiêng trả lời khi thiếu, và làm mọi bước có thể kiểm tra lạ
 
 **Chẩn đoán ngược:** nếu một câu hỏi *lẽ ra* có đường tượng trưng mà hệ thống vẫn đi RAG,
 đó là lỗi router (§9.71), không phải "RAG mạnh hơn".
+
+### 9.70.1 GraphRAG so với cửa sổ ngữ cảnh dài 1M–2M token: mặt trận Pareto
+
+Tất cả các mục trên giả định ta *đã* chọn giữa RAG và truy vấn tượng trưng. Nhưng có một
+câu hỏi thứ ba, nóng hơn với người làm thực hành năm nay, và nó phải được trả lời thẳng:
+
+> **"Tại sao tôi phải bỏ công xây GraphRAG — liên kết thực thể, ontology, truy xuất đồ
+> thị — trong khi Gemini 1.5 Pro hay Claude 3.5 Sonnet đã hỗ trợ cửa sổ ngữ cảnh 1–2
+> triệu token, đủ để tôi *nhét thẳng* toàn bộ tài liệu thô vào và hỏi?"**
+
+Đây không phải câu hỏi "RAG vs KGQA" (§9.53) mà là **"ngữ cảnh dài thô vs truy xuất có
+cấu trúc"**. Trả lời nó bằng cảm tính — "ngữ cảnh dài giải quyết hết rồi" hoặc "đồ thị
+luôn đúng" — đều sai. Câu trả lời trung thực là một **mặt trận Pareto**: mỗi phương án
+thắng trên một số trục và thua trên số trục khác, và điểm làm việc tối ưu *dịch chuyển*
+theo quy mô kho tài liệu, loại câu hỏi, và yêu cầu kiểm toán.
+
+**Bốn trục đánh đổi.** Bảng 9.4 đối đầu trực tiếp hai kiến trúc (BOOK-DEFINED, tổng hợp
+từ các giới hạn đã xây rải rác trong chương):
+
+| Trục | Nhét toàn bộ vào ngữ cảnh dài (Long-Context) | GraphRAG (truy xuất đồ thị con) |
+|---|---|---|
+| **Độ phức tạp & chi phí mỗi truy vấn** | Attention tự-để $O(N^2)$ theo độ dài $N$; bộ nhớ KV-cache và độ trễ tăng tuyến tính–bậc hai theo $N$. Nhét $N$ triệu token *mỗi lần hỏi* = trả giá $N$ *mỗi lần*. | Trích đồ thị con compact $O(1)$–$O(\lvert E\rvert)$ theo *câu hỏi*, không theo kích thước kho. Token đưa vào mô hình nhỏ và gần không đổi khi kho phình to. |
+| **Độ tin cậy khi ngữ cảnh dài** | **"Lost in the middle"** (§9.34): mô hình dùng đầu/cuối đáng tin hơn giữa; chôn sự kiện quyết định giữa hàng trăm nghìn token làm chất lượng tụt rõ rệt [@liu-lostmid-2023]. | Đường liên kết được **dâng tường minh** vào gói, sắp thứ tự theo quyết định (§9.32); không có "giữa" khổng lồ để sự kiện bị chôn. |
+| **Độ chính xác quan hệ & tri thức luận** | Mô hình *sinh* câu trả lời xác suất, có thể bịa liên kết không có trong tài liệu (ô D, §9.42); không có bản ghi nào nói "điều này được chấp nhận". | Câu trả lời **neo vào Claim Ledger ID** (C471 vs C210) với trạng thái quản trị tường minh (`Accepted`/`Contested`) và hiệu lực thời gian (§9.23–9.25); hallucination quan hệ bị chặn bởi ràng buộc gói (§9.37). |
+| **Tổng hợp toàn cục trên cả kho** | Prompt phẳng không trả lời đáng tin các câu hỏi *holistic*: "mẫu cơ chế lặp lại xuyên suốt 10.000 bài báo là gì?" — không có chỗ nào trong một cửa sổ để "đọc hết rồi tóm". | **Global Search** của GraphRAG dùng phát hiện cộng đồng phân cấp (Leiden/Louvain) + tóm tắt cộng đồng tiền tính toán, rồi map-reduce trên chúng để tổng hợp chủ đề toàn cục [@edge-graphrag-2024] (§9.51, §9.56). |
+
+**Bắc cầu Giải tích/Đại số tuyến tính cho trục chi phí.** Chi phí attention tự-để trên $N$
+token là $O(N^2)$ vì mỗi token so khớp với mọi token khác — $N\times N$ điểm tích vô hướng
+$\mathbf{q}_i\cdot\mathbf{k}_j$ (đúng phép nhân vector Ch8 đã dạy). Nhân $N$ lên 10 lần
+làm chi phí mỗi truy vấn tăng ~100 lần. GraphRAG thay $N$ (kích thước *kho*) bằng
+$\lvert E_{\text{sub}}\rvert$ (kích thước *đồ thị con liên quan tới câu hỏi*), thứ không
+tăng theo kho. Đây là khác biệt giữa một hàm theo **dữ liệu** và một hàm theo **câu hỏi**
+— cùng loại đánh đổi đã làm nên giá trị của chỉ mục ở §9.10.
+
+**Khi nào Long-Context thắng (ROI dương cho nhét thẳng):**
+
+- Kho **nhỏ–trung bình** vừa trọn trong cửa sổ với ngân sách token cho phép;
+- Câu hỏi **thăm dò, mở**, chưa biết trước cần cấu trúc nào;
+- **Prototype nhanh**: chưa muốn đầu tư ontology + entity linking;
+- Tài liệu **thuần văn bản, ít quan hệ** — không có cấu trúc đa chặng để khai thác;
+- Yêu cầu **đọc-trọn-văn-bản** (tóm tắt một hợp đồng 200 trang) — vốn là ngữ cảnh dài
+  *thật*, không phải truy xuất.
+
+**Khi nào GraphRAG là bắt buộc (Long-Context cho ROI âm):**
+
+- **Suy luận nhân–quả đa chặng** — chuỗi quan hệ dài mà $p^k$ (§9.55.2) và $\bar{d}^k$
+  (§9.55.1) khiến việc "đọc hết rồi đoán" vừa không chính xác vừa không kinh tế;
+- **Tuân thủ quy định / kiểm toán** — mọi khẳng định phải vết về Claim ID + trạng thái
+  quản trị + nguồn gốc (Compartment 2–3 của Evidence Packet, §9.36); ngữ cảnh dài không
+  giữ được bất biến đó;
+- **Claim mâu thuẫn / có hiệu lực thời gian** — cần truy xuất *cả hai phía* kèm phạm vi
+  (§9.27) và đúng đồng hồ thời gian (§9.25); nhét phẳng trộn lẫn chúng không kiểm soát;
+- **Thông lượng cao, sản xuất** — $O(N^2)$ mỗi truy vấn trên kho lớn là không trả nổi về
+  chi phí và độ trễ;
+- **Tổng hợp toàn cục** — câu hỏi "xuyên suốt cả kho" mà chỉ cấu trúc cộng đồng + tóm tắt
+  tiền tính toán trả lời được [@edge-graphrag-2024].
+
+**Nguyên tắc Pareto (BOOK-DEFINED):** không có "bên thắng tuyệt đối". Có một **ranh giới
+ROI** phụ thuộc ba biến — kích thước kho, độ sâu quan hệ của câu hỏi, và yêu cầu kiểm toán.
+Khi cả ba thấp, long-context thắng vì chi phí xây dựng bằng 0. Khi bất kỳ cái nào cao,
+GraphRAG bắt đầu trả nợ chi phí xây dựng. Một hệ thống trưởng thành thường dùng **cả hai**:
+GraphRAG truy xuất đồ thị con *có cấu trúc*, rồi đưa đồ thị con đã tuần tự hóa (§9.35) vào
+cửa sổ dài của LLM để tổng hợp — ngữ cảnh dài là *tầng sinh*, không phải *tầng truy xuất*.
+
+![Mặt trận Pareto GraphRAG vs Long-Context: hai trục chi phí-mỗi-truy-vấn và độ chính-xác-tri-thức-luận; đường Pareto nối các điểm làm việc tối ưu. Long-context thắng vùng kho nhỏ/câu hỏi mở; GraphRAG thắng vùng đa chặng/kiểm toán/toàn cục.](figures/generated/ch09-pareto-graphrag.pdf)
+
+**MUST NOT suy ra:**
+- Không được khẳng định cửa sổ dài "giải quyết hết" vấn đề truy xuất — nó dời chi phí sang
+  $O(N^2)$ và sang độ tin cậy giữa-cửa sổ (§9.34), không loại bỏ chúng.
+- Không được khẳng định GraphRAG luôn tốt hơn long-context — với kho nhỏ và câu hỏi mở,
+  chi phí xây đồ thị là ROI âm.
+- Không được coi độ dài cửa sổ (1M, 2M token) như một bằng chứng cho chất lượng *sử dụng*
+  ngữ cảnh — "nhét được" ≠ "dùng đáng tin" (§9.34).
+- Không được trình bày bảng 9.4 như một kết luận vĩnh viễn — nó là mặt trận Pareto, điểm
+  tối ưu dịch theo phần cứng và mô hình.
 
 ## 9.71 Router thực thi truy vấn tổng hợp (Query Execution Router — BOOK-DEFINED)
 

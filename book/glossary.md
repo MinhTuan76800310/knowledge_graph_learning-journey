@@ -178,6 +178,8 @@ một nút trong đồ thị.
 
 **Entity linking (Liên kết thực thể).** Ánh xạ mention trong câu hỏi sang các ứng viên thực thể: sinh ứng viên → chấm điểm ngữ cảnh → quyết định/ghi nhận mơ hồ. Chọn điểm cao nhất không phải bước bắt buộc; mơ hồ phải được ghi nhận (Chương 9).
 
+**Error cascading (Suy giảm lỗi đa chặng).** Xác suất một đường đa chặng đúng bằng tích độ chính xác từng chặng: P = ∏pᵢ = pᵏ. Với p=0.8, đường 3 chặng chỉ đúng ~0.512 — lý do đường dài không được trình bày như chứng minh (Chương 9).
+
 **Escalation Policy (Chính sách leo thang).** Quy tắc quyết định khi nào một tín hiệu (mâu thuẫn, suy thoái) được đưa lên mức quản trị cao hơn: theo hạn mức, tuổi, phạm vi. Chính sách được bản thể hóa và kiểm toán (Chương 10).
 
 **Evidence diversity (Đa dạng bằng chứng).** Đa nguồn, đa loại, đa quan điểm, đa thời điểm của bằng chứng. Nhiều đoạn trùng nguồn gốc không phải nhiều bằng chứng độc lập (Chương 9).
@@ -302,6 +304,8 @@ thuộc tính) và quan hệ (có hướng, có kiểu, và có thể có thuộ
 
 **Lexical retrieval (Truy xuất từ vựng).** Khớp từ chính xác giữa câu hỏi và tài liệu với trọng số (BM25). Giỏi thuật ngữ chính xác, dốt đồng nghĩa/paraphrase không có từ chung (Chương 9).
 
+**Long-context vs GraphRAG (Mặt trận Pareto).** Đánh đổi giữa nhét toàn bộ tài liệu vào cửa sổ dài (chi phí O(N²), lost-in-the-middle, không neo tri thức luận) và truy xuất đồ thị con có cấu trúc (O(|E|), neo Claim ID, tổng hợp toàn cục). Không bên thắng tuyệt đối; ranh giới ROI dịch theo quy mô kho, độ sâu quan hệ, và yêu cầu kiểm toán (Chương 9).
+
 **Link prediction (Dự đoán liên kết).** Với đồ thị quan sát được một phần, xếp hạng các bộ ba ứng viên còn thiếu. Đầu ra là danh sách có thứ tự, không phải sự thật được khẳng định.
 
 **Literal.** Giá trị dữ liệu trong RDF (chuỗi, số, …), chỉ xuất hiện ở vị trí đối tượng của
@@ -387,6 +391,8 @@ thế giới đóng (thiếu = sai/vắng).
 **Path explosion (Bùng nổ đường đi).** Số đường đi giữa các nút tăng theo cấp số nhân khi đồ thị lớn. Cần giới hạn cấu trúc và ưu tiên đường quyết định (Chương 9).
 
 **Path-based explanation (Giải thích theo đường đi).** Giải thích dự đoán bằng cách chỉ ra đường đi trong đồ thị dẫn tới kết luận. Tự nhiên với học quy tắc, khó với KGE/GNN.
+
+**Personalized PageRank (PPR — PageRank cá nhân hóa).** Điểm lan truyền $\mathbf{p}=(1-\alpha)\tilde{A}\mathbf{p}+\alpha\mathbf{s}$ với $\mathbf{s}$ là vector khởi phát từ nút truy vấn và $\alpha$ là xác suất quay lại nguồn. Tự phạt hub (chia theo $\deg$), ưu tiên đồ thị con cục bộ mà không liệt kê toàn bộ $O(\bar{d}^k)$ đường; giải bằng lặp lũy thừa hội tụ vì bán kính phổ $1-\alpha<1$ (Chương 9).
 
 **Poincaré embedding (Nhúng hyperbolic trên đĩa Poincaré).** Nhúng các thực thể vào đĩa Poincaré $\mathbb{B}^d$ với khoảng cách $d_{\mathbb{B}}(\mathbf{u},\mathbf{v}) = \text{arcosh}(1+2\|\mathbf{u}-\mathbf{v}\|^2/((1-\|\mathbf{u}\|^2)(1-\|\mathbf{v}\|^2)))$. Khoảng cách gần tâm ≈ tuyến tính, gần biên ≈ exponent, phù hợp với cấu trúc root→leaf của ontology (Chương 8).
 
@@ -519,6 +525,8 @@ tác vụ suy luận.
 **Spurious correlation (Tương quan giả).** Quan hệ học được giữa dấu hiệu bề mặt và nhãn, xuất hiện trong dữ liệu huấn luyện nhưng không phải cấu trúc cơ chế. Dẫn đến học lối tắt (shortcut learning).
 
 **Staleness (Cũ / ứ đọng).** Tình trạng một claim còn đó nhưng không còn được bằng chứng hiện tại hỗ trợ. Cũ ≠ sai: có thể vẫn đúng nhưng chưa được kiểm chứng lại (Chương 10).
+
+**Steiner tree (Cây Steiner).** Bài toán tìm cây trọng số nhỏ nhất nối một tập terminal cho trước, được phép dùng thêm nút trung gian (Steiner). NP-đầy đủ (Karp 1972); xấp xỉ 2 lần qua metric closure (đường đi ngắn nhất mọi cặp) + MST. Dùng để nối nhiều bằng chứng rời rạc thành một đồ thị con tối thiểu (Chương 9).
 
 **Stopping condition (Điều kiện dừng).** Chính sách kết thúc truy xuất lặp: đủ ô bằng chứng, không có thông tin mới, dưới ngưỡng liên quan, hết ngân sách, mâu thuẫn cần con người. Dừng-tìm ≠ đầy đủ (Chương 9).
 
