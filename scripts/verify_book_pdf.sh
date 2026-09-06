@@ -36,6 +36,7 @@ if [ "$LANG" = "en" ]; then
     "Claims, Evidence, Provenance, Time, and Contradiction"
     "Knowledge Acquisition and Integration"
     "Inductive Knowledge and Learning from Graphs"
+    "Retrieval, Question Answering, and GraphRAG"
   )
   TOC_PAT='Contents'
   BIB_TITLE='References'

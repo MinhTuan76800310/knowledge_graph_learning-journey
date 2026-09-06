@@ -2107,6 +2107,38 @@ concepts:
     incidental_gloss: false
     notes: "Exact query suffices, authoritative facts, unacceptable hallucination risk, out-of-scope"
 
+  personalized_pagerank:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Biased random-walk-with-restart p=(1-alpha)A~p+alpha s; power iteration; naturally penalizes high-degree hubs to bound path explosion (§9.55.4)"
+
+  steiner_tree_approximation:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Minimum-weight connected subgraph over query terminals; NP-complete (Karp); 2-approximation via metric closure + MST, run on constraint-filtered edges (§9.55.5)"
+
+  multi_hop_error_cascading:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "End-to-end path precision decays as product of per-hop precisions p^k; 0.8^3=0.512; why long paths are not proofs (§9.55.2)"
+
+  graphrag_vs_long_context:
+    first_mentioned_chapter: 9
+    first_required_use_chapter: 9
+    first_explained_chapter: 9
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Pareto frontier: O(N^2) flat-context cost + lost-in-middle vs O(|E_sub|) graph retrieval with epistemic grounding; ROI decision boundary (§9.70.1)"
+
   # === Chapter 10 concepts ===
   living_knowledge_system:
     first_mentioned_chapter: 10

@@ -57,8 +57,9 @@ chapter by chapter and kept in parity. It builds with `LANG=en`.
 | 5 — Deduction, Rules, and Validation | ✅ | ✅ (Pillar 2, PR #70) | ✅ | MERGED (PR #62/#70) |
 | 6 — Claims, Evidence, Provenance, Time, Contradiction | ✅ | ✅ (Pillar 3, parity with VI) | ✅ | MERGED (PR #72) |
 | 7 — Knowledge Acquisition and Integration | ✅ | ✅ (Pillar 3, parity with VI) | ✅ | MERGED (PR #74) |
-| 8 — Inductive Knowledge and Learning from Graphs | ✅ | 🔄 (Pillar 4, parity with VI, this branch) | 🔲 | PR pending (branch `en-vi-ch8-pillar4`) |
-| 9–10 | 🔲 |  | 🔲 | PLANNED |
+| 8 — Inductive Knowledge and Learning from Graphs | ✅ | ✅ (Pillar 4, PR #76) | ✅ | MERGED (PR #76) |
+| 9 — Retrieval, Question Answering, and GraphRAG | 🔄 | 🔄 (Pillar 5, parity with VI, this branch) | 🔲 | PR pending (branch `en-vi-ch9-pillar5`) |
+| 10 | 🔲 | 🔲 | 🔲 | PLANNED |
 
 English build verified at v0.2.0: 70 print pages, `verify_book_pdf.sh` (LANG=en) gate
 PASSED.
@@ -73,8 +74,8 @@ Focus: 6 theoretical pillars (Hypergraphs, Logic Complexity & Decidability, Demp
 | Pillar 1: Hypergraphs & Formal Blank Node Logic | Ch 1–3 | 🟢 Ch 1–3 MERGED (PR #66) | `docs/BOOK_V0_3_MILESTONE.md` §Target 1 |
 | Pillar 2: Complexity Landscape, FOL-Rewritability & Datalog | Ch 4–5 | 🟢 Ch 4 MERGED (PR #68); 🟢 Ch 5 MERGED (PR #70) | `docs/BOOK_V0_3_MILESTONE.md` §Target 2 |
 | Pillar 3: Dempster-Shafer Confidence & AGM Belief Revision | Ch 6 | 🟢 Ch 6 MERGED (VI+EN parity, PR #72) | `docs/BOOK_V0_3_MILESTONE.md` §Target 3 |
-| Pillar 4: Weisfeiler-Lehman (1-WL), RotatE & Hyperbolic Geometry | Ch 8 | 🔄 Ch 8 in PR (VI+EN parity, branch `en-vi-ch8-pillar4`) | `docs/BOOK_V0_3_MILESTONE.md` §Target 4 |
-| Pillar 5: Path Explosion Bounds & Long-Context vs GraphRAG | Ch 9 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 5 |
+| Pillar 4: Weisfeiler-Lehman (1-WL), RotatE & Hyperbolic Geometry | Ch 8 | 🟢 Ch 8 MERGED (VI+EN parity, PR #76) | `docs/BOOK_V0_3_MILESTONE.md` §Target 4 |
+| Pillar 5: Path Explosion Bounds & Long-Context vs GraphRAG | Ch 9 | 🔄 Ch 9 in PR (VI+EN parity, branch `en-vi-ch9-pillar5`) | `docs/BOOK_V0_3_MILESTONE.md` §Target 5 |
 | Pillar 6: Closed-Loop Stability & Autophagous Model Collapse | Ch 10 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 6 |
 
 ## Legend

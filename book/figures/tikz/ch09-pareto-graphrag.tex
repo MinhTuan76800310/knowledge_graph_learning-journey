@@ -1,0 +1,57 @@
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{unicode-math}
+\setmathfont{Cambria Math}
+\usetikzlibrary{shapes.geometric,positioning,fit,backgrounds,arrows.meta,calc}
+
+\begin{document}
+\begin{tikzpicture}[
+  axis/.style={-{Stealth[length=2.6mm]}, thick, gray!60!black},
+  curve/.style={thick, blue!60!black},
+  label/.style={font=\scriptsize\itshape, text=gray!55!black},
+  reg/.style={font=\scriptsize\bfseries},
+]
+
+% === Title ===
+\node[font=\scriptsize\bfseries] at (4.2, 4.3) {Mặt trận Pareto: GraphRAG vs Long-Context (ranh giới ROI)};
+
+% === Axes ===
+\draw[axis] (0,0) -- (8.6,0) node[right, font=\scriptsize, text=gray!60!black] {};
+\draw[axis] (0,-2.4) -- (0,3.6);
+
+% X label
+\node[label, align=center] at (4.3, -1.0) {Kích thước kho $\times$ độ sâu quan hệ $\times$ yêu cầu kiểm toán\\
+ (độ khó bài toán)};
+% Y label
+\node[label, rotate=90, align=center] at (-1.15, 1.6) {Lợi thế tương đối của GraphRAG};
+
+% zero line
+\draw[dashed, gray!50] (0,0) -- (8.6,0);
+\node[label, right] at (8.6, 0) {$0$};
+
+% === Rising curve crossing zero at ROI boundary ===
+\draw[curve] plot[smooth, domain=0.2:8.4, samples=60]
+  (\x, {-1.9 + 0.62*\x});
+
+% ROI boundary marker
+\draw[dotted, thick, red!70!black] (3.06,0) -- (3.06,-2.4);
+\node[font=\scriptsize, text=red!70!black] at (3.06, 0.35) {ranh giới ROI};
+
+% === Region labels ===
+\node[reg, text=blue!55!black] at (1.6, 2.6) {Long-Context thắng};
+\node[label, align=center] at (1.6, 2.05) {kho nhỏ, câu hỏi mở,\\ prototype nhanh};
+
+\node[reg, text=green!40!black] at (6.6, 2.6) {GraphRAG bắt buộc};
+\node[label, align=center] at (6.6, 2.05) {đa chặng, kiểm toán,\\ mâu thuẫn, toàn cục};
+
+% === Four Pareto axes legend (bottom-right box) ===
+\node[draw, rounded corners, fill=gray!6, align=left, font=\scriptsize, text width=6.6cm] (leg) at (5.0, -1.9)
+  {\textbf{Bốn trục đánh đổi (Bảng 9.4):}\\
+   \textbullet\ Chi phí/truy vấn: $O(N^2)$ (LC) vs $O(\lvert E_{\text{sub}}\rvert)$ (GR)\\
+   \textbullet\ Lost-in-the-middle: LC tụt ở giữa cửa sổ (§9.34)\\
+   \textbullet\ Neo tri thức luận: GR có Claim ID + quản trị (§9.23)\\
+   \textbullet\ Tổng hợp toàn cục: GR dùng cộng đồng (§9.56)};
+
+\end{tikzpicture}
+\end{document}
