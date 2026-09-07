@@ -12,14 +12,14 @@ Each lab is designed to be:
 
 ## 🗺️ Curriculum Matrix (Chapters 1–10)
 
-> **Current Implementation Status:** **18 Labs Executable** (`pytest`: 131 passed across Ch1–3) | **24 Labs Target Specifications** (Pending implementation for Ch4–10) | **Target Total: 42 Labs**.
+> **Current Implementation Status:** **21 Labs Executable** (`pytest`: 144 passed across Ch1–4) | **21 Labs Target Specifications** (Pending implementation for Ch5–10) | **Target Total: 42 Labs**.
 
 | Chapter | Title | Lab Range | Status | Test Module |
 |---|---|:---:|:---:|---|
 | **Ch 1** | From Graph to Knowledge | `EXP-1-1` $\to$ `EXP-1-5` | ✅ Complete (5 labs) | `chapter01/test_experiments.py` (25 tests) |
 | **Ch 2** | Data Models & Query Languages | `EXP-2-1` $\to$ `EXP-2-7` | ✅ Complete (7 labs) | `chapter02/test_ch2_experiments.py` (40 tests) |
 | **Ch 3** | Schema, Identity, Context | `EXP-3-1` $\to$ `EXP-3-6` | ✅ Complete (6 labs) | `chapter03/test_ch3_experiments.py` (15 tests) |
-| **Ch 4** | Ontologies & Formal Meaning | `EXP-4-1` $\to$ `EXP-4-3` | 🚧 3 Labs to Build | `chapter04/test_ch4_experiments.py` |
+| **Ch 4** | Ontologies & Formal Meaning | `EXP-4-1` $\to$ `EXP-4-3` | ✅ Complete (3 labs) | `chapter04/test_ch4_experiments.py` (13 tests) |
 | **Ch 5** | Deduction, Rules, Validation | `EXP-5-1` $\to$ `EXP-5-4` | 🚧 4 Labs to Build | `chapter05/test_ch5_experiments.py` |
 | **Ch 6** | Claims, Epistemics, Time | `EXP-6-1` $\to$ `EXP-6-4` | 🚧 4 Labs to Build | `chapter06/test_ch6_experiments.py` |
 | **Ch 7** | Acquisition & Integration | `EXP-7-1` $\to$ `EXP-7-6` | 🚧 6 Labs to Build | `chapter07/test_ch7_experiments.py` |
@@ -140,7 +140,7 @@ Each lab is designed to be:
   - Assert deductive closure generates all implicit `rdf:type` and `rdfs:subClassOf` triples.
 
 #### `EXP-4-2`: $DL\text{-}Lite_R$ / OWL 2 QL First-Order Query Rewriting Prototype
-- **File:** `chapter04/exp_4_2_fol_rewriting.py`
+- **File:** `chapter04/exp_4_2_dl_lite_query_rewriting.py`
 - **Pedagogical Purpose:** Implement backward-chaining ontological query rewriting (Calvanese et al., 2007).
 - **Implementation:**
   - Input: Conjunctive SPARQL query $q(x) \leftarrow \text{Mechanism}(x)$.
@@ -150,7 +150,7 @@ Each lab is designed to be:
   - Verify that SQL UCQ query result is 100% equivalent to full graph materialization.
 
 #### `EXP-4-3`: Open World Assumption (OWA) vs. Inconsistency Detection
-- **File:** `chapter04/exp_4_3_owa_vs_cwa.py`
+- **File:** `chapter04/exp_4_3_owa_and_inconsistency.py`
 - **Pedagogical Purpose:** Contrast missing data under OWA with formal contradiction and class unsatisfiability (`owl:Nothing`).
 - **Test Oracle:**
   - Assert that missing properties return unproven (not false). Assert that membership in disjoint classes triggers inconsistency.

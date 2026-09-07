@@ -47,10 +47,10 @@ Each entry records:
 
 ---
 
-## Backlog outside Chapter 2
+## Backlog outside Chapters 1–4
 
-Chapters 4–10 experiments are not yet designed. They will be added here as each
-chapter is written, applying the same rule: defer any experiment that is not required
+Chapters 5–10 experiments are being designed and implemented. They will be added here as each
+chapter lab suite is completed, applying the same rule: defer any experiment that is not required
 to validate a factual claim in the manuscript.
 
 ---
@@ -82,6 +82,24 @@ to validate a factual claim in the manuscript.
 
 ### EXP-3-6 — Identity-resolution exercise
 - **Status:** ✅ COMPLETED (`chapter03/exp_3_6_identity_resolution.py`)
+
+---
+
+## Chapter 4 — Ontologies and Formal Meaning Labs (COMPLETED)
+
+> **Status Update (v0.3.0 Completeness):** All 3 experiments for Chapter 4 have been fully implemented, verified with 13 direct semantic tests in `chapter04/test_ch4_experiments.py`, and documented:
+> - `EXP-4-1`: `chapter04/exp_4_1_owl_reasoning.py` (OWL 2 DL Entailment & Subsumption Reasoning over the Mechanism Knowledge Graph domain, preserving source graph immutability).
+> - `EXP-4-2`: `chapter04/exp_4_2_dl_lite_query_rewriting.py` (DL-Lite backward-chaining query rewriting to SQL Union of Conjunctive Queries over SQLite, demonstrating AC^0 data complexity and 100% equivalence to RDF materialization).
+> - `EXP-4-3`: `chapter04/exp_4_3_owa_and_inconsistency.py` (Open World Assumption tri-state logic, disjointness conflict detection, and distinguishing class unsatisfiability from ontology inconsistency).
+
+### EXP-4-1 — Description Logic Subsumption & Entailment
+- **Status:** ✅ COMPLETED (`chapter04/exp_4_1_owl_reasoning.py`)
+
+### EXP-4-2 — DL-Lite First-Order Query Rewriting to SQL
+- **Status:** ✅ COMPLETED (`chapter04/exp_4_2_dl_lite_query_rewriting.py`)
+
+### EXP-4-3 — OWA vs. Disjointness Inconsistency
+- **Status:** ✅ COMPLETED (`chapter04/exp_4_3_owa_and_inconsistency.py`)
 
 ---
 

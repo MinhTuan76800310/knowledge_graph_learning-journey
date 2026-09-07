@@ -43,5 +43,5 @@ python_version = "3.12"
 strict = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests", "chapter01", "chapter02", "chapter03"]
+testpaths = ["tests", "chapter01", "chapter02", "chapter03", "chapter04"]
 addopts = "-v --tb=short"
