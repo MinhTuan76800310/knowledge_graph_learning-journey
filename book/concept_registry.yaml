@@ -1,2549 +1,2706 @@
-# Concept Dependency Registry — Knowledge Graph Book
-# Tracks when each concept is first MENTIONED, first REQUIRED, and first EXPLAINED.
-#
-# Field semantics:
-#   first_mentioned_chapter:    first textual appearance (may be incidental)
-#   first_required_use_chapter: first chapter where reader MUST understand the concept
-#   first_explained_chapter:    chapter where mechanism-level teaching occurs
-#   incidental_gloss:           whether pre-explanation mentions include a minimum local gloss
-#   explanation_level:          intuition | mechanism | application
-#
-# Invariants enforced by tests/test_book_concept_dependencies.py:
-#   1. first_explained_chapter <= first_required_use_chapter
-#      (cannot require understanding before teaching)
-#   2. if first_mentioned_chapter < first_explained_chapter then incidental_gloss == true
-#      (early mentions must carry a local gloss)
-#   3. first_mentioned_chapter <= first_required_use_chapter
-#      (cannot require something before it's even mentioned)
-
 concepts:
-  # === Chapter 1 core concepts ===
   graph:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Formal model introduced with set-theoretic definition"
-
+    notes: Formal model introduced with set-theoretic definition
   node:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Defined as element of vertex set V"
-
+    notes: Defined as element of vertex set V
   edge:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Defined as element of edge set E, directed pair (u,v)"
-
+    notes: Defined as element of edge set E, directed pair (u,v)
   entity:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Real-world entity ≠ graph node ≠ identifier ≠ label — four-way distinction"
-
+    notes: Real-world entity ≠ graph node ≠ identifier ≠ label — four-way distinction
   relation:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Binary relation between entities, distinct from property"
-
+    notes: Binary relation between entities, distinct from property
   property:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Attribute of entity; distinguished from relation"
-
+    notes: Attribute of entity; distinguished from relation
   knowledge_graph:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Data Graph + Semantics + Context mental model"
-
+    notes: Data Graph + Semantics + Context mental model
   data_graph:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Pure structure layer of KG mental model"
-
+    notes: Pure structure layer of KG mental model
   semantics:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Meaning layer; full formal treatment deferred to Ch4"
-
+    notes: Meaning layer; full formal treatment deferred to Ch4
   context:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Provenance/time/scope layer; full treatment in Ch6"
-
+    notes: Provenance/time/scope layer; full treatment in Ch6
   taxonomy:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Data Graph + concept hierarchy C⊆V and subClassOf partial order"
-
+    notes: Data Graph + concept hierarchy C⊆V and subClassOf partial order
   ontology:
     first_mentioned_chapter: 1
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Introduced intuitively in Ch1; formal treatment Ch4"
-
+    notes: Introduced intuitively in Ch1; formal treatment Ch4
   schema:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Expected structure; distinguished from ontology in Ch3-4"
-
+    notes: Expected structure; distinguished from ontology in Ch3-4
   rdf:
     first_mentioned_chapter: 1
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 preview box; triple model taught in Ch2"
-
+    notes: Named in Ch1 preview box; triple model taught in Ch2
   sparql:
     first_mentioned_chapter: 1
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1; query language taught in Ch2"
-
+    notes: Named in Ch1; query language taught in Ch2
   rdfs:
     first_mentioned_chapter: 1
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1; schema language taught in Ch2"
-
+    notes: Named in Ch1; schema language taught in Ch2
   owl:
     first_mentioned_chapter: 1
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1; formal semantics taught in Ch4"
-
+    notes: Named in Ch1; formal semantics taught in Ch4
   shacl:
     first_mentioned_chapter: 1
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1; validation language taught in Ch5"
-
+    notes: Named in Ch1; validation language taught in Ch5
   property_graph:
     first_mentioned_chapter: 1
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Contrasted with RDF in Ch1; model details in Ch2"
-
+    notes: Contrasted with RDF in Ch1; model details in Ch2
   iri:
     first_mentioned_chapter: 1
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1; identity mechanism taught in Ch2"
-
+    notes: Named in Ch1; identity mechanism taught in Ch2
   embedding:
     first_mentioned_chapter: 1
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Mentioned as representation technique; full treatment Ch8"
-
+    notes: Mentioned as representation technique; full treatment Ch8
   inference:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Deriving new knowledge from existing knowledge; formal treatment Ch4-5"
-
+    notes: Deriving new knowledge from existing knowledge; formal treatment Ch4-5
   validation:
     first_mentioned_chapter: 1
     first_required_use_chapter: 1
     first_explained_chapter: 1
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Checking structural/semantic correctness; SHACL treatment Ch5"
-
+    notes: Checking structural/semantic correctness; SHACL treatment Ch5
   provenance:
     first_mentioned_chapter: 1
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 context layer; PROV-O treatment Ch6"
-
-  # === Chapter 2 core concepts ===
+    notes: Named in Ch1 context layer; PROV-O treatment Ch6
   triple:
     first_mentioned_chapter: 1
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 §1.3; formal (subject, predicate, object) definition in Ch2"
-
+    notes: Named in Ch1 §1.3; formal (subject, predicate, object) definition in Ch2
   blank_node:
     first_mentioned_chapter: 2
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Existential variable, not a name; scope-limited identity"
-
+    notes: Existential variable, not a name; scope-limited identity
   literal:
     first_mentioned_chapter: 2
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Typed value with optional language tag"
-
+    notes: Typed value with optional language tag
   turtle:
     first_mentioned_chapter: 2
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Serialization syntax for RDF; prefixes, semicolons, collections"
-
+    notes: Serialization syntax for RDF; prefixes, semicolons, collections
   bgp:
     first_mentioned_chapter: 2
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Basic Graph Pattern; pattern matching via solution mappings"
-
+    notes: Basic Graph Pattern; pattern matching via solution mappings
   solution_mapping:
     first_mentioned_chapter: 2
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Variable-to-term binding μ; worked substitution example"
-
+    notes: Variable-to-term binding μ; worked substitution example
   graph_isomorphism:
     first_mentioned_chapter: 2
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Structural equivalence modulo blank node renaming"
-
+    notes: Structural equivalence modulo blank node renaming
   cypher:
     first_mentioned_chapter: 2
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Property graph query language; pattern matching"
-
-  # === Chapter 3 core concepts ===
+    notes: Property graph query language; pattern matching
   identity:
     first_mentioned_chapter: 1
     first_required_use_chapter: 3
     first_explained_chapter: 3
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 Entity definition; full treatment Ch3"
-
+    notes: Named in Ch1 Entity definition; full treatment Ch3
   entity_resolution:
-    first_mentioned_chapter: 1
-    first_required_use_chapter: 3
-    first_explained_chapter: 3
+    first_mentioned_chapter: 3
+    first_required_use_chapter: 7
+    first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 Entity counterexample; full treatment Ch3"
-
+    notes: 'End-to-end: do two records denote the same entity? Candidate generation
+      → comparison → decision → merge; record linkage is its quantitative core'
   reification:
     first_mentioned_chapter: 3
     first_required_use_chapter: 3
     first_explained_chapter: 3
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Making statements about statements; n-ary relations"
-
+    notes: Making statements about statements; n-ary relations
   named_graph:
     first_mentioned_chapter: 1
     first_required_use_chapter: 3
     first_explained_chapter: 3
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 §1.12; full treatment Ch3"
-
+    notes: Named in Ch1 §1.12; full treatment Ch3
   una:
     first_mentioned_chapter: 3
     first_required_use_chapter: 3
     first_explained_chapter: 3
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Unique Name Assumption; OWL lacks it by default"
-
+    notes: Unique Name Assumption; OWL lacks it by default
   subclass:
     first_mentioned_chapter: 1
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "rdfs:subClassOf as partial order; OWL ⊑ semantics in Ch4"
-
+    notes: rdfs:subClassOf as partial order; OWL ⊑ semantics in Ch4
   domain_range:
     first_mentioned_chapter: 1
     first_required_use_chapter: 2
     first_explained_chapter: 2
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 §1.6 step 4; RDFS entailment semantics in Ch2"
-
-  # === Chapter 4 concepts ===
+    notes: Named in Ch1 §1.6 step 4; RDFS entailment semantics in Ch2
   axiom:
     first_mentioned_chapter: 1
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 ontology definition; formal treatment Ch4"
-
+    notes: Named in Ch1 ontology definition; formal treatment Ch4
   interpretation:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Model-theoretic interpretation I = (Δ^I, ·^I)"
-
+    notes: Model-theoretic interpretation I = (Δ^I, ·^I)
   model:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Interpretation satisfying all axioms"
-
+    notes: Interpretation satisfying all axioms
   entailment:
     first_mentioned_chapter: 1
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Named in Ch1 §1.4; O ⊨ α formally taught Ch4"
-
+    notes: Named in Ch1 §1.4; O ⊨ α formally taught Ch4
   class_expression:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Intersection, union, complement, restrictions"
-
+    notes: Intersection, union, complement, restrictions
   existential_restriction:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "∃R.C; requires existence in model, not named individual"
-
+    notes: ∃R.C; requires existence in model, not named individual
   universal_restriction:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "∀R.C; does not imply existence of R-successor"
-
+    notes: ∀R.C; does not imply existence of R-successor
   owa:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Open World Assumption; unknown ≠ false"
-
+    notes: Open World Assumption; unknown ≠ false
   necessary_condition:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "If A ⊑ B then B is necessary for A; directionality explicit"
-
+    notes: If A ⊑ B then B is necessary for A; directionality explicit
   sufficient_condition:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "If A ⊑ B then A is sufficient for B; Equivalence gives both necessary and sufficient"
-
+    notes: If A ⊑ B then A is sufficient for B; Equivalence gives both necessary and
+      sufficient
   description_logic:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Decidable fragment of FOL; expressivity vs computability tradeoff"
-
+    notes: Decidable fragment of FOL; expressivity vs computability tradeoff
   tbox:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Terminological box; general domain knowledge (mental category, not physical section)"
-
+    notes: Terminological box; general domain knowledge (mental category, not physical
+      section)
   abox:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Assertional box; individual facts (mental category, not physical section)"
-
+    notes: Assertional box; individual facts (mental category, not physical section)
   rbox:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Role box; property characteristics (mental category, not physical section)"
-
+    notes: Role box; property characteristics (mental category, not physical section)
   consistency:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Existence of at least one model; ≠ data correctness"
-
+    notes: Existence of at least one model; ≠ data correctness
   satisfiability:
     first_mentioned_chapter: 4
     first_required_use_chapter: 4
     first_explained_chapter: 4
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Non-empty extension in at least one model; ≠ ontology consistency"
-
-  # === Chapter 5 concepts ===
+    notes: Non-empty extension in at least one model; ≠ ontology consistency
   forward_chaining:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Fixpoint algorithm G_{i+1} = G_i ∪ consequences(G_i); monotonicity required for termination"
-
+    notes: Fixpoint algorithm G_{i+1} = G_i ∪ consequences(G_i); monotonicity required
+      for termination
   materialization:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Implementation strategy of pre-computing closure; ≠ entailment itself; may be infeasible"
-
+    notes: Implementation strategy of pre-computing closure; ≠ entailment itself;
+      may be infeasible
   rule:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Horn clause: head ← body₁ ∧ ... ∧ bodyₙ; monotonic; finite-graph termination guaranteed"
-
+    notes: 'Horn clause: head ← body₁ ∧ ... ∧ bodyₙ; monotonic; finite-graph termination
+      guaranteed'
   validation_report:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "SHACL output: conforms (bool) + list of ValidationResult; violation ≠ repair"
-
+    notes: 'SHACL output: conforms (bool) + list of ValidationResult; violation ≠
+      repair'
   shape:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "SHACL constraint definition; targets nodes; ≠ ontology axiom"
-
+    notes: SHACL constraint definition; targets nodes; ≠ ontology axiom
   soundness:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Everything derived is entailed; must specify language + regime + task"
-
+    notes: Everything derived is entailed; must specify language + regime + task
   completeness:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Everything entailed is derived; OWL RL not complete on arbitrary RDF"
-
+    notes: Everything entailed is derived; OWL RL not complete on arbitrary RDF
   conformance:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Data satisfies shapes; ≠ factual truth; ≠ logical consistency"
-
+    notes: Data satisfies shapes; ≠ factual truth; ≠ logical consistency
   entailment_regime:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Specifies which semantic rules apply; different regimes → different consequences"
-
+    notes: Specifies which semantic rules apply; different regimes → different consequences
   swrl:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: intuition
     incidental_gloss: false
-    notes: "W3C Member Submission (NOT Rec); extends OWL with Horn rules; undecidable with OWL DL"
-
+    notes: W3C Member Submission (NOT Rec); extends OWL with Horn rules; undecidable
+      with OWL DL
   substitution:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Binding θ mapping variables to concrete values; bridges abstract rules to graph entities"
-
+    notes: Binding θ mapping variables to concrete values; bridges abstract rules
+      to graph entities
   fixpoint:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "G_{n+1} = G_n; no new facts derived; closure stabilized"
-
+    notes: G_{n+1} = G_n; no new facts derived; closure stabilized
   monotonicity:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "G ⊆ G' → Consequences(G) ⊆ Consequences(G'); defined over knowledge base, not rule body"
-
+    notes: G ⊆ G' → Consequences(G) ⊆ Consequences(G'); defined over knowledge base,
+      not rule body
   focus_node:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Node being validated against a shape; selected by target mechanism"
-
+    notes: Node being validated against a shape; selected by target mechanism
   value_node:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Nodes reached from focus node via path; for node shapes, value nodes = {focus node}"
-
+    notes: Nodes reached from focus node via path; for node shapes, value nodes =
+      {focus node}
   shacl_instance:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "SHACL class membership includes rdfs:subClassOf* chain; not just explicit rdf:type"
-
+    notes: SHACL class membership includes rdfs:subClassOf* chain; not just explicit
+      rdf:type
   effective_validation_graph:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Graph actually validated; may be asserted, expanded, or hybrid; architectural decision"
-
+    notes: Graph actually validated; may be asserted, expanded, or hybrid; architectural
+      decision
   graph_repair:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Decision problem, not syntactic patch; multiple candidate repairs; passes validation ≠ becomes true"
-
+    notes: Decision problem, not syntactic patch; multiple candidate repairs; passes
+      validation ≠ becomes true
   backward_chaining:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Goal-driven reasoning; from query → subgoals → assertions; contrasted with forward chaining"
-
+    notes: Goal-driven reasoning; from query → subgoals → assertions; contrasted with
+      forward chaining
   immediate_consequence_operator:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "T_P(I) = all ground heads whose bodies hold in I; monotone on finite ground universe → lfp(T_P) = ∪ T_P^k(∅); Knaster-Tarski"
-
+    notes: T_P(I) = all ground heads whose bodies hold in I; monotone on finite ground
+      universe → lfp(T_P) = ∪ T_P^k(∅); Knaster-Tarski
   datalog_semantics:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Three equivalent semantics of safe function-free Datalog: model-theoretic (minimal Herbrand model), proof-theoretic, fixpoint lfp(T_P); data PTIME / combined EXPTIME"
-
+    notes: 'Three equivalent semantics of safe function-free Datalog: model-theoretic
+      (minimal Herbrand model), proof-theoretic, fixpoint lfp(T_P); data PTIME / combined
+      EXPTIME'
   negation_as_failure:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "NAF (not/~): non-monotonic, CWA-flavored; distinct from classical negation (¬, monotonic, OWA); unstratified negation → multiple minimal models"
-
+    notes: 'NAF (not/~): non-monotonic, CWA-flavored; distinct from classical negation
+      (¬, monotonic, OWA); unstratified negation → multiple minimal models'
   stratified_datalog:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Negated predicate must live in a strictly lower stratum → unique perfect model; stratification is a property of the program, not the data"
-
+    notes: Negated predicate must live in a strictly lower stratum → unique perfect
+      model; stratification is a property of the program, not the data
   rete_algorithm:
     first_mentioned_chapter: 5
     first_required_use_chapter: 5
     first_explained_chapter: 5
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Alpha (1-input filters) + beta (2-input joins + memory) network caching partial matches; WMEs + agenda/conflict resolution; computes same lfp(T_P) faster; memory-for-speed"
-
-  # === Chapter 6 concepts ===
+    notes: Alpha (1-input filters) + beta (2-input joins + memory) network caching
+      partial matches; WMEs + agenda/conflict resolution; computes same lfp(T_P) faster;
+      memory-for-speed
   claim:
     first_mentioned_chapter: 3
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "First-class epistemic object: assertion + source + time + evidence + status; distinct from proposition and assertion"
-
+    notes: 'First-class epistemic object: assertion + source + time + evidence + status;
+      distinct from proposition and assertion'
   evidence:
     first_mentioned_chapter: 3
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Information supporting or challenging a claim; supports/contradicts/isRelevantTo relations; ≠ source"
-
+    notes: Information supporting or challenging a claim; supports/contradicts/isRelevantTo
+      relations; ≠ source
   epistemic_model:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Book-defined framework: Observation → Assertion → Claim → Evidence → Accepted Knowledge"
-
+    notes: 'Book-defined framework: Observation → Assertion → Claim → Evidence → Accepted
+      Knowledge'
   proposition:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Abstract content P, independent of representation; distinguished from assertion and claim"
-
+    notes: Abstract content P, independent of representation; distinguished from assertion
+      and claim
   governance_state:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Candidate/Accepted/Rejected/Contested/Superseded; Accepted ≠ eternal truth"
-
+    notes: Candidate/Accepted/Rejected/Contested/Superseded; Accepted ≠ eternal truth
   contradiction_taxonomy:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Five types: logical, value conflict, temporal, scope, source; context dissolution before declaring contradiction"
-
+    notes: 'Five types: logical, value conflict, temporal, scope, source; context
+      dissolution before declaring contradiction'
   valid_time:
     first_mentioned_chapter: 3
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "When statement applies to the world; distinguished from assertion/observation/system time"
-
+    notes: When statement applies to the world; distinguished from assertion/observation/system
+      time
   bitemporal:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Valid time + system time as a 2D rectangle R=[Tv_start,Tv_end]x[Ttx_start,Ttx_end]; point-probe query; append-only non-destructive history (Snodgrass)"
-
+    notes: Valid time + system time as a 2D rectangle R=[Tv_start,Tv_end]x[Ttx_start,Ttx_end];
+      point-probe query; append-only non-destructive history (Snodgrass)
   dempster_shafer:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Theory of evidence: frame Θ, mass m:2^Θ→[0,1] with m(∅)=0, Bel/Pl interval; Dempster's rule with conflict K; Zadeh paradox — keep conflicting branches, don't blend"
-
+    notes: 'Theory of evidence: frame Θ, mass m:2^Θ→[0,1] with m(∅)=0, Bel/Pl interval;
+      Dempster''s rule with conflict K; Zadeh paradox — keep conflicting branches,
+      don''t blend'
   subjective_logic:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Opinion ω=(b,d,u,a), b+d+u=1 on barycentric simplex; reference probability P=b+a·u; cumulative fusion ⊕ shrinks uncertainty monotonically"
-
+    notes: Opinion ω=(b,d,u,a), b+d+u=1 on barycentric simplex; reference probability
+      P=b+a·u; cumulative fusion ⊕ shrinks uncertainty monotonically
   agm_belief_revision:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Expansion/contraction/revision on a belief set; Levi & Harper identities; 6 rationality postulates; Claim Ledger = lossless projection satisfying AGM per system-time slice"
-
+    notes: Expansion/contraction/revision on a belief set; Levi & Harper identities;
+      6 rationality postulates; Claim Ledger = lossless projection satisfying AGM
+      per system-time slice
   supersession:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "New claim replaces old because better, not because old is wrong; ≠ contradiction"
-
+    notes: New claim replaces old because better, not because old is wrong; ≠ contradiction
   confidence_semantics:
     first_mentioned_chapter: 6
     first_required_use_chapter: 6
     first_explained_chapter: 6
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Must specify WHAT is assessed; source reliability ≠ claim confidence; no universal formula"
-
-  # === Chapter 7 concepts ===
+    notes: Must specify WHAT is assessed; source reliability ≠ claim confidence; no
+      universal formula
   knowledge_acquisition:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Bringing source content into the system as candidate knowledge with provenance; distinct from integration"
-
+    notes: Bringing source content into the system as candidate knowledge with provenance;
+      distinct from integration
   knowledge_integration:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Reconciling, validating, resolving candidate knowledge before Claim Ledger insertion; grounded in classification"
-
+    notes: Reconciling, validating, resolving candidate knowledge before Claim Ledger
+      insertion; grounded in classification
   source_artifact:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Registered addressable record of a source (IRI + metadata); ≠ physical source; registration ≠ reliability"
-
+    notes: Registered addressable record of a source (IRI + metadata); ≠ physical
+      source; registration ≠ reliability
   source_fragment:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Delimited addressable portion of a Source Artifact; fragment-granular provenance"
-
+    notes: Delimited addressable portion of a Source Artifact; fragment-granular provenance
   extraction:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Turning raw content into candidate structured records; content-specific patterns; not error-free"
-
+    notes: Turning raw content into candidate structured records; content-specific
+      patterns; not error-free
   extraction_activity:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "PROV Activity recording a specific extraction execution; breadcrumb for provenance"
-
+    notes: PROV Activity recording a specific extraction execution; breadcrumb for
+      provenance
   extraction_confidence:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Confidence about the extraction, not about the extracted content's truth"
-
+    notes: Confidence about the extraction, not about the extracted content's truth
   normalization:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Canonical comparable values (units, dates, numbers); lossy; keep raw value traceable"
-
+    notes: Canonical comparable values (units, dates, numbers); lossy; keep raw value
+      traceable
   structuring:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Producing RDF triples from normalized records under a target schema"
-
-  entity_resolution:
-    first_mentioned_chapter: 3
-    first_required_use_chapter: 7
-    first_explained_chapter: 7
-    explanation_level: mechanism
-    incidental_gloss: true
-    notes: "End-to-end: do two records denote the same entity? Candidate generation → comparison → decision → merge; record linkage is its quantitative core"
-
+    notes: Producing RDF triples from normalized records under a target schema
   record_linkage:
     first_mentioned_chapter: 3
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Fellegi–Sunter: comparison vector γ, m/u probabilities, likelihood ratio, two-threshold decision rule; problem named in Ch3 §3.2.5"
-
+    notes: 'Fellegi–Sunter: comparison vector γ, m/u probabilities, likelihood ratio,
+      two-threshold decision rule; problem named in Ch3 §3.2.5'
   candidate_generation:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Recall-oriented coarse pairing; candidates are not decisions"
-
+    notes: Recall-oriented coarse pairing; candidates are not decisions
   blocking:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Grouping by blocking key to avoid O(n²) comparisons; trades recall for tractability"
-
+    notes: Grouping by blocking key to avoid O(n²) comparisons; trades recall for
+      tractability
   candidate_matching:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Comparison vector γ evidence over attributes; not a truth judgment"
-
+    notes: Comparison vector γ evidence over attributes; not a truth judgment
   identity_decision:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Outcome: match / possible (clerical) / non-match; decisions carry residual error"
-
+    notes: 'Outcome: match / possible (clerical) / non-match; decisions carry residual
+      error'
   schema_alignment:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Semantic correspondences between schema elements; element vs structure level; schema/instance/hybrid matchers"
-
+    notes: Semantic correspondences between schema elements; element vs structure
+      level; schema/instance/hybrid matchers
   mapping_specification:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Explicit versioned artifact: source → target graph; reviewable and replayable (R2RML triples map)"
-
+    notes: 'Explicit versioned artifact: source → target graph; reviewable and replayable
+      (R2RML triples map)'
   direct_mapping:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Automatic W3C default RDB→RDF: table→class, row→resource, column→predicate; shape follows DB schema"
-
+    notes: 'Automatic W3C default RDB→RDF: table→class, row→resource, column→predicate;
+      shape follows DB schema'
   semantic_mapping:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Custom mapping to a target ontology (R2RML / CSVW); author decisions shape RDF; lossy"
-
+    notes: Custom mapping to a target ontology (R2RML / CSVW); author decisions shape
+      RDF; lossy
   deduplication:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Detecting exact/near duplicates; reconcile evidence, never silently drop"
-
+    notes: Detecting exact/near duplicates; reconcile evidence, never silently drop
   idempotent_ingestion:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Re-running ingestion yields same ledger state; enabled by determinism + content hashes"
-
+    notes: Re-running ingestion yields same ledger state; enabled by determinism +
+      content hashes
   content_hash:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Deterministic digest of canonical record; key for dedup/idempotency; ≠ claim identity, ≠ provenance"
-
+    notes: Deterministic digest of canonical record; key for dedup/idempotency; ≠
+      claim identity, ≠ provenance
   structural_validation:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "SHACL shape conformance; checks shape not truth"
-
+    notes: SHACL shape conformance; checks shape not truth
   integration_decision:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Accept / reject / defer to review; recorded rationale; not a proof of truth"
-
+    notes: Accept / reject / defer to review; recorded rationale; not a proof of truth
   conflict_detection:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Overlaps with Ch6 contradiction taxonomy; not every text difference is a conflict; completeness not guaranteed"
-
+    notes: Overlaps with Ch6 contradiction taxonomy; not every text difference is
+      a conflict; completeness not guaranteed
   merge_outcome:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Ledger result of a candidate cluster: insert/strengthen/supersede/merge; losing claims preserved"
-
+    notes: 'Ledger result of a candidate cluster: insert/strengthen/supersede/merge;
+      losing claims preserved'
   claim_ledger_insertion:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Committed write with full epistemic envelope; ledger is system of record"
-
+    notes: Committed write with full epistemic envelope; ledger is system of record
   canonical_projection:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Materialized view from ledger after governance; rebuilt, not independent of truth"
-
+    notes: Materialized view from ledger after governance; rebuilt, not independent
+      of truth
   lineage:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Provenance path from ledger claim back to source fragments; ≠ evidence"
-
+    notes: Provenance path from ledger claim back to source fragments; ≠ evidence
   evidence_vs_lineage:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Lineage answers 'from where?'; evidence answers 'why believe?'; rich lineage ≠ strong evidence"
-
+    notes: Lineage answers 'from where?'; evidence answers 'why believe?'; rich lineage
+      ≠ strong evidence
   human_review:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Clerical review zone (Fellegi–Sunter) / policy-deferred cases; decisions recorded in ledger"
-
+    notes: Clerical review zone (Fellegi–Sunter) / policy-deferred cases; decisions
+      recorded in ledger
   data_quality_dimension:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Multiple dimensions: accuracy, completeness, consistency, timeliness, provenance, conformance; no single score"
-
+    notes: 'Multiple dimensions: accuracy, completeness, consistency, timeliness,
+      provenance, conformance; no single score'
   failure_modes:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Catalog: extraction/normalization/blocking/linkage/mapping/idempotency/validation/echo/partial/chunk/policy-drift; each with signal + recovery"
-
+    notes: 'Catalog: extraction/normalization/blocking/linkage/mapping/idempotency/validation/echo/partial/chunk/policy-drift;
+      each with signal + recovery'
   echo_source:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Derived source with no independent evidence; echoing inflates apparent support"
-
+    notes: Derived source with no independent evidence; echoing inflates apparent
+      support
   pipeline_versioning:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Every output-shaping component versioned and stamped into provenance"
-
+    notes: Every output-shaping component versioned and stamped into provenance
   reprocessing:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Re-running pipeline after version change; safe only with idempotency; re-gated"
-
+    notes: Re-running pipeline after version change; safe only with idempotency; re-gated
   chunking:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Splitting long documents into bounded addressable fragments; boundaries are a decision"
-
+    notes: Splitting long documents into bounded addressable fragments; boundaries
+      are a decision
   retrieval_bound:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Fragment may only assert what its own content supports within its context; OWA preserved"
-
+    notes: Fragment may only assert what its own content supports within its context;
+      OWA preserved
   extraction_schema:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Declared intermediate record structure; conformance ≠ semantic correctness"
-
+    notes: Declared intermediate record structure; conformance ≠ semantic correctness
   unresolved_value:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Explicitly modeled unknown; never guessed, never interpreted as false (OWA)"
-
+    notes: Explicitly modeled unknown; never guessed, never interpreted as false (OWA)
   integration_policy:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Versioned decision rules operationalizing Ch6 governance; not neutral or universal"
-
+    notes: Versioned decision rules operationalizing Ch6 governance; not neutral or
+      universal
   acquisition_invariant:
     first_mentioned_chapter: 7
     first_required_use_chapter: 7
     first_explained_chapter: 7
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "I1–I7: provenance, version stamp, hash uniqueness, validation accompanies, no overwrite, idempotency, recorded rationale"
-  # === Chapter 8 concepts ===
+    notes: 'I1–I7: provenance, version stamp, hash uniqueness, validation accompanies,
+      no overwrite, idempotency, recorded rationale'
   induction:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Generalizing patterns from observations; fallible; distinct from deduction"
+    notes: Generalizing patterns from observations; fallible; distinct from deduction
   deduction_vs_induction:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Central distinction chain: prediction != entailment"
+    notes: 'Central distinction chain: prediction != entailment'
   abduction:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Inference to best explanation; taught to prevent terminology confusion"
+    notes: Inference to best explanation; taught to prevent terminology confusion
   prediction:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Score-based model output; prediction != entailment"
+    notes: Score-based model output; prediction != entailment
   statistical_knowledge:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Learned representations/scores vs symbolic explicit structures"
+    notes: Learned representations/scores vs symbolic explicit structures
   feature_representation:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Hand-chosen encodings; model sees only chosen representation"
+    notes: Hand-chosen encodings; model sees only chosen representation
   representation_learning:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Learning vector representations from data; entity != embedding"
+    notes: Learning vector representations from data; entity != embedding
   knowledge_graph_embedding:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "E,R embeddings + scoring function; higher score = more plausible not true"
+    notes: E,R embeddings + scoring function; higher score = more plausible not true
   scoring_function:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "f(h,r,t) real-valued plausibility"
+    notes: f(h,r,t) real-valued plausibility
   transe:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "h + r ~= t; translation geometry; 1-to-N limitations"
+    notes: h + r ~= t; translation geometry; 1-to-N limitations
   bilinear_model:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "DistMult: <h,r,t> symmetric limitation"
+    notes: 'DistMult: <h,r,t> symmetric limitation'
   complex_embedding:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "ComplEx: Hermitian dot product handles antisymmetry"
+    notes: 'ComplEx: Hermitian dot product handles antisymmetry'
   inductive_bias:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Design-family structural assumptions about what patterns matter"
+    notes: Design-family structural assumptions about what patterns matter
   negative_sampling:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Training-time corruption device; OWA: absence != falsity"
+    notes: 'Training-time corruption device; OWA: absence != falsity'
   false_negative:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "True triples used as negatives because KG incomplete; distorts boundary"
+    notes: True triples used as negatives because KG incomplete; distorts boundary
   link_prediction:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Ranking candidate triples; top rank != truth"
+    notes: Ranking candidate triples; top rank != truth
   mrr:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Mean reciprocal rank; position metric only"
+    notes: Mean reciprocal rank; position metric only
   hits_at_k:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Fraction of correct answers in top-K"
+    notes: Fraction of correct answers in top-K
   filtered_evaluation:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Removes known positives before ranking; not truth measurement"
+    notes: Removes known positives before ranking; not truth measurement
   data_leakage:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Test info reaching training; duplicate/inverse/path/entity/temporal/source"
+    notes: Test info reaching training; duplicate/inverse/path/entity/temporal/source
   temporal_leakage:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Future in train, past in test; temporal split not a panacea"
+    notes: Future in train, past in test; temporal split not a panacea
   source_leakage:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Same source in train+test overestimates cross-source generalization"
+    notes: Same source in train+test overestimates cross-source generalization
   transductive_learning:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Known entities at training; standard KGE is transductive"
+    notes: Known entities at training; standard KGE is transductive
   inductive_graph_learning:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Generalizing to unseen entities/subgraphs (GraIL framing)"
+    notes: Generalizing to unseen entities/subgraphs (GraIL framing)
   oov_entity:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Unseen entity without trained embedding"
+    notes: Unseen entity without trained embedding
   message_passing:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Generic MESSAGE/AGGREGATE/UPDATE framework, not one algorithm"
+    notes: Generic MESSAGE/AGGREGATE/UPDATE framework, not one algorithm
   gnn:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Neural models computing along graph structure"
+    notes: Neural models computing along graph structure
   rgcn:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Relation-specific transformations; encoder+decoder for link prediction"
+    notes: Relation-specific transformations; encoder+decoder for link prediction
   oversmoothing:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Deep GNN layers: representations converge (Laplacian smoothing)"
+    notes: 'Deep GNN layers: representations converge (Laplacian smoothing)'
   subgraph_representation:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Pooling/readout of node representations; node rep != subgraph rep"
+    notes: Pooling/readout of node representations; node rep != subgraph rep
   structural_similarity:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Multi-dimensional evidence; similarity != identity"
+    notes: Multi-dimensional evidence; similarity != identity
   cosine_similarity:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "cos(a,b) = (a.b)/(||a||.||b||); directional agreement only"
+    notes: cos(a,b) = (a.b)/(||a||.||b||); directional agreement only
   mechanism_hypothesis:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "CandidateMechanismHypothesis: BOOK-DEFINED candidate claim about common abstract mechanism"
+    notes: 'CandidateMechanismHypothesis: BOOK-DEFINED candidate claim about common
+      abstract mechanism'
   invariant_structure:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Structure hypothesis retains across applications vs incidental domain detail"
+    notes: Structure hypothesis retains across applications vs incidental domain detail
   rule_induction:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "AMIE+ path rules under OWA; learned rule is hypothesis"
+    notes: AMIE+ path rules under OWA; learned rule is hypothesis
   rule_mining_confidence:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "PCA confidence = frequency assumption; terminology collision with Ch6 epistemic confidence"
+    notes: PCA confidence = frequency assumption; terminology collision with Ch6 epistemic
+      confidence
   hybrid_pipeline:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "BOOK-DEFINED: ML candidates -> symbolic filter -> epistemic -> governance"
+    notes: 'BOOK-DEFINED: ML candidates -> symbolic filter -> epistemic -> governance'
   cross_domain_generalization:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Mechanism recognition in new domain despite different vocabulary"
+    notes: Mechanism recognition in new domain despite different vocabulary
   spurious_correlation:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Shortcut learning; benchmark score can coexist with wrong mechanism understanding"
+    notes: Shortcut learning; benchmark score can coexist with wrong mechanism understanding
   hard_negative:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Negative near decision boundary forces meaningful boundary"
+    notes: Negative near decision boundary forces meaningful boundary
   clustering:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Exploratory grouping; cluster != ontology class"
+    notes: Exploratory grouping; cluster != ontology class
   classification:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Supervised labeling; output is candidate claim not type assertion"
+    notes: Supervised labeling; output is candidate claim not type assertion
   calibration:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Predicted probabilities vs observed correctness; modern nets overconfident"
+    notes: Predicted probabilities vs observed correctness; modern nets overconfident
   model_assessment:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "BOOK-DEFINED object wrapping score semantics/model/dataset; no anonymous numbers"
+    notes: BOOK-DEFINED object wrapping score semantics/model/dataset; no anonymous
+      numbers
   training_provenance:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "wasGeneratedBy TrainingOrInferenceActivity; provenance != evidence"
+    notes: wasGeneratedBy TrainingOrInferenceActivity; provenance != evidence
   self_reinforcing_feedback:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Predictions re-entering training data; distinguishes source vs model-generated candidates"
+    notes: Predictions re-entering training data; distinguishes source vs model-generated
+      candidates
   model_collapse:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: intuition
     incidental_gloss: false
-    notes: "Recursively generated data: distribution tails disappear (Shumailov)"
+    notes: 'Recursively generated data: distribution tails disappear (Shumailov)'
   candidate_axiom:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Model-proposed axiom pending semantics/consistency/governance; blast radius"
+    notes: Model-proposed axiom pending semantics/consistency/governance; blast radius
   blast_radius:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Set of conclusions affected if axiom wrong; mandatory evaluation for candidate axioms"
+    notes: Set of conclusions affected if axiom wrong; mandatory evaluation for candidate
+      axioms
   ontology_evolution:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Candidate ontology refinement from inductive evidence; governance decision"
+    notes: Candidate ontology refinement from inductive evidence; governance decision
   training_data_as_evidence:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Training lineage is provenance, not direct evidence; echo/duplicate sources"
-
-  # Pillar 4 (v0.3) concepts introduced in the Chapter 8 upgrade
+    notes: Training lineage is provenance, not direct evidence; echo/duplicate sources
   weisfeiler_lehman_test:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "1-WL color-refinement test; expressive-power ceiling of standard MPNNs (GCN/GAT/R-GCN)"
+    notes: 1-WL color-refinement test; expressive-power ceiling of standard MPNNs
+      (GCN/GAT/R-GCN)
   rotate:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Relational rotation in complex space with |r_i|=1; symmetry/antisymmetry/inversion/composition"
+    notes: Relational rotation in complex space with |r_i|=1; symmetry/antisymmetry/inversion/composition
   poincare_embedding:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Hyperbolic (Poincare ball) embedding of hierarchical KGs; root mechanisms at center, leaves at boundary"
+    notes: Hyperbolic (Poincare ball) embedding of hierarchical KGs; root mechanisms
+      at center, leaves at boundary
   hyperbolic_geometry:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Negative-curvature geometry: volume grows exponentially, suitable for embedding trees/taxonomies"
+    notes: 'Negative-curvature geometry: volume grows exponentially, suitable for
+      embedding trees/taxonomies'
   differentiable_logic_programming:
     first_mentioned_chapter: 8
     first_required_use_chapter: 8
     first_explained_chapter: 8
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Neural LP/DRUM and partial-ILP: differentiable rule learning via matrix-chain or fuzzy t-norm relaxation"
-
+    notes: 'Neural LP/DRUM and partial-ILP: differentiable rule learning via matrix-chain
+      or fuzzy t-norm relaxation'
   question_interpretation:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Interpretation maps NL question to structured intent; result may be wrong and must be recorded"
-
+    notes: Interpretation maps NL question to structured intent; result may be wrong
+      and must be recorded
   query_intent:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "9-type intent taxonomy (factual/structural/comparative/explanatory/provenance/temporal/contradiction/discovery/multi-hop) selects retrieval target"
-
+    notes: 9-type intent taxonomy (factual/structural/comparative/explanatory/provenance/temporal/contradiction/discovery/multi-hop)
+      selects retrieval target
   entity_linking_query:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Mention -> candidates -> contextual scoring -> decision/ambiguity; highest score is not correctness"
-
+    notes: Mention -> candidates -> contextual scoring -> decision/ambiguity; highest
+      score is not correctness
   query_decomposition:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Complex question -> subquestions with dependency graph; a plan, not a truth computation"
-
+    notes: Complex question -> subquestions with dependency graph; a plan, not a truth
+      computation
   retrieval_plan:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Ordered retrieval operations with bounds and stopping conditions; completion does not imply sufficiency"
-
+    notes: Ordered retrieval operations with bounds and stopping conditions; completion
+      does not imply sufficiency
   query_execution_router:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "BOOK-DEFINED: intent -> execution path (KGQA/symbolic/text RAG/GraphRAG/ledger) -> Evidence Packet"
-
+    notes: 'BOOK-DEFINED: intent -> execution path (KGQA/symbolic/text RAG/GraphRAG/ledger)
+      -> Evidence Packet'
   retrieval_unit:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Kind of object a retrieval step returns; unit choice determines recall, precision, context coherence, provenance"
-
+    notes: Kind of object a retrieval step returns; unit choice determines recall,
+      precision, context coherence, provenance
   search_index:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Index is a derived access structure over KG content; may lag; index state != KG state"
-
+    notes: Index is a derived access structure over KG content; may lag; index state
+      != KG state
   symbolic_graph_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Exact graph query (SPARQL) when schema/entities/relations known; exact match, not semantic similarity"
-
+    notes: Exact graph query (SPARQL) when schema/entities/relations known; exact
+      match, not semantic similarity
   multi_hop_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Walk edges across hops; a path shows connectivity, not a proof"
-
+    notes: Walk edges across hops; a path shows connectivity, not a proof
   path_bounds:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Max depth/edge types/direction/branching are epistemic boundaries; beyond them is unseen"
-
+    notes: Max depth/edge types/direction/branching are epistemic boundaries; beyond
+      them is unseen
   relation_aware_traversal:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Choose traversed edge types by intent; filter may discard decisive paths"
-
+    notes: Choose traversed edge types by intent; filter may discard decisive paths
   k_hop_neighborhood:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "All nodes within k edges; mostly noise; within-k-hop != relevant"
-
+    notes: All nodes within k edges; mostly noise; within-k-hop != relevant
   subgraph_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Coherent subgraph selection is a retrieval problem; minimal sufficient subgraph is policy-based, not provably minimal"
-
+    notes: Coherent subgraph selection is a retrieval problem; minimal sufficient
+      subgraph is policy-based, not provably minimal
   bm25:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Lexical ranking: idf x tf-saturation x length normalization; ranking utility, not probability"
-
+    notes: 'Lexical ranking: idf x tf-saturation x length normalization; ranking utility,
+      not probability'
   dense_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Dual-encoder dot-product retrieval; captures paraphrase; similarity != relevance"
-
+    notes: Dual-encoder dot-product retrieval; captures paraphrase; similarity !=
+      relevance
   query_embedding:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Query vector is a learned representation for ranking, not the query's full meaning"
-
+    notes: Query vector is a learned representation for ranking, not the query's full
+      meaning
   hybrid_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Lexical+dense+graph combined; reduces misses, does not raise truth"
-
+    notes: Lexical+dense+graph combined; reduces misses, does not raise truth
   rank_fusion:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "RRF = sum 1/(k+rank_i); position-based fusion; fused score is retrieval utility only"
-
+    notes: RRF = sum 1/(k+rank_i); position-based fusion; fused score is retrieval
+      utility only
   graph_first_text_first:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Order of access (graph->text or text->graph) chosen by intent; no universal winner"
-
+    notes: Order of access (graph->text or text->graph) chosen by intent; no universal
+      winner
   canonical_view_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Answers what is accepted now; empty projection does not imply empty ledger"
-
+    notes: Answers what is accepted now; empty projection does not imply empty ledger
   claim_ledger_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Answers history/contradictions/provenance; required for temporal/contradiction questions"
-
+    notes: Answers history/contradictions/provenance; required for temporal/contradiction
+      questions
   governance_aware_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Filter/priority by governance state per intent; Accepted != true, Rejected != false"
-
+    notes: Filter/priority by governance state per intent; Accepted != true, Rejected
+      != false
   temporal_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Multiple clocks: valid/publication/system time; never collapse"
-
+    notes: 'Multiple clocks: valid/publication/system time; never collapse'
   provenance_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Retrieve Claim->Evidence->SourceFragment->SourceArtifact chain; existence is not correctness"
-
+    notes: Retrieve Claim->Evidence->SourceFragment->SourceArtifact chain; existence
+      is not correctness
   contradiction_aware_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Retrieve competing claims with scopes; do not force LLM to pick a side without policy"
-
+    notes: Retrieve competing claims with scopes; do not force LLM to pick a side
+      without policy
   evidence_diversity:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Source/type/viewpoint/time diversity; duplicate-source passages are not independent evidence"
-
+    notes: Source/type/viewpoint/time diversity; duplicate-source passages are not
+      independent evidence
   top_k_epistemic_bound:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Model cannot reason over evidence it does not see; not-in-top_k != irrelevant/absent"
-
+    notes: Model cannot reason over evidence it does not see; not-in-top_k != irrelevant/absent
   precision:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "|relevant n retrieved| / |retrieved|; measures retrieval quality, not truth"
-
+    notes: '|relevant n retrieved| / |retrieved|; measures retrieval quality, not
+      truth'
   recall:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "|relevant n retrieved| / |relevant|; high recall matters for explanations/contradictions"
-
+    notes: '|relevant n retrieved| / |relevant|; high recall matters for explanations/contradictions'
   precision_at_k:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Relevant among top-K / K; ranked cutoff metric"
-
+    notes: Relevant among top-K / K; ranked cutoff metric
   recall_at_k:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Relevant among top-K / total relevant; measures cutoff coverage"
-
+    notes: Relevant among top-K / total relevant; measures cutoff coverage
   mrr_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Mean reciprocal rank of first relevant result; for first-hit use cases"
-
+    notes: Mean reciprocal rank of first relevant result; for first-hit use cases
   ndcg:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Graded relevance, log discount, normalized by ideal; ranking quality, not epistemic confidence"
-
+    notes: Graded relevance, log discount, normalized by ideal; ranking quality, not
+      epistemic confidence
   reranking:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Two-stage: broad first stage + precise pair scorer; cannot recover first-stage recall misses"
-
+    notes: 'Two-stage: broad first stage + precise pair scorer; cannot recover first-stage
+      recall misses'
   context_assembly:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Select/group/order evidence into model input; order affects reliability"
-
+    notes: Select/group/order evidence into model input; order affects reliability
   context_compression:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Dedupe/select/summarize; summaries are derived artifacts with provenance"
-
+    notes: Dedupe/select/summarize; summaries are derived artifacts with provenance
   lost_in_the_middle:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Start/end of long context used more reliably than middle; empirical, model-specific"
-
+    notes: Start/end of long context used more reliably than middle; empirical, model-specific
   graph_serialization:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Triples/tables/JSON/NL tradeoffs; no serialization is lossless"
-
+    notes: Triples/tables/JSON/NL tradeoffs; no serialization is lossless
   evidence_packet:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "BOOK-DEFINED: structured container between retrieval and answer synthesis; full fields != sufficient evidence"
-
+    notes: 'BOOK-DEFINED: structured container between retrieval and answer synthesis;
+      full fields != sufficient evidence'
   answer_generation:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Map (question, Evidence Packet) -> draft; no inventing relations outside the packet"
-
+    notes: Map (question, Evidence Packet) -> draft; no inventing relations outside
+      the packet
   answer_claim:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Answer decomposes into claims, each traceable to evidence/path/claim"
-
+    notes: Answer decomposes into claims, each traceable to evidence/path/claim
   grounded_answer:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Supported by identified sources (AIS); grounded != true"
-
+    notes: Supported by identified sources (AIS); grounded != true
   citation:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Claim -> actual supporting evidence; citation presence != support"
-
+    notes: Claim -> actual supporting evidence; citation presence != support
   citation_completeness:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Citation recall/precision per claim; count of citations != quality"
-
+    notes: Citation recall/precision per claim; count of citations != quality
   faithfulness:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Answer stays within supplied context; faithful != correct"
-
+    notes: Answer stays within supplied context; faithful != correct
   correctness_groundedness:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "2x2: C target (right+grounded); B = faithful to wrong source; process does not move B to C"
-
+    notes: '2x2: C target (right+grounded); B = faithful to wrong source; process
+      does not move B to C'
   abstention:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Say insufficient evidence rather than fabricate; abstention != false"
-
+    notes: Say insufficient evidence rather than fabricate; abstention != false
   unknown_vs_not_found:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Not retrieved != not in index != not in KG != known false != unknown"
-
+    notes: Not retrieved != not in index != not in KG != known false != unknown
   retrieval_failure_vs_knowledge_absence:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Correct claim in ledger but retriever misses it = retrieval failure, not knowledge absence"
-
+    notes: Correct claim in ledger but retriever misses it = retrieval failure, not
+      knowledge absence
   query_planning:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Rule/LLM/hybrid planners; LLM planner is not mandatory"
-
+    notes: Rule/LLM/hybrid planners; LLM planner is not mandatory
   agentic_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Iterative retrieve-inspect-refine; risks drift, noise, cost, confirmation bias"
-
+    notes: Iterative retrieve-inspect-refine; risks drift, noise, cost, confirmation
+      bias
   stopping_condition:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Explicit termination: slots filled, no new info, threshold, budget, contradiction"
-
+    notes: 'Explicit termination: slots filled, no new info, threshold, budget, contradiction'
   query_drift:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Successive subqueries deviate from original intent; preserve original query record"
-
+    notes: Successive subqueries deviate from original intent; preserve original query
+      record
   confirmation_bias:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "One-sided retrieval only confirms; counterexamples are primary data"
-
+    notes: One-sided retrieval only confirms; counterexamples are primary data
   hypothesis_testing_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Retrieve supporting AND challenging evidence for candidate mechanism hypotheses"
-
+    notes: Retrieve supporting AND challenging evidence for candidate mechanism hypotheses
   local_global_questions:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Local = entity-anchored; global = corpus-wide; different strategies"
-
+    notes: Local = entity-anchored; global = corpus-wide; different strategies
   graphrag:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Family of architectures using graph structure in retrieval/context; not one standard algorithm"
-
+    notes: Family of architectures using graph structure in retrieval/context; not
+      one standard algorithm
   kgqa:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Question answering via structured query/reasoning over the KG; != GraphRAG"
-
+    notes: Question answering via structured query/reasoning over the KG; != GraphRAG
   rag_kgqa_graphrag_decision:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Decision table: exact queries -> KGQA; open questions -> text RAG; structure+evidence -> GraphRAG"
-
+    notes: 'Decision table: exact queries -> KGQA; open questions -> text RAG; structure+evidence
+      -> GraphRAG'
   path_explanation:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Path is an explanation of structure, not a logical proof"
-
+    notes: Path is an explanation of structure, not a logical proof
   path_explosion:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Number of paths grows exponentially; bounds + decisive-path priority required"
-
+    notes: Number of paths grows exponentially; bounds + decisive-path priority required
   community_retrieval:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Leiden communities + bottom-up summaries for global questions; summaries are derived artifacts"
-
+    notes: Leiden communities + bottom-up summaries for global questions; summaries
+      are derived artifacts
   caching:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Cache query/subgraph/summary/answer results; keys need KG/index/ontology versions"
-
+    notes: Cache query/subgraph/summary/answer results; keys need KG/index/ontology
+      versions
   index_consistency:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Ledger changes but index does not -> stale answers despite correct pipeline"
-
+    notes: Ledger changes but index does not -> stale answers despite correct pipeline
   retrieval_provenance:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Record query, interpretation, retrievers, index snapshot, filters, top_k, scores, timestamps"
-
+    notes: Record query, interpretation, retrievers, index snapshot, filters, top_k,
+      scores, timestamps
   answer_provenance:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "BOOK-DEFINED Answer artifact: generatedFor/usedEvidence/generatedBy/modelVersion/citations/status"
-
+    notes: 'BOOK-DEFINED Answer artifact: generatedFor/usedEvidence/generatedBy/modelVersion/citations/status'
   qa_answer_not_ingestion:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "QA answers do not become knowledge without Ch7 governance pipeline"
-
+    notes: QA answers do not become knowledge without Ch7 governance pipeline
   score_semantics:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "BM25/cosine/reranker/graph scores are ranking signals, not probabilities of truth"
-
+    notes: BM25/cosine/reranker/graph scores are ranking signals, not probabilities
+      of truth
   asserted_derived_predicted:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Three epistemic statuses in the Evidence Packet; never conflate"
-
+    notes: Three epistemic statuses in the Evidence Packet; never conflate
   retrieval_evaluation_layers:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "7 layers: linking/retrieval/evidence sufficiency/grounding/correctness/citation/boundary behavior"
-
+    notes: '7 layers: linking/retrieval/evidence sufficiency/grounding/correctness/citation/boundary
+      behavior'
   gold_evidence:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Annotated relevance set per question; annotation, not metaphysical truth"
-
+    notes: Annotated relevance set per question; annotation, not metaphysical truth
   retrieval_failure_walkthrough:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Failure cases: stale index (B), misinterpretation, path-as-proof"
-
+    notes: 'Failure cases: stale index (B), misinterpretation, path-as-proof'
   hallucination_taxonomy:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Relation fabrication/misattribution/number fabrication/false certainty"
-
+    notes: Relation fabrication/misattribution/number fabrication/false certainty
   claim_evidence_alignment:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "SUPPORTED/PARTIALLY_SUPPORTED/UNSUPPORTED/CONTESTED per answer claim"
-
+    notes: SUPPORTED/PARTIALLY_SUPPORTED/UNSUPPORTED/CONTESTED per answer claim
   graph_vs_llm_reasoning:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Symbolic reasoning is reproducible; LLM is probabilistic; allocate by question type"
-
+    notes: Symbolic reasoning is reproducible; LLM is probabilistic; allocate by question
+      type
   when_not_to_use_rag:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Exact query suffices, authoritative facts, unacceptable hallucination risk, out-of-scope"
-
+    notes: Exact query suffices, authoritative facts, unacceptable hallucination risk,
+      out-of-scope
   personalized_pagerank:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Biased random-walk-with-restart p=(1-alpha)A~p+alpha s; power iteration; naturally penalizes high-degree hubs to bound path explosion (§9.55.4)"
-
+    notes: Biased random-walk-with-restart p=(1-alpha)A~p+alpha s; power iteration;
+      naturally penalizes high-degree hubs to bound path explosion (§9.55.4)
   steiner_tree_approximation:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Minimum-weight connected subgraph over query terminals; NP-complete (Karp); 2-approximation via metric closure + MST, run on constraint-filtered edges (§9.55.5)"
-
+    notes: Minimum-weight connected subgraph over query terminals; NP-complete (Karp);
+      2-approximation via metric closure + MST, run on constraint-filtered edges (§9.55.5)
   multi_hop_error_cascading:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "End-to-end path precision decays as product of per-hop precisions p^k; 0.8^3=0.512; why long paths are not proofs (§9.55.2)"
-
+    notes: End-to-end path precision decays as product of per-hop precisions p^k;
+      0.8^3=0.512; why long paths are not proofs (§9.55.2)
   graphrag_vs_long_context:
     first_mentioned_chapter: 9
     first_required_use_chapter: 9
     first_explained_chapter: 9
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Pareto frontier: O(N^2) flat-context cost + lost-in-middle vs O(|E_sub|) graph retrieval with epistemic grounding; ROI decision boundary (§9.70.1)"
-
-  # === Chapter 10 concepts ===
+    notes: 'Pareto frontier: O(N^2) flat-context cost + lost-in-middle vs O(|E_sub|)
+      graph retrieval with epistemic grounding; ROI decision boundary (§9.70.1)'
   living_knowledge_system:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "System as a living process, not a static artifact (§10.1)"
+    notes: System as a living process, not a static artifact (§10.1)
   system_state:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Traceable snapshot of the system at time T: claim states, index/ontology versions, queues (§10.1)"
+    notes: 'Traceable snapshot of the system at time T: claim states, index/ontology
+      versions, queues (§10.1)'
   six_flows_of_change:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Six change flows that drive a knowledge system away from reality (§10.2)"
+    notes: Six change flows that drive a knowledge system away from reality (§10.2)
   data_drift:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Input/context distribution changes over time reducing fit of existing knowledge (§10.2)"
+    notes: Input/context distribution changes over time reducing fit of existing knowledge
+      (§10.2)
   staleness:
     first_mentioned_chapter: 9
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Claim present but no longer supported by current evidence; stale ≠ wrong (§10.3)"
+    notes: Claim present but no longer supported by current evidence; stale ≠ wrong
+      (§10.3)
   freshness:
     first_mentioned_chapter: 9
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "Metric of recency of verification, not a truth judgment (§10.4)"
+    notes: Metric of recency of verification, not a truth judgment (§10.4)
   freshness_vs_correctness:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Independent axes: fresh ≠ correct (§10.5)"
+    notes: 'Independent axes: fresh ≠ correct (§10.5)'
   valid_clock:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Time an event holds in the world (valid time), distinct from system clock (§10.6)"
+    notes: Time an event holds in the world (valid time), distinct from system clock
+      (§10.6)
   system_clock:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Time an event is recorded in the system (transaction time) (§10.6)"
+    notes: Time an event is recorded in the system (transaction time) (§10.6)
   assessment_clock:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Time the system performs assessment, periodic or event-driven (§10.6)"
+    notes: Time the system performs assessment, periodic or event-driven (§10.6)
   self_observation:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "System observes itself: logs, ledger diffs, index state, queues (§10.7)"
+    notes: 'System observes itself: logs, ledger diffs, index state, queues (§10.7)'
   monitoring_loop:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "CENTRAL MECHANISM: COLLECT → AGGREGATE → COMPARE → ALERT → ASSESS → ACT → RE-MEASURE; decides attention and maintenance, not truth (§10.9)"
+    notes: 'CENTRAL MECHANISM: COLLECT → AGGREGATE → COMPARE → ALERT → ASSESS → ACT
+      → RE-MEASURE; decides attention and maintenance, not truth (§10.9)'
   aggregation_window:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Time span over which raw observations are aggregated into a metric (§10.10)"
+    notes: Time span over which raw observations are aggregated into a metric (§10.10)
   threshold_as_policy:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Threshold is a governance decision about accepted risk, not truth (§10.11)"
+    notes: Threshold is a governance decision about accepted risk, not truth (§10.11)
   threshold_vs_truth:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Crossing a threshold triggers attention, not a truth verdict (§10.12)"
+    notes: Crossing a threshold triggers attention, not a truth verdict (§10.12)
   alert:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Verifiable notification with reference to observation and threshold used (§10.13)"
+    notes: Verifiable notification with reference to observation and threshold used
+      (§10.13)
   assessment_stage:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Epistemic stage of the monitoring loop: what the signal means and which governed action follows (§10.14)"
+    notes: 'Epistemic stage of the monitoring loop: what the signal means and which
+      governed action follows (§10.14)'
   monitored_vs_governed:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Self-monitoring does not imply self-governance (§10.15)"
+    notes: Self-monitoring does not imply self-governance (§10.15)
   feedback_loop:
     first_mentioned_chapter: 8
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: true
-    notes: "System output re-enters as input; safe only with governance gates (§10.16)"
+    notes: System output re-enters as input; safe only with governance gates (§10.16)
   answer_feedback_gate:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "QA answers re-enter the ledger only through the Ch7 governance gate, as candidates (§10.17)"
+    notes: QA answers re-enter the ledger only through the Ch7 governance gate, as
+      candidates (§10.17)
   user_correction:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "User edits are feedback with user provenance, processed as candidates (§10.18)"
+    notes: User edits are feedback with user provenance, processed as candidates (§10.18)
   feedback_vs_evidence:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Feedback is signal, not evidence about world truth (§10.19)"
+    notes: Feedback is signal, not evidence about world truth (§10.19)
   feedback_loop_safety:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Properties keeping feedback from corrupting the system: gates, provenance separation, contamination metrics, audit (§10.20)"
+    notes: 'Properties keeping feedback from corrupting the system: gates, provenance
+      separation, contamination metrics, audit (§10.20)'
   contradiction_accumulation:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Competing claims piling up unresolved; measured, capped, escalated by policy (§10.21)"
+    notes: Competing claims piling up unresolved; measured, capped, escalated by policy
+      (§10.21)
   knowledge_debt:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Accumulated cost of unpaid knowledge obligations (§10.22)"
+    notes: Accumulated cost of unpaid knowledge obligations (§10.22)
   contradiction_debt:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Knowledge debt from unresolved contradiction pairs (§10.22)"
+    notes: Knowledge debt from unresolved contradiction pairs (§10.22)
   escalation_policy:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Rules deciding when a signal moves to a higher governance level (§10.23)"
+    notes: Rules deciding when a signal moves to a higher governance level (§10.23)
   quality_dimension:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "One of five dimensions: correctness, completeness, freshness, consistency, trustworthiness — each with definition, measure, window, and what it does NOT measure (§10.24)"
+    notes: 'One of five dimensions: correctness, completeness, freshness, consistency,
+      trustworthiness — each with definition, measure, window, and what it does NOT
+      measure (§10.24)'
   correctness_over_time:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Correctness changes as evidence/context change; was-correct ≠ is-correct (§10.25)"
+    notes: Correctness changes as evidence/context change; was-correct ≠ is-correct
+      (§10.25)
   completeness_over_time:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Completeness relative to a declared scope, tracked over time (§10.26)"
+    notes: Completeness relative to a declared scope, tracked over time (§10.26)
   freshness_over_time:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Freshness of claims and index measured in windows; index lag is first-class (§10.27)"
+    notes: Freshness of claims and index measured in windows; index lag is first-class
+      (§10.27)
   consistency_over_time:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Consistency tracked over time; no contradiction is not consistency (quiescence ≠ consistency) (§10.28)"
+    notes: Consistency tracked over time; no contradiction is not consistency (quiescence
+      ≠ consistency) (§10.28)
   trustworthiness_over_time:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Trustworthiness = provenance + governance behavior measured over time; not truth (§10.29)"
+    notes: Trustworthiness = provenance + governance behavior measured over time;
+      not truth (§10.29)
   level_vs_trend:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Level is current state; trend is derivative over windows; trend carries more maintenance information (§10.30)"
+    notes: Level is current state; trend is derivative over windows; trend carries
+      more maintenance information (§10.30)
   quality_vs_truth:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Quality scores describe knowledge-management behavior, not world truth (§10.31)"
+    notes: Quality scores describe knowledge-management behavior, not world truth
+      (§10.31)
   degradation:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Sustained decline of a quality dimension, detected by level + trend (§10.32)"
+    notes: Sustained decline of a quality dimension, detected by level + trend (§10.32)
   benchmark_decay:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Old test sets no longer reflect current distribution; high old-benchmark scores prove nothing current (§10.33)"
+    notes: Old test sets no longer reflect current distribution; high old-benchmark
+      scores prove nothing current (§10.33)
   feedback_collapse:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "QA answers recycled as training input without governance, degenerating content (§10.34)"
+    notes: QA answers recycled as training input without governance, degenerating
+      content (§10.34)
   collapse_vs_staleness:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Collapse is content recycling and degradation; staleness is aging — different phenomena (§10.36)"
+    notes: Collapse is content recycling and degradation; staleness is aging — different
+      phenomena (§10.36)
   maintenance_operations:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Governed operations: re-validate, re-assess, retire, supersede, reindex (§10.37)"
+    notes: 'Governed operations: re-validate, re-assess, retire, supersede, reindex
+      (§10.37)'
   re_validation:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Rechecking an accepted claim against latest evidence: still-correct? (§10.38)"
+    notes: 'Rechecking an accepted claim against latest evidence: still-correct? (§10.38)'
   re_assessment:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Reassessing a claim on new signals; can move Accepted → Contested (§10.39)"
+    notes: Reassessing a claim on new signals; can move Accepted → Contested (§10.39)
   retirement:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Removing knowledge from active flow with a governed record; retire ≠ delete (§10.40)"
+    notes: Removing knowledge from active flow with a governed record; retire ≠ delete
+      (§10.40)
   supersession_at_scale:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Replacing old claims at scale with recorded supersession chains (§10.41)"
+    notes: Replacing old claims at scale with recorded supersession chains (§10.41)
   batch_governance:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Applying governance decisions to many claims at once with policy, logging, rollback (§10.42)"
+    notes: Applying governance decisions to many claims at once with policy, logging,
+      rollback (§10.42)
   audit_replay:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Reconstructing why the system believed an answer at any time point (§10.43)"
+    notes: Reconstructing why the system believed an answer at any time point (§10.43)
   controlled_trust:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Trust granted, measured, and revocable based on evidence and governance (§10.44)"
+    notes: Trust granted, measured, and revocable based on evidence and governance
+      (§10.44)
   trust_vs_blind_trust:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Trust based on evidence/audit vs acceptance without conditions (§10.45)"
+    notes: Trust based on evidence/audit vs acceptance without conditions (§10.45)
   living_architecture:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "BOOK ENGINEERING MODEL: system as a set of feedback loops, not a linear pipeline (§10.46)"
+    notes: 'BOOK ENGINEERING MODEL: system as a set of feedback loops, not a linear
+      pipeline (§10.46)'
   orchestration:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Coordinating multiple loops: resource conflicts, priorities, queues, cross-loop audit (§10.47)"
+    notes: 'Coordinating multiple loops: resource conflicts, priorities, queues, cross-loop
+      audit (§10.47)'
   automation_gradient:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Scale allocating decisions between human and machine by epistemic risk (§10.48)"
+    notes: Scale allocating decisions between human and machine by epistemic risk
+      (§10.48)
   auto_repair_vs_auto_truth:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Auto-repair produces candidates; governance decides truth (§10.49)"
+    notes: Auto-repair produces candidates; governance decides truth (§10.49)
   never_done:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Living knowledge systems never finish; done is a static-system illusion (§10.50)"
+    notes: Living knowledge systems never finish; done is a static-system illusion
+      (§10.50)
   system_health_report:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Periodic report of level + trend vs thresholds (§10.52)"
+    notes: Periodic report of level + trend vs thresholds (§10.52)
   closed_loop_dynamical_stability:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Living KG as a delayed feedback control loop; aτ<π/2 stability criterion, Lyapunov V, safeguards (§10.20.1)"
+    notes: Living KG as a delayed feedback control loop; aτ<π/2 stability criterion,
+      Lyapunov V, safeguards (§10.20.1)
   belief_oscillation:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Limit-cycle instability when verification delay is large vs update gain: claim flips Accepted↔Contested↔Retracted (§10.20.1)"
+    notes: 'Limit-cycle instability when verification delay is large vs update gain:
+      claim flips Accepted↔Contested↔Retracted (§10.20.1)'
   knowledge_entropy:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "H_K(t) = -Σ p_t(c) log p_t(c): diversity of concept-class distribution over generations (§10.35.1)"
+    notes: 'H_K(t) = -Σ p_t(c) log p_t(c): diversity of concept-class distribution
+      over generations (§10.35.1)'
   autophagous_model_collapse:
     first_mentioned_chapter: 10
     first_required_use_chapter: 10
     first_explained_chapter: 10
     explanation_level: mechanism
     incidental_gloss: false
-    notes: "Recursive refit on synthetic output shrinks variance σ²(1-1/M)^t and extinguishes rare tails; distinct from feedback collapse (§10.35.1)"
-
+    notes: Recursive refit on synthetic output shrinks variance σ²(1-1/M)^t and extinguishes
+      rare tails; distinct from feedback collapse (§10.35.1)
+  grammar_constrained_decoding:
+    first_mentioned_chapter: 11
+    first_required_use_chapter: 11
+    first_explained_chapter: 11
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Constraining LLM logits using Pushdown Automata to force generation of
+      valid syntax
+  context_free_grammar_decoding:
+    first_mentioned_chapter: 11
+    first_required_use_chapter: 11
+    first_explained_chapter: 11
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Formal CFG guidance ensuring valid syntactic production rules during token
+      generation
+  pushdown_automaton_masking:
+    first_mentioned_chapter: 11
+    first_required_use_chapter: 11
+    first_explained_chapter: 11
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: State-dependent token probability masking derived from PDA state transitions
+  shacl_to_cfg_compiler:
+    first_mentioned_chapter: 11
+    first_required_use_chapter: 11
+    first_explained_chapter: 11
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Compiling target SHACL node/property shapes into formal EBNF grammar constraints
+  equation_ast_reification:
+    first_mentioned_chapter: 11
+    first_required_use_chapter: 11
+    first_explained_chapter: 11
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Parsing mathematical formulas into symbolic Abstract Syntax Trees linked
+      to mechanism nodes
+  open_information_extraction:
+    first_mentioned_chapter: 11
+    first_required_use_chapter: 11
+    first_explained_chapter: 11
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Extracting arbitrary novel relational phrases without a pre-defined TBox
+      ontology
+  closed_ontology_guided_extraction:
+    first_mentioned_chapter: 11
+    first_required_use_chapter: 11
+    first_explained_chapter: 11
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Constrained extraction projecting extracted candidate triples strictly
+      onto target ontology classes and properties
+  dense_semantic_blocking:
+    first_mentioned_chapter: 12
+    first_required_use_chapter: 12
+    first_explained_chapter: 12
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Projecting textual entity profiles into dense vector space to reduce quadratic
+      N^2 matching to sub-linear candidates
+  bi_encoder_blocking:
+    first_mentioned_chapter: 12
+    first_required_use_chapter: 12
+    first_explained_chapter: 12
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Dual-encoder architecture computing entity representations independently
+      for fast approximate indexing
+  cross_encoder_graph_matching:
+    first_mentioned_chapter: 12
+    first_required_use_chapter: 12
+    first_explained_chapter: 12
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Joint neural encoder scoring entity pairs by evaluating both token cross-attention
+      and local graph neighborhood topology
+  hnsw_vector_index:
+    first_mentioned_chapter: 12
+    first_required_use_chapter: 12
+    first_explained_chapter: 12
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Hierarchical Navigable Small World graphs for sub-linear approximate nearest
+      neighbor search
+  gnn_ontology_alignment:
+    first_mentioned_chapter: 12
+    first_required_use_chapter: 12
+    first_explained_chapter: 12
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Using Graph Neural Networks to align disjoint ontologies across structural
+      and semantic representations
+  multi_channel_gnn_alignment:
+    first_mentioned_chapter: 12
+    first_required_use_chapter: 12
+    first_explained_chapter: 12
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Multi-channel architecture separating structural embedding from relation
+      embedding to reconcile ontology heterogeneity
+  probabilistic_cosine_calibration:
+    first_mentioned_chapter: 12
+    first_required_use_chapter: 12
+    first_explained_chapter: 12
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Formal mapping calibrating vector cosine similarity to Fellegi-Sunter log-likelihood
+      agreement ratios
+  causal_knowledge_graph:
+    first_mentioned_chapter: 13
+    first_required_use_chapter: 13
+    first_explained_chapter: 13
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Knowledge graph explicitly encoding causal mechanisms, intervention operators,
+      and structural equations
+  pearl_causal_hierarchy:
+    first_mentioned_chapter: 13
+    first_required_use_chapter: 13
+    first_explained_chapter: 13
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: 'Three-level ladder of causation: Association P(y|x), Intervention P(y|do(x)),
+      and Counterfactuals P(y_x|x'',y'')'
+  observational_association_layer:
+    first_mentioned_chapter: 13
+    first_required_use_chapter: 13
+    first_explained_chapter: 13
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: 'Layer 1 of causation: standard statistical correlation represented by
+      observational graph edges'
+  interventional_causal_layer:
+    first_mentioned_chapter: 13
+    first_required_use_chapter: 13
+    first_explained_chapter: 13
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: 'Layer 2 of causation: evaluating active graph interventions do(X=x) via
+      graph mutilation and backdoor adjustment'
+  counterfactual_retrospective_layer:
+    first_mentioned_chapter: 13
+    first_required_use_chapter: 13
+    first_explained_chapter: 13
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: 'Layer 3 of causation: retrospective reasoning evaluating what would have
+      occurred had actions differed in past state'
+  do_calculus:
+    first_mentioned_chapter: 13
+    first_required_use_chapter: 13
+    first_explained_chapter: 13
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Syntactic transformation rules for converting interventional distributions
+      into observational expressions on DAGs
+  backdoor_adjustment_criterion:
+    first_mentioned_chapter: 13
+    first_required_use_chapter: 13
+    first_explained_chapter: 13
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Graphical test identifying conditioning sets Z that block all spurious
+      confounding paths between cause and effect
+  structural_causal_model:
+    first_mentioned_chapter: 13
+    first_required_use_chapter: 13
+    first_explained_chapter: 13
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Formal 4-tuple M = <U, V, F, P(U)> modeling deterministic functional mechanisms
+      with exogenous background noise
+  independent_causal_mechanisms:
+    first_mentioned_chapter: 13
+    first_required_use_chapter: 13
+    first_explained_chapter: 13
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Principle stating that generative physical mechanisms in a causal DAG are
+      modular and autonomous
+  constraint_based_causal_discovery:
+    first_mentioned_chapter: 13
+    first_required_use_chapter: 13
+    first_explained_chapter: 13
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Learning causal DAG skeletons from observational conditional independence
+      tests (PC, FCI) constrained by TBox priors
+  agent_tripartite_memory:
+    first_mentioned_chapter: 14
+    first_required_use_chapter: 14
+    first_explained_chapter: 14
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Cognitive agent memory architecture dividing storage into Working Memory,
+      Episodic DAG, and Semantic KG
+  agent_episodic_memory_dag:
+    first_mentioned_chapter: 14
+    first_required_use_chapter: 14
+    first_explained_chapter: 14
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Graph representation of agent execution histories, state transitions, tool
+      invocations, and temporal PROV-O traces
+  agent_semantic_memory_kg:
+    first_mentioned_chapter: 14
+    first_required_use_chapter: 14
+    first_explained_chapter: 14
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Consolidated, deduplicated domain knowledge graph serving as verifiable
+      agent world model
+  agent_working_memory_subgraph:
+    first_mentioned_chapter: 14
+    first_required_use_chapter: 14
+    first_explained_chapter: 14
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Active task-relevant subgraph dynamically loaded into LLM prompt context
+      window
+  conformal_prediction_on_kg:
+    first_mentioned_chapter: 14
+    first_required_use_chapter: 14
+    first_explained_chapter: 14
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Distribution-free calibration generating candidate triple prediction sets
+      with rigorous finite-sample coverage guarantee
+  finite_sample_coverage_guarantee:
+    first_mentioned_chapter: 14
+    first_required_use_chapter: 14
+    first_explained_chapter: 14
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Statistical guarantee P(Y in C(X)) >= 1 - alpha holding exactly for any
+      finite sample without parametric assumptions
+  non_conformity_score_calibration:
+    first_mentioned_chapter: 14
+    first_required_use_chapter: 14
+    first_explained_chapter: 14
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Quantifying disagreement between candidate triples and neural model scores
+      over an exchangeable calibration split
+  risk_controlled_triple_ingestion:
+    first_mentioned_chapter: 14
+    first_required_use_chapter: 14
+    first_explained_chapter: 14
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Protocol gating Candidate triples into AcceptedKnowledge only when conformal
+      non-conformity satisfies false-discovery budget
+  multi_agent_epistemic_consensus:
+    first_mentioned_chapter: 14
+    first_required_use_chapter: 14
+    first_explained_chapter: 14
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: Distributed agreement protocols for reconciling conflicting knowledge graphs
+      maintained by autonomous peer agents

@@ -1,4 +1,4 @@
-﻿# Documentation Index — Knowledge Graph Book
+# Documentation Index — Knowledge Graph Book
 
 This directory contains the foundational specifications, pedagogical standards, source verification archives, semantic contracts, and acceptance review records for the **Knowledge Graph Book** project.
 
@@ -51,6 +51,10 @@ Every chapter in the manuscript must fulfill formal semantic contracts and pass 
 | **Ch 8** | [`CHAPTER08_SEMANTIC_CONTRACTS.md`](CHAPTER08_SEMANTIC_CONTRACTS.md) | [`CHAPTER08_BOOK_CHECKPOINT.md`](CHAPTER08_BOOK_CHECKPOINT.md) | [`CHAPTER08_DEPTH_REVIEW.md`](CHAPTER08_DEPTH_REVIEW.md) |
 | **Ch 9** | [`CHAPTER09_SEMANTIC_CONTRACTS.md`](CHAPTER09_SEMANTIC_CONTRACTS.md) | [`CHAPTER09_BOOK_CHECKPOINT.md`](CHAPTER09_BOOK_CHECKPOINT.md) | [`CHAPTER09_DEPTH_REVIEW.md`](CHAPTER09_DEPTH_REVIEW.md) |
 | **Ch 10** | [`CHAPTER10_SEMANTIC_CONTRACTS.md`](CHAPTER10_SEMANTIC_CONTRACTS.md) | [`CHAPTER10_BOOK_CHECKPOINT.md`](CHAPTER10_BOOK_CHECKPOINT.md) | [`EN_VI_CH10_PILLAR6_REVIEW.md`](EN_VI_CH10_PILLAR6_REVIEW.md) |
+| **Ch 11** | [`CHAPTER11_SEMANTIC_CONTRACTS.md`](CHAPTER11_SEMANTIC_CONTRACTS.md) | Scheduled (v0.4.0) | Scheduled (v0.4.0) |
+| **Ch 12** | [`CHAPTER12_SEMANTIC_CONTRACTS.md`](CHAPTER12_SEMANTIC_CONTRACTS.md) | Scheduled (v0.4.0) | Scheduled (v0.4.0) |
+| **Ch 13** | [`CHAPTER13_SEMANTIC_CONTRACTS.md`](CHAPTER13_SEMANTIC_CONTRACTS.md) | Scheduled (v0.4.0) | Scheduled (v0.4.0) |
+| **Ch 14** | [`CHAPTER14_SEMANTIC_CONTRACTS.md`](CHAPTER14_SEMANTIC_CONTRACTS.md) | Scheduled (v0.4.0) | Scheduled (v0.4.0) |
 
 ---
 

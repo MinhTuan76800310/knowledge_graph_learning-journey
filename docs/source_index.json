@@ -2010,6 +2010,262 @@
       ],
       "research_note_path": "docs/research_notes/SNODGRASS-01.md",
       "key_finding": "Foundational temporal database text distinguishing valid time, transaction time and system time; bitemporal modeling and time-varying relations."
+    },
+    {
+      "id": "OUTLINES-01",
+      "canonical_url": "https://arxiv.org/abs/2307.09702",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2307.09702",
+      "title": "Efficient Guided Generation for Large Language Models",
+      "document_status": "Pre-print / Tool Specification",
+      "publication_date": "2023-07-18",
+      "used_in_chapters": [
+        "11"
+      ],
+      "research_note_path": "docs/research_notes/OUTLINES-01.md",
+      "key_finding": "Pushdown automata and regular expressions index token vocabulary to guarantee that LLM output conforms to Context-Free Grammars (CFG) without rejection sampling."
+    },
+    {
+      "id": "SYNTAX-01",
+      "canonical_url": "https://aclanthology.org/2021.emnlp-main.779/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://aclanthology.org/2021.emnlp-main.779/",
+      "title": "PICARD: Parsing Incrementally for Constrained Auto-regressive Decoding from Language Models",
+      "document_status": "EMNLP 2021",
+      "publication_date": "2021-11-07",
+      "used_in_chapters": [
+        "11"
+      ],
+      "research_note_path": "docs/research_notes/SYNTAX-01.md",
+      "key_finding": "Incremental parsing during beam search filters out invalid SQL/SPARQL tokens, preventing syntax errors in structured semantic generation."
+    },
+    {
+      "id": "OPENIE-01",
+      "canonical_url": "https://dl.acm.org/doi/10.5555/1625275.1625705",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://dl.acm.org/doi/10.5555/1625275.1625705",
+      "title": "Open Information Extraction from the Web",
+      "document_status": "IJCAI 2007",
+      "publication_date": "2007-01-06",
+      "used_in_chapters": [
+        "11"
+      ],
+      "research_note_path": "docs/research_notes/OPENIE-01.md",
+      "key_finding": "Open Information Extraction (OIE) scales extraction across heterogeneous domains by discovering novel relational phrases rather than relying on a fixed schema."
+    },
+    {
+      "id": "SYMPY-01",
+      "canonical_url": "https://doi.org/10.7717/peerj-cs.103",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.7717/peerj-cs.103",
+      "title": "SymPy: symbolic computing in Python",
+      "document_status": "PeerJ Computer Science",
+      "publication_date": "2017-01-02",
+      "used_in_chapters": [
+        "11"
+      ],
+      "research_note_path": "docs/research_notes/SYMPY-01.md",
+      "key_finding": "Mathematical expressions can be decomposed into symbolic Abstract Syntax Trees (ASTs) with explicit operator nodes, variables, and numerical constants."
+    },
+    {
+      "id": "DENSE-ER-01",
+      "canonical_url": "https://doi.org/10.1145/3183713.3196926",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1145/3183713.3196926",
+      "title": "Deep Learning for Entity Matching: A Comprehensive Empirical Evaluation",
+      "document_status": "SIGMOD 2018",
+      "publication_date": "2018-05-27",
+      "used_in_chapters": [
+        "12"
+      ],
+      "research_note_path": "docs/research_notes/DENSE-ER-01.md",
+      "key_finding": "Neural sequence models and dense embeddings significantly outperform traditional rule-based and string-similarity matchers on noisy textual entity matching."
+    },
+    {
+      "id": "HNSW-01",
+      "canonical_url": "https://doi.org/10.1109/TPAMI.2018.2889473",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1109/TPAMI.2018.2889473",
+      "title": "Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs",
+      "document_status": "IEEE TPAMI 2020",
+      "publication_date": "2020-03-01",
+      "used_in_chapters": [
+        "12"
+      ],
+      "research_note_path": "docs/research_notes/HNSW-01.md",
+      "key_finding": "Multi-layer proximity graphs achieve logarithmic complexity O(log N) for metric space vector retrieval with high recall."
+    },
+    {
+      "id": "MUGNN-01",
+      "canonical_url": "https://aclanthology.org/P19-1140/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://aclanthology.org/P19-1140/",
+      "title": "Multi-Channel Graph Neural Network for Entity Alignment",
+      "document_status": "ACL 2019",
+      "publication_date": "2019-07-28",
+      "used_in_chapters": [
+        "12"
+      ],
+      "research_note_path": "docs/research_notes/MUGNN-01.md",
+      "key_finding": "Multi-channel GNNs separate structural and relation-type embedding spaces and reconcile structural heterogeneity via rule-based inference channels."
+    },
+    {
+      "id": "GCN-ALIGN-01",
+      "canonical_url": "https://aclanthology.org/D18-1032/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://aclanthology.org/D18-1032/",
+      "title": "Cross-lingual Knowledge Graph Alignment via Graph Convolutional Networks",
+      "document_status": "EMNLP 2018",
+      "publication_date": "2018-10-31",
+      "used_in_chapters": [
+        "12"
+      ],
+      "research_note_path": "docs/research_notes/GCN-ALIGN-01.md",
+      "key_finding": "GCNs embed entities from different language graphs into a unified vector space based on topological neighborhoods for cross-lingual entity alignment."
+    },
+    {
+      "id": "PEARL-01",
+      "canonical_url": "https://doi.org/10.1017/CBO9780511803161",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1017/CBO9780511803161",
+      "title": "Causality: Models, Reasoning, and Inference",
+      "document_status": "Cambridge University Press (2nd Ed)",
+      "publication_date": "2009-09-14",
+      "used_in_chapters": [
+        "13"
+      ],
+      "research_note_path": "docs/research_notes/PEARL-01.md",
+      "key_finding": "Formalizes the Causal Hierarchy (Association, Intervention, Counterfactuals), Structural Causal Models (SCMs), do-calculus, and graphical criteria (Backdoor, Frontdoor)."
+    },
+    {
+      "id": "PETERS-01",
+      "canonical_url": "https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/",
+      "title": "Elements of Causal Inference: Foundations and Learning Algorithms",
+      "document_status": "MIT Press",
+      "publication_date": "2017-12-29",
+      "used_in_chapters": [
+        "13"
+      ],
+      "research_note_path": "docs/research_notes/PETERS-01.md",
+      "key_finding": "Independent Causal Mechanisms (ICM) principle states that the causal generative process of a system is composed of autonomous, non-interfering modules."
+    },
+    {
+      "id": "SPIRTIS-01",
+      "canonical_url": "https://doi.org/10.7551/mitpress/1754.001.0001",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.7551/mitpress/1754.001.0001",
+      "title": "Causation, Prediction, and Search",
+      "document_status": "MIT Press (2nd Ed)",
+      "publication_date": "2000-01-01",
+      "used_in_chapters": [
+        "13"
+      ],
+      "research_note_path": "docs/research_notes/SPIRTIS-01.md",
+      "key_finding": "PC and FCI constraint-based algorithms recover causal DAG skeletons and Markov equivalence classes from conditional independence tests under the Causal Markov and Faithfulness assumptions."
+    },
+    {
+      "id": "CAUSAL-KG-01",
+      "canonical_url": "https://doi.org/10.1109/JPROC.2021.3058954",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1109/JPROC.2021.3058954",
+      "title": "Toward Causal Representation Learning",
+      "document_status": "Proceedings of the IEEE",
+      "publication_date": "2021-05-01",
+      "used_in_chapters": [
+        "13"
+      ],
+      "research_note_path": "docs/research_notes/CAUSAL-KG-01.md",
+      "key_finding": "Deep learning representation must transition from statistical patterns to causal world models capable of modeling distribution shifts, interventions, and physical mechanisms."
+    },
+    {
+      "id": "AGENT-MEM-01",
+      "canonical_url": "https://doi.org/10.1145/3586183.3606763",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1145/3586183.3606763",
+      "title": "Generative Agents: Interactive Simulacra of Human Behavior",
+      "document_status": "ACM UIST 2023",
+      "publication_date": "2023-10-29",
+      "used_in_chapters": [
+        "14"
+      ],
+      "research_note_path": "docs/research_notes/AGENT-MEM-01.md",
+      "key_finding": "Tripartite agent architecture combining memory stream (recency, importance, relevance), reflection (hierarchical synthesis), and planning maintains long-term behavioral consistency."
+    },
+    {
+      "id": "VOVK-01",
+      "canonical_url": "https://doi.org/10.1007/b106715",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://doi.org/10.1007/b106715",
+      "title": "Algorithmic Learning in a Random World",
+      "document_status": "Springer Monograph",
+      "publication_date": "2005-01-01",
+      "used_in_chapters": [
+        "14"
+      ],
+      "research_note_path": "docs/research_notes/VOVK-01.md",
+      "key_finding": "Conformal prediction provides distribution-free, finite-sample statistical validity guarantees for machine learning predictions without assuming parametric data distributions."
+    },
+    {
+      "id": "ANGEL-01",
+      "canonical_url": "https://arxiv.org/abs/2107.07511",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://arxiv.org/abs/2107.07511",
+      "title": "A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification",
+      "document_status": "arXiv:2107.07511",
+      "publication_date": "2021-07-15",
+      "used_in_chapters": [
+        "14"
+      ],
+      "research_note_path": "docs/research_notes/ANGEL-01.md",
+      "key_finding": "Practical framework for computing non-conformity scores, calibration set quantiles, and prediction sets with provable 1 - alpha marginal coverage guarantees."
+    },
+    {
+      "id": "MULTI-AGENT-01",
+      "canonical_url": "https://www.wiley.com/en-us/An+Introduction+to+MultiAgent+Systems%2C+2nd+Edition-p-9780470519462",
+      "fetch_status": "FETCHED_AND_VERIFIED",
+      "fetched_at": "2026-09-07T12:00:00Z",
+      "http_status": 200,
+      "final_url": "https://www.wiley.com/en-us/An+Introduction+to+MultiAgent+Systems%2C+2nd+Edition-p-9780470519462",
+      "title": "An Introduction to MultiAgent Systems",
+      "document_status": "John Wiley & Sons (2nd Ed)",
+      "publication_date": "2009-06-22",
+      "used_in_chapters": [
+        "14"
+      ],
+      "research_note_path": "docs/research_notes/MULTI-AGENT-01.md",
+      "key_finding": "Multi-agent coordination, communication protocols (FIPA ACL), consensus mechanisms, and epistemic logic under distributed environments."
     }
   ]
 }
