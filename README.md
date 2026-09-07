@@ -1,28 +1,39 @@
-# Knowledge Graph: Từ Đồ thị đến Hệ thống Tri thức
+﻿# Knowledge Graph: From Graph to Living Knowledge Systems
 
-[![release](https://img.shields.io/github/v/release/MinhTuan76800310/knowledge_graph_learning-journey?label=release&color=blue)](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/latest)
-[![license: GPL-3.0-or-later](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)](LICENSE)
-[![language: Vietnamese](https://img.shields.io/badge/lang-vi-green)](#editions)
-[![language: English](https://img.shields.io/badge/lang-en-yellowgreen)](#editions)
-[![pages: 364 vi · 70 en](https://img.shields.io/badge/pages-364_vi%20%C2%B7%2070_en-lightgrey)](#editions)
+<h4 align="center">Từ Đồ thị đến Hệ thống Tri thức — An Executable, Bilingual Monograph</h4>
 
-> **An open-source, executable, bilingual textbook.** Knowledge Graphs from first
-> principles to production knowledge systems — explained at the mechanism level, with
-> runnable experiments and traceable citations. Written in **Vietnamese** (canonical,
-> complete) with an **English** edition in progress.
+<p align="center">
+  <a href="https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/latest"><img src="https://img.shields.io/github/v/release/MinhTuan76800310/knowledge_graph_learning-journey?label=release&color=blue" alt="release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue" alt="license: GPL-3.0-or-later"></a>
+  <a href="#editions"><img src="https://img.shields.io/badge/language-Vietnamese%20(Canonical)-green" alt="language: Vietnamese"></a>
+  <a href="#editions"><img src="https://img.shields.io/badge/language-English%20(100%25%20Parity)-blue" alt="language: English"></a>
+  <a href="#editions"><img src="https://img.shields.io/badge/pages-434_vi%20%C2%B7%20412_en-purple" alt="pages: 434 vi · 412 en"></a>
+  <a href="#testing-and-validation"><img src="https://img.shields.io/badge/tests-106%20passed-brightgreen" alt="tests: 106 passed"></a>
+  <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-%3E%3D3.12-informational" alt="python: >=3.12"></a>
+</p>
 
-**Latest release:** [`v0.2.0`](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/tag/v0.2.0)
-— complete Vietnamese book (364 pages) + English edition, Chapters 1–3 (70 pages).
+> **An open-source, executable, bilingual monograph.** Knowledge Graphs from first principles to production knowledge systems — explained at the mechanism level, with runnable experiments, rigorous mathematical foundations, and traceable citations.
+>
+> Published in **both Vietnamese and English** across all 10 chapters with **100% structural, pedagogical, and mathematical parity**.
+
+**Latest release:** [`v0.3.0`](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/tag/v0.3.0) — Complete bilingual monograph: Vietnamese complete edition (**434** print pages) + English complete edition (**412** print pages), incorporating all **6 Frontier Theoretical Pillars**.
 
 **License:** [GPL-3.0-or-later](LICENSE)
 
-> Badges above are all verifiable today. There is deliberately **no CI badge**: the
-> pipeline is still planned (see [Project status](#project-status)), and a build-passing
-> badge would contradict the book's own epistemic-honesty rule.
+---
+
+## 📥 Publication Downloads
+
+The complete publication-ready PDF editions can be downloaded directly from GitHub Releases:
+
+| Edition | Language | Pages | Content Scope | Download Link |
+|---|:---:|:---:|---|:---:|
+| **Vietnamese** | `vi` | **434** | Full Monograph (Front Matter, Ch 1–10, Afterword, Glossary, Bibliography) | [📥 `knowledge-graph-book-v0.3.0.pdf`](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/download/v0.3.0/knowledge-graph-book-v0.3.0.pdf) |
+| **English** | `en` | **412** | Full Monograph (Front Matter, Ch 1–10, Afterword, Glossary, Bibliography) | [📥 `knowledge-graph-book-en-v0.3.0.pdf`](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/download/v0.3.0/knowledge-graph-book-en-v0.3.0.pdf) |
 
 ---
 
-## The two ideas this book is built on
+## 💡 The Two Mental Models
 
 ```text
 Mental Model 1  (introduced in Chapter 1)
@@ -33,297 +44,236 @@ Mental Model 2  (emerges gradually; capstone architecture in Chapter 10)
                       + Acquisition + Inference + Validation + Evolution
 ```
 
-These are **engineering learning models**, not universally accepted formal definitions.
-The book is explicit about the distinction between book-defined models and external
-standards.
+These are **engineering learning models**, not universally accepted formal definitions. The book clearly demarcates the boundary between book-defined pedagogical models and authoritative formal standards (W3C RDF 1.1/1.2, OWL 2, SPARQL 1.1, SHACL).
 
 ---
 
-## Table of contents
+## 🏛️ The Six Theoretical Pillars (v0.3.0 Upgrade)
 
-- [The two ideas this book is built on](#the-two-ideas-this-book-is-built-on)
-- [What this book is](#what-this-book-is)
-- [Editions](#editions)
-- [Chapters](#chapters)
-- [Repository structure](#repository-structure)
-- [Getting started](#getting-started)
-- [Building the PDF book](#building-the-pdf-book)
-- [Testing and validation](#testing-and-validation)
-- [Project status](#project-status)
-- [Writing conventions](#writing-conventions)
-- [Contributing](#contributing)
-- [About the author](#about-the-author)
-- [Copyright, sources, citation](#copyright-sources-citation)
+The monograph bridges foundational knowledge engineering with frontier AI research through six core theoretical pillars:
+
+1. **Structural Foundations & Identity (Chapters 1–3):** Directed Hypergraphs $\mathcal{H} = (V, \mathcal{E})$, LPG formal 7-tuple $\mathcal{G}$, Blank Nodes First-Order Model Theory ($\exists x$, lean graph NP-hardness), and the Vector Fallacy matrix.
+2. **Logic Complexity & Fixpoint Semantics (Chapters 4–5):** Description Logics decidability landscape ($\mathcal{SROIQ}$ 2-NEXPTIME vs. Tractable Profiles), $DL\text{-}Lite_R$ First-Order Rewritability into SQL UCQ, Datalog 3-way semantics equivalence (Knaster-Tarski $T_P \uparrow \omega$), and Stratified Negation as Failure (NAF).
+3. **Epistemics, Temporal Validity & Belief Revision (Chapters 6–7):** Dempster-Shafer theory of evidence ($m: 2^\Omega \to [0, 1]$), Subjective Logic $(b, d, u, a)$ opinion vectors & cumulative fusion $\oplus$, 2D Bitemporal Grid ($T_{\text{valid}} \times T_{\text{tx}}$), and AGM Belief Revision Postulates.
+4. **Graph Representation Learning & Invariance (Chapter 8):** Weisfeiler-Lehman (1-WL) isomorphism bound on MPNN expressiveness, RotatE complex rotational algebra ($\mathbf{h} \circ \mathbf{r} = \mathbf{t}$), Poincaré hyperbolic taxonomy embeddings ($\mathbb{B}^d$), and Differentiable ILP ($\partial\text{ILP}$).
+5. **Retrieval Dynamics & GraphRAG Bounds (Chapter 9):** Path explosion asymptotic bounds $O(\bar{d}^k)$, multi-hop error cascading bounds ($p^k$), Personalized PageRank contraction mapping, Steiner Tree 2-approximation, GraphRAG vs. 1M–2M Long-Context LLMs Pareto frontier, and Physical Evidence Packet dossiers.
+6. **Cybernetic Stability & Model Collapse (Chapter 10):** Delayed closed-loop feedback control transfer functions $L(s) = G(s)H(s)e^{-s\tau_{\text{verify}}}$, Delay Differential Equation (DDE) stability theorems ($\tau < \frac{\pi}{2a}$), Nyquist stability / Hopf bifurcation limit cycles, Knowledge Entropy ($H_K$), and Autophagous Model Collapse variance shrinkage ($\sigma_{t+1}^2 = \sigma_t^2(1 - 1/M)$).
 
 ---
 
-## What this book is
+## 📖 Chapters Overview
 
-This is **not** a Neo4j tutorial or a GraphRAG cookbook. It is a mechanism-level
-exploration of what turns data into knowledge that a machine can represent, query,
-reason about, validate, update, and use.
+| # | Title | Core Question | Key Foundations & Frontier Mechanisms |
+|:---:|---|---|---|
+| **1** | From Graph to Knowledge | What turns a graph into a *knowledge* graph? | Graph topology, entity-relation-attribute substrates, semantic layering, vector fallacy matrix |
+| **2** | Data Models and Query Languages | How do we represent and query knowledge mechanically? | RDF 1.1/1.2 triples, SPARQL 1.1 Basic Graph Patterns, Property Graphs, Cypher traversals, reification trade-offs |
+| **3** | Schema, Identity, and Context | How do we model identity, ambiguity, and context? | URI/IRI minting, entity resolution, Blank Node model theory, Named Graphs, quad semantics |
+| **4** | Ontologies and Formal Meaning | How do we give machine-readable meaning to data? | RDFS entailment, OWL 2 Description Logics ($\mathcal{SROIQ}$), DL-Lite FOL-rewritability, TBox vs. ABox |
+| **5** | Deduction, Rules, and Validation | How do we infer new knowledge and validate integrity? | Datalog 3-way semantics, Knaster-Tarski fixpoint, Stratified NAF, SHACL closed-world constraint validation |
+| **6** | Claims, Evidence, Provenance, Time, Contradiction | How do we handle competing, temporal, uncertain claims? | PROV-O provenance, Dempster-Shafer evidence, Subjective Logic fusion, 2D bitemporal modeling, AGM belief revision |
+| **7** | Knowledge Acquisition and Integration | How do we acquire knowledge without blindly trusting extraction? | Extraction-to-candidate pipelines, Fellegi-Sunter entity linking, R2RML relational mapping, human-in-the-loop review |
+| **8** | Inductive Knowledge and Learning from Graphs | How do graphs learn patterns and predict missing facts? | TransE/RotatE embeddings, Poincaré hyperbolic geometry, 1-WL expressiveness bound of MPNNs, Differentiable ILP |
+| **9** | Retrieval, Question Answering, GraphRAG | How do we retrieve knowledge for humans and LLMs? | Combinatorial path explosion $O(\bar{d}^k)$, multi-hop error cascading $p^k$, Personalized PageRank, Steiner trees, GraphRAG vs. Long-Context |
+| **10** | Building a Living Knowledge System | How do we build a self-sustaining, trustworthy knowledge system? | Delayed closed-loop feedback control, DDE stability criterion, Knowledge Entropy, autophagous collapse prevention |
 
-The reader is an experienced software engineer who wants to understand Knowledge Graphs
-deeply enough to design custom knowledge systems for AI agents — not merely to call an
-API.
+The book concludes with an **Afterword (Lời bạt)** exploring societal authority, multi-agent epistemic governance, economic viability, and future paradigm shifts.
 
-The book is written in **Vietnamese**, with English technical terms preserved on first
-occurrence ("thực thể (entity)", "suy diễn (inference)"). Self-contained chapters
-document the OWL/RDF/SHACL/SPARQL and related primitives on first use. An **English
-edition** is being produced in parallel, chapter by chapter, from the Vietnamese
-canonical text.
+---
 
-## Editions
+## 🌐 Editions & Parity Guarantee
 
-| Edition | Language | Scope | Status |
-|---------|----------|-------|--------|
-| **Vietnamese** (canonical) | `vi` | Front matter + Chapters 1–10 + Afterword + Glossary (226 terms) + Bibliography (92 sources) | ✅ Complete — 364 print pages |
-| **English** | `en` | Chapters 1–3 (Schema, Identity, and Context through Chapter 3) | 🚧 In progress — 70 print pages |
+The book is maintained in two parallel editions with **100% mutual parity**:
 
-The Vietnamese text is the source of truth; the English edition mirrors it and is kept in
-parity chapter by chapter. Every chapter passed an independent acceptance gate before
-merge: semantic contracts, depth review, reader-capability test, citation/glossary/registry
-integrity, and a clean PDF build. Details per chapter live in
-`docs/CHAPTER*nn*_BOOK_CHECKPOINT.md`.
+- **Vietnamese (Canonical):** `book/` — 434 print pages. Technical terms are introduced with their English equivalents on first occurrence ("thực thể (entity)", "suy diễn (inference)").
+- **English Edition:** `book-en/` — 412 print pages. A rigorous, faithful parallel edition preserving exact section hierarchies, mathematical formulations, TikZ diagrams, and pedagogical structure.
 
-Download the release PDFs:
+Every single section, code listing, citation, and equation is aligned 1-to-1. Both editions are compiled using XeLaTeX through our automated PDF build and verification gates.
 
-```text
-Vietnamese (complete):
-  https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/download/v0.2.0/knowledge-graph-book-v0.2.0.pdf
+---
 
-English (Chapters 1–3):
-  https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases/download/v0.2.0/knowledge-graph-book-en-v0.2.0.pdf
-```
-
-## Chapters
-
-| # | Title | Core Question |
-|---|-------|---------------|
-| 1 | From Graph to Knowledge | What makes a graph a *knowledge* graph? |
-| 2 | Data Models and Query Languages | How do we represent and query graphs? (RDF/SPARQL, Property Graph/Cypher) |
-| 3 | Schema, Identity, and Context | How do we model identity and meaning? |
-| 4 | Ontologies and Formal Meaning | How do we give machine-readable meaning? (RDFS, OWL, DL) |
-| 5 | Deduction, Rules, and Validation | How do we infer and validate? (SHACL, rules) |
-| 6 | Claims, Evidence, Provenance, Time, Contradiction | How do we handle competing claims? (epistemic model) |
-| 7 | Knowledge Acquisition and Integration | How do we acquire knowledge without blind trust? |
-| 8 | Inductive Knowledge and Learning from Graphs | How do graphs learn patterns? (KGE, GNN) |
-| 9 | Retrieval, Question Answering, GraphRAG | How do we retrieve knowledge for humans and LLMs? |
-| 10 | Building a Living Knowledge System | How do we design a living, trustworthy knowledge system? |
-
-Each chapter closes by motivating the next. The book ends with an **Afterword (Lời bạt)**
-that opens the frontier (authority, human oversight, cost, multi-agent governance,
-paradigm shifts, societal trust).
-
-## Repository structure
+## 📂 Repository Structure
 
 ```
 knowledge_graph_learning-journey/
-├── README.md               # This file
-├── CLAUDE.md               # AI-assistant working conventions
-├── AGENTS.md               # Subagent guidelines
-├── pyproject.toml          # Python project configuration (>=3.12)
-├── uv.lock                 # Pinned dependencies
-├── Makefile                # make book / book-check / book-clean
-├── docker-compose.yml      # Neo4j for Chapter 2 experiments
-├── book/                   # Canonical text (Vietnamese)
-│   ├── preface.md, how-to-use.md, introduction.md
-│   ├── chapter01.md ... chapter10.md, afterword.md
+├── README.md               # Repository overview (this document)
+├── CONTRIBUTING.md         # Open-source contributor guidelines & quality standards
+├── CLAUDE.md               # AI assistant working conventions & release protocol
+├── pyproject.toml          # Python project dependencies (>=3.12)
+├── uv.lock                 # Pinned dependencies lockfile
+├── Makefile                # Build automation (make book, make book-check)
+├── docker-compose.yml      # Optional Neo4j graph database container
+├── book/                   # Canonical Vietnamese manuscript (Ch 1–10 + Front/Back Matter)
+│   ├── chapter01.md ... chapter10.md
+│   ├── preface.md, introduction.md, afterword.md
 │   ├── glossary.md, references.bib, book-manifest.yaml, metadata.yaml
-│   └── figures/            # TikZ + Mermaid sources and generated PDFs
-├── book-en/                # English edition (in progress)
-│   ├── chapter01.md ... chapter03.md
-│   ├── book-manifest.yaml, metadata.yaml
-│   └── figures/            # English figure sources
-├── chapter01/ ... chapter02/   # Per-chapter runnable experiments + tests
-├── capstone/               # Mechanism Knowledge Graph capstone project
-├── datasets/               # Toy and capstone datasets
-├── tests/                  # Book-level integrity tests (chapters 8–10, repo)
-├── docs/                   # Research artifacts & meta-docs
-│   ├── BOOK_STATUS.md      # Per-section acceptance state
-│   ├── BOOK_PEDAGOGY.md    # Canonical writing policy
-│   ├── BOOK_V0_1_MILESTONE.md
-│   ├── source_index.json   # 92 registered sources (machine-readable)
-│   ├── research_notes/     # Per-source verification notes
-│   ├── CITATION_MAP.md
-│   └── CHAPTER*nn*_*.md    # Contracts / checkpoints / depth reviews
-├── scripts/                # PDF build pipeline (pandoc + LuaLaTeX)
-└── dist/                   # Built PDFs (gitignored; attach to Releases)
+│   └── figures/            # TikZ source diagrams and compiled vector PDFs
+├── book-en/                # English manuscript (Ch 1–10 + Front/Back Matter, 100% parity)
+│   ├── chapter01.md ... chapter10.md
+│   ├── preface.md, introduction.md, afterword.md
+│   ├── glossary.md, references.bib, book-manifest.yaml, metadata.yaml
+│   └── figures/            # English TikZ source diagrams and vector PDFs
+├── chapter01/ ... /        # Standalone runnable Python experiments & tests
+├── capstone/               # Mechanism Knowledge Graph capstone domain system
+├── datasets/               # Running toy and mechanism datasets (e.g. rate_of_change.ttl)
+├── tests/                  # Integrity test suite (106 tests: structure, concepts, citations)
+├── docs/                   # Specifications, research notes, and semantic contracts
+│   ├── README.md           # Navigational guide to the docs directory
+│   ├── BOOK_STATUS.md      # Publication state of each manuscript section
+│   ├── BOOK_PEDAGOGY.md    # Canonical authoring policy & pedagogical guidelines
+│   ├── BOOK_V0_3_MILESTONE.md # Specification of the 6 theoretical pillars
+│   ├── BOOK_V0_4_ROADMAP.md   # Roadmap for post-v0.3 frontier research modules
+│   ├── source_index.json   # 92+ registered authoritative sources (W3C, papers, books)
+│   └── CHAPTER*nn*_*.md    # Semantic contracts, depth reviews, and checkpoints
+├── scripts/                # XeLaTeX / Pandoc compilation & verification pipeline
+└── dist/                   # Built publication PDFs (gitignored; attached to Releases)
 ```
 
-## Getting started
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Python 3.12+
-- [uv](https://docs.astral.sh/uv/) (Python package manager)
-- Docker (for the optional Neo4j experiments in Chapter 2)
-- Pandoc + LuaLaTeX (only if you want to build the PDF; see below)
+- **Python 3.12+**
+- **[uv](https://docs.astral.sh/uv/)** or standard `python -m venv` / `pip`
+- **Docker** (optional; for live Neo4j Cypher exercises)
+- **Pandoc & XeLaTeX / LuaLaTeX** (required only for building PDFs from markdown sources)
 
-### Setup
+### Setup & Environment
 
 ```bash
-# Clone the repository
+# 1. Clone repository
 git clone https://github.com/MinhTuan76800310/knowledge_graph_learning-journey.git
 cd knowledge_graph_learning-journey
 
-# Install dependencies
+# 2. Install dependencies
 uv sync
+# Or with standard pip:
+# python -m venv .venv && source .venv/bin/activate && pip install -e .
 
-# Start Neo4j (optional; needed for Chapter 2 LAB exercises)
-docker compose up -d
-
-# Run the test suite
-uv run pytest
-
-# Run Chapter 1 experiments
-cd chapter01
-uv run python exp_1_1_plain_graph.py
+# 3. Run automated verification suite
+python -m pytest
 ```
 
-See each experiment directory's `README.md` (where present) for specific instructions.
-The book's main argument is readable **without** running any code — experiments are
-companions, not prerequisites (see `docs/BOOK_V0_1_MILESTONE.md`).
-
-## Building the PDF book
-
-The PDF build pipeline lives in `scripts/` and requires **pandoc**, **LuaLaTeX** and the
-TeX packages in `book/header.tex`. Building also pre-renders TikZ figures, so a TeX
-distribution with the `tikz`/`pgfplots` packages is required.
+### Running Experiments
 
 ```bash
-# Vietnamese (canonical) — build print + screen PDFs into dist/
+# Chapter 1: Plain Graph vs. Semantic KG
+python chapter01/exp_1_1_plain_graph.py
+python chapter01/exp_1_5_relation_semantics.py
+
+# Chapter 2: RDFLib & SPARQL Querying
+python chapter02/exp_2_1_rdf_first_principles.py
+python chapter02/exp_2_4_mechanism_turtle_sparql.py
+```
+
+---
+
+## 🛠️ Building the PDF Monograph
+
+The monograph compilation pipeline uses Pandoc and XeLaTeX to produce publication-grade PDFs with custom typography, syntax highlighting, and vector TikZ diagrams:
+
+```bash
+# Build Vietnamese edition (creates dist/knowledge-graph-book-print.pdf)
 make book
+# Or run script directly:
+bash scripts/build_book.sh
 
-# Build, then run the automated PDF verification gate
+# Run automated verification gate on built Vietnamese PDF
 make book-check
+# Or run script directly:
+bash scripts/verify_book_pdf.sh
 
-# English edition — same pipeline, switched by LANG=en
+# Build English edition (creates dist/knowledge-graph-book-en-print.pdf)
 LANG=en bash scripts/build_book.sh
+
+# Run automated verification gate on built English PDF
 LANG=en bash scripts/verify_book_pdf.sh
 
 # Clean build artifacts
 make book-clean
 ```
 
-Outputs land in `dist/` (gitignored). For releases, the versioned PDFs are attached to a
-GitHub Release — see the [releases page](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/releases).
+---
 
-## Testing and validation
+## 🧪 Testing and Validation
 
-The repository is validated by both automated integrity tests and per-chapter human
-acceptance audits:
+The codebase enforces strict quality controls across empirical code, theoretical consistency, and manuscript structure:
 
 ```bash
-uv run pytest            # 106 tests: book integrity + chapter experiments
-uv run ruff check .      # 0 errors
-uv run ruff format --check .
+# 1. Run all 106 unit, integration, and integrity tests
+python -m pytest
+
+# 2. Run Ruff code linter
+python -m ruff check .
+
+# 3. Run Ruff code formatter verification
+python -m ruff format --check .
 ```
 
-What the tests cover:
+### Test Suite Architecture (106 tests)
 
-- `tests/test_book_integrity.py` — book-wide structure
-- `tests/test_book_concept_dependencies.py` — concept ordering across chapters
-- `tests/test_chapter08_integrity.py` / `test_chapter09_integrity.py` /
-  `test_chapter10_integrity.py` — sections, figures, citations, glossary, registry
-- `tests/test_repo_integrity.py` — source index, research notes, no leaked artifacts
-- `chapter01/test_experiments.py` & `chapter02/test_ch2_experiments.py` — runnable labs
+- **Empirical Experiments:** `chapter01/test_experiments.py` (25 tests) & `chapter02/test_ch2_experiments.py` (30 tests) verify exact graph models, SPARQL query results, and RDFS entailment semantics.
+- **Structural Integrity:** `tests/test_book_integrity.py` (8 tests) verifies Markdown headings, LaTeX math delimiters, and section structures.
+- **Pedagogical Progression:** `tests/test_book_concept_dependencies.py` (8 tests) asserts that no chapter introduces concepts before their formal dependencies are defined.
+- **Frontier Chapters Integrity:** `tests/test_chapter08_integrity.py` (4 tests), `tests/test_chapter09_integrity.py` (13 tests), and `tests/test_chapter10_integrity.py` (11 tests) verify coverage of theoretical terms, equations, and glossary entries.
+- **Source & Repo Integrity:** `tests/test_repo_integrity.py` (7 tests) validates `docs/source_index.json`, research notes links, and ensures zero leaked development markers.
 
-**Note on correctness:** passing tests does *not* prove semantic correctness. Every
-chapter additionally passes a human/independent acceptance gate (semantic contracts,
-depth review, reader-capability test) before it is marked ACCEPTED.
+---
 
-## Project status
+## 🗺️ Project Milestones & Roadmap
 
-| Milestone | State |
-|-----------|-------|
-| **v0.2.0** — English edition begins (Ch1–3) + Vietnamese Ch3 quality pass | ✅ **RELEASED** (2026-09-02, tag `v0.2.0`) |
-| **v0.1.0** — complete Vietnamese book (Ch1–10 + Afterword) | ✅ RELEASED (2026-08-31, tag `v0.1.0`) |
-| Vietnamese Chapters 1–10 + Afterword | ✅ ACCEPTED via independent audits |
-| English Chapters 1–3 | ✅ merged, in parity with Vietnamese |
-| English Chapters 4–10 | ⏳ planned |
-| Experiments | Chapter 1–2 runnable; Chapter 3–10 labs deferred to `docs/LAB_BACKLOG.md` |
-| CI pipeline | ⏳ planned (local `make book-check` + `uv run pytest` today) |
+| Milestone | Scope & Highlights | Status |
+|:---:|---|:---:|
+| **v0.3.0** | **Full Bilingual Edition & 6 Frontier Theoretical Pillars:** All 10 chapters in Vietnamese (434 pages) and English (412 pages) in 100% parity; Hypergraphs, DL Decidability, Dempster-Shafer/AGM, 1-WL/RotatE, Combinatorial GraphRAG, Closed-Loop Cybernetics. | ✅ **RELEASED** (2026-09-07) |
+| **v0.2.0** | **English Edition Inception & Chapter 3 Quality Pass:** English Ch 1–3 + Vietnamese Ch 3 deep rework (364 pages VI, 70 pages EN). | ✅ **RELEASED** (2026-09-02) |
+| **v0.1.0** | **Complete Vietnamese Manuscript Baseline:** Chapters 1–10 + Afterword + Glossary (358 pages). | ✅ **RELEASED** (2026-08-31) |
+| **v0.4.0** | **Advanced Frontiers (Post-v0.3 Extension):** Neuro-Symbolic Information Extraction, Vector-Graph Hybrid Entity Resolution, GNN-based Ontology Alignment, Structural Causal Models (SCMs), and Conformal Prediction. | 🚧 **PLANNED** (See [`docs/BOOK_V0_4_ROADMAP.md`](docs/BOOK_V0_4_ROADMAP.md)) |
 
-Current per-section state is tracked in [`docs/BOOK_STATUS.md`](docs/BOOK_STATUS.md).
+Current per-section tracking lives in [`docs/BOOK_STATUS.md`](docs/BOOK_STATUS.md).
 
-## Writing conventions
+---
 
-- **Canonical text in Vietnamese**; technical terms in English on first occurrence. The
-  English edition is a faithful parallel translation, kept in parity chapter by chapter.
-- **Mechanism-first tone**: every major abstraction answers — what problem, what
-  mechanism, what information, what assumptions, what can/cannot be inferred, what
-  breaks, how to verify.
-- **Epistemic discipline**: fact / claim / assertion / assumption / inference /
-  prediction / book-defined model are clearly distinguished.
-- **Source-backed**: important factual/formal claims carry reader-facing citations to
-  the 92 registered sources (`docs/source_index.json`); book-defined models are labeled
-  `BOOK-DEFINED`, never presented as standards.
-- **Example continuity**: one recurring capstone domain (the Mechanism Knowledge Graph)
-  rather than many unrelated toy domains.
+## 🤝 Contributing
 
-## Contributing
+Contributions, feedback, and semantic reviews from researchers, practitioners, and educators are warmly welcomed!
 
-Contributions are welcome — especially **semantic corrections**, which the author treats
-as the highest-priority feedback and acts on first.
+- Please read [`CONTRIBUTING.md`](CONTRIBUTING.md) for contribution guidelines, branch conventions, and code standards.
+- Before proposing changes to manuscript chapters, review [`docs/BOOK_PEDAGOGY.md`](docs/BOOK_PEDAGOGY.md) for pedagogical constraints.
+- **Semantic corrections** (fixing an incorrect logical inference rule, clarifying Description Logic complexity bounds, or refining a mathematical proof) are treated with top priority.
 
-The project follows a traceable workflow, documented in [`CLAUDE.md`](CLAUDE.md) and
-[`AGENTS.md`](AGENTS.md):
+---
 
-```text
-Issue → Branch → Commits → PR → Validate → Merge
-```
+## 👨‍💻 About the Author
 
-How to help:
+This book is created by [**MinhTuan76800310**](https://github.com/MinhTuan76800310) as an open, public learning journey, dedicated to advancing deep conceptual mastery of Knowledge Graphs, Neuro-Symbolic AI, and Autonomous Multi-Agent Systems.
 
-- **Report an error or gap** — open an [issue](https://github.com/MinhTuan76800310/knowledge_graph_learning-journey/issues)
-  pointing to the chapter/section and, where relevant, the registered source it conflicts
-  with.
-- **Propose a change** — branch from `main`, keep one coherent change per branch, and open
-  a PR to `main`. Run `uv run pytest`, `uv run ruff check .`, and (for manuscript changes)
-  `make book-check` before requesting review.
-- **Contribute to the English edition** — Chapters 4–10 are open; each translation must
-  preserve parity with the Vietnamese canonical text and pass the same acceptance gate.
+Core engineering values:
+- **Understand mechanisms, not just APIs.**
+- **Practice strict epistemic honesty.**
+- **Ensure everything is traceable and verifiable.**
 
-Before writing for this book, read [`docs/BOOK_PEDAGOGY.md`](docs/BOOK_PEDAGOGY.md) — it is
-the canonical writing policy (mechanism-first tone, epistemic discipline, source
-traceability).
+---
 
-## About the author
+## 📜 Citation, Sources & Copyright
 
-This book is an open, public **learning journey** by
-[**MinhTuan76800310**](https://github.com/MinhTuan76800310) — a software engineer
-building it from first principles, chapter by chapter, in Vietnamese with an English
-edition in parallel.
+This repository contains original technical writing. All external concepts, algorithms, and W3C standards are cited and traceable:
 
-The project values are explicit in the writing:
+- **Machine-readable Source Index:** [`docs/source_index.json`](docs/source_index.json)
+- **BibTeX Bibliography:** [`book/references.bib`](book/references.bib)
+- **Concept-to-Source Mapping:** [`docs/CITATION_MAP.md`](docs/CITATION_MAP.md)
 
-- Understand the **mechanism**, not only the API.
-- Be **epistemically honest**: distinguish what is known, what is believed, and what is
-  book-defined.
-- Keep everything **verifiable**: every external claim traces to a registered source;
-  every chapter passes an independent acceptance audit.
-
-## Copyright, sources, citation
-
-This repository contains **original writing**. No substantial passages are copied from
-textbooks, standards, courses, or other repositories; all external content is cited and
-traceable.
-
-- Machine-readable source registry: [`docs/source_index.json`](docs/source_index.json)
-- BibTeX bibliography: [`book/references.bib`](book/references.bib)
-- Topic-to-source map: [`docs/CITATION_MAP.md`](docs/CITATION_MAP.md)
-
-**License:** [GPL-3.0-or-later](LICENSE) — you are free to read, print, and share the
-book, provided derivative works remain under the same license.
-
-To cite this book (work-in-progress), you may use the repository itself:
+If you find this work helpful in your research or engineering projects, please cite it as:
 
 ```bibtex
-@misc{knowledgeGraphLearningJourney,
-  title  = {Knowledge Graph: Từ Đồ thị đến Hệ thống Tri thức},
-  author = {Nguyen, Minh Tuan},
-  year   = {2026},
-  url    = {https://github.com/MinhTuan76800310/knowledge_graph_learning-journey}
+@book{nguyen2026knowledgegraph,
+  title     = {Knowledge Graph: From Graph to Living Knowledge Systems},
+  author    = {Nguyen, Minh Tuan},
+  year      = {2026},
+  publisher = {Open Source Monograph},
+  url       = {https://github.com/MinhTuan76800310/knowledge_graph_learning-journey},
+  note      = {Version 0.3.0, 434 pp. (Vietnamese), 412 pp. (English)}
 }
 ```
+
+**License:** [GPL-3.0-or-later](LICENSE)

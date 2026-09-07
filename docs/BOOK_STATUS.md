@@ -85,8 +85,7 @@ Focus: 6 theoretical pillars (Hypergraphs, Logic Complexity & Decidability, Demp
 
 ## Notes
 
-- Chapters 1–4 form the **Book Preview v0.3** deliverable (Introduction + Chapters 1–4 +
-  Glossary + Bibliography, 74 PDF pages). They are complete and printable.
+- **v0.3.0 Release** (2026-09-07): Milestone v0.3.0 is officially released with complete bilingual editions (Vietnamese: 434 pages, English: 412 pages) incorporating all 6 theoretical pillars across Chapters 1–10. Future research extensions are detailed in `docs/BOOK_V0_4_ROADMAP.md`.
 - Chapter 3 acceptance is recorded in `docs/CHAPTER03_BOOK_CHECKPOINT.md`.
 - Chapter 4 acceptance is recorded in `docs/CHAPTER04_BOOK_CHECKPOINT.md`.
 - Chapter 5 acceptance is recorded in `docs/CHAPTER05_BOOK_CHECKPOINT.md`.
