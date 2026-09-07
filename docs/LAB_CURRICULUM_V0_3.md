@@ -1,4 +1,4 @@
-﻿# Master Executable Lab Curriculum — Knowledge Graph Book (v0.3.0)
+# Master Executable Lab Curriculum — Knowledge Graph Book (v0.3.0)
 
 This document contains the canonical engineering specifications, mathematical formulations, and test oracles for all **42 executable hands-on labs** across Chapters 1–10 of the Knowledge Graph monograph.
 
@@ -15,7 +15,7 @@ Each lab is designed to be:
 | Chapter | Title | Lab Range | Status | Test Module |
 |---|---|:---:|:---:|---|
 | **Ch 1** | From Graph to Knowledge | `EXP-1-1` $\to$ `EXP-1-5` | ✅ Complete (5 labs) | `chapter01/test_experiments.py` (25 tests) |
-| **Ch 2** | Data Models & Query Languages | `EXP-2-1` $\to$ `EXP-2-7` | ⚠️ 4 Done, 3 Missing | `chapter02/test_ch2_experiments.py` (30 tests) |
+| **Ch 2** | Data Models & Query Languages | `EXP-2-1` $\to$ `EXP-2-7` | ✅ Complete (7 labs) | `chapter02/test_ch2_experiments.py` (40 tests) |
 | **Ch 3** | Schema, Identity, Context | `EXP-3-1` $\to$ `EXP-3-6` | 🚧 6 Labs to Build | `chapter03/test_ch3_experiments.py` |
 | **Ch 4** | Ontologies & Formal Meaning | `EXP-4-1` $\to$ `EXP-4-3` | 🚧 3 Labs to Build | `chapter04/test_ch4_experiments.py` |
 | **Ch 5** | Deduction, Rules, Validation | `EXP-5-1` $\to$ `EXP-5-4` | 🚧 4 Labs to Build | `chapter05/test_ch5_experiments.py` |

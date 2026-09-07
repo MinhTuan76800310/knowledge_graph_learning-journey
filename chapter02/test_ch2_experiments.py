@@ -536,3 +536,202 @@ class TestExp24MechanismSparql:
             ("newtonCooling_1", "rateOfChange_1"),
             ("newtonCooling_1", "heatTransferRate_2"),
         }
+
+
+# ---------------------------------------------------------------------------
+# Experiment 2-5: Labeled Property Graph (LPG) Modeling & Ingestion
+# ---------------------------------------------------------------------------
+
+
+class TestExp25LabeledPropertyGraph:
+    """Semantic tests for exp_2_5_labeled_property_graph.py."""
+
+    def test_node_creation_and_multilabel(self) -> None:
+        from exp_2_5_labeled_property_graph import SimplePropertyGraph
+
+        g = SimplePropertyGraph()
+        n = g.add_node("Hanoi", labels={"City", "Capital"}, properties={"population": 8418883})
+        assert n.id == "Hanoi"
+        assert n.labels == {"City", "Capital"}
+        assert n.has_label("City")
+        assert n.has_label("Capital")
+        assert not n.has_label("Country")
+        assert n.get("population") == 8418883
+        assert n.get("nonexistent", "default") == "default"
+
+    def test_edge_creation_and_properties(self) -> None:
+        from exp_2_5_labeled_property_graph import SimplePropertyGraph
+
+        g = SimplePropertyGraph()
+        g.add_node("Hanoi", labels={"City"})
+        g.add_node("Vietnam", labels={"Country"})
+        e = g.add_edge(
+            "e1",
+            "Hanoi",
+            "Vietnam",
+            "CAPITAL_OF",
+            properties={"since": 1976, "status": "Official"},
+        )
+        assert e.id == "e1"
+        assert e.source == "Hanoi"
+        assert e.target == "Vietnam"
+        assert e.type == "CAPITAL_OF"
+        assert e.get("since") == 1976
+        assert e.get("status") == "Official"
+
+    def test_edge_creation_fails_on_missing_nodes(self) -> None:
+        import pytest
+        from exp_2_5_labeled_property_graph import SimplePropertyGraph
+
+        g = SimplePropertyGraph()
+        g.add_node("Hanoi", labels={"City"})
+        with pytest.raises(ValueError, match="Target node 'Vietnam' does not exist"):
+            g.add_edge("e1", "Hanoi", "Vietnam", "CAPITAL_OF")
+
+    def test_city_graph_structure(self) -> None:
+        from exp_2_5_labeled_property_graph import build_city_graph
+
+        g = build_city_graph()
+        assert len(g.nodes) == 4
+        assert len(g.edges) == 3
+        assert set(g.nodes.keys()) == {"Hanoi", "Vietnam", "Paris", "France"}
+
+        # Outgoing edges from Hanoi: CAPITAL_OF and SISTER_CITY
+        hn_out = g.outgoing_edges("Hanoi")
+        assert len(hn_out) == 2
+        types = {e.type for e in hn_out}
+        assert types == {"CAPITAL_OF", "SISTER_CITY"}
+
+        # Incoming edges to Vietnam: CAPITAL_OF from Hanoi
+        vn_in = g.incoming_edges("Vietnam")
+        assert len(vn_in) == 1
+        assert vn_in[0].source == "Hanoi"
+
+    def test_mechanism_graph_structure(self) -> None:
+        from exp_2_5_labeled_property_graph import build_mechanism_graph
+
+        g = build_mechanism_graph()
+        assert len(g.nodes) == 6
+        assert len(g.edges) == 5
+
+        # Check derivative operation node wiring
+        op_nodes = g.nodes_with_label("Operation")
+        assert len(op_nodes) == 1
+        op = op_nodes[0]
+        assert op.get("type") == "Derivative"
+
+        diff_edges = g.outgoing_edges(op.id, "DIFFERENTIAND")
+        assert len(diff_edges) == 1
+        assert diff_edges[0].target == "position_1"
+
+        wrt_edges = g.outgoing_edges(op.id, "WITH_RESPECT_TO")
+        assert len(wrt_edges) == 1
+        assert wrt_edges[0].target == "time_1"
+
+
+# ---------------------------------------------------------------------------
+# Experiment 2-6: Cypher Pattern Matching & Graph Traversal
+# ---------------------------------------------------------------------------
+
+
+class TestExp26CypherTraversal:
+    """Semantic tests for exp_2_6_cypher_traversal.py."""
+
+    def test_directed_pattern_matching_capitals(self) -> None:
+        from exp_2_5_labeled_property_graph import build_city_graph
+        from exp_2_6_cypher_traversal import CypherPatternEngine
+
+        g = build_city_graph()
+        engine = CypherPatternEngine(g)
+        matches = engine.match_hop("City", "CAPITAL_OF", "Country", direction="OUT")
+
+        pairs = {(m["source"].id, m["target"].id) for m in matches}
+        assert pairs == {("Hanoi", "Vietnam"), ("Paris", "France")}
+
+        # Check edge metadata preserved in match
+        for m in matches:
+            assert "since" in m["relationship"].properties
+
+    def test_undirected_matching_sister_cities(self) -> None:
+        from exp_2_5_labeled_property_graph import build_city_graph
+        from exp_2_6_cypher_traversal import CypherPatternEngine
+
+        g = build_city_graph()
+        engine = CypherPatternEngine(g)
+
+        # Undirected match traverses in both directions
+        matches = engine.match_hop("City", "SISTER_CITY", "City", direction="BOTH")
+        pairs = {(m["source"].id, m["target"].id) for m in matches}
+        assert pairs == {("Hanoi", "Paris"), ("Paris", "Hanoi")}
+
+        # Directed match only traverses forward
+        matches_out = engine.match_hop("City", "SISTER_CITY", "City", direction="OUT")
+        pairs_out = {(m["source"].id, m["target"].id) for m in matches_out}
+        assert pairs_out == {("Hanoi", "Paris")}
+
+    def test_variable_length_path_traversal(self) -> None:
+        from exp_2_5_labeled_property_graph import build_mechanism_graph
+        from exp_2_6_cypher_traversal import CypherPatternEngine
+
+        g = build_mechanism_graph()
+        engine = CypherPatternEngine(g)
+
+        # newtonCooling_1 requires rateOfChange_1 and heatTransferRate_2
+        paths = engine.find_paths("newtonCooling_1", "REQUIRES", min_hops=1, max_hops=2)
+        assert len(paths) == 2
+        endpoints = {p[-1] for p in paths}
+        assert endpoints == {"rateOfChange_1", "heatTransferRate_2"}
+
+
+# ---------------------------------------------------------------------------
+# Experiment 2-7: RDF vs. Property Graph Executable Benchmark
+# ---------------------------------------------------------------------------
+
+
+class TestExp27RdfVsPropertyGraph:
+    """Semantic tests for exp_2_7_rdf_vs_property_graph.py."""
+
+    def test_exact_semantic_equivalence(self) -> None:
+        from exp_2_7_rdf_vs_property_graph import (
+            build_lpg_representation,
+            build_rdf_representation,
+            query_lpg_capital_with_metadata,
+            query_rdf_capital_with_metadata,
+        )
+
+        rdf_g = build_rdf_representation()
+        lpg_g = build_lpg_representation()
+
+        rdf_res = query_rdf_capital_with_metadata(rdf_g)
+        lpg_res = query_lpg_capital_with_metadata(lpg_g)
+
+        # Assert identical structured answers across completely different graph engines
+        assert rdf_res == lpg_res
+        assert len(rdf_res) == 2
+        assert rdf_res[0] == {"city": "Hanoi", "country": "Vietnam", "since": 1976}
+        assert rdf_res[1] == {"city": "Paris", "country": "France", "since": 1789}
+
+    def test_structural_tradeoffs_edge_metadata(self) -> None:
+        """Assert that RDF standard reification requires 5 triples per statement
+
+        while LPG requires 1 relationship with inline property.
+        """
+        from exp_2_7_rdf_vs_property_graph import (
+            build_lpg_representation,
+            build_rdf_representation,
+        )
+
+        rdf_g = build_rdf_representation()
+        lpg_g = build_lpg_representation()
+
+        # RDF has 22 triples total (12 base triples + 10 reification triples for 2 statements)
+        assert len(rdf_g) == 22
+
+        # LPG has 4 nodes and 3 edges total
+        assert len(lpg_g.nodes) == 4
+        assert len(lpg_g.edges) == 3
+
+        # In LPG, the edge 'e_hn_vn' directly holds since=1976 without any helper nodes
+        edge = lpg_g.get_edge("e_hn_vn")
+        assert edge is not None
+        assert edge.properties["since"] == 1976

@@ -20,9 +20,9 @@ How does the choice of graph representation change what we can express, query, i
 | 2-2 | Turtle serialization round-trip | ★★ | ✅ | `exp_2_2_turtle_serialization.py` |
 | 2-3 | SPARQL Basic Graph Patterns | ★★ | ✅ | `exp_2_3_sparql_basic_patterns.py` |
 | 2-4 | Mechanism RATE_OF_CHANGE via RDF + SPARQL (capstone thread) | ★★ | ✅ | `exp_2_4_mechanism_turtle_sparql.py` |
-| 2-5 | Labeled Property Graph / Neo4j | ★★ | 🔲 Deferred | taught conceptually in chapter text |
-| 2-6 | Cypher traversal | ★★ | 🔲 Deferred | taught conceptually in chapter text |
-| 2-7 | Same knowledge — RDF vs Property Graph | ★★★ | 🔲 Deferred | taught conceptually in chapter text |
+| 2-5 | Labeled Property Graph / Neo4j | ★★ | ✅ | `exp_2_5_labeled_property_graph.py` |
+| 2-6 | Cypher traversal | ★★ | ✅ | `exp_2_6_cypher_traversal.py` |
+| 2-7 | Same knowledge — RDF vs Property Graph | ★★★ | ✅ | `exp_2_7_rdf_vs_property_graph.py` |
 
 ## Domain
 
@@ -40,6 +40,9 @@ uv run python chapter02/exp_2_1_rdf_first_principles.py
 uv run python chapter02/exp_2_2_turtle_serialization.py
 uv run python chapter02/exp_2_3_sparql_basic_patterns.py
 uv run python chapter02/exp_2_4_mechanism_turtle_sparql.py
+uv run python chapter02/exp_2_5_labeled_property_graph.py
+uv run python chapter02/exp_2_6_cypher_traversal.py
+uv run python chapter02/exp_2_7_rdf_vs_property_graph.py
 ```
 
 ## Running Tests
