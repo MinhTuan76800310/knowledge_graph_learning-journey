@@ -16,7 +16,7 @@ Each lab is designed to be:
 |---|---|:---:|:---:|---|
 | **Ch 1** | From Graph to Knowledge | `EXP-1-1` $\to$ `EXP-1-5` | ✅ Complete (5 labs) | `chapter01/test_experiments.py` (25 tests) |
 | **Ch 2** | Data Models & Query Languages | `EXP-2-1` $\to$ `EXP-2-7` | ✅ Complete (7 labs) | `chapter02/test_ch2_experiments.py` (40 tests) |
-| **Ch 3** | Schema, Identity, Context | `EXP-3-1` $\to$ `EXP-3-6` | 🚧 6 Labs to Build | `chapter03/test_ch3_experiments.py` |
+| **Ch 3** | Schema, Identity, Context | `EXP-3-1` $\to$ `EXP-3-6` | ✅ Complete (6 labs) | `chapter03/test_ch3_experiments.py` (15 tests) |
 | **Ch 4** | Ontologies & Formal Meaning | `EXP-4-1` $\to$ `EXP-4-3` | 🚧 3 Labs to Build | `chapter04/test_ch4_experiments.py` |
 | **Ch 5** | Deduction, Rules, Validation | `EXP-5-1` $\to$ `EXP-5-4` | 🚧 4 Labs to Build | `chapter05/test_ch5_experiments.py` |
 | **Ch 6** | Claims, Epistemics, Time | `EXP-6-1` $\to$ `EXP-6-4` | 🚧 4 Labs to Build | `chapter06/test_ch6_experiments.py` |
