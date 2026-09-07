@@ -1,4 +1,4 @@
-﻿# Knowledge Graph: From Graph to Living Knowledge Systems
+# Knowledge Graph: From Graph to Living Knowledge Systems
 
 <h4 align="center">Từ Đồ thị đến Hệ thống Tri thức — An Executable, Bilingual Monograph</h4>
 
@@ -57,7 +57,7 @@ The monograph bridges foundational knowledge engineering with frontier AI resear
 3. **Epistemics, Temporal Validity & Belief Revision (Chapters 6–7):** Dempster-Shafer theory of evidence ($m: 2^\Omega \to [0, 1]$), Subjective Logic $(b, d, u, a)$ opinion vectors & cumulative fusion $\oplus$, 2D Bitemporal Grid ($T_{\text{valid}} \times T_{\text{tx}}$), and AGM Belief Revision Postulates.
 4. **Graph Representation Learning & Invariance (Chapter 8):** Weisfeiler-Lehman (1-WL) isomorphism bound on MPNN expressiveness, RotatE complex rotational algebra ($\mathbf{h} \circ \mathbf{r} = \mathbf{t}$), Poincaré hyperbolic taxonomy embeddings ($\mathbb{B}^d$), and Differentiable ILP ($\partial\text{ILP}$).
 5. **Retrieval Dynamics & GraphRAG Bounds (Chapter 9):** Path explosion asymptotic bounds $O(\bar{d}^k)$, multi-hop error cascading bounds ($p^k$), Personalized PageRank contraction mapping, Steiner Tree 2-approximation, GraphRAG vs. 1M–2M Long-Context LLMs Pareto frontier, and Physical Evidence Packet dossiers.
-6. **Cybernetic Stability & Model Collapse (Chapter 10):** Delayed closed-loop feedback control transfer functions $L(s) = G(s)H(s)e^{-s\tau_{\text{verify}}}$, Delay Differential Equation (DDE) stability theorems ($\tau < \frac{\pi}{2a}$), Nyquist stability / Hopf bifurcation limit cycles, Knowledge Entropy ($H_K$), and Autophagous Model Collapse variance shrinkage ($\sigma_{t+1}^2 = \sigma_t^2(1 - 1/M)$).
+6. **Cybernetic Stability & Model Collapse (Chapter 10):** Delayed closed-loop feedback control transfer functions $L(s) = G(s)H(s)e^{-s\tau_{\text{verify}}}$, Delay Differential Equation (DDE) stability theorems ($a\tau < \frac{\pi}{2}$), Hopf bifurcation limit cycles, Lyapunov stability ($\dot{V} < 0$), Knowledge Entropy ($H_K$), and Autophagous Model Collapse variance shrinkage ($\sigma_{t+1}^2 = \sigma_t^2(1 - 1/M)$).
 
 ---
 

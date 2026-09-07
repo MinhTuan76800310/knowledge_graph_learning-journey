@@ -1,4 +1,4 @@
-﻿# Knowledge Graph Book — Handoff & Next Phase Roadmap (v0.3 Released -> v0.4 Roadmap)
+# Knowledge Graph Book — Handoff & Next Phase Roadmap (v0.3 Released -> v0.4 Roadmap)
 
 ## Current Milestone State (v0.3.0 RELEASED — 2026-09-07)
 
@@ -22,7 +22,7 @@
 3. **Pillar 3 (Ch 6–7, PRs #72, #74):** Dempster-Shafer theory of evidence ($m: 2^\Omega \to [0, 1]$), Subjective Logic opinion vectors & cumulative fusion $\oplus$, 2D Bitemporal Grid ($T_{\text{valid}} \times T_{\text{tx}}$), AGM belief revision postulates.
 4. **Pillar 4 (Ch 8, PR #76):** Weisfeiler-Lehman (1-WL) expressive power ceiling on MPNNs, RotatE complex rotational algebra ($\mathbf{h} \circ \mathbf{r} = \mathbf{t}$), Poincaré hyperbolic embeddings ($\mathbb{B}^d$), Differentiable ILP ($\partial\text{ILP}$).
 5. **Pillar 5 (Ch 9, PR #78):** Combinatorial path explosion bounds $O(\bar{d}^k)$, Multi-hop error cascading bounds ($p^k$), Personalized PageRank contraction mapping, Steiner Tree 2-approximation, GraphRAG vs 1M–2M Long-Context LLMs Pareto frontier, Physical Evidence Packet dossier.
-6. **Pillar 6 (Ch 10, PR #80):** Cybernetic closed-loop feedback control with verification delay, DDE stability theorem ($\tau < \frac{\pi}{2a}$), Nyquist / Hopf bifurcation belief limit cycles, Knowledge Entropy ($H_K$), Autophagous model collapse variance shrinkage ($\sigma_{t+1}^2 = \sigma_t^2(1 - 1/M)$).
+6. **Pillar 6 (Ch 10, PR #80):** Cybernetic closed-loop feedback control with verification delay, DDE stability theorem ($a\tau < \frac{\pi}{2}$), Hopf bifurcation belief limit cycles, Lyapunov stability ($\dot{V} < 0$), Knowledge Entropy ($H_K$), Autophagous model collapse variance shrinkage ($\sigma_{t+1}^2 = \sigma_t^2(1 - 1/M)$).
 
 ---
 

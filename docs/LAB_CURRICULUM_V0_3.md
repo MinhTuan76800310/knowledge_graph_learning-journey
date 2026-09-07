@@ -12,6 +12,8 @@ Each lab is designed to be:
 
 ## 🗺️ Curriculum Matrix (Chapters 1–10)
 
+> **Current Implementation Status:** **18 Labs Executable** (`pytest`: 131 passed across Ch1–3) | **24 Labs Target Specifications** (Pending implementation for Ch4–10) | **Target Total: 42 Labs**.
+
 | Chapter | Title | Lab Range | Status | Test Module |
 |---|---|:---:|:---:|---|
 | **Ch 1** | From Graph to Knowledge | `EXP-1-1` $\to$ `EXP-1-5` | ✅ Complete (5 labs) | `chapter01/test_experiments.py` (25 tests) |
@@ -298,9 +300,9 @@ Each lab is designed to be:
 
 ### Chapter 10: Building a Living Knowledge System (5 Labs)
 
-#### `EXP-10-1`: Freshness & Staleness Detection on Streaming Claims
+#### `EXP-10-1`: Multi-Subsystem Freshness & Quality Degradation Detection
 - **File:** `chapter10/exp_10_1_staleness_detection.py`
-- **Pedagogical Purpose:** Stream temporal claims; compute exponential decay freshness $F(t) = e^{-\lambda(t - t_{\text{valid}})}$; detect stale assertions.
+- **Pedagogical Purpose:** Track multi-subsystem freshness metrics (ledger freshness, index freshness, schema freshness) as defined in §10.27; compute sliding-window degradation trends (§10.32) to detect prolonged staleness before QA accuracy collapses.
 
 #### `EXP-10-2`: Contradiction Queue & Escalation Policy Engine
 - **File:** `chapter10/exp_10_2_contradiction_escalation.py`
@@ -308,7 +310,7 @@ Each lab is designed to be:
 
 #### `EXP-10-3`: Closed-Loop Delayed Feedback DDE Stability Simulation
 - **File:** `chapter10/exp_10_3_closed_loop_stability.py`
-- **Pedagogical Purpose:** Numerical simulation of open-loop transfer function $L(s) = G(s)H(s)e^{-s\tau_{\text{verify}}}$; demonstrate Hopf bifurcation belief limit cycles when $\tau > \pi / (2a)$.
+- **Pedagogical Purpose:** Numerical simulation of open-loop transfer function $L(s) = G(s)H(s)e^{-s\tau_{\text{verify}}}$ and time-domain DDE $\dot{x}(t) = -a\,x(t-\tau)$ (§10.20.1); demonstrate belief limit cycles when $a\tau \ge \pi/2$ and evaluate damping via low-pass filtering and hysteresis bands.
 
 #### `EXP-10-4`: Knowledge Entropy $H_K$ & Autophagous Model Collapse Simulator
 - **File:** `chapter10/exp_10_4_model_collapse_simulation.py`
