@@ -4,10 +4,11 @@ Tracks the publication state of each manuscript section. State definitions are i
 `docs/BOOK_V0_1_MILESTONE.md`. Experiments do **not** gate chapter acceptance unless an
 experiment is required to validate an important technical claim.
 
-Last updated: 2026-09-05 (**v0.2.0 RELEASED**: tag `v0.2.0`; Vietnamese complete book
-`knowledge-graph-book-v0.2.0.pdf`, 364 print pages + English edition
-`knowledge-graph-book-en-v0.2.0.pdf`, 70 print pages, Ch1–3. Delta over v0.1.0: English
-edition launched (Ch1–3, PRs #27/#30/#40) + Vietnamese Chapter 3 quality pass (#42).
+Last updated: 2026-09-07 (**v0.3 in progress**: Pillars 1–5 (Ch1–9) EN-merged, PRs
+#66/#68/#70/#72/#74/#76/#78; Pillar 6 (Ch10 closed-loop stability + autophagous model
+collapse) in PR on branch `en-vi-ch10-pillar6`). Prior release: v0.2.0 (tag `v0.2.0`;
+Vietnamese complete book `knowledge-graph-book-v0.2.0.pdf`, 364 print pages + English edition
+`knowledge-graph-book-en-v0.2.0.pdf`, 70 print pages, Ch1–3).
 Prior: v0.1.0 @ aa91115, 358 print pages, full Vietnamese book = front matter + Ch1–10 +
 Afterword + Glossary + Bibliography)
 
@@ -58,8 +59,8 @@ chapter by chapter and kept in parity. It builds with `LANG=en`.
 | 6 — Claims, Evidence, Provenance, Time, Contradiction | ✅ | ✅ (Pillar 3, parity with VI) | ✅ | MERGED (PR #72) |
 | 7 — Knowledge Acquisition and Integration | ✅ | ✅ (Pillar 3, parity with VI) | ✅ | MERGED (PR #74) |
 | 8 — Inductive Knowledge and Learning from Graphs | ✅ | ✅ (Pillar 4, PR #76) | ✅ | MERGED (PR #76) |
-| 9 — Retrieval, Question Answering, and GraphRAG | 🔄 | 🔄 (Pillar 5, parity with VI, this branch) | 🔲 | PR pending (branch `en-vi-ch9-pillar5`) |
-| 10 | 🔲 | 🔲 | 🔲 | PLANNED |
+| 9 — Retrieval, Question Answering, and GraphRAG | ✅ | ✅ (Pillar 5, PR #78) | ✅ | MERGED (PR #78) |
+| 10 — Building a Living Knowledge System | 🔄 | 🔄 (Pillar 6, parity with VI, this branch) | 🔲 | PR pending (branch `en-vi-ch10-pillar6`) |
 
 English build verified at v0.2.0: 70 print pages, `verify_book_pdf.sh` (LANG=en) gate
 PASSED.
@@ -75,8 +76,8 @@ Focus: 6 theoretical pillars (Hypergraphs, Logic Complexity & Decidability, Demp
 | Pillar 2: Complexity Landscape, FOL-Rewritability & Datalog | Ch 4–5 | 🟢 Ch 4 MERGED (PR #68); 🟢 Ch 5 MERGED (PR #70) | `docs/BOOK_V0_3_MILESTONE.md` §Target 2 |
 | Pillar 3: Dempster-Shafer Confidence & AGM Belief Revision | Ch 6 | 🟢 Ch 6 MERGED (VI+EN parity, PR #72) | `docs/BOOK_V0_3_MILESTONE.md` §Target 3 |
 | Pillar 4: Weisfeiler-Lehman (1-WL), RotatE & Hyperbolic Geometry | Ch 8 | 🟢 Ch 8 MERGED (VI+EN parity, PR #76) | `docs/BOOK_V0_3_MILESTONE.md` §Target 4 |
-| Pillar 5: Path Explosion Bounds & Long-Context vs GraphRAG | Ch 9 | 🔄 Ch 9 in PR (VI+EN parity, branch `en-vi-ch9-pillar5`) | `docs/BOOK_V0_3_MILESTONE.md` §Target 5 |
-| Pillar 6: Closed-Loop Stability & Autophagous Model Collapse | Ch 10 | 🔲 PLANNED | `docs/BOOK_V0_3_MILESTONE.md` §Target 6 |
+| Pillar 5: Path Explosion Bounds & Long-Context vs GraphRAG | Ch 9 | 🟢 Ch 9 MERGED (VI+EN parity, PR #78) | `docs/BOOK_V0_3_MILESTONE.md` §Target 5 |
+| Pillar 6: Closed-Loop Stability & Autophagous Model Collapse | Ch 10 | 🔄 Ch 10 in PR (VI+EN parity, branch `en-vi-ch10-pillar6`) | `docs/BOOK_V0_3_MILESTONE.md` §Target 6 |
 
 ## Legend
 

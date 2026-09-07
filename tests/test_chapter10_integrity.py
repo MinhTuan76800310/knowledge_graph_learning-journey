@@ -25,6 +25,8 @@ FIGURES = [
     "ch10-feedback-collapse",
     "ch10-audit-replay",
     "ch10-living-architecture",
+    "ch10-closed-loop-stability",
+    "ch10-knowledge-entropy-collapse",
 ]
 
 CITED_KEYS = [
@@ -42,6 +44,7 @@ CITED_KEYS = [
     "sculley-debt-2015",
     "shumailov-collapse-2024",
     "widmer-drift-1996",
+    "wiener-cybernetics-1948",
     "zaveri-kgquality-2016",
 ]
 
@@ -53,9 +56,12 @@ GLOSSARY_TERMS = [
     "Audit Replay",
     "Audit Trail",
     "Automation Gradient",
+    "Autophagous model collapse",
     "Batch Governance",
+    "Belief oscillation",
     "Benchmark Decay",
     "Candidate Claim",
+    "Closed-loop dynamical stability",
     "Completeness over Time",
     "Consistency over Time",
     "Contradiction Accumulation",
@@ -71,6 +77,7 @@ GLOSSARY_TERMS = [
     "Feedback Loop Safety",
     "Freshness",
     "Knowledge Debt",
+    "Knowledge entropy",
     "Level vs Trend",
     "Living Architecture",
     "Living Knowledge System",
@@ -167,8 +174,8 @@ class TestCh10ConceptRegistry:
             for name, entry in data["concepts"].items()
             if entry.get("first_explained_chapter") == 10
         }
-        # 54 concepts are explained first in Chapter 10.
-        assert len(ch10) == 54, f"Expected 54 Ch10 concepts, found {len(ch10)}"
+        # 58 concepts are explained first in Chapter 10.
+        assert len(ch10) == 58, f"Expected 58 Ch10 concepts, found {len(ch10)}"
 
     def test_ch10_concepts_explained_when_required(self):
         with open(REGISTRY_PATH, encoding="utf-8") as f:

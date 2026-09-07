@@ -38,6 +38,8 @@ Trong RDF, một triple có mặt trong đồ thị là một assertion. Asserti
 
 **Automation Gradient (Dốc tự động hóa).** Thang phân bổ quyền quyết định giữa con người và máy theo rủi ro tri thức luận: hành động tự động chỉ ở bậc thấp, leo thang con người ở bậc cao. Cấu hình quản trị, không phải giá trị kỹ thuật (Chương 10).
 
+**Autophagous model collapse (Sụp đổ mô hình tự thực).** Mô hình/KG nuôi mình bằng chính đầu ra tổng hợp qua nhiều thế hệ mà không có bằng chứng thực nghiệm mới: phương sai co theo $\sigma^2(1-1/M)^t$ và các lớp hiếm (đuôi phân bố) tuyệt chủng, kéo entropy tri thức $H_K$ xuống. Khác với sụp đổ phản hồi (một claim bị khuếch đại) — đây là lỗi dân số học của cả phân bố (Chương 10).
+
 **Axiom (Tiên đề).** Phát biểu ràng buộc ngữ nghĩa hình thức của các ký hiệu trong ontology.
 Khác với chú thích (annotation): tiên đề tạo ra suy diễn, chú thích chỉ dành cho con người.
 
@@ -46,6 +48,8 @@ quy tắc có head khớp, tạo subgoal từ body, đệ quy cho đến khi đ�
 forward chaining (data-driven). Phù hợp khi ít truy vấn trên đồ thị lớn.
 
 **Batch Governance (Quản trị hàng loạt).** Áp dụng quyết định quản trị (re-validate, retire, supersede) lên nhiều claim cùng lúc với chính sách rõ ràng, log và cơ chế rollback. Thao tác hàng loạt an toàn vì có quản trị, không phải vì chạy nhanh (Chương 10).
+
+**Belief oscillation (Dao động niềm tin).** Mất ổn định kiểu chu kỳ giới hạn của trạng thái niềm tin khi độ trễ xác minh $\tau$ lớn so với độ lợi cập nhật ($a\tau > \pi/2$): một claim lật liên tục Accepted ↔ Contested ↔ Retracted mà không hội tụ. Là hỏng hóc điều khiển của vòng phản hồi, không phải "hệ đang học" (Chương 10).
 
 **Belief revision (AGM) (Sửa đổi niềm tin AGM).** Lý thuyết hình thức của Alchourrón–Gärdenfors–Makinson về cách một tập niềm tin thay đổi hợp lý khi gặp bằng chứng trái ngược: ba phép mở rộng $K+\varphi$, co rút $K\div\varphi$, sửa đổi $K*\varphi$, nối với nhau qua đẳng thức Levi/Harper và 6 tiên đề tối thiểu (mất ít thông tin nhất) (Chương 6).
 
@@ -75,6 +79,8 @@ làm tên quy chiếu của một thực thể; các tên khác được giữ n
 **Citation (Trích dẫn).** Gắn một claim con của câu trả lời với bằng chứng thực sự hỗ trợ nó và nguồn gốc của bằng chứng. Có trích dẫn ≠ được hỗ trợ; trích dẫn phải trỏ tới đoạn thật sự chứa thông tin hỗ trợ (Chương 9).
 
 **Claim Ledger (Sổ cái claim).** Kho bất biến mọi claim có provenance, trạng thái, lịch sử. Truy xuất lịch sử/mâu thuẫn/provenance phải vào Sổ cái, không phải chiếu hình (Chương 9).
+
+**Closed-loop dynamical stability (Ổn định động học vòng kín).** Tính ổn định tiệm cận của một hệ tri thức vận hành như vòng phản hồi có trễ: nghiệm hội tụ về cân bằng khi $a\tau < \pi/2$ (điều kiện Lyapunov $\dot V < 0$). Bảo đảm bằng lọc thông thấp, giới hạn tốc độ thu nhận, và dải trễ quanh ngưỡng chấp nhận (Chương 10).
 
 **Class Expression (Biểu thức lớp).** Tổ hợp của các lớp và thuộc tính tạo thành mô tả phức
 tạp: giao (⊓), hợp (⊔), phủ định (¬), hạn chế tồn tại (∃R.C), hạn chế phổ quát (∀R.C).
@@ -288,6 +294,8 @@ chắc là hai thực thể khác nhau.
 **KGQA (Knowledge Graph Question Answering / Hỏi đáp đồ thị tri thức).** Trả lời bằng truy vấn/suy luận cấu trúc trên đồ thị (SPARQL/path) sau bước entity linking + relation linking. Khác với RAG (sinh từ đoạn văn) và GraphRAG (đồ thị dẫn dắt truy xuất) (Chương 9).
 
 **Knowledge Debt (Nợ tri thức).** Chi phí tích lũy của các nghĩa vụ tri thức chưa thanh toán: claim chưa re-validate, mâu thuẫn chưa phân xử, index chưa cập nhật. Nợ khác với sai — có thể sống chung nếu đo và trả (Chương 10).
+
+**Knowledge entropy (Entropy tri thức).** $H_K(t) = -\sum_c p_t(c)\log p_t(c)$: độ đa dạng của phân bố các lớp khái niệm/cơ chế trong KG theo thời gian. $H_K$ giảm là tín hiệu sụp đổ tự thực — tri thức co về vài lớp đầu ngành, đuôi hiếm biến mất (Chương 10).
 
 **Knowledge Graph (Đồ thị Tri thức).** Theo nghĩa tối thiểu: đồ thị có hướng có nhãn, trong đó
 nhãn mang ngữ nghĩa được định nghĩa. Theo mô hình kỹ thuật của sách: Data Graph + Semantics

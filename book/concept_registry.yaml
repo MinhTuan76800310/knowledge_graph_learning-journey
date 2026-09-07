@@ -2518,4 +2518,32 @@ concepts:
     explanation_level: mechanism
     incidental_gloss: false
     notes: "Periodic report of level + trend vs thresholds (§10.52)"
+  closed_loop_dynamical_stability:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Living KG as a delayed feedback control loop; aτ<π/2 stability criterion, Lyapunov V, safeguards (§10.20.1)"
+  belief_oscillation:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Limit-cycle instability when verification delay is large vs update gain: claim flips Accepted↔Contested↔Retracted (§10.20.1)"
+  knowledge_entropy:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "H_K(t) = -Σ p_t(c) log p_t(c): diversity of concept-class distribution over generations (§10.35.1)"
+  autophagous_model_collapse:
+    first_mentioned_chapter: 10
+    first_required_use_chapter: 10
+    first_explained_chapter: 10
+    explanation_level: mechanism
+    incidental_gloss: false
+    notes: "Recursive refit on synthetic output shrinks variance σ²(1-1/M)^t and extinguishes rare tails; distinct from feedback collapse (§10.35.1)"
 
