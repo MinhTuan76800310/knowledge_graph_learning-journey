@@ -100,3 +100,8 @@ When adding or modifying tests for standards-sensitive behavior:
 4. Never modify expected outputs to match incorrect code; fix the code to match the standard
 
 See `docs/research_notes/R11-03.md` for the canonical RDFS domain/range semantics contract.
+
+## Autonomous Execution (YOLO Mode)
+
+- Full autonomy is enabled for this project: terminal commands, file edits/reads, and testing run proactively without unnecessary confirmations.
+- Proactively verify changes using tests and linters before reporting back.
