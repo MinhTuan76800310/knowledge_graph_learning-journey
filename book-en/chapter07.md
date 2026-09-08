@@ -2,11 +2,13 @@
 
 > **Chapter orientation**
 >
-> **Central question:** Chapter 6 assumed statements already *sat* in the ledger with
-> full provenance. But where does new knowledge come from? How does a system take content
-> from many sources — textbooks, databases, APIs — turn it into structured statements,
-> recognize "two sources are talking about the same thing", align schemas, remove
-> duplicates, and write it into the ledger without corrupting the already-governed graph?
+> **Central question:** Chapter 6 established how statements are governed once recorded
+> in the ledger with full provenance. But where does this knowledge originate? How does
+> a knowledge system ingest raw content from heterogeneous sources — textbooks, relational
+> databases, web APIs — transform it into structured statements, determine whether disparate
+> sources describe identical entities, harmonize schema differences, reconcile duplicates,
+> and commit verified claims into the ledger without corrupting the integrity of the
+> governed graph?
 >
 > **Why it matters:** The first six chapters built the graph (Ch1–2), identity (Ch3),
 > semantics (Ch4), inference/validation (Ch5), and the epistemic layer (Ch6). But all of
@@ -45,9 +47,10 @@
 
 ## 7.0 Introduction: Three sources, one concept
 
-Chapter 6 led with two population figures. Chapter 7 opens with a harder situation: three
-different sources, stating *almost* the same concept, but it is not self-evident that they
-are talking about the same thing.
+While Chapter 6 motivated governance using conflicting population figures for a single entity,
+Chapter 7 confronts a subtler, more pervasive challenge: three distinct sources that appear
+to describe nearly identical physical and mathematical mechanisms, yet whose equivalence cannot
+be assumed prima facie.
 
 **Source A** — a calculus textbook, Chapter 3, defining the derivative:
 
@@ -77,15 +80,18 @@ respect to time". But the system must not rush to conclude. Ask three questions:
 3. **Duplication and conflict:** If two sources both assert one thing, how many statements
    do we record? If the values differ, keep both or handle it how?
 
-The naive answer — "they look alike, so merge them" — is exactly where a knowledge graph
-breaks. If the system hastily links `owl:sameAs` between "the derivative of a function"
-(A) and "current through a capacitor" (C) just because of the shared phrase "rate of
-change", the damage propagates across the whole graph, as Chapter 3 warned (§3.2.4).
+The reflexive response — "they look identical on the surface, so merge them immediately" —
+is precisely where real-world knowledge graphs fail. If the ingestion pipeline hastily asserts
+an `owl:sameAs` equivalence between the abstract mathematical derivative (Source A) and the
+physical current through a capacitor (Source C) merely because both invoke the words "rate of
+change", the resulting identity collapse cascades throughout the entire graph, as warned in
+Chapter 3 (§3.2.4).
 
-Chapter 7 builds the **acquisition and integration pipeline**: a disciplined process for
-bringing these three sources into the system, turning them into structured statements,
-deciding *whether or not* they are the same concept — and connecting the result to the
-governance of Chapter 6.
+To prevent such corruption, Chapter 7 formalizes an end-to-end **acquisition and integration pipeline**:
+a principled architectural framework for registering heterogeneous sources, extracting and
+structuring their assertions into candidate claims, resolving entity identities and schemas
+under probabilistic and structural criteria, and safely committing verified knowledge into the
+governed ledger established in Chapter 6.
 
 > 🖊 **Self-check:** Before reading on, answer for yourself: in your view, should the
 > "rate of change" in sources A, B, C point to the same node or not? Write down your
@@ -96,10 +102,12 @@ governance of Chapter 6.
 
 ### Intuition
 
-All knowledge in the system comes from some source. The central pipeline is an *ordered*
-description of how source content is gradually transformed into a governed statement.
-Like an oil refinery: raw material passes through many stages, each stage has controls,
-and only product meeting spec enters the finished-goods store.
+Every statement inside a knowledge system traces back to an originating source. The central
+pipeline defines the disciplined, stage-by-stage progression through which raw external content
+is progressively refined into a governed knowledge claim. Much like an industrial refinery,
+unprocessed feedstock undergoes sequential stages of extraction, cleaning, and quality control;
+only output that satisfies rigorous structural and semantic specifications is permitted to enter
+the authoritative repository.
 
 ### Mechanism
 
@@ -168,34 +176,41 @@ relationship between them.
 
 ### Intuition
 
-Two people do two different jobs: one **brings goods into the warehouse**, the other
-**sorts, inspects, and reconciles the goods** before closing the books. Merging the two
-into one creates chaos: uninspected goods get put out for sale.
+Consider a warehouse workflow where intake and inventory reconciliation are distinct
+responsibilities: one team **receives incoming shipments at the loading dock**, while
+another **inspects, catalogs, and reconciles the merchandise** before logging it into the
+central inventory ledger. Conflating these responsibilities creates operational chaos:
+uninspected, unverified goods get placed directly onto store shelves.
 
 ### Mechanism
 
-**Acquisition** answers the question "how do we bring information into the system?" — read
-the source, extract, normalize, structure into **candidate knowledge** with provenance.
-Acquisition does *not* decide who is right, does not deduplicate, does not align schemas —
-it only makes source content *structured and traceable*.
+**Acquisition** answers the question: *"How do we ingest external information into the
+system?"* — reading the source, extracting structured attributes, normalizing representations,
+and packaging the result as **candidate knowledge** accompanied by provenance metadata.
+Acquisition does *not* arbitrate truth, does not deduplicate across sources, and does not
+align differing schemas — its sole mandate is to make source content *structured and traceable*.
 
-**Integration** answers the question "how do we merge many streams into one consistent
-picture?" — recognize whether two pieces of knowledge talk about the same thing (identity
-resolution), align differing schemas (schema alignment), remove duplicates, control
-conflicts, and decide what to write into the ledger [@lenzerini-2002]
-[@hogan-creation-enrichment].
+**Integration** answers the question: *"How do we reconcile disparate streams into a coherent,
+non-redundant whole?"* — determining whether distinct records denote the same entity (identity
+resolution), harmonizing schema vocabularies (schema alignment), identifying duplicates,
+adjudicating conflicting assertions, and deciding what qualifies for ledger entry
+[@lenzerini-2002] [@hogan-creation-enrichment].
 
-Why must they be separated? Because the two questions have **different success criteria**:
+Why must these two phases remain strictly decoupled? Because they optimize for fundamentally
+**different objectives and success metrics**:
 
-- Acquisition is measured by **coverage and extraction accuracy**: did we capture all the
-  content worth capturing? Does the record match the source?
-- Integration is measured by **consistency and reliability of the ledger**: after merging,
-  are there still duplicates? Are the identity/schema decisions evidenced and recorded?
+- **Acquisition** is evaluated on **coverage, recall, and extraction fidelity**: Did the system
+  capture all relevant information from the source? Does the extracted record faithfully
+  mirror the source text?
+- **Integration** is evaluated on **semantic consistency, deduplication, and ledger integrity**:
+  Following reconciliation, does the graph remain free of spurious duplicate entities? Are
+  identity links and schema mappings substantiated by explicit evidence and recorded provenance?
 
-A subtle error: treating "acquisition done = knowledge is in the system". Wrong.
-Acquisition only produces **candidates**. A record extracted from source C — "current =
-C·dV/dt" — is a candidate statement, not yet accepted, its relationship to sources A/B not
-yet known.
+A common architectural fallacy is equating completed extraction with verified knowledge:
+*"The pipeline extracted a triple, therefore the knowledge graph now knows it."* In reality,
+acquisition yields only **epistemic candidates**. An assertion extracted from Source C —
+"current $i = C \cdot dV/dt$" — is merely an unverified candidate claim whose semantic
+relationship to Sources A and B remains unestablished until integration evaluates it.
 
 ### Application
 
@@ -387,9 +402,12 @@ coincidence.
 
 ### Intuition
 
-The same extraction tool extracting a math formula is different from extracting a vague
-sentence. The results are not equally trustworthy. We need to note "how trustworthy was the
-making of this record *in terms of extraction*".
+An information extraction model parsing an unambiguous, closed-form mathematical expression
+operates under vastly different uncertainty conditions than one processing an idiom-laden
+natural language passage. Because extraction fidelity varies across source modalities and
+syntactic complexities, the ingestion system must explicitly quantify the reliability of the
+extraction process itself — separating the mechanical quality of the parsing from the factual
+truth of the claim.
 
 ### Mechanism
 
@@ -611,9 +629,13 @@ The likelihood ratio m(γ)/u(γ) is the weight of the comparison vector. Two thr
 γ above the high threshold  →  match
 ```
 
-The model is optimal when the compared attributes are conditionally independent — an ideal
-assumption, not always true in practice. Importantly: m(γ) and u(γ) must be **estimated
-from data** (labels or an unsupervised algorithm), not guessed.
+The model is optimal when the compared attributes are conditionally independent — the same
+**naive Bayes assumption** used in many probabilistic classifiers. This is an ideal
+assumption, rarely perfectly true in practice; when attributes are correlated (e.g.,
+`input_1` and `output` often co-vary because the same physical law constrains both), the
+likelihood ratio $m(\gamma)/u(\gamma)$ becomes an approximation rather than an exact
+posterior. Importantly: $m(\gamma)$ and $u(\gamma)$ must be **estimated from data** (labels
+or an unsupervised algorithm), not guessed.
 
 For the pair (B, C): γ = (agree, disagree, agree, disagree). If the system estimates a low
 m(γ)/u(γ) (differing inputs/outputs strongly suggest different entities), the pair falls
@@ -789,9 +811,14 @@ its own provenance. Deduplication is *reconciliation*, not deletion.
 
 **Deduplication** is recognizing duplicate records/statements — exact duplicates
 (identical) or near-duplicates (same proposition, differing value/unit) — and deciding how
-to handle them. Connecting to Chapter 6: two claims with the same content are still two
-separate objects (claim identity ≠ content identity, §6.2). So deduplication at the
-integration layer does not merge claim IRIs; it merges *how they enter the ledger*.
+to handle them. Exact duplicates are resolved automatically via content hashing (§7.14).
+**Near-duplicates** — where the proposition is recognizably similar but values, units, or
+surface forms differ — are flagged for **manual review** in the review queue (§7.20) rather
+than auto-merged, because the semantic gap between "approximately the same" and "actually
+the same" requires human judgment. Connecting to Chapter 6: two claims with the same
+content are still two separate objects (claim identity ≠ content identity, §6.2). So
+deduplication at the integration layer does not merge claim IRIs; it merges *how they enter
+the ledger*.
 
 **Claim Deduplication** is the book's own rule: two candidate claims with the same content
 but different provenance are *content-duplicate candidates*; they may be merged into one
@@ -1123,9 +1150,10 @@ the result of a recorded integration decision.
 
 ### Intuition
 
-When an Accepted claim appears in the projection, a user has the right to ask: "where did
-this come from?" and "why should I believe it?". Two different questions, two different
-kinds of data.
+When an Accepted claim materializes in the canonical projection, any downstream consumer
+or auditor is entitled to ask two fundamentally distinct questions: *"Where did this originate?"*
+and *"What justifies believing it?"* Conflating these inquiries compromises both system
+traceability and evidentiary rigor.
 
 ### Mechanism
 
@@ -1148,10 +1176,12 @@ ex:claim_velocity_rate_of_change
 (Chapter 6, §6.3, §6.5). A claim can have very complete lineage but weak evidence, or
 strong evidence but thin lineage.
 
-This is the chapter's subtlest point: **complete lineage is not evidence**. A perfect
-pipeline (long, complete, clean lineage) can produce a false claim if the source is wrong
-or the rule is wrong. Long lineage only tells you "every step was recorded" — not that
-"those steps are correct".
+This marks the central epistemological insight of the chapter: **comprehensive lineage does
+not constitute evidentiary support**. A flawless ingestion pipeline featuring an unbroken,
+meticulously documented provenance trail can still deposit a false claim into the ledger if the
+originating primary source is flawed or the mapping rule is semantically corrupt. Exhaustive
+lineage confirms only that *every processing step was faithfully recorded* — it offers no
+guarantee that *the recorded claim is objectively true*.
 
 ### Application
 
@@ -1274,10 +1304,12 @@ no errors does not mean the pipeline is error-free; it may be failing quietly.
 
 ### Intuition
 
-A website aggregating "10 essential physics definitions" copies the velocity definition
-from textbook B. If the system records both as two independent sources, it will believe
-`ex:recB_1` has two supporting sources — when in reality there is only one. An **echo
-source** inflates the apparent evidence count.
+Consider a web aggregator titled "10 Essential Physics Definitions" that republishes the
+velocity definition verbatim from Textbook B. If an ingestion system blindly logs both as
+independent originating sources, it will falsely calculate that the claim possesses two
+corroborating evidentiary streams. In reality, the secondary publication merely echoes the
+primary text; treating it as autonomous corroboration constitutes an **echo source fallacy**
+that artificially inflates confidence metrics.
 
 ### Mechanism
 
@@ -1801,9 +1833,10 @@ failure mode that is never detected in time.
 
 ### Intuition
 
-This chapter teaches *bringing knowledge in* and *merging knowledge*. There is a larger
-problem this chapter **deliberately does not solve**: how to infer new knowledge that is in
-none of the sources.
+While Chapter 7 establishes the mechanics of ingesting and reconciling asserted knowledge
+from external sources, it deliberately stops short of addressing a fundamentally different
+epistemological challenge: how a system might infer entirely novel regularities, patterns,
+or general laws that were never explicitly stated in any underlying source.
 
 ### Mechanism
 

@@ -638,7 +638,11 @@ target triple and candidates that genuinely do not appear in the graph
 > ⚠️ **Filtered evaluation ≠ truth evaluation.**
 > Filtered evaluation only removes *known* true triples. It knows nothing about true
 > triples that have not been recorded (OWA). So filtered evaluation is a technical
-> improvement, not a measure of absolute truth.
+> improvement, not a measure of absolute truth. In practice, filtered MRR and Hits@K
+> are **upper bounds** on the model's true ranking ability: some candidates labeled
+> "incorrect" by the evaluation may actually be unrecorded true facts, meaning the
+> model is penalized for correct predictions that happen to be missing from the
+> dataset.
 
 ## 8.10 Data Splits and Leakage
 
@@ -797,11 +801,14 @@ Step t+1:  c_v^(t+1) = hash( c_v^(t), { c_u^(t) | u ∈ N(v) } )
 Stop:      when the color partition stops changing
 ```
 
-Here `{ c_u^(t) | u ∈ N(v) }` is a **multiset** — a neighbor list in which colors may
-repeat. At each step, a node receives a new color based on **its own old color** and the
-**multiset of its neighbors' colors**. If after step $t$ two graphs have different color
-partitions, they are certainly not isomorphic. If 1-WL cannot distinguish two graphs, they
-may still differ — 1-WL is only a sufficient, not necessary, method.
+Here `{ c_u^(t) | u ∈ N(v) }` is a **multiset** — a set that *counts duplicates*: unlike
+an ordinary set where each element appears at most once, a multiset records *how many times*
+each element occurs. Concretely: if node $v$ has three neighbors colored red and two colored
+blue, the multiset is $\{red, red, red, blue, blue\}$, not $\{red, blue\}$. This counting
+information is critical. At each step, a node receives a new color based on **its own old
+color** and the **multiset of its neighbors' colors**. If after step $t$ two graphs have
+different color partitions, they are certainly not isomorphic. If 1-WL cannot distinguish
+two graphs, they may still differ — 1-WL is only a sufficient, not necessary, method.
 
 **Bridge to message passing.** Look again at the message-passing formula: each node
 collects information from neighbors and then updates itself. 1-WL does the same thing, but
